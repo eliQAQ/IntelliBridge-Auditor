@@ -1,7 +1,3 @@
-/**
- *Submitted for verification at Etherscan.io on 2021-07-10
-*/
-
 // SPDX-License-Identifier: UNLICENSED
 // -------------------
 // Router Version: 2.0
@@ -124,8 +120,7 @@ contract THORChain_Router {
     }
 
     //############################## VAULT MANAGEMENT ##############################
-    //CIV 
-    // AC inconsistency, lack of repetitive checks 
+
     // A vault can call to "return" all assets to an asgard, including ETH. 
     function returnVaultAssets(address router, address payable asgard, Coin[] memory coins, string memory memo) external payable {
         if (router == address(this)){
