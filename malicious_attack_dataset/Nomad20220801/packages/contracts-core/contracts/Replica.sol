@@ -112,7 +112,7 @@ contract Replica is Version0, NomadBase {
         remoteDomain = _remoteDomain;
         committedRoot = _committedRoot;
         // pre-approve the committed root.
-        if (_committedRoot != bytes32(0)) confirmAt[_committedRoot] = 1;
+        confirmAt[_committedRoot] = 1;
         _setOptimisticTimeout(_optimisticSeconds);
     }
 
@@ -149,27 +149,20 @@ contract Replica is Version0, NomadBase {
     }
 
     /**
-     * @notice If necessary, attempts to prove the validity of provided
-     *         `_message`. If the message is successfully proven, then tries to
-     *         process the message
+     * @notice First attempts to prove the validity of provided formatted
+     * `message`. If the message is successfully proven, then tries to process
+     * message.
      * @dev Reverts if `prove` call returns false
-     * @param _message A Nomad message coming from another chain :)
-     * @param _proof Merkle proof of inclusion for message's leaf (optional if
-     *        the message has already been proven).
-     * @param _index Index of leaf in home's merkle tree (optional if the
-     *        message has already been proven).
+     * @param _message Formatted message (refer to NomadBase.sol Message library)
+     * @param _proof Merkle proof of inclusion for message's leaf
+     * @param _index Index of leaf in home's merkle tree
      */
     function proveAndProcess(
         bytes memory _message,
         bytes32[32] calldata _proof,
         uint256 _index
     ) external {
-        bytes32 _messageHash = keccak256(_message);
-        require(
-            acceptableRoot(messages[_messageHash]) ||
-                prove(_messageHash, _proof, _index),
-            "!prove"
-        );
+        require(prove(keccak256(_message), _proof, _index), "!prove");
         process(_message);
     }
 
@@ -245,7 +238,6 @@ contract Replica is Version0, NomadBase {
         external
         onlyOwner
     {
-        require(_root != bytes32(0) || _confirmAt == 0, "can't set zero root");
         uint256 _previousConfirmAt = confirmAt[_root];
         confirmAt[_root] = _confirmAt;
         emit SetConfirmation(_root, _previousConfirmAt, _confirmAt);
@@ -264,8 +256,7 @@ contract Replica is Version0, NomadBase {
         // this is backwards-compatibility for messages proven/processed
         // under previous versions
         if (_root == LEGACY_STATUS_PROVEN) return true;
-        if (_root == LEGACY_STATUS_PROCESSED || _root == LEGACY_STATUS_NONE)
-            return false;
+        if (_root == LEGACY_STATUS_PROCESSED) return false;
 
         uint256 _time = confirmAt[_root];
         if (_time == 0) {
