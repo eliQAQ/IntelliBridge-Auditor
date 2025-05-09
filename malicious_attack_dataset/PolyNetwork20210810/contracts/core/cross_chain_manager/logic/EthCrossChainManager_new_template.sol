@@ -8,7 +8,7 @@ import "./../upgrade/UpgradableECCM.sol";
 import "./../libs/EthCrossChainUtils.sol";
 import "./../interface/IEthCrossChainManager.sol";
 import "./../interface/IEthCrossChainData.sol";
-contract EthCrossChainManager is IEthCrossChainManager, UpgradableECCM {
+contract NewEthCrossChainManager is IEthCrossChainManager, UpgradableECCM {
     using SafeMath for uint256;
 
     event InitGenesisBlockEvent(uint256 height, bytes rawHeader);
@@ -115,6 +115,7 @@ contract EthCrossChainManager is IEthCrossChainManager, UpgradableECCM {
         emit CrossChainEvent(tx.origin, paramTxHash, msg.sender, toChainId, toContract, rawParam);
         return true;
     }
+
     /* @notice              Verify Poly chain header and proof, execute the cross chain tx from Poly chain to Ethereum
     *  @param proof         Poly chain tx merkle proof
     *  @param rawHeader     The header containing crossStateRoot to verify the above tx merkle proof
@@ -140,7 +141,7 @@ contract EthCrossChainManager is IEthCrossChainManager, UpgradableECCM {
             require(ECCUtils.verifySig(rawHeader, headerSig, polyChainBKs, n - ( n - 1) / 3), "Verify poly chain header signature failed!");
         } else {
             // We need to verify the signature of curHeader 
-            require(ECCUtils.verifySig(curRawHeader, headerSig, polyChainBKs, n - ( n - 1) / 3), "Verify poly chain current epoch header signature failed!");
+            require(ECCUtils.verifySig(curRawHeader, headerSig, polyChainBKs, n - ( n - 1) / 3), "Verify poly chain header signature failed!");
 
             // Then use curHeader.StateRoot and headerProof to verify rawHeader.CrossStateRoot
             ECCUtils.Header memory curHeader = ECCUtils.deserializeHeader(curRawHeader);
@@ -148,7 +149,7 @@ contract EthCrossChainManager is IEthCrossChainManager, UpgradableECCM {
             require(ECCUtils.getHeaderHash(rawHeader) == Utils.bytesToBytes32(proveValue), "verify header proof failed!");
         }
         
-        // Through rawHeader.CrossStatesRoot, the toMerkleValue or cross chain msg can be verified and parsed from proof
+        // Through rawHeader.CrossStateRoot, the toMerkleValue or cross chain msg can be verified and parsed from proof
         bytes memory toMerkleValueBs = ECCUtils.merkleProve(proof, header.crossStatesRoot);
         
         // Parse the toMerkleValue struct and make sure the tx has not been processed, then mark this tx as processed
@@ -171,7 +172,8 @@ contract EthCrossChainManager is IEthCrossChainManager, UpgradableECCM {
 
         return true;
     }
-    
+
+
     /* @notice                  Dynamically invoke the targeting contract, and trigger executation of cross chain tx on Ethereum side
     *  @param _toContract       The targeting contract that will be invoked by the Ethereum Cross Chain Manager contract
     *  @param _method           At which method will be invoked within the targeting contract
@@ -198,5 +200,9 @@ contract EthCrossChainManager is IEthCrossChainManager, UpgradableECCM {
         require(res == true, "EthCrossChain call business contract return is not true");
         
         return true;
+    }
+    // new feature added in the upgraded contract
+    function addFunctionTest1(uint256 a, uint256 b) whenNotPaused public view returns (uint256) {
+        return a.add(b);
     }
 }

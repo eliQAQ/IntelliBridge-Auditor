@@ -7,11 +7,8 @@ import "./../../../libs/ownership/Ownable.sol";
 
 contract UpgradableECCM is IUpgradableECCM, Ownable, Pausable {
     address public EthCrossChainDataAddress;
-    uint64 public chainId;  
-    
-    constructor (address ethCrossChainDataAddr, uint64 _chainId) Pausable() Ownable()  public {
+    constructor (address ethCrossChainDataAddr) Pausable() Ownable()  public {
         EthCrossChainDataAddress = ethCrossChainDataAddr;
-        chainId = _chainId;
     }
     function pause() onlyOwner public returns (bool) {
         if (!paused()) {
@@ -39,11 +36,6 @@ contract UpgradableECCM is IUpgradableECCM, Ownable, Pausable {
     function upgradeToNew(address newEthCrossChainManagerAddress) whenPaused onlyOwner public returns (bool) {
         IEthCrossChainData eccd = IEthCrossChainData(EthCrossChainDataAddress);
         eccd.transferOwnership(newEthCrossChainManagerAddress);
-        return true;
-    }
-    
-    function setChainId(uint64 _newChainId) whenPaused onlyOwner public returns (bool) {
-        chainId = _newChainId;
         return true;
     }
 }
