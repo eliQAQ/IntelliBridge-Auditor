@@ -1,0 +1,96 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_2253_ERC20Safe {
+label = "ERC20Safe"
+"2253__safeTransferFrom" [label="_safeTransferFrom"]
+"2253_lockERC20" [label="lockERC20"]
+"2253__safeCall" [label="_safeCall"]
+"2253_fundERC20" [label="fundERC20"]
+"2253_burnERC20" [label="burnERC20"]
+"2253_mintERC20" [label="mintERC20"]
+"2253_releaseERC20" [label="releaseERC20"]
+"2253__safeTransfer" [label="_safeTransfer"]
+"2253_fundERC20" -> "2253__safeTransferFrom"
+"2253__safeTransfer" -> "2253__safeCall"
+"2253_lockERC20" -> "2253__safeTransferFrom"
+"2253__safeTransferFrom" -> "2253__safeCall"
+"2253_releaseERC20" -> "2253__safeTransfer"
+}subgraph cluster_81_IERCHandler {
+label = "IERCHandler"
+"81_setBurnable" [label="setBurnable"]
+"81_setResource" [label="setResource"]
+"81_withdraw" [label="withdraw"]
+"81_updateBridgeAddress" [label="updateBridgeAddress"]
+"81__wtokenAddress" [label="_wtokenAddress"]
+}subgraph cluster_26_IDepositExecute {
+label = "IDepositExecute"
+"26_executeProposal" [label="executeProposal"]
+"26_deposit" [label="deposit"]
+}subgraph cluster_2811_ERC20Handler {
+label = "ERC20Handler"
+"2811_getDepositRecord" [label="getDepositRecord"]
+"2811_receive" [label="receive"]
+"2811_updateBridgeAddress" [label="updateBridgeAddress"]
+"2811_executeProposal" [label="executeProposal"]
+"2811_constructor" [label="constructor"]
+"2811_deposit" [label="deposit"]
+"2811_withdraw" [label="withdraw"]
+"2811_executeProposal" -> "2811_releaseERC20"
+"2811_withdraw" -> "2811_releaseERC20"
+"2811_deposit" -> "2811_lockERC20"
+"2811_updateBridgeAddress" -> "2811_onlyBridge"
+"2811_constructor" -> "2811__setBurnable"
+"2811_withdraw" -> "2811_onlyBridge"
+"2811_executeProposal" -> "2811_mintERC20"
+"2811_deposit" -> "2811_onlyBridge"
+"2811_deposit" -> "2811_burnERC20"
+"2811_constructor" -> "2811__setResource"
+"2811_executeProposal" -> "2811_onlyBridge"
+}subgraph cluster_220_HandlerHelpers {
+label = "HandlerHelpers"
+"220__onlyBridge" [label="_onlyBridge"]
+"220_setResource" [label="setResource"]
+"220_withdraw" [label="withdraw"]
+"220__setResource" [label="_setResource"]
+"220_updateBridgeAddress" [label="updateBridgeAddress"]
+"220__setBurnable" [label="_setBurnable"]
+"220_setBurnable" [label="setBurnable"]
+"220_setResource" -> "220_onlyBridge"
+"220_setBurnable" -> "220__setBurnable"
+"220_setResource" -> "220__setResource"
+"220_setBurnable" -> "220_onlyBridge"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"calldataload(uint256)" 
+"mload(uint256)" 
+"abi.decode()" 
+"abi.encodeWithSelector()" 
+"assert(bool)" 
+"calldatasize()" 
+"calldatacopy(uint256,uint256,uint256)" 
+"require(bool,string)" 
+"mstore(uint256,uint256)" 
+"2811_deposit" -> "calldataload(uint256)"
+"2811_deposit" -> "require(bool,string)"
+"2811_executeProposal" -> "require(bool,string)"
+"2253__safeCall" -> "abi.decode()"
+"2253__safeTransfer" -> "abi.encodeWithSelector()"
+"2811_deposit" -> "calldatasize()"
+"2811_executeProposal" -> "calldataload(uint256)"
+"2811_updateBridgeAddress" -> "require(bool,string)"
+"220__onlyBridge" -> "require(bool,string)"
+"2811_executeProposal" -> "calldatacopy(uint256,uint256,uint256)"
+"2811_executeProposal" -> "mload(uint256)"
+"2253__safeCall" -> "require(bool,string)"
+"2811_receive" -> "assert(bool)"
+"2811_deposit" -> "mstore(uint256,uint256)"
+"2811_constructor" -> "require(bool,string)"
+"2811_executeProposal" -> "calldatasize()"
+"2811_deposit" -> "calldatacopy(uint256,uint256,uint256)"
+"2811_deposit" -> "mload(uint256)"
+"2253__safeTransferFrom" -> "abi.encodeWithSelector()"
+"2811_executeProposal" -> "mstore(uint256,uint256)"
+"220__setBurnable" -> "require(bool,string)"
+}
+}

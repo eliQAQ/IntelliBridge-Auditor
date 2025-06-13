@@ -1,0 +1,30 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_2447_TransferHelper {
+label = "TransferHelper"
+"2447_safeTransfer" [label="safeTransfer"]
+"2447_safeTransferETH" [label="safeTransferETH"]
+"2447_safeTransferFrom" [label="safeTransferFrom"]
+"2447_safeApprove" [label="safeApprove"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"keccak256(bytes)" 
+"require(bool,string)" 
+"abi.encodeWithSelector()" 
+"abi.decode()" 
+"2447_safeTransferETH" -> "require(bool,string)"
+"2447_safeTransfer" -> "abi.encodeWithSelector()"
+"2447_safeTransferFrom" -> "abi.decode()"
+"2447_safeTransfer" -> "abi.decode()"
+"2447_safeTransferFrom" -> "keccak256(bytes)"
+"2447_safeApprove" -> "require(bool,string)"
+"2447_safeTransfer" -> "require(bool,string)"
+"2447_safeApprove" -> "abi.encodeWithSelector()"
+"2447_safeApprove" -> "abi.decode()"
+"2447_safeApprove" -> "keccak256(bytes)"
+"2447_safeTransfer" -> "keccak256(bytes)"
+"2447_safeTransferFrom" -> "abi.encodeWithSelector()"
+"2447_safeTransferFrom" -> "require(bool,string)"
+}
+}

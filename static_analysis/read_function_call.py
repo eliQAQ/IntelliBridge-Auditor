@@ -4,6 +4,7 @@ import argparse
 import subprocess
 import re
 import json
+import pydot
 
 func_dict = {}
 def traverse_directories(directory):
@@ -77,16 +78,31 @@ def traverse_files(directory):
                 continue
 
 
+
+def read_all_dot(path):
+    pydot_graphs = pydot.graph_from_dot_file(path)
+    G = nx.MultiDiGraph()
+    for dot in pydot_graphs:
+        Gi = nx.nx_pydot.from_pydot(dot)
+        G.add_edges_from(Gi.edges(data=True))
+        subgraphs = dot.get_subgraphs()
+        for subgraph in subgraphs:
+            Gj = nx.nx_pydot.from_pydot(subgraph)
+            G.add_edges_from(Gj.edges(data=True))
+    
+    return G
+
+
 def  get_function_called_graph(directory, function_name):
     G_function_graph = nx.DiGraph()
     function_stack = function_name
     clusters = {}
-    for root, dirs, files in os.walk(directory):
-        pre_len = -1
-        while pre_len != len(function_stack):
+    pre_len = -1
+    while pre_len != len(function_stack):
+        pre_len = len(function_stack)
+        for root, dirs, files in os.walk(directory):
             #print(pre_len)
             #print(root, dirs, files)
-            pre_len = len(function_stack)
             for file_name in files:
                 file_path = os.path.join(root, file_name)
                 #print(file_path)
@@ -111,16 +127,21 @@ def  get_function_called_graph(directory, function_name):
                         else:
                             continue
                     
-                    G = nx.nx_pydot.read_dot(file_path)
+                    G = read_all_dot(file_path)
                     # 打印图的节点和边
                     for edge in G.edges():
                         if "call-graph" in file_name:
-                            x = re.sub(r'^\d+_', '', edge[0])
-                            y = re.sub(r'^\d+_', '', edge[1])
-                            contract_prefix_x = clusters[re.match(r'^(\d+)_', edge[0])[1]]
-                            contract_prefix_y = clusters[re.match(r'^(\d+)_', edge[1])[1]]
-                            final_x = file_prefix + "." + contract_prefix_x + "."  + x
-                            final_y = file_prefix + "." + contract_prefix_y + "."  + y
+                            if "all_contracts" in file_name:
+                                x = re.sub(r'^\d+_', '', edge[0])
+                                y = re.sub(r'^\d+_', '', edge[1])
+                                id_x = re.match(r'^(\d+)_', edge[0])
+                                id_y = re.match(r'^(\d+)_', edge[1])
+                                if id_x is None or id_y is None:
+                                    continue
+                                contract_prefix_x = clusters[id_x.group(1)]
+                                contract_prefix_y = clusters[id_y.group(1)]
+                                final_x = file_prefix + "." + contract_prefix_x + "."  + x
+                                final_y = file_prefix + "." + contract_prefix_y + "."  + y
                         else:
                             # x = re.sub(r'[^.]+\.', '', edge[0])
                             # y = re.sub(r'[^.]+\.', '', edge[1])
@@ -128,6 +149,23 @@ def  get_function_called_graph(directory, function_name):
                             y = edge[1]
                             final_x = file_prefix + "." + x
                             final_y = file_prefix + "." + y
+                        try:
+                            file_prefix_x, contract_prefix_x, func_prefix_x = final_x.split(".")
+                            file_prefix_y, contract_prefix_y, func_prefix_y = final_y.split(".")                     
+                            sol_file = f"{file_prefix_x}.sol"
+                            if is_interface_in_file(sol_file, contract_prefix_x):
+                                file_prefix_x, contract_prefix_x = find_implementing_contracts(contract_prefix_x, directory)[0]
+                                file_prefix_x = file_prefix_x[:-4]
+                            
+                            sol_file = f"{file_prefix_y}.sol"
+                            if is_interface_in_file(sol_file, contract_prefix_y):
+                                file_prefix_y, contract_prefix_y = find_implementing_contracts(contract_prefix_y, directory)[0]
+                                file_prefix_y = file_prefix_y[:-4]
+                        except:
+                            continue
+
+                        final_x = file_prefix_x + "." + contract_prefix_x + "." + func_prefix_x
+                        final_y = file_prefix_y + "." + contract_prefix_y + "." + func_prefix_y
                             #print(x, y)
                         #print(final_x, final_y)
                         # if file_name == "AnyswapV4Router.sol.dot":
@@ -149,12 +187,13 @@ def  get_function_call_graph(directory, function_name):
     G_function_graph = nx.DiGraph()
     function_stack = function_name
     clusters = {}
-    for root, dirs, files in os.walk(directory):
-        pre_len = -1
-        while pre_len != len(function_stack):
-            #print(pre_len)
-            #print(root, dirs, files)
-            pre_len = len(function_stack)
+    pre_len = -1
+    
+    while pre_len != len(function_stack):
+        pre_len = len(function_stack)
+        for root, dirs, files in os.walk(directory):
+                #print(pre_len)
+                #print(root, dirs, files)
             for file_name in files:
                 file_path = os.path.join(root, file_name)
                 #print(file_path)
@@ -178,16 +217,21 @@ def  get_function_call_graph(directory, function_name):
                         else:
                             continue
                     
-                    G = nx.nx_pydot.read_dot(file_path)
+                    G = read_all_dot(file_path)
                     # 打印图的节点和边
                     for edge in G.edges():
                         if "call-graph" in file_name:
-                            x = re.sub(r'^\d+_', '', edge[0])
-                            y = re.sub(r'^\d+_', '', edge[1])
-                            contract_prefix_x = clusters[re.match(r'^(\d+)_', edge[0])[1]]
-                            contract_prefix_y = clusters[re.match(r'^(\d+)_', edge[1])[1]]
-                            final_x = file_prefix + "." + contract_prefix_x + "."  + x
-                            final_y = file_prefix + "." + contract_prefix_y + "."  + y
+                            if "all_contracts" in file_name:
+                                x = re.sub(r'^\d+_', '', edge[0])
+                                y = re.sub(r'^\d+_', '', edge[1])
+                                id_x = re.match(r'^(\d+)_', edge[0])
+                                id_y = re.match(r'^(\d+)_', edge[1])
+                                if id_x is None or id_y is None:
+                                    continue
+                                contract_prefix_x = clusters[id_x.group(1)]
+                                contract_prefix_y = clusters[id_y.group(1)]
+                                final_x = file_prefix + "." + contract_prefix_x + "."  + x
+                                final_y = file_prefix + "." + contract_prefix_y + "."  + y
                         else:
                             # x = re.sub(r'[^.]+\.', '', edge[0])
                             # y = re.sub(r'[^.]+\.', '', edge[1])
@@ -195,11 +239,28 @@ def  get_function_call_graph(directory, function_name):
                             y = edge[1]
                             final_x = file_prefix + "." + x
                             final_y = file_prefix + "." + y
+                        try:
+                            file_prefix_x, contract_prefix_x, func_prefix_x = final_x.split(".")
+                            file_prefix_y, contract_prefix_y, func_prefix_y = final_y.split(".")
+                            sol_file = f"{file_prefix_x}.sol"
+                            if is_interface_in_file(sol_file, contract_prefix_x):
+                                file_prefix_x, contract_prefix_x = find_implementing_contracts(contract_prefix_x, directory)[0]
+                                file_prefix_x = file_prefix_x[:-4]
+                            sol_file = f"{file_prefix_y}.sol"
+                            if is_interface_in_file(sol_file, contract_prefix_y):
+                                file_prefix_y, contract_prefix_y = find_implementing_contracts(contract_prefix_y, directory)[0]
+                                file_prefix_y = file_prefix_y[:-4]
+                        except:
+                            continue
+
+                        final_x = file_prefix_x + "." + contract_prefix_x + "." + func_prefix_x
+                        final_y = file_prefix_y + "." + contract_prefix_y + "." + func_prefix_y
                             #print(x, y)
                         #print(final_x, final_y)
                         # if file_name == "AnyswapV4Router.sol.dot":
                         #     print(G.edges())
-                        # if y == "_anySwapOut":
+                        # if y == "burnERC20":
+                        #     print(final_x, x, function_stack)
                         #print(final_x, function_stack)
                         if final_x in function_stack:
                             if not G_function_graph.has_edge(final_x, final_y):
@@ -404,9 +465,12 @@ def get_code_from_func(directory, get_all_func_stack):
         file_path, contract_name, func_name = item.split('.')
         sol_file = f"{file_path}.sol"
         if is_interface_in_file(sol_file, contract_name):
+            #print(sol_file, contract_name)
             impls = find_implementing_contracts(contract_name, directory)
+            #print(impls)
             for impl in impls:
                 code = extract_function_code(impl[0], impl[1], func_name)
+                #print(code)
                 results.append(code)
                 break
         else:
@@ -422,7 +486,7 @@ def get_code_from_graph(directory, called_and_call_graph, func_name):
     get_all_func_stack = []
     add_stack = func_name
     while len(add_stack) != 0:
-        callers = [v for u, v in called_and_call_graph if u in add_stack]
+        callers = [v for u, v in called_and_call_graph if u in add_stack and v not in add_stack]
         get_all_func_stack += add_stack
         add_stack = callers
     #print(get_all_func_stack)
@@ -440,7 +504,7 @@ if __name__ == "__main__":
     parser.add_argument("--event-name", type=str, required=False, help="调用的事件名称")
     args = parser.parse_args()
     function_names = get_function_name(args.file_directory, args.event_name)
-    print(function_names)
+    #print(function_names)
     traverse_files(args.file_directory)
     directory_name = "output/" + args.file_directory + "_" + args.event_name
     if not os.path.exists(directory_name):
@@ -451,7 +515,7 @@ if __name__ == "__main__":
         called_graph, func_name_called = get_function_called_graph(args.file_directory, func_name)
         called_and_call_graph, func_name_call = get_function_call_graph(args.file_directory, func_name_called)
         call_chain = patrition_public_chain(called_graph, func_name[0])
-        print(call_chain)
+        #print(call_chain, called_and_call_graph)
         for key, value in call_chain.items():
             cnt += 1
             code = get_code_from_graph(args.file_directory, called_and_call_graph, value)

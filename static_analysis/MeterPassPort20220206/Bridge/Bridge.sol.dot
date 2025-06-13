@@ -1,0 +1,318 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterEnumerableSet" {
+  graph [ label = "EnumerableSet  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "EnumerableSet._add" [ label = "_add", color = "red" ];
+  "EnumerableSet._remove" [ label = "_remove" ];
+  "EnumerableSet._contains" [ label = "_contains" ];
+  "EnumerableSet._length" [ label = "_length" ];
+  "EnumerableSet._at" [ label = "_at" ];
+  "EnumerableSet.add" [ label = "add", color = "white" ];
+  "EnumerableSet.remove" [ label = "remove", color = "white" ];
+  "EnumerableSet.contains" [ label = "contains", color = "white" ];
+  "EnumerableSet.length" [ label = "length", color = "white" ];
+  "EnumerableSet.at" [ label = "at", color = "white" ];
+  "EnumerableSet.address" [ label = "address" ];
+}
+
+subgraph "clusterAddress" {
+  graph [ label = "Address  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Address.isContract" [ label = "isContract", color = "white" ];
+  "Address.sendValue" [ label = "sendValue", color = "white" ];
+  "Address.address" [ label = "address" ];
+}
+
+subgraph "clusterContext" {
+  graph [ label = "Context", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Context.<Constructor>" [ label = "<Constructor>", color = "white" ];
+  "Context._msgSender" [ label = "_msgSender", color = "white" ];
+  "Context._msgData" [ label = "_msgData", color = "white" ];
+}
+
+subgraph "clusterAccessControl" {
+  graph [ label = "AccessControl", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "AccessControl.hasRole" [ label = "hasRole" ];
+  "AccessControl.getRoleMemberCount" [ label = "getRoleMemberCount", color = "green" ];
+  "AccessControl.getRoleMember" [ label = "getRoleMember", color = "green" ];
+  "AccessControl.getRoleAdmin" [ label = "getRoleAdmin", color = "green" ];
+  "AccessControl.grantRole" [ label = "grantRole", color = "green" ];
+  "AccessControl.revokeRole" [ label = "revokeRole", color = "green" ];
+  "AccessControl.renounceRole" [ label = "renounceRole", color = "green" ];
+  "AccessControl._setupRole" [ label = "_setupRole", color = "white" ];
+  "AccessControl._setRoleAdmin" [ label = "_setRoleAdmin", color = "white" ];
+  "AccessControl._grantRole" [ label = "_grantRole" ];
+  "AccessControl._revokeRole" [ label = "_revokeRole" ];
+  "AccessControl._msgSender" [ label = "_msgSender" ];
+}
+
+subgraph "clusterPausable" {
+  graph [ label = "Pausable", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Pausable.<Constructor>" [ label = "<Constructor>", color = "white" ];
+  "Pausable.paused" [ label = "paused", color = "green" ];
+  "Pausable.whenNotPaused" [ label = "whenNotPaused", color = "yellow" ];
+  "Pausable._whenNotPaused" [ label = "_whenNotPaused" ];
+  "Pausable.whenPaused" [ label = "whenPaused", color = "yellow" ];
+  "Pausable._whenPaused" [ label = "_whenPaused" ];
+  "Pausable._pause" [ label = "_pause", color = "white" ];
+  "Pausable._unpause" [ label = "_unpause", color = "white" ];
+}
+
+subgraph "clusterSafeMath" {
+  graph [ label = "SafeMath", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "SafeMath.sub" [ label = "sub", color = "white" ];
+  "SafeMath._sub" [ label = "_sub" ];
+}
+
+subgraph "clusterIDepositExecute" {
+  graph [ label = "IDepositExecute  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IDepositExecute.deposit" [ label = "deposit" ];
+  "IDepositExecute.executeProposal" [ label = "executeProposal" ];
+}
+
+subgraph "clusterIBridge" {
+  graph [ label = "IBridge  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IBridge._chainID" [ label = "_chainID", color = "blue" ];
+}
+
+subgraph "clusterIERCHandler" {
+  graph [ label = "IERCHandler  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IERCHandler.setResource" [ label = "setResource" ];
+  "IERCHandler.setBurnable" [ label = "setBurnable" ];
+  "IERCHandler.withdraw" [ label = "withdraw" ];
+  "IERCHandler._wtokenAddress" [ label = "_wtokenAddress", color = "blue" ];
+  "IERCHandler.updateBridgeAddress" [ label = "updateBridgeAddress" ];
+}
+
+subgraph "clusterIGenericHandler" {
+  graph [ label = "IGenericHandler  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IGenericHandler.setResource" [ label = "setResource" ];
+}
+
+subgraph "clusterIWETH" {
+  graph [ label = "IWETH  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IWETH.deposit" [ label = "deposit", color = "blue" ];
+  "IWETH.transfer" [ label = "transfer", color = "blue" ];
+  "IWETH.withdraw" [ label = "withdraw", color = "blue" ];
+}
+
+subgraph "clusterBridge" {
+  graph [ label = "Bridge", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Bridge.onlyAdmin" [ label = "onlyAdmin", color = "yellow" ];
+  "Bridge.onlyAdminOrRelayer" [ label = "onlyAdminOrRelayer", color = "yellow" ];
+  "Bridge.onlyRelayers" [ label = "onlyRelayers", color = "yellow" ];
+  "Bridge.onlyOperators" [ label = "onlyOperators", color = "yellow" ];
+  "Bridge.onlyAdminOrOperator" [ label = "onlyAdminOrOperator", color = "yellow" ];
+  "Bridge._onlyAdminOrRelayer" [ label = "_onlyAdminOrRelayer" ];
+  "Bridge._onlyAdminOrOperator" [ label = "_onlyAdminOrOperator" ];
+  "Bridge._onlyAdmin" [ label = "_onlyAdmin" ];
+  "Bridge._onlyRelayers" [ label = "_onlyRelayers" ];
+  "Bridge._onlyOperators" [ label = "_onlyOperators" ];
+  "Bridge.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "Bridge.isRelayer" [ label = "isRelayer", color = "blue" ];
+  "Bridge.isOperator" [ label = "isOperator", color = "blue" ];
+  "Bridge.renounceAdmin" [ label = "renounceAdmin", color = "blue" ];
+  "Bridge.adminPauseTransfers" [ label = "adminPauseTransfers", color = "blue" ];
+  "Bridge.adminUnpauseTransfers" [ label = "adminUnpauseTransfers", color = "blue" ];
+  "Bridge.adminChangeRelayerThreshold" [ label = "adminChangeRelayerThreshold", color = "blue" ];
+  "Bridge.adminAddRelayer" [ label = "adminAddRelayer", color = "blue" ];
+  "Bridge.adminRemoveRelayer" [ label = "adminRemoveRelayer", color = "blue" ];
+  "Bridge.adminAddOperator" [ label = "adminAddOperator", color = "blue" ];
+  "Bridge.adminRemoveOperator" [ label = "adminRemoveOperator", color = "blue" ];
+  "Bridge.adminSetResource" [ label = "adminSetResource", color = "blue" ];
+  "Bridge.adminSetGenericResource" [ label = "adminSetGenericResource", color = "blue" ];
+  "Bridge.adminSetBurnable" [ label = "adminSetBurnable", color = "blue" ];
+  "Bridge.getProposal" [ label = "getProposal", color = "blue" ];
+  "Bridge.adminChangeFee" [ label = "adminChangeFee", color = "blue" ];
+  "Bridge.adminChangeSpecialFee" [ label = "adminChangeSpecialFee", color = "blue" ];
+  "Bridge._getFee" [ label = "_getFee" ];
+  "Bridge.getFee" [ label = "getFee", color = "blue" ];
+  "Bridge.adminUpdateBridgeAddress" [ label = "adminUpdateBridgeAddress", color = "blue" ];
+  "Bridge.adminWithdraw" [ label = "adminWithdraw", color = "blue" ];
+  "Bridge.deposit" [ label = "deposit", color = "blue" ];
+  "Bridge.depositETH" [ label = "depositETH", color = "blue" ];
+  "Bridge.voteProposal" [ label = "voteProposal", color = "blue" ];
+  "Bridge.cancelProposal" [ label = "cancelProposal", color = "green" ];
+  "Bridge.executeProposal" [ label = "executeProposal", color = "blue" ];
+  "Bridge.transferFunds" [ label = "transferFunds", color = "blue" ];
+  "Bridge._setRoleAdmin" [ label = "_setRoleAdmin" ];
+  "Bridge._pause" [ label = "_pause" ];
+  "Bridge._unpause" [ label = "_unpause" ];
+  "Bridge.address" [ label = "address" ];
+}
+
+  "EnumerableSet._add";
+  "EnumerableSet._contains";
+  "EnumerableSet.add";
+  "EnumerableSet.remove";
+  "EnumerableSet._remove";
+  "EnumerableSet.contains";
+  "EnumerableSet.length";
+  "EnumerableSet._length";
+  "EnumerableSet.at";
+  "EnumerableSet.address";
+  "EnumerableSet._at";
+  "Address.sendValue";
+  "Address.address";
+  "AccessControl.grantRole";
+  "AccessControl.hasRole";
+  "AccessControl._msgSender";
+  "AccessControl._grantRole";
+  "AccessControl.revokeRole";
+  "AccessControl._revokeRole";
+  "AccessControl.renounceRole";
+  "AccessControl._setupRole";
+  "Pausable.whenNotPaused";
+  "Pausable._whenNotPaused";
+  "Pausable.whenPaused";
+  "Pausable._whenPaused";
+  "SafeMath.sub";
+  "SafeMath._sub";
+  "Bridge.onlyAdmin";
+  "Bridge._onlyAdmin";
+  "Bridge.onlyAdminOrRelayer";
+  "Bridge._onlyAdminOrRelayer";
+  "Bridge.onlyRelayers";
+  "Bridge._onlyRelayers";
+  "Bridge.onlyOperators";
+  "Bridge._onlyOperators";
+  "Bridge.onlyAdminOrOperator";
+  "Bridge._onlyAdminOrOperator";
+  "Bridge.<Constructor>";
+  "Bridge._setRoleAdmin";
+  "Bridge.isRelayer";
+  "Bridge.isOperator";
+  "Bridge.renounceAdmin";
+  "Bridge.adminPauseTransfers";
+  "Bridge._pause";
+  "Bridge.adminUnpauseTransfers";
+  "Bridge._unpause";
+  "Bridge.adminAddRelayer";
+  "Bridge.adminRemoveRelayer";
+  "Bridge.adminAddOperator";
+  "Bridge.adminRemoveOperator";
+  "Bridge.adminSetResource";
+  "IERCHandler.setResource";
+  "Bridge.adminSetGenericResource";
+  "IGenericHandler.setResource";
+  "Bridge.adminSetBurnable";
+  "IERCHandler.setBurnable";
+  "Bridge.getFee";
+  "Bridge._getFee";
+  "Bridge.adminUpdateBridgeAddress";
+  "IERCHandler.updateBridgeAddress";
+  "Bridge.adminWithdraw";
+  "IERCHandler.withdraw";
+  "Bridge.deposit";
+  "Bridge.address";
+  "IDepositExecute.deposit";
+  "Bridge.depositETH";
+  "Bridge.voteProposal";
+  "Bridge.cancelProposal";
+  "Bridge.executeProposal";
+  "IDepositExecute.executeProposal";
+  "EnumerableSet._add" -> "EnumerableSet._contains" [ color = "green" ];
+  "EnumerableSet.add" -> "EnumerableSet._add" [ color = "green" ];
+  "EnumerableSet.remove" -> "EnumerableSet._remove" [ color = "green" ];
+  "EnumerableSet.contains" -> "EnumerableSet._contains" [ color = "green" ];
+  "EnumerableSet.length" -> "EnumerableSet._length" [ color = "green" ];
+  "EnumerableSet.at" -> "EnumerableSet.address" [ color = "green" ];
+  "EnumerableSet.at" -> "EnumerableSet._at" [ color = "green" ];
+  "EnumerableSet.add" -> "EnumerableSet._add" [ color = "green" ];
+  "EnumerableSet.remove" -> "EnumerableSet._remove" [ color = "green" ];
+  "EnumerableSet.contains" -> "EnumerableSet._contains" [ color = "green" ];
+  "EnumerableSet.length" -> "EnumerableSet._length" [ color = "green" ];
+  "EnumerableSet.at" -> "EnumerableSet._at" [ color = "green" ];
+  "Address.sendValue" -> "Address.address" [ color = "green" ];
+  "AccessControl.grantRole" -> "AccessControl.hasRole" [ color = "green" ];
+  "AccessControl.grantRole" -> "AccessControl._msgSender" [ color = "green" ];
+  "AccessControl.grantRole" -> "AccessControl._grantRole" [ color = "green" ];
+  "AccessControl.revokeRole" -> "AccessControl.hasRole" [ color = "green" ];
+  "AccessControl.revokeRole" -> "AccessControl._msgSender" [ color = "green" ];
+  "AccessControl.revokeRole" -> "AccessControl._revokeRole" [ color = "green" ];
+  "AccessControl.renounceRole" -> "AccessControl._msgSender" [ color = "green" ];
+  "AccessControl.renounceRole" -> "AccessControl._revokeRole" [ color = "green" ];
+  "AccessControl._setupRole" -> "AccessControl._grantRole" [ color = "green" ];
+  "AccessControl._grantRole" -> "AccessControl._msgSender" [ color = "green" ];
+  "AccessControl._revokeRole" -> "AccessControl._msgSender" [ color = "green" ];
+  "Pausable.whenNotPaused" -> "Pausable._whenNotPaused" [ color = "green" ];
+  "Pausable.whenPaused" -> "Pausable._whenPaused" [ color = "green" ];
+  "SafeMath.sub" -> "SafeMath._sub" [ color = "green" ];
+  "Bridge.onlyAdmin" -> "Bridge._onlyAdmin" [ color = "green" ];
+  "Bridge.onlyAdminOrRelayer" -> "Bridge._onlyAdminOrRelayer" [ color = "green" ];
+  "Bridge.onlyRelayers" -> "Bridge._onlyRelayers" [ color = "green" ];
+  "Bridge.onlyOperators" -> "Bridge._onlyOperators" [ color = "green" ];
+  "Bridge.onlyAdminOrOperator" -> "Bridge._onlyAdminOrOperator" [ color = "green" ];
+  "Bridge._onlyAdminOrRelayer" -> "AccessControl.hasRole" [ color = "green" ];
+  "Bridge._onlyAdminOrRelayer" -> "AccessControl.hasRole" [ color = "green" ];
+  "Bridge._onlyAdminOrOperator" -> "AccessControl.hasRole" [ color = "green" ];
+  "Bridge._onlyAdminOrOperator" -> "AccessControl.hasRole" [ color = "green" ];
+  "Bridge._onlyAdmin" -> "AccessControl.hasRole" [ color = "green" ];
+  "Bridge._onlyRelayers" -> "AccessControl.hasRole" [ color = "green" ];
+  "Bridge._onlyOperators" -> "AccessControl.hasRole" [ color = "green" ];
+  "Bridge.<Constructor>" -> "AccessControl._setupRole" [ color = "green" ];
+  "Bridge.<Constructor>" -> "Bridge._setRoleAdmin" [ color = "green" ];
+  "Bridge.<Constructor>" -> "Bridge._setRoleAdmin" [ color = "green" ];
+  "Bridge.<Constructor>" -> "AccessControl.grantRole" [ color = "green" ];
+  "Bridge.isRelayer" -> "AccessControl.hasRole" [ color = "green" ];
+  "Bridge.isOperator" -> "AccessControl.hasRole" [ color = "green" ];
+  "Bridge.renounceAdmin" -> "AccessControl.grantRole" [ color = "green" ];
+  "Bridge.renounceAdmin" -> "AccessControl.renounceRole" [ color = "green" ];
+  "Bridge.adminPauseTransfers" -> "Bridge._pause" [ color = "green" ];
+  "Bridge.adminUnpauseTransfers" -> "Bridge._unpause" [ color = "green" ];
+  "Bridge.adminAddRelayer" -> "AccessControl.hasRole" [ color = "green" ];
+  "Bridge.adminAddRelayer" -> "AccessControl.grantRole" [ color = "green" ];
+  "Bridge.adminRemoveRelayer" -> "AccessControl.hasRole" [ color = "green" ];
+  "Bridge.adminRemoveRelayer" -> "AccessControl.revokeRole" [ color = "green" ];
+  "Bridge.adminAddOperator" -> "AccessControl.hasRole" [ color = "green" ];
+  "Bridge.adminAddOperator" -> "AccessControl.grantRole" [ color = "green" ];
+  "Bridge.adminRemoveOperator" -> "AccessControl.hasRole" [ color = "green" ];
+  "Bridge.adminRemoveOperator" -> "AccessControl.revokeRole" [ color = "green" ];
+  "Bridge.adminSetResource" -> "IERCHandler.setResource" [ color = "orange" ];
+  "Bridge.adminSetGenericResource" -> "IGenericHandler.setResource" [ color = "orange" ];
+  "Bridge.adminSetBurnable" -> "IERCHandler.setBurnable" [ color = "orange" ];
+  "Bridge.getFee" -> "Bridge._getFee" [ color = "green" ];
+  "Bridge.adminUpdateBridgeAddress" -> "IERCHandler.updateBridgeAddress" [ color = "orange" ];
+  "Bridge.adminWithdraw" -> "IERCHandler.withdraw" [ color = "orange" ];
+  "Bridge.deposit" -> "Bridge._getFee" [ color = "green" ];
+  "Bridge.deposit" -> "Bridge.address" [ color = "green" ];
+  "Bridge.deposit" -> "IDepositExecute.deposit" [ color = "orange" ];
+  "Bridge.depositETH" -> "Bridge._getFee" [ color = "green" ];
+  "Bridge.depositETH" -> "Bridge.address" [ color = "green" ];
+  "Bridge.depositETH" -> "Bridge.address" [ color = "green" ];
+  "Bridge.depositETH" -> "Bridge.address" [ color = "green" ];
+  "Bridge.depositETH" -> "IDepositExecute.deposit" [ color = "orange" ];
+  "Bridge.voteProposal" -> "Bridge.address" [ color = "green" ];
+  "Bridge.voteProposal" -> "SafeMath.sub" [ color = "green" ];
+  "Bridge.cancelProposal" -> "SafeMath.sub" [ color = "green" ];
+  "Bridge.executeProposal" -> "IDepositExecute.executeProposal" [ color = "orange" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

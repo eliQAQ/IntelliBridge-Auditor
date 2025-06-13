@@ -1,0 +1,17 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_945_Address {
+label = "Address"
+"945_sendValue" [label="sendValue"]
+"945_isContract" [label="isContract"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"balance(address)" 
+"require(bool,string)" 
+"extcodehash(uint256)" 
+"945_sendValue" -> "require(bool,string)"
+"945_sendValue" -> "balance(address)"
+"945_isContract" -> "extcodehash(uint256)"
+}
+}

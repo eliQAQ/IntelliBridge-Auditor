@@ -1,0 +1,229 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_482_Context {
+label = "Context"
+"482__msgData" [label="_msgData"]
+"482_constructor" [label="constructor"]
+"482__msgSender" [label="_msgSender"]
+}subgraph cluster_742_AccessControl {
+label = "AccessControl"
+"742__setupRole" [label="_setupRole"]
+"742_getRoleMemberCount" [label="getRoleMemberCount"]
+"742_hasRole" [label="hasRole"]
+"742_getRoleAdmin" [label="getRoleAdmin"]
+"742__grantRole" [label="_grantRole"]
+"742__revokeRole" [label="_revokeRole"]
+"742_renounceRole" [label="renounceRole"]
+"742_revokeRole" [label="revokeRole"]
+"742__setRoleAdmin" [label="_setRoleAdmin"]
+"742_getRoleMember" [label="getRoleMember"]
+"742_grantRole" [label="grantRole"]
+"742_grantRole" -> "742__grantRole"
+"742_renounceRole" -> "742__revokeRole"
+"742__revokeRole" -> "742__msgSender"
+"742__setupRole" -> "742__grantRole"
+"742_grantRole" -> "742__msgSender"
+"742__grantRole" -> "742__msgSender"
+"742_revokeRole" -> "742__msgSender"
+"742_renounceRole" -> "742__msgSender"
+"742_grantRole" -> "742_hasRole"
+"742_revokeRole" -> "742_hasRole"
+"742_revokeRole" -> "742__revokeRole"
+}subgraph cluster_841_Pausable {
+label = "Pausable"
+"841__unpause" [label="_unpause"]
+"841__whenNotPaused" [label="_whenNotPaused"]
+"841__pause" [label="_pause"]
+"841__whenPaused" [label="_whenPaused"]
+"841_paused" [label="paused"]
+"841_constructor" [label="constructor"]
+"841__unpause" -> "841_whenPaused"
+"841__pause" -> "841_whenNotPaused"
+}subgraph cluster_457_Address {
+label = "Address"
+"457_isContract" [label="isContract"]
+"457_sendValue" [label="sendValue"]
+}subgraph cluster_395_EnumerableSet {
+label = "EnumerableSet"
+"395__contains" [label="_contains"]
+"395_length" [label="length"]
+"395__at" [label="_at"]
+"395_remove" [label="remove"]
+"395_at" [label="at"]
+"395__add" [label="_add"]
+"395_contains" [label="contains"]
+"395__length" [label="_length"]
+"395__remove" [label="_remove"]
+"395_add" [label="add"]
+"395_remove" -> "395__remove"
+"395_at" -> "395__at"
+"395_contains" -> "395__contains"
+"395__add" -> "395__contains"
+"395_length" -> "395__length"
+"395_add" -> "395__add"
+}subgraph cluster_973_IGenericHandler {
+label = "IGenericHandler"
+"973_setResource" [label="setResource"]
+}subgraph cluster_912_IDepositExecute {
+label = "IDepositExecute"
+"912_executeProposal" [label="executeProposal"]
+"912_deposit" [label="deposit"]
+}subgraph cluster_920_IBridge {
+label = "IBridge"
+"920__chainID" [label="_chainID"]
+}subgraph cluster_888_SafeMath {
+label = "SafeMath"
+"888_sub" [label="sub"]
+"888__sub" [label="_sub"]
+"888_sub" -> "888__sub"
+}subgraph cluster_2459_Bridge {
+label = "Bridge"
+"2459__getFee" [label="_getFee"]
+"2459_depositETH" [label="depositETH"]
+"2459_adminChangeRelayerThreshold" [label="adminChangeRelayerThreshold"]
+"2459__onlyAdminOrOperator" [label="_onlyAdminOrOperator"]
+"2459_renounceAdmin" [label="renounceAdmin"]
+"2459_executeProposal" [label="executeProposal"]
+"2459_constructor" [label="constructor"]
+"2459__onlyRelayers" [label="_onlyRelayers"]
+"2459_getFee" [label="getFee"]
+"2459_adminRemoveOperator" [label="adminRemoveOperator"]
+"2459_adminUnpauseTransfers" [label="adminUnpauseTransfers"]
+"2459_adminSetResource" [label="adminSetResource"]
+"2459_deposit" [label="deposit"]
+"2459_adminWithdraw" [label="adminWithdraw"]
+"2459_adminChangeSpecialFee" [label="adminChangeSpecialFee"]
+"2459_adminSetGenericResource" [label="adminSetGenericResource"]
+"2459__onlyOperators" [label="_onlyOperators"]
+"2459_cancelProposal" [label="cancelProposal"]
+"2459__onlyAdmin" [label="_onlyAdmin"]
+"2459_transferFunds" [label="transferFunds"]
+"2459_isOperator" [label="isOperator"]
+"2459_adminSetBurnable" [label="adminSetBurnable"]
+"2459_getProposal" [label="getProposal"]
+"2459_adminChangeFee" [label="adminChangeFee"]
+"2459_voteProposal" [label="voteProposal"]
+"2459_adminAddRelayer" [label="adminAddRelayer"]
+"2459_adminPauseTransfers" [label="adminPauseTransfers"]
+"2459_adminUpdateBridgeAddress" [label="adminUpdateBridgeAddress"]
+"2459_adminRemoveRelayer" [label="adminRemoveRelayer"]
+"2459_isRelayer" [label="isRelayer"]
+"2459_adminAddOperator" [label="adminAddOperator"]
+"2459__onlyAdminOrRelayer" [label="_onlyAdminOrRelayer"]
+"2459_transferFunds" -> "2459_onlyAdmin"
+"2459_adminSetGenericResource" -> "2459_onlyAdmin"
+"2459_constructor" -> "2459__setRoleAdmin"
+"2459_depositETH" -> "2459_whenNotPaused"
+"2459_voteProposal" -> "2459_whenNotPaused"
+"2459_adminWithdraw" -> "2459_onlyAdmin"
+"2459_renounceAdmin" -> "2459_onlyAdmin"
+"2459_adminAddRelayer" -> "2459_onlyAdmin"
+"2459_constructor" -> "2459_grantRole"
+"2459_adminAddOperator" -> "2459_onlyAdmin"
+"2459_adminAddOperator" -> "2459_grantRole"
+"2459_executeProposal" -> "2459_whenNotPaused"
+"2459_isRelayer" -> "2459_hasRole"
+"2459_adminPauseTransfers" -> "2459__pause"
+"2459_renounceAdmin" -> "2459_grantRole"
+"2459_voteProposal" -> "2459_onlyRelayers"
+"2459_adminRemoveOperator" -> "2459_onlyAdmin"
+"2459_adminRemoveRelayer" -> "2459_onlyAdmin"
+"2459_isOperator" -> "2459_hasRole"
+"2459_adminRemoveRelayer" -> "2459_hasRole"
+"2459__onlyAdminOrOperator" -> "2459_hasRole"
+"2459_adminRemoveOperator" -> "2459_hasRole"
+"2459_adminChangeSpecialFee" -> "2459_onlyAdminOrOperator"
+"2459_adminChangeFee" -> "2459_onlyAdmin"
+"2459_adminAddOperator" -> "2459_hasRole"
+"2459_adminSetBurnable" -> "2459_onlyAdmin"
+"2459_adminUnpauseTransfers" -> "2459_onlyAdminOrOperator"
+"2459_adminAddRelayer" -> "2459_hasRole"
+"2459_depositETH" -> "2459__getFee"
+"2459_adminRemoveOperator" -> "2459_revokeRole"
+"2459_constructor" -> "2459__setupRole"
+"2459_adminRemoveRelayer" -> "2459_revokeRole"
+"2459_renounceAdmin" -> "2459_renounceRole"
+"2459_adminPauseTransfers" -> "2459_onlyAdminOrOperator"
+"2459_adminUnpauseTransfers" -> "2459__unpause"
+"2459_deposit" -> "2459_whenNotPaused"
+"2459_adminUpdateBridgeAddress" -> "2459_onlyAdmin"
+"2459_adminAddRelayer" -> "2459_grantRole"
+"2459_cancelProposal" -> "2459_onlyAdminOrRelayer"
+"2459__onlyOperators" -> "2459_hasRole"
+"2459__onlyAdmin" -> "2459_hasRole"
+"2459_adminChangeRelayerThreshold" -> "2459_onlyAdmin"
+"2459_deposit" -> "2459__getFee"
+"2459_cancelProposal" -> "2459_sub"
+"2459_executeProposal" -> "2459_onlyRelayers"
+"2459_adminSetResource" -> "2459_onlyAdmin"
+"2459__onlyAdminOrRelayer" -> "2459_hasRole"
+"2459__onlyRelayers" -> "2459_hasRole"
+"2459_getFee" -> "2459__getFee"
+"2459_voteProposal" -> "2459_sub"
+}subgraph cluster_957_IERCHandler {
+label = "IERCHandler"
+"957__wtokenAddress" [label="_wtokenAddress"]
+"957_setBurnable" [label="setBurnable"]
+"957_setResource" [label="setResource"]
+"957_updateBridgeAddress" [label="updateBridgeAddress"]
+"957_withdraw" [label="withdraw"]
+}subgraph cluster_991_IWETH {
+label = "IWETH"
+"991_withdraw" [label="withdraw"]
+"991_transfer" [label="transfer"]
+"991_deposit" [label="deposit"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"balance(address)" 
+"require(bool,string)" 
+"keccak256(bytes)" 
+"calldataload(uint256)" 
+"extcodehash(uint256)" 
+"abi.encodePacked()" 
+"2459_deposit" -> "require(bool,string)"
+"457_sendValue" -> "balance(address)"
+"2459__onlyAdmin" -> "require(bool,string)"
+"2459__onlyAdminOrOperator" -> "require(bool,string)"
+"888__sub" -> "require(bool,string)"
+"2459_adminChangeSpecialFee" -> "require(bool,string)"
+"841__whenPaused" -> "require(bool,string)"
+"2459__onlyOperators" -> "require(bool,string)"
+"2459_adminChangeFee" -> "require(bool,string)"
+"2459_adminRemoveOperator" -> "require(bool,string)"
+"2459_executeProposal" -> "abi.encodePacked()"
+"2459__onlyAdminOrRelayer" -> "require(bool,string)"
+"2459_adminAddOperator" -> "require(bool,string)"
+"2459_voteProposal" -> "require(bool,string)"
+"457_sendValue" -> "require(bool,string)"
+"742_grantRole" -> "require(bool,string)"
+"2459_depositETH" -> "calldataload(uint256)"
+"2459_executeProposal" -> "require(bool,string)"
+"742_revokeRole" -> "require(bool,string)"
+"841__whenNotPaused" -> "require(bool,string)"
+"2459_cancelProposal" -> "require(bool,string)"
+"742_renounceRole" -> "require(bool,string)"
+"2459_executeProposal" -> "keccak256(bytes)"
+"457_isContract" -> "extcodehash(uint256)"
+"2459_adminRemoveRelayer" -> "require(bool,string)"
+"395__at" -> "require(bool,string)"
+"2459_depositETH" -> "require(bool,string)"
+"2459__onlyRelayers" -> "require(bool,string)"
+"2459_adminAddRelayer" -> "require(bool,string)"
+}"2459_depositETH" -> "912_deposit"
+"2459_adminWithdraw" -> "957_withdraw"
+"2459_executeProposal" -> "912_executeProposal"
+"742_getRoleMemberCount" -> "395_length"
+"2459_adminSetBurnable" -> "957_setBurnable"
+"742_getRoleMember" -> "395_at"
+"2459_deposit" -> "912_deposit"
+"2459_depositETH" -> "991_deposit"
+"2459_depositETH" -> "957__wtokenAddress"
+"2459_depositETH" -> "991_transfer"
+"2459_adminSetGenericResource" -> "973_setResource"
+"742__grantRole" -> "395_add"
+"742__revokeRole" -> "395_remove"
+"2459_adminSetResource" -> "957_setResource"
+"2459_adminUpdateBridgeAddress" -> "957_updateBridgeAddress"
+"742_hasRole" -> "395_contains"
+}

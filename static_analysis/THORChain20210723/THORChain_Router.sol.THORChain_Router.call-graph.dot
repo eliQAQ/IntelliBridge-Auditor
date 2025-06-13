@@ -3,40 +3,40 @@ rankdir="LR"
 node [shape=box]
 subgraph cluster_688_THORChain_Router {
 label = "THORChain_Router"
-"688_depositWithExpiry" [label="depositWithExpiry"]
-"688__adjustAllowances" [label="_adjustAllowances"]
-"688__routerDeposit" [label="_routerDeposit"]
-"688_deposit" [label="deposit"]
 "688_constructor" [label="constructor"]
-"688_safeTransferFrom" [label="safeTransferFrom"]
-"688_slitherConstructorConstantVariables" [label="slitherConstructorConstantVariables"]
-"688_batchTransferOut" [label="batchTransferOut"]
-"688_transferOut" [label="transferOut"]
+"688_depositWithExpiry" [label="depositWithExpiry"]
 "688_transferAllowance" [label="transferAllowance"]
+"688__routerDeposit" [label="_routerDeposit"]
+"688_slitherConstructorConstantVariables" [label="slitherConstructorConstantVariables"]
+"688__adjustAllowances" [label="_adjustAllowances"]
 "688_returnVaultAssets" [label="returnVaultAssets"]
-"688_returnVaultAssets" -> "688__adjustAllowances"
-"688_returnVaultAssets" -> "688__routerDeposit"
-"688_transferOut" -> "688_nonReentrant"
-"688_deposit" -> "688_nonReentrant"
+"688_transferOut" [label="transferOut"]
+"688_deposit" [label="deposit"]
+"688_batchTransferOut" [label="batchTransferOut"]
+"688_safeTransferFrom" [label="safeTransferFrom"]
 "688_deposit" -> "688_safeTransferFrom"
+"688_transferOut" -> "688_nonReentrant"
+"688_returnVaultAssets" -> "688__adjustAllowances"
 "688_transferAllowance" -> "688__routerDeposit"
+"688_deposit" -> "688_nonReentrant"
 "688_batchTransferOut" -> "688_transferOut"
 "688_depositWithExpiry" -> "688_deposit"
+"688_returnVaultAssets" -> "688__routerDeposit"
 "688_transferAllowance" -> "688__adjustAllowances"
 }subgraph cluster_solidity {
 label = "[Solidity]"
 "require(bool)" 
-"abi.encodeWithSignature()" 
 "require(bool,string)" 
-"688_transferOut" -> "require(bool)"
-"688_transferOut" -> "abi.encodeWithSignature()"
-"688_deposit" -> "require(bool)"
-"688_batchTransferOut" -> "require(bool)"
-"688__routerDeposit" -> "require(bool)"
+"abi.encodeWithSignature()" 
 "688_safeTransferFrom" -> "require(bool)"
-"688_depositWithExpiry" -> "require(bool,string)"
-"688__routerDeposit" -> "abi.encodeWithSignature()"
-"688_returnVaultAssets" -> "require(bool)"
+"688_deposit" -> "require(bool)"
 "688_safeTransferFrom" -> "abi.encodeWithSignature()"
+"688_transferOut" -> "abi.encodeWithSignature()"
+"688__routerDeposit" -> "abi.encodeWithSignature()"
+"688_batchTransferOut" -> "require(bool)"
+"688_transferOut" -> "require(bool)"
+"688_returnVaultAssets" -> "require(bool)"
+"688_depositWithExpiry" -> "require(bool,string)"
+"688__routerDeposit" -> "require(bool)"
 }
 }
