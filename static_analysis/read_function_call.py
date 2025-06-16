@@ -164,8 +164,8 @@ def  get_function_called_graph(directory, function_name):
                         except:
                             continue
 
-                        final_x = file_prefix_x + "." + contract_prefix_x + "." + func_prefix_x
-                        final_y = file_prefix_y + "." + contract_prefix_y + "." + func_prefix_y
+                        final_x = contract_prefix_x + "." + func_prefix_x
+                        final_y = contract_prefix_y + "." + func_prefix_y
                             #print(x, y)
                         #print(final_x, final_y)
                         # if file_name == "AnyswapV4Router.sol.dot":
@@ -253,8 +253,8 @@ def  get_function_call_graph(directory, function_name):
                         except:
                             continue
 
-                        final_x = file_prefix_x + "." + contract_prefix_x + "." + func_prefix_x
-                        final_y = file_prefix_y + "." + contract_prefix_y + "." + func_prefix_y
+                        final_x = contract_prefix_x + "." + func_prefix_x
+                        final_y = contract_prefix_y + "." + func_prefix_y
                             #print(x, y)
                         #print(final_x, final_y)
                         # if file_name == "AnyswapV4Router.sol.dot":
@@ -274,12 +274,28 @@ def  get_function_call_graph(directory, function_name):
 
 def extract_contract_ranges(source: str):
     """
-    扫描出所有 contract 声明的名字和它们在源码里的区间 [start, end]。
+    扫描出所有 contract和library声明的名字和它们在源码里的区间 [start, end]。
     返回：列表 of (contract_name, start_index, end_index)
     """
     pattern = re.compile(r'\bcontract\s+([A-Za-z_]\w*)\s*(?:is[^{;]*)?\{')
+    pattern_library = re.compile(r'\blibrary\s+([A-Za-z_]\w*)\s*(?:is[^{;]*)?\{')
     contracts = []
     for m in pattern.finditer(source):
+        name = m.group(1)
+        start = m.end() - 1  # '{' 的位置
+        # 向后匹配找到对应的闭合 '}'
+        brace = 0
+        for i in range(start, len(source)):
+            if source[i] == '{':
+                brace += 1
+            elif source[i] == '}':
+                brace -= 1
+                if brace == 0:
+                    end = i
+                    contracts.append((name, m.start(), end+1))
+                    break
+    
+    for m in pattern_library.finditer(source):
         name = m.group(1)
         start = m.end() - 1  # '{' 的位置
         # 向后匹配找到对应的闭合 '}'
@@ -334,9 +350,10 @@ def extract_functions_with_event(file_prefix: str, contracts, source_code: str, 
         i = start
         
         contract_prefix = find_contract_of_pos(contracts, start)
+
         if contract_prefix is None:
             continue
-        mark_name = file_prefix + "." + contract_prefix + "." + fn_name
+        mark_name = contract_prefix + "." + fn_name
         if "public" or "external" in whole_fn_name:
             func_dict[mark_name] = True
         else:
@@ -425,7 +442,12 @@ def extract_function_code(sol_path, contract_name, func_name):
     contract_re = re.compile(
         r'\bcontract\s+' + re.escape(contract_name) + r'\b[^{]*\{'
     )
+    libraray_re = re.compile(
+        r'\blibrary\s+' + re.escape(contract_name) + r'\b[^{]*\{'
+    )
     m = contract_re.search(text)
+    if not m:
+        m = libraray_re.search(text)
     if not m:
         return ''
     start = m.end()  # 合约体开始大括号之后
@@ -459,25 +481,62 @@ def extract_function_code(sol_path, contract_name, func_name):
         idx2 += 1
     return contract_body[f_start:idx2]
 
+
+def is_contract_func_in_file(sol_file, contract_name, func_name):
+    with open(sol_file, "r") as f:
+        source = f.read()
+    pattern = re.compile(
+        r'\b(?:contract|library)\s+' + re.escape(contract_name) + r'\b[^{]*\{',
+        re.IGNORECASE
+    )
+    match = pattern.search(source)
+    if not match:
+        return None
+
+    start = match.end() - 1  
+    depth = 0
+    for i in range(start, len(source)):
+        if source[i] == '{':
+            depth += 1
+        elif source[i] == '}':
+            depth -= 1
+            if depth == 0:
+                source = source[match.start():i+1]
+                break
+    
+    pattern = re.compile(
+        r'\bfunction\s+' + re.escape(func_name) + r'\s*\(',
+        re.IGNORECASE
+    )
+    return bool(pattern.search(source))
+
+
 def get_code_from_func(directory, get_all_func_stack):
     results = []
     for item in get_all_func_stack:
-        file_path, contract_name, func_name = item.split('.')
-        sol_file = f"{file_path}.sol"
-        if is_interface_in_file(sol_file, contract_name):
-            #print(sol_file, contract_name)
-            impls = find_implementing_contracts(contract_name, directory)
-            #print(impls)
-            for impl in impls:
-                code = extract_function_code(impl[0], impl[1], func_name)
-                #print(code)
-                results.append(code)
-                break
-        else:
-            # 普通合约
-            code = extract_function_code(sol_file, contract_name, func_name)
-            if code:
-                results.append(code)
+        contract_name, func_name = item.split('.')
+        for root, dirs, files in os.walk(directory):
+            for file in files:
+                file_path = os.path.join(root, file)
+                if not file_path.endswith(".sol"):
+                    continue
+                if not is_contract_func_in_file(file_path, contract_name, func_name):
+                    continue
+                if is_interface_in_file(file_path, contract_name):
+                    #print(sol_file, contract_name)
+                    impls = find_implementing_contracts(contract_name, directory)
+                    #print(impls)
+                    for impl in impls:
+                        code = extract_function_code(impl[0], impl[1], func_name)
+                        #print(code)
+
+                        results.append(impl[1] + "." + func_name + ":" + code)
+                        break
+                else:
+                    # 普通合约
+                    code = extract_function_code(file_path, contract_name, func_name)
+                    if code:
+                        results.append(contract_name + "." + func_name + ":" +code)
     return results
         
 
@@ -504,7 +563,7 @@ if __name__ == "__main__":
     parser.add_argument("--event-name", type=str, required=False, help="调用的事件名称")
     args = parser.parse_args()
     function_names = get_function_name(args.file_directory, args.event_name)
-    #print(function_names)
+    print(function_names)
     traverse_files(args.file_directory)
     directory_name = "output/" + args.file_directory + "_" + args.event_name
     if not os.path.exists(directory_name):
@@ -515,7 +574,6 @@ if __name__ == "__main__":
         called_graph, func_name_called = get_function_called_graph(args.file_directory, func_name)
         called_and_call_graph, func_name_call = get_function_call_graph(args.file_directory, func_name_called)
         call_chain = patrition_public_chain(called_graph, func_name[0])
-        #print(call_chain, called_and_call_graph)
         for key, value in call_chain.items():
             cnt += 1
             code = get_code_from_graph(args.file_directory, called_and_call_graph, value)
