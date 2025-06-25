@@ -92,8 +92,8 @@ contract RubicProxy is OnlySourceFunctionality {
             revert DifferentAmountSpent();
         }
     }
-    //lack of whilelist check
-    //CCV vulnerability functions
+
+
     function routerCallNative(BaseCrossChainParams calldata _params, bytes calldata _data)
         external
         payable
