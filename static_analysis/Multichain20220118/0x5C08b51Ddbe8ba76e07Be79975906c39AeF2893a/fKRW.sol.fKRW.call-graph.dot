@@ -1,0 +1,89 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_105_IERC2612 {
+label = "IERC2612"
+"105_permit" [label="permit"]
+"105_nonces" [label="nonces"]
+}subgraph cluster_1330_fKRW {
+label = "fKRW"
+"1330_constructor" [label="constructor"]
+"1330_slitherConstructorConstantVariables" [label="slitherConstructorConstantVariables"]
+"1330_transferWithPermit" [label="transferWithPermit"]
+"1330_prefixed" [label="prefixed"]
+"1330_changeDCRMOwner" [label="changeDCRMOwner"]
+"1330__mint" [label="_mint"]
+"1330__burn" [label="_burn"]
+"1330_verifyPersonalSign" [label="verifyPersonalSign"]
+"1330_transferAndCall" [label="transferAndCall"]
+"1330_transferFrom" [label="transferFrom"]
+"1330_Swapin" [label="Swapin"]
+"1330_approve" [label="approve"]
+"1330_approveAndCall" [label="approveAndCall"]
+"1330_Swapout" [label="Swapout"]
+"1330_totalSupply" [label="totalSupply"]
+"1330_transfer" [label="transfer"]
+"1330_verifyEIP712" [label="verifyEIP712"]
+"1330_owner" [label="owner"]
+"1330_permit" [label="permit"]
+"1330_transferWithPermit" -> "1330_verifyPersonalSign"
+"1330_permit" -> "1330_verifyEIP712"
+"1330_Swapin" -> "1330__mint"
+"1330_Swapin" -> "1330_onlyOwner"
+"1330_transferWithPermit" -> "1330_verifyEIP712"
+"1330_Swapout" -> "1330__burn"
+"1330_verifyPersonalSign" -> "1330_prefixed"
+"1330_changeDCRMOwner" -> "1330_onlyOwner"
+"1330_changeDCRMOwner" -> "1330_owner"
+"1330_permit" -> "1330_verifyPersonalSign"
+}subgraph cluster_77_IERC20 {
+label = "IERC20"
+"77_transfer" [label="transfer"]
+"77_balanceOf" [label="balanceOf"]
+"77_approve" [label="approve"]
+"77_allowance" [label="allowance"]
+"77_totalSupply" [label="totalSupply"]
+"77_transferFrom" [label="transferFrom"]
+}subgraph cluster_135_IWERC10 {
+label = "IWERC10"
+"135_approveAndCall" [label="approveAndCall"]
+"135_transferAndCall" [label="transferAndCall"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool)" 
+"ecrecover(bytes32,uint8,bytes32,bytes32)" 
+"keccak256(bytes)" 
+"abi.encode()" 
+"chainid()" 
+"abi.encodePacked()" 
+"require(bool,string)" 
+"1330_verifyEIP712" -> "abi.encodePacked()"
+"1330_verifyEIP712" -> "keccak256(bytes)"
+"1330_permit" -> "require(bool)"
+"1330_permit" -> "require(bool,string)"
+"1330_constructor" -> "abi.encode()"
+"1330_prefixed" -> "abi.encodePacked()"
+"1330_Swapout" -> "require(bool,string)"
+"1330_verifyEIP712" -> "ecrecover(bytes32,uint8,bytes32,bytes32)"
+"1330_transferWithPermit" -> "keccak256(bytes)"
+"1330_constructor" -> "chainid()"
+"1330_prefixed" -> "keccak256(bytes)"
+"1330_transferAndCall" -> "require(bool)"
+"1330_transferWithPermit" -> "require(bool,string)"
+"1330_transferAndCall" -> "require(bool,string)"
+"1330_verifyPersonalSign" -> "ecrecover(bytes32,uint8,bytes32,bytes32)"
+"1330_transfer" -> "require(bool)"
+"1330_changeDCRMOwner" -> "require(bool,string)"
+"1330_transferWithPermit" -> "require(bool)"
+"1330_permit" -> "abi.encode()"
+"1330_transferFrom" -> "require(bool)"
+"1330__mint" -> "require(bool,string)"
+"1330_slitherConstructorConstantVariables" -> "keccak256(bytes)"
+"1330_transferFrom" -> "require(bool,string)"
+"1330__burn" -> "require(bool,string)"
+"1330_transferWithPermit" -> "abi.encode()"
+"1330_constructor" -> "keccak256(bytes)"
+"1330_transfer" -> "require(bool,string)"
+"1330_permit" -> "keccak256(bytes)"
+}
+}

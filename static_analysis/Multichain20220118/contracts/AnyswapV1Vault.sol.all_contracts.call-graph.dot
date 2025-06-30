@@ -1,0 +1,292 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_1187_IERC20 {
+label = "IERC20"
+"1187_approve" [label="approve"]
+"1187_totalSupply" [label="totalSupply"]
+"1187_transfer" [label="transfer"]
+"1187_transferFrom" [label="transferFrom"]
+"1187_permit" [label="permit"]
+"1187_balanceOf" [label="balanceOf"]
+"1187_transferWithPermit" [label="transferWithPermit"]
+"1187_allowance" [label="allowance"]
+}subgraph cluster_3077_AnyswapV1Vault {
+label = "AnyswapV1Vault"
+"3077_getAmountsOut" [label="getAmountsOut"]
+"3077_anySwapOutUnderlyingWithTransferPermit" [label="anySwapOutUnderlyingWithTransferPermit"]
+"3077_anySwapFeeTo" [label="anySwapFeeTo"]
+"3077_anySwapOutExactTokensForNative" [label="anySwapOutExactTokensForNative"]
+"3077_anySwapOutExactTokensForTokens" [label="anySwapOutExactTokensForTokens"]
+"3077_anySwapOutUnderlyingWithPermit" [label="anySwapOutUnderlyingWithPermit"]
+"3077_anySwapOutExactTokensForNativeUnderlying" [label="anySwapOutExactTokensForNativeUnderlying"]
+"3077_getAmountOut" [label="getAmountOut"]
+"3077_anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" [label="anySwapOutExactTokensForTokensUnderlyingWithTransferPermit"]
+"3077_anySwapInExactTokensForTokens" [label="anySwapInExactTokensForTokens"]
+"3077_anySwapOutUnderlying" [label="anySwapOutUnderlying"]
+"3077_constructor" [label="constructor"]
+"3077_getAmountIn" [label="getAmountIn"]
+"3077_anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" [label="anySwapOutExactTokensForNativeUnderlyingWithTransferPermit"]
+"3077__swap" [label="_swap"]
+"3077__anySwapOut" [label="_anySwapOut"]
+"3077_changeVault" [label="changeVault"]
+"3077_anySwapIn" [label="anySwapIn"]
+"3077_anySwapOutExactTokensForNativeUnderlyingWithPermit" [label="anySwapOutExactTokensForNativeUnderlyingWithPermit"]
+"3077_anySwapInUnderlying" [label="anySwapInUnderlying"]
+"3077_mpc" [label="mpc"]
+"3077_anySwapOutExactTokensForTokensUnderlying" [label="anySwapOutExactTokensForTokensUnderlying"]
+"3077_getAmountsIn" [label="getAmountsIn"]
+"3077_anySwapInExactTokensForNative" [label="anySwapInExactTokensForNative"]
+"3077_anySwapOut" [label="anySwapOut"]
+"3077__anySwapIn" [label="_anySwapIn"]
+"3077_anySwapOutExactTokensForTokensUnderlyingWithPermit" [label="anySwapOutExactTokensForTokensUnderlyingWithPermit"]
+"3077_cID" [label="cID"]
+"3077_quote" [label="quote"]
+"3077_changeMPC" [label="changeMPC"]
+"3077_receive" [label="receive"]
+"3077_anySwapInUnderlying" -> "3077_onlyMPC"
+"3077_anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" -> "3077_ensure"
+"3077_anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" -> "3077_cID"
+"3077_anySwapInExactTokensForNative" -> "3077__anySwapIn"
+"3077_anySwapOutExactTokensForTokensUnderlyingWithPermit" -> "3077_ensure"
+"3077_changeVault" -> "3077_onlyMPC"
+"3077_anySwapInUnderlying" -> "3077__anySwapIn"
+"3077_anySwapIn" -> "3077_onlyMPC"
+"3077_anySwapInExactTokensForTokens" -> "3077__swap"
+"3077_anySwapOutExactTokensForNative" -> "3077_ensure"
+"3077_anySwapOutExactTokensForTokensUnderlyingWithPermit" -> "3077_cID"
+"3077_anySwapOutExactTokensForTokens" -> "3077_cID"
+"3077_anySwapOutExactTokensForNativeUnderlying" -> "3077_cID"
+"3077__anySwapIn" -> "3077_cID"
+"3077_anySwapInExactTokensForTokens" -> "3077__anySwapIn"
+"3077_changeMPC" -> "3077_onlyMPC"
+"3077_anySwapFeeTo" -> "3077_mpc"
+"3077_anySwapOutUnderlyingWithTransferPermit" -> "3077__anySwapOut"
+"3077__anySwapOut" -> "3077_cID"
+"3077_anySwapInExactTokensForTokens" -> "3077_ensure"
+"3077_anySwapOutExactTokensForNativeUnderlying" -> "3077_ensure"
+"3077_anySwapFeeTo" -> "3077_onlyMPC"
+"3077_changeMPC" -> "3077_cID"
+"3077_anySwapOut" -> "3077__anySwapOut"
+"3077_anySwapInExactTokensForTokens" -> "3077_onlyMPC"
+"3077_anySwapInExactTokensForNative" -> "3077_onlyMPC"
+"3077_anySwapOutUnderlyingWithPermit" -> "3077__anySwapOut"
+"3077_anySwapOutUnderlying" -> "3077__anySwapOut"
+"3077_anySwapOutExactTokensForTokens" -> "3077_ensure"
+"3077_anySwapInExactTokensForNative" -> "3077_ensure"
+"3077_anySwapOutExactTokensForTokensUnderlying" -> "3077_ensure"
+"3077_changeMPC" -> "3077_mpc"
+"3077_anySwapIn" -> "3077__anySwapIn"
+"3077_anySwapOutExactTokensForNative" -> "3077_cID"
+"3077_anySwapOutExactTokensForNativeUnderlyingWithPermit" -> "3077_cID"
+"3077_anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" -> "3077_ensure"
+"3077_anySwapOutExactTokensForTokensUnderlying" -> "3077_cID"
+"3077_anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" -> "3077_cID"
+"3077_anySwapOutExactTokensForNativeUnderlyingWithPermit" -> "3077_ensure"
+"3077_anySwapInExactTokensForNative" -> "3077__swap"
+}subgraph cluster_1032_IwNATIVE {
+label = "IwNATIVE"
+"1032_transfer" [label="transfer"]
+"1032_deposit" [label="deposit"]
+"1032_withdraw" [label="withdraw"]
+}subgraph cluster_943_TransferHelper {
+label = "TransferHelper"
+"943_safeApprove" [label="safeApprove"]
+"943_safeTransfer" [label="safeTransfer"]
+"943_safeTransferNative" [label="safeTransferNative"]
+"943_safeTransferFrom" [label="safeTransferFrom"]
+}subgraph cluster_241_ISushiswapV2Pair {
+label = "ISushiswapV2Pair"
+"241_decimals" [label="decimals"]
+"241_balanceOf" [label="balanceOf"]
+"241_skim" [label="skim"]
+"241_token0" [label="token0"]
+"241_burn" [label="burn"]
+"241_kLast" [label="kLast"]
+"241_token1" [label="token1"]
+"241_permit" [label="permit"]
+"241_symbol" [label="symbol"]
+"241_price0CumulativeLast" [label="price0CumulativeLast"]
+"241_mint" [label="mint"]
+"241_factory" [label="factory"]
+"241_getReserves" [label="getReserves"]
+"241_MINIMUM_LIQUIDITY" [label="MINIMUM_LIQUIDITY"]
+"241_totalSupply" [label="totalSupply"]
+"241_PERMIT_TYPEHASH" [label="PERMIT_TYPEHASH"]
+"241_sync" [label="sync"]
+"241_DOMAIN_SEPARATOR" [label="DOMAIN_SEPARATOR"]
+"241_nonces" [label="nonces"]
+"241_allowance" [label="allowance"]
+"241_price1CumulativeLast" [label="price1CumulativeLast"]
+"241_name" [label="name"]
+"241_transfer" [label="transfer"]
+"241_initialize" [label="initialize"]
+"241_swap" [label="swap"]
+"241_transferFrom" [label="transferFrom"]
+"241_approve" [label="approve"]
+}subgraph cluster_785_SushiswapV2Library {
+label = "SushiswapV2Library"
+"785_getAmountIn" [label="getAmountIn"]
+"785_pairFor" [label="pairFor"]
+"785_quote" [label="quote"]
+"785_sortTokens" [label="sortTokens"]
+"785_getAmountsIn" [label="getAmountsIn"]
+"785_getReserves" [label="getReserves"]
+"785_getAmountsOut" [label="getAmountsOut"]
+"785_getAmountOut" [label="getAmountOut"]
+"785_getReserves" -> "785_sortTokens"
+"785_getReserves" -> "785_pairFor"
+"785_getAmountsIn" -> "785_getReserves"
+"785_pairFor" -> "785_sortTokens"
+"785_getAmountsOut" -> "785_getAmountOut"
+"785_getAmountsOut" -> "785_getReserves"
+"785_getAmountsIn" -> "785_getAmountIn"
+}subgraph cluster_1362_SafeERC20 {
+label = "SafeERC20"
+"1362_callOptionalReturn" [label="callOptionalReturn"]
+"1362_safeTransferFrom" [label="safeTransferFrom"]
+"1362_safeApprove" [label="safeApprove"]
+"1362_safeTransfer" [label="safeTransfer"]
+"1362_safeTransfer" -> "1362_callOptionalReturn"
+"1362_safeTransferFrom" -> "1362_callOptionalReturn"
+"1362_safeApprove" -> "1362_callOptionalReturn"
+}subgraph cluster_1014_ISushiswapV2Factory {
+label = "ISushiswapV2Factory"
+"1014_getPair" [label="getPair"]
+"1014_feeTo" [label="feeTo"]
+"1014_setMigrator" [label="setMigrator"]
+"1014_createPair" [label="createPair"]
+"1014_allPairsLength" [label="allPairsLength"]
+"1014_migrator" [label="migrator"]
+"1014_feeToSetter" [label="feeToSetter"]
+"1014_setFeeTo" [label="setFeeTo"]
+"1014_setFeeToSetter" [label="setFeeToSetter"]
+"1014_allPairs" [label="allPairs"]
+}subgraph cluster_314_SafeMathSushiswap {
+label = "SafeMathSushiswap"
+"314_mul" [label="mul"]
+"314_sub" [label="sub"]
+"314_add" [label="add"]
+}subgraph cluster_1083_AnyswapV1ERC20 {
+label = "AnyswapV1ERC20"
+"1083_mint" [label="mint"]
+"1083_withdrawVault" [label="withdrawVault"]
+"1083_underlying" [label="underlying"]
+"1083_depositVault" [label="depositVault"]
+"1083_changeVault" [label="changeVault"]
+"1083_burn" [label="burn"]
+}subgraph cluster_1213_Address {
+label = "Address"
+"1213_isContract" [label="isContract"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"chainid()" 
+"abi.encodePacked()" 
+"abi.encodeWithSelector()" 
+"extcodehash(uint256)" 
+"abi.decode()" 
+"assert(bool)" 
+"keccak256(bytes)" 
+"require(bool,string)" 
+"314_mul" -> "require(bool,string)"
+"1362_safeApprove" -> "require(bool,string)"
+"943_safeTransferFrom" -> "require(bool,string)"
+"785_getAmountIn" -> "require(bool,string)"
+"785_getAmountsOut" -> "require(bool,string)"
+"3077_anySwapInExactTokensForNative" -> "require(bool,string)"
+"1362_callOptionalReturn" -> "abi.decode()"
+"943_safeApprove" -> "abi.encodeWithSelector()"
+"3077_anySwapInExactTokensForTokens" -> "require(bool,string)"
+"1362_callOptionalReturn" -> "require(bool,string)"
+"943_safeTransferFrom" -> "abi.encodeWithSelector()"
+"314_add" -> "require(bool,string)"
+"3077_changeMPC" -> "require(bool,string)"
+"785_quote" -> "require(bool,string)"
+"943_safeTransfer" -> "require(bool,string)"
+"3077_cID" -> "chainid()"
+"785_sortTokens" -> "require(bool,string)"
+"314_sub" -> "require(bool,string)"
+"3077_receive" -> "assert(bool)"
+"1362_safeTransferFrom" -> "abi.encodeWithSelector()"
+"3077_changeVault" -> "require(bool,string)"
+"943_safeTransfer" -> "abi.decode()"
+"1362_safeApprove" -> "abi.encodeWithSelector()"
+"943_safeApprove" -> "require(bool,string)"
+"785_pairFor" -> "abi.encodePacked()"
+"1362_safeTransfer" -> "abi.encodeWithSelector()"
+"943_safeTransfer" -> "abi.encodeWithSelector()"
+"943_safeTransferFrom" -> "abi.decode()"
+"943_safeApprove" -> "abi.decode()"
+"1213_isContract" -> "extcodehash(uint256)"
+"785_getAmountsIn" -> "require(bool,string)"
+"785_pairFor" -> "keccak256(bytes)"
+"785_getAmountOut" -> "require(bool,string)"
+"943_safeTransferNative" -> "require(bool,string)"
+}"3077_anySwapOutExactTokensForNativeUnderlying" -> "1362_safeTransferFrom"
+"3077_anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" -> "1187_transferWithPermit"
+"785_getAmountOut" -> "314_add"
+"3077_quote" -> "785_quote"
+"785_getAmountIn" -> "314_mul"
+"1362_safeApprove" -> "1187_allowance"
+"785_getAmountIn" -> "314_add"
+"3077_getAmountsIn" -> "785_getAmountsIn"
+"3077_anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" -> "1187_transferWithPermit"
+"3077_anySwapOutExactTokensForNativeUnderlying" -> "1083_depositVault"
+"3077_anySwapOutExactTokensForNativeUnderlyingWithPermit" -> "1083_depositVault"
+"3077_anySwapOutExactTokensForTokensUnderlyingWithPermit" -> "1362_safeTransferFrom"
+"3077_anySwapOutExactTokensForNativeUnderlying" -> "1083_burn"
+"3077_anySwapInExactTokensForNative" -> "785_getAmountsOut"
+"3077_anySwapOutUnderlyingWithTransferPermit" -> "1187_transferWithPermit"
+"3077__swap" -> "785_pairFor"
+"3077_anySwapOutExactTokensForNativeUnderlyingWithPermit" -> "1083_underlying"
+"3077_anySwapOutUnderlyingWithTransferPermit" -> "1083_depositVault"
+"785_getAmountIn" -> "314_sub"
+"3077_getAmountOut" -> "785_getAmountOut"
+"3077_anySwapFeeTo" -> "1083_mint"
+"3077_anySwapOutUnderlying" -> "1083_depositVault"
+"3077_anySwapInExactTokensForTokens" -> "785_getAmountsOut"
+"3077_anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" -> "1083_depositVault"
+"3077_anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" -> "1083_underlying"
+"3077_anySwapOutExactTokensForNative" -> "1083_burn"
+"3077_anySwapInExactTokensForNative" -> "1032_withdraw"
+"3077_anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" -> "1083_depositVault"
+"3077_getAmountsOut" -> "785_getAmountsOut"
+"3077_anySwapOutExactTokensForTokensUnderlyingWithPermit" -> "1083_burn"
+"3077_anySwapOutUnderlyingWithTransferPermit" -> "1083_underlying"
+"3077_anySwapOutUnderlying" -> "1362_safeTransferFrom"
+"3077_anySwapOutExactTokensForTokensUnderlyingWithPermit" -> "1083_depositVault"
+"3077_anySwapInUnderlying" -> "1083_withdrawVault"
+"3077_anySwapOutUnderlyingWithPermit" -> "1083_depositVault"
+"3077_anySwapOutUnderlying" -> "1083_underlying"
+"3077_anySwapOutUnderlyingWithPermit" -> "1187_permit"
+"1362_callOptionalReturn" -> "1213_isContract"
+"3077_anySwapOutExactTokensForTokensUnderlyingWithPermit" -> "1083_underlying"
+"3077__anySwapIn" -> "1083_mint"
+"785_getReserves" -> "241_getReserves"
+"3077_anySwapOutExactTokensForNativeUnderlyingWithPermit" -> "1187_permit"
+"3077_anySwapInExactTokensForTokens" -> "785_pairFor"
+"3077_anySwapOutExactTokensForNativeUnderlyingWithPermit" -> "1083_burn"
+"3077_anySwapOutExactTokensForTokensUnderlying" -> "1083_depositVault"
+"3077_anySwapOutUnderlyingWithPermit" -> "1083_underlying"
+"3077_anySwapOutUnderlyingWithPermit" -> "1362_safeTransferFrom"
+"3077_anySwapOutExactTokensForTokensUnderlying" -> "1362_safeTransferFrom"
+"3077_getAmountIn" -> "785_getAmountIn"
+"3077_anySwapOutExactTokensForTokensUnderlying" -> "1083_underlying"
+"3077_anySwapOutExactTokensForTokensUnderlying" -> "1083_burn"
+"3077_anySwapInExactTokensForNative" -> "785_pairFor"
+"3077_anySwapFeeTo" -> "1083_withdrawVault"
+"785_quote" -> "314_mul"
+"3077_changeVault" -> "1083_changeVault"
+"3077__swap" -> "241_swap"
+"3077__swap" -> "785_sortTokens"
+"3077_anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" -> "1083_burn"
+"3077_anySwapOutExactTokensForNativeUnderlying" -> "1083_underlying"
+"3077_anySwapInExactTokensForNative" -> "943_safeTransferNative"
+"3077_anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" -> "1083_burn"
+"3077_anySwapOutExactTokensForTokens" -> "1083_burn"
+"3077__anySwapOut" -> "1083_burn"
+"785_getAmountOut" -> "314_mul"
+"3077_anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" -> "1083_underlying"
+"3077_anySwapOutExactTokensForNativeUnderlyingWithPermit" -> "1362_safeTransferFrom"
+"3077_anySwapOutExactTokensForTokensUnderlyingWithPermit" -> "1187_permit"
+}

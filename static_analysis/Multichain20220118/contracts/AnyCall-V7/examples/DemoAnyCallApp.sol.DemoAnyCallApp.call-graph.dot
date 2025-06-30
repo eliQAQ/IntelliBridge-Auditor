@@ -1,0 +1,68 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_740_IAnyCallReceiver {
+label = "IAnyCallReceiver"
+"740_anyExecute" [label="anyExecute"]
+}subgraph cluster_239_DemoAnyCallApp {
+label = "DemoAnyCallApp"
+"239_sendBlockInfo" [label="sendBlockInfo"]
+"239_constructor" [label="constructor"]
+"239_setPeer" [label="setPeer"]
+"239_setFee" [label="setFee"]
+"239__beforeSend" [label="_beforeSend"]
+"239_receiveBlockInfo" [label="receiveBlockInfo"]
+"239__anyFallback" [label="_anyFallback"]
+"239__anyExecute" [label="_anyExecute"]
+"239__anyExecute" -> "239_sendBlockInfo"
+"239__anyExecute" -> "239_receiveBlockInfo"
+"239_sendBlockInfo" -> "239__anyCall"
+"239_sendBlockInfo" -> "239__beforeSend"
+"239_setFee" -> "239_onlyAdmin"
+"239_setPeer" -> "239_onlyAdmin"
+"239_constructor" -> "239_constructor"
+}subgraph cluster_659_Administrable {
+label = "Administrable"
+"659_transferAdmin" [label="transferAdmin"]
+"659_acceptAdmin" [label="acceptAdmin"]
+"659_setAdmin" [label="setAdmin"]
+"659_transferAdmin" -> "659_onlyAdmin"
+}subgraph cluster_532_AnyCallApp {
+label = "AnyCallApp"
+"532__anyFallback" [label="_anyFallback"]
+"532_anyFallback" [label="anyFallback"]
+"532_setSenders" [label="setSenders"]
+"532__anyCall" [label="_anyCall"]
+"532_anyExecute" [label="anyExecute"]
+"532_withdrawAnyCallFee" [label="withdrawAnyCallFee"]
+"532_depositAnyCallFee" [label="depositAnyCallFee"]
+"532_setAnyCallProxy" [label="setAnyCallProxy"]
+"532_constructor" [label="constructor"]
+"532__anyExecute" [label="_anyExecute"]
+"532_approve" [label="approve"]
+"532_setAnyCallProxy" -> "532_onlyAdmin"
+"532_approve" -> "532_onlyAdmin"
+"532_anyExecute" -> "532__anyExecute"
+"532_withdrawAnyCallFee" -> "532_onlyAdmin"
+"532_anyFallback" -> "532__anyFallback"
+"532_anyExecute" -> "532_onlyExecutor"
+"532_anyFallback" -> "532_onlyExecutor"
+"532_setSenders" -> "532_onlyAdmin"
+}subgraph cluster_760_IAnyCallSender {
+label = "IAnyCallSender"
+"760_anyFallback" [label="anyFallback"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"abi.encodePacked()" 
+"abi.decode()" 
+"require(bool)" 
+"require(bool,string)" 
+"532_anyFallback" -> "require(bool,string)"
+"239__anyExecute" -> "abi.decode()"
+"659_acceptAdmin" -> "require(bool)"
+"532_anyExecute" -> "require(bool,string)"
+"239_sendBlockInfo" -> "abi.encodePacked()"
+"239__anyFallback" -> "abi.decode()"
+"532_withdrawAnyCallFee" -> "require(bool)"
+}
+}

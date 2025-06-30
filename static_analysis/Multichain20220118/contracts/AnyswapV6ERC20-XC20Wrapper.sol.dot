@@ -1,0 +1,213 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterIERC20" {
+  graph [ label = "IERC20  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IERC20.name" [ label = "name", color = "blue" ];
+  "IERC20.symbol" [ label = "symbol", color = "blue" ];
+  "IERC20.totalSupply" [ label = "totalSupply", color = "blue" ];
+  "IERC20.decimals" [ label = "decimals", color = "blue" ];
+  "IERC20.balanceOf" [ label = "balanceOf", color = "blue" ];
+  "IERC20.transfer" [ label = "transfer", color = "blue" ];
+  "IERC20.allowance" [ label = "allowance", color = "blue" ];
+  "IERC20.approve" [ label = "approve", color = "blue" ];
+  "IERC20.transferFrom" [ label = "transferFrom", color = "blue" ];
+  "IERC20.data" [ label = "data" ];
+}
+
+subgraph "clusterLocalAsset" {
+  graph [ label = "LocalAsset  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "LocalAsset.mint" [ label = "mint", color = "blue" ];
+  "LocalAsset.burn" [ label = "burn", color = "blue" ];
+  "LocalAsset.freeze" [ label = "freeze", color = "blue" ];
+  "LocalAsset.thaw" [ label = "thaw", color = "blue" ];
+  "LocalAsset.freezeAsset" [ label = "freezeAsset", color = "blue" ];
+  "LocalAsset.freeze_asset" [ label = "freeze_asset", color = "blue" ];
+  "LocalAsset.thawAsset" [ label = "thawAsset", color = "blue" ];
+  "LocalAsset.thaw_asset" [ label = "thaw_asset", color = "blue" ];
+  "LocalAsset.transferOwnership" [ label = "transferOwnership", color = "blue" ];
+  "LocalAsset.transfer_ownership" [ label = "transfer_ownership", color = "blue" ];
+  "LocalAsset.setTeam" [ label = "setTeam", color = "blue" ];
+  "LocalAsset.set_team" [ label = "set_team", color = "blue" ];
+  "LocalAsset.setMetadata" [ label = "setMetadata", color = "blue" ];
+  "LocalAsset.set_metadata" [ label = "set_metadata", color = "blue" ];
+  "LocalAsset.clearMetadata" [ label = "clearMetadata", color = "blue" ];
+  "LocalAsset.clear_metadata" [ label = "clear_metadata", color = "blue" ];
+}
+
+subgraph "clusterIXC20" {
+  graph [ label = "IXC20  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+}
+
+subgraph "clusterSafeERC20" {
+  graph [ label = "SafeERC20  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "SafeERC20.safeTransfer" [ label = "safeTransfer", color = "white" ];
+  "SafeERC20.safeTransferFrom" [ label = "safeTransferFrom", color = "white" ];
+  "SafeERC20.callOptionalReturn" [ label = "callOptionalReturn" ];
+  "SafeERC20.address" [ label = "address" ];
+}
+
+subgraph "clusterAnyswapV6ERC20_XC20Wrapper" {
+  graph [ label = "AnyswapV6ERC20_XC20Wrapper", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "AnyswapV6ERC20_XC20Wrapper.onlyAuth" [ label = "onlyAuth", color = "yellow" ];
+  "AnyswapV6ERC20_XC20Wrapper.onlyVault" [ label = "onlyVault", color = "yellow" ];
+  "AnyswapV6ERC20_XC20Wrapper.onlyMintableXC20" [ label = "onlyMintableXC20", color = "yellow" ];
+  "AnyswapV6ERC20_XC20Wrapper.onlyExternalXC20" [ label = "onlyExternalXC20", color = "yellow" ];
+  "AnyswapV6ERC20_XC20Wrapper.isMintableXC20" [ label = "isMintableXC20" ];
+  "AnyswapV6ERC20_XC20Wrapper.owner" [ label = "owner", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.mpc" [ label = "mpc", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.setVaultOnly" [ label = "setVaultOnly", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.setMinter" [ label = "setMinter", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.applyMinter" [ label = "applyMinter", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.revokeMinter" [ label = "revokeMinter", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.getAllMinters" [ label = "getAllMinters", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.changeVault" [ label = "changeVault", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.mint" [ label = "mint", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.burn" [ label = "burn", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.Swapin" [ label = "Swapin", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.Swapout" [ label = "Swapout", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper._swapin" [ label = "_swapin" ];
+  "AnyswapV6ERC20_XC20Wrapper._swapout" [ label = "_swapout" ];
+  "AnyswapV6ERC20_XC20Wrapper.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.init" [ label = "init", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.totalSupply" [ label = "totalSupply", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.deposit" [ label = "deposit", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.depositVault" [ label = "depositVault", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper._deposit" [ label = "_deposit" ];
+  "AnyswapV6ERC20_XC20Wrapper.withdraw" [ label = "withdraw", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.withdrawVault" [ label = "withdrawVault", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper._withdraw" [ label = "_withdraw" ];
+  "AnyswapV6ERC20_XC20Wrapper._mint" [ label = "_mint" ];
+  "AnyswapV6ERC20_XC20Wrapper._burn" [ label = "_burn" ];
+  "AnyswapV6ERC20_XC20Wrapper.approve" [ label = "approve", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.transfer" [ label = "transfer", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.transferFrom" [ label = "transferFrom", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.freeze" [ label = "freeze", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.thaw" [ label = "thaw", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.freezeAsset" [ label = "freezeAsset", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.freeze_asset" [ label = "freeze_asset", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.thawAsset" [ label = "thawAsset", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.thaw_asset" [ label = "thaw_asset", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.transferOwnership" [ label = "transferOwnership", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.transfer_ownership" [ label = "transfer_ownership", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.setTeam" [ label = "setTeam", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper.set_team" [ label = "set_team", color = "blue" ];
+  "AnyswapV6ERC20_XC20Wrapper._initMetaData" [ label = "_initMetaData" ];
+  "AnyswapV6ERC20_XC20Wrapper.address" [ label = "address" ];
+  "AnyswapV6ERC20_XC20Wrapper.type" [ label = "type" ];
+}
+
+  "SafeERC20.safeTransfer";
+  "SafeERC20.callOptionalReturn";
+  "SafeERC20.safeTransferFrom";
+  "SafeERC20.address";
+  "IERC20.data";
+  "AnyswapV6ERC20_XC20Wrapper.onlyMintableXC20";
+  "AnyswapV6ERC20_XC20Wrapper.isMintableXC20";
+  "AnyswapV6ERC20_XC20Wrapper.onlyExternalXC20";
+  "AnyswapV6ERC20_XC20Wrapper.setMinter";
+  "AnyswapV6ERC20_XC20Wrapper.address";
+  "AnyswapV6ERC20_XC20Wrapper.applyMinter";
+  "AnyswapV6ERC20_XC20Wrapper.changeVault";
+  "AnyswapV6ERC20_XC20Wrapper.mint";
+  "AnyswapV6ERC20_XC20Wrapper._swapin";
+  "AnyswapV6ERC20_XC20Wrapper.burn";
+  "AnyswapV6ERC20_XC20Wrapper._swapout";
+  "AnyswapV6ERC20_XC20Wrapper.Swapin";
+  "AnyswapV6ERC20_XC20Wrapper.Swapout";
+  "AnyswapV6ERC20_XC20Wrapper._mint";
+  "AnyswapV6ERC20_XC20Wrapper._burn";
+  "AnyswapV6ERC20_XC20Wrapper.init";
+  "AnyswapV6ERC20_XC20Wrapper._initMetaData";
+  "AnyswapV6ERC20_XC20Wrapper.deposit";
+  "AnyswapV6ERC20_XC20Wrapper._deposit";
+  "AnyswapV6ERC20_XC20Wrapper.depositVault";
+  "AnyswapV6ERC20_XC20Wrapper.withdraw";
+  "AnyswapV6ERC20_XC20Wrapper._withdraw";
+  "AnyswapV6ERC20_XC20Wrapper.withdrawVault";
+  "AnyswapV6ERC20_XC20Wrapper.transfer";
+  "AnyswapV6ERC20_XC20Wrapper.transferFrom";
+  "AnyswapV6ERC20_XC20Wrapper.type";
+  "SafeERC20.safeTransfer" -> "SafeERC20.callOptionalReturn" [ color = "green" ];
+  "SafeERC20.safeTransferFrom" -> "SafeERC20.callOptionalReturn" [ color = "green" ];
+  "SafeERC20.callOptionalReturn" -> "SafeERC20.address" [ color = "green" ];
+  "SafeERC20.callOptionalReturn" -> "IERC20.data" [ color = "orange" ];
+  "SafeERC20.callOptionalReturn" -> "SafeERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.onlyMintableXC20" -> "AnyswapV6ERC20_XC20Wrapper.isMintableXC20" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.onlyExternalXC20" -> "AnyswapV6ERC20_XC20Wrapper.isMintableXC20" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.setMinter" -> "AnyswapV6ERC20_XC20Wrapper.address" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.applyMinter" -> "AnyswapV6ERC20_XC20Wrapper.address" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.applyMinter" -> "AnyswapV6ERC20_XC20Wrapper.address" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.changeVault" -> "AnyswapV6ERC20_XC20Wrapper.address" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.mint" -> "AnyswapV6ERC20_XC20Wrapper._swapin" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.burn" -> "AnyswapV6ERC20_XC20Wrapper._swapout" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.Swapin" -> "AnyswapV6ERC20_XC20Wrapper._swapin" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.Swapout" -> "AnyswapV6ERC20_XC20Wrapper.address" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.Swapout" -> "AnyswapV6ERC20_XC20Wrapper._swapout" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.Swapout" -> "AnyswapV6ERC20_XC20Wrapper._swapout" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper._swapin" -> "AnyswapV6ERC20_XC20Wrapper.isMintableXC20" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper._swapin" -> "AnyswapV6ERC20_XC20Wrapper.address" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper._swapin" -> "AnyswapV6ERC20_XC20Wrapper._mint" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper._swapout" -> "AnyswapV6ERC20_XC20Wrapper.isMintableXC20" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper._swapout" -> "AnyswapV6ERC20_XC20Wrapper._burn" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper._swapout" -> "AnyswapV6ERC20_XC20Wrapper.address" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper._swapout" -> "AnyswapV6ERC20_XC20Wrapper.address" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper._swapout" -> "AnyswapV6ERC20_XC20Wrapper.address" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.init" -> "AnyswapV6ERC20_XC20Wrapper.address" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.init" -> "AnyswapV6ERC20_XC20Wrapper.address" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.init" -> "AnyswapV6ERC20_XC20Wrapper._initMetaData" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.init" -> "AnyswapV6ERC20_XC20Wrapper.address" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.init" -> "AnyswapV6ERC20_XC20Wrapper.address" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.init" -> "AnyswapV6ERC20_XC20Wrapper.address" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.deposit" -> "AnyswapV6ERC20_XC20Wrapper.address" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.deposit" -> "AnyswapV6ERC20_XC20Wrapper._deposit" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.deposit" -> "AnyswapV6ERC20_XC20Wrapper.address" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.deposit" -> "AnyswapV6ERC20_XC20Wrapper._deposit" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.deposit" -> "AnyswapV6ERC20_XC20Wrapper.address" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.deposit" -> "AnyswapV6ERC20_XC20Wrapper._deposit" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.depositVault" -> "AnyswapV6ERC20_XC20Wrapper._deposit" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper._deposit" -> "AnyswapV6ERC20_XC20Wrapper._mint" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.withdraw" -> "AnyswapV6ERC20_XC20Wrapper._withdraw" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.withdraw" -> "AnyswapV6ERC20_XC20Wrapper._withdraw" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.withdraw" -> "AnyswapV6ERC20_XC20Wrapper._withdraw" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.withdrawVault" -> "AnyswapV6ERC20_XC20Wrapper._withdraw" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper._withdraw" -> "AnyswapV6ERC20_XC20Wrapper._burn" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper._mint" -> "AnyswapV6ERC20_XC20Wrapper.address" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper._mint" -> "AnyswapV6ERC20_XC20Wrapper.address" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper._burn" -> "AnyswapV6ERC20_XC20Wrapper.address" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper._burn" -> "AnyswapV6ERC20_XC20Wrapper.address" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.transfer" -> "AnyswapV6ERC20_XC20Wrapper.address" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.transfer" -> "AnyswapV6ERC20_XC20Wrapper.address" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.transferFrom" -> "AnyswapV6ERC20_XC20Wrapper.address" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.transferFrom" -> "AnyswapV6ERC20_XC20Wrapper.address" [ color = "green" ];
+  "AnyswapV6ERC20_XC20Wrapper.transferFrom" -> "AnyswapV6ERC20_XC20Wrapper.type" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

@@ -563,7 +563,6 @@ if __name__ == "__main__":
     parser.add_argument("--event-name", type=str, required=False, help="调用的事件名称")
     args = parser.parse_args()
     function_names = get_function_name(args.file_directory, args.event_name)
-    print(function_names)
     traverse_files(args.file_directory)
     directory_name = "output/" + args.file_directory + "_" + args.event_name
     if not os.path.exists(directory_name):

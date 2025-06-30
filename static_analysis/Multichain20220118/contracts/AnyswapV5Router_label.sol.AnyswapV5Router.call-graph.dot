@@ -1,0 +1,101 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_3392_AnyswapV5Router {
+label = "AnyswapV5Router"
+"3392_anySwapOutUnderlyingWithPermit" [label="anySwapOutUnderlyingWithPermit"]
+"3392_anySwapOutExactTokensForTokens" [label="anySwapOutExactTokensForTokens"]
+"3392_anySwapInExactTokensForTokens" [label="anySwapInExactTokensForTokens"]
+"3392_getAmountsOut" [label="getAmountsOut"]
+"3392_anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" [label="anySwapOutExactTokensForNativeUnderlyingWithTransferPermit"]
+"3392_anySwapIn" [label="anySwapIn"]
+"3392_anySwapOutExactTokensForNativeUnderlying" [label="anySwapOutExactTokensForNativeUnderlying"]
+"3392_anySwapInUnderlying" [label="anySwapInUnderlying"]
+"3392_anySwapInAuto" [label="anySwapInAuto"]
+"3392_withdrawNative" [label="withdrawNative"]
+"3392__swap" [label="_swap"]
+"3392__anySwapIn" [label="_anySwapIn"]
+"3392_getAmountOut" [label="getAmountOut"]
+"3392_cID" [label="cID"]
+"3392_anySwapOutExactTokensForTokensUnderlying" [label="anySwapOutExactTokensForTokensUnderlying"]
+"3392_anySwapOutUnderlyingWithTransferPermit" [label="anySwapOutUnderlyingWithTransferPermit"]
+"3392_quote" [label="quote"]
+"3392_anySwapOut" [label="anySwapOut"]
+"3392_changeMPC" [label="changeMPC"]
+"3392_receive" [label="receive"]
+"3392_constructor" [label="constructor"]
+"3392_getAmountIn" [label="getAmountIn"]
+"3392_anySwapOutUnderlying" [label="anySwapOutUnderlying"]
+"3392__anySwapOut" [label="_anySwapOut"]
+"3392_getAmountsIn" [label="getAmountsIn"]
+"3392_anySwapOutExactTokensForNativeUnderlyingWithPermit" [label="anySwapOutExactTokensForNativeUnderlyingWithPermit"]
+"3392_anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" [label="anySwapOutExactTokensForTokensUnderlyingWithTransferPermit"]
+"3392_anySwapOutNative" [label="anySwapOutNative"]
+"3392_depositNative" [label="depositNative"]
+"3392_changeVault" [label="changeVault"]
+"3392_anySwapOutExactTokensForNative" [label="anySwapOutExactTokensForNative"]
+"3392_anySwapFeeTo" [label="anySwapFeeTo"]
+"3392_mpc" [label="mpc"]
+"3392_anySwapOutExactTokensForTokensUnderlyingWithPermit" [label="anySwapOutExactTokensForTokensUnderlyingWithPermit"]
+"3392_anySwapInExactTokensForNative" [label="anySwapInExactTokensForNative"]
+"3392_anySwapInExactTokensForNative" -> "3392_onlyMPC"
+"3392_anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" -> "3392_cID"
+"3392_anySwapOutUnderlyingWithTransferPermit" -> "3392__anySwapOut"
+"3392_anySwapOutNative" -> "3392__anySwapOut"
+"3392_changeMPC" -> "3392_mpc"
+"3392_anySwapInExactTokensForNative" -> "3392__swap"
+"3392_anySwapIn" -> "3392_onlyMPC"
+"3392_anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" -> "3392_cID"
+"3392_anySwapOutExactTokensForNative" -> "3392_ensure"
+"3392_anySwapOutExactTokensForTokensUnderlying" -> "3392_cID"
+"3392_anySwapOutExactTokensForTokensUnderlyingWithPermit" -> "3392_ensure"
+"3392_anySwapOut" -> "3392__anySwapOut"
+"3392_anySwapInExactTokensForTokens" -> "3392__swap"
+"3392_anySwapFeeTo" -> "3392_onlyMPC"
+"3392_anySwapInExactTokensForTokens" -> "3392__anySwapIn"
+"3392_anySwapOutExactTokensForNativeUnderlyingWithPermit" -> "3392_cID"
+"3392_anySwapInExactTokensForTokens" -> "3392_onlyMPC"
+"3392_anySwapOutExactTokensForTokens" -> "3392_cID"
+"3392_changeMPC" -> "3392_cID"
+"3392_changeVault" -> "3392_onlyMPC"
+"3392_anySwapInAuto" -> "3392__anySwapIn"
+"3392_anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" -> "3392_ensure"
+"3392_anySwapOutExactTokensForNativeUnderlying" -> "3392_ensure"
+"3392_anySwapOutExactTokensForNativeUnderlyingWithPermit" -> "3392_ensure"
+"3392_anySwapInExactTokensForNative" -> "3392_ensure"
+"3392_anySwapInUnderlying" -> "3392__anySwapIn"
+"3392_changeMPC" -> "3392_onlyMPC"
+"3392__anySwapIn" -> "3392_cID"
+"3392_anySwapOutUnderlyingWithPermit" -> "3392__anySwapOut"
+"3392_anySwapInExactTokensForTokens" -> "3392_ensure"
+"3392_anySwapIn" -> "3392__anySwapIn"
+"3392_anySwapOutExactTokensForTokensUnderlying" -> "3392_ensure"
+"3392__anySwapOut" -> "3392_cID"
+"3392_anySwapInUnderlying" -> "3392_onlyMPC"
+"3392_anySwapOutExactTokensForTokens" -> "3392_ensure"
+"3392_anySwapOutExactTokensForNativeUnderlying" -> "3392_cID"
+"3392_anySwapInExactTokensForNative" -> "3392__anySwapIn"
+"3392_anySwapOutExactTokensForTokensUnderlyingWithPermit" -> "3392_cID"
+"3392_anySwapOutExactTokensForNative" -> "3392_cID"
+"3392_anySwapOutUnderlying" -> "3392__anySwapOut"
+"3392_anySwapFeeTo" -> "3392_mpc"
+"3392_anySwapInAuto" -> "3392_onlyMPC"
+"3392_anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" -> "3392_ensure"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"chainid()" 
+"assert(bool)" 
+"3392_anySwapInExactTokensForNative" -> "require(bool,string)"
+"3392_changeVault" -> "require(bool,string)"
+"3392_anySwapOutNative" -> "require(bool,string)"
+"3392_cID" -> "chainid()"
+"3392_receive" -> "assert(bool)"
+"3392_withdrawNative" -> "require(bool,string)"
+"3392_depositNative" -> "assert(bool)"
+"3392_changeMPC" -> "require(bool,string)"
+"3392_anySwapInExactTokensForTokens" -> "require(bool,string)"
+"3392_anySwapOutNative" -> "assert(bool)"
+"3392_depositNative" -> "require(bool,string)"
+}
+}

@@ -1,0 +1,153 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_3044_MultichainV7Router {
+label = "MultichainV7Router"
+"3044_anySwapOut" [label="anySwapOut"]
+"3044_anySwapInUnderlying" [label="anySwapInUnderlying"]
+"3044_setRouterSecurity" [label="setRouterSecurity"]
+"3044_anySwapInAuto" [label="anySwapInAuto"]
+"3044_anySwapOutNative" [label="anySwapOutNative"]
+"3044_anySwapOutUnderlying" [label="anySwapOutUnderlying"]
+"3044_constructor" [label="constructor"]
+"3044_anySwapIn" [label="anySwapIn"]
+"3044_slitherConstructorConstantVariables" [label="slitherConstructorConstantVariables"]
+"3044_anySwapOutAndCall" [label="anySwapOutAndCall"]
+"3044_anySwapInUnderlyingAndExec" [label="anySwapInUnderlyingAndExec"]
+"3044_addAnycallProxies" [label="addAnycallProxies"]
+"3044_retrySwapinAndExec" [label="retrySwapinAndExec"]
+"3044_anySwapOutNativeAndCall" [label="anySwapOutNativeAndCall"]
+"3044_anySwapOutUnderlyingAndCall" [label="anySwapOutUnderlyingAndCall"]
+"3044_removeAnycallProxies" [label="removeAnycallProxies"]
+"3044_changeVault" [label="changeVault"]
+"3044_receive" [label="receive"]
+"3044_anySwapFeeTo" [label="anySwapFeeTo"]
+"3044_anySwapInAndExec" [label="anySwapInAndExec"]
+"3044__anySwapOutUnderlying" [label="_anySwapOutUnderlying"]
+"3044_anySwapInNative" [label="anySwapInNative"]
+"3044__anySwapOutNative" [label="_anySwapOutNative"]
+"3044_anySwapInAuto" -> "3044_nonReentrant"
+"3044_anySwapOutAndCall" -> "3044_nonReentrant"
+"3044__anySwapOutUnderlying" -> "3044_whenNotPaused"
+"3044_anySwapInUnderlying" -> "3044_whenNotPaused"
+"3044_retrySwapinAndExec" -> "3044_whenNotPaused"
+"3044_anySwapOutUnderlyingAndCall" -> "3044_nonReentrant"
+"3044_anySwapInAndExec" -> "3044_nonReentrant"
+"3044_anySwapOutUnderlying" -> "3044__anySwapOutUnderlying"
+"3044_anySwapOutNativeAndCall" -> "3044_whenNotPaused"
+"3044_addAnycallProxies" -> "3044_nonReentrant"
+"3044_setRouterSecurity" -> "3044_onlyMPC"
+"3044_anySwapOutNativeAndCall" -> "3044__anySwapOutNative"
+"3044_anySwapFeeTo" -> "3044_nonReentrant"
+"3044_anySwapInAuto" -> "3044_whenNotPaused"
+"3044_anySwapOut" -> "3044_nonReentrant"
+"3044_addAnycallProxies" -> "3044_onlyAdmin"
+"3044_setRouterSecurity" -> "3044_nonReentrant"
+"3044_removeAnycallProxies" -> "3044_nonReentrant"
+"3044_changeVault" -> "3044_onlyMPC"
+"3044_anySwapInNative" -> "3044_nonReentrant"
+"3044__anySwapOutNative" -> "3044_whenNotPaused"
+"3044_anySwapInAndExec" -> "3044_whenNotPaused"
+"3044_anySwapFeeTo" -> "3044_onlyMPC"
+"3044_anySwapInAndExec" -> "3044_onlyMPC"
+"3044_constructor" -> "3044_constructor"
+"3044_anySwapOutAndCall" -> "3044_whenNotPaused"
+"3044_anySwapIn" -> "3044_onlyMPC"
+"3044_anySwapInNative" -> "3044_onlyMPC"
+"3044_anySwapInUnderlying" -> "3044_onlyMPC"
+"3044_anySwapInUnderlyingAndExec" -> "3044_nonReentrant"
+"3044_anySwapInNative" -> "3044_whenNotPaused"
+"3044_removeAnycallProxies" -> "3044_onlyAdmin"
+"3044_anySwapInUnderlyingAndExec" -> "3044_onlyMPC"
+"3044_anySwapOutNative" -> "3044__anySwapOutNative"
+"3044_anySwapOutUnderlyingAndCall" -> "3044__anySwapOutUnderlying"
+"3044_anySwapOutUnderlyingAndCall" -> "3044_whenNotPaused"
+"3044_anySwapInUnderlyingAndExec" -> "3044_whenNotPaused"
+"3044_retrySwapinAndExec" -> "3044_nonReentrant"
+"3044_anySwapOutNativeAndCall" -> "3044_nonReentrant"
+"3044_anySwapOutNative" -> "3044_nonReentrant"
+"3044_anySwapOutUnderlying" -> "3044_nonReentrant"
+"3044_anySwapInAuto" -> "3044_onlyMPC"
+"3044_anySwapOut" -> "3044_whenNotPaused"
+"3044_changeVault" -> "3044_nonReentrant"
+"3044_anySwapIn" -> "3044_nonReentrant"
+"3044_anySwapIn" -> "3044_whenNotPaused"
+"3044_anySwapInUnderlying" -> "3044_nonReentrant"
+}subgraph cluster_103_PausableControl {
+label = "PausableControl"
+"103__unpause" [label="_unpause"]
+"103__pause" [label="_pause"]
+"103_paused" [label="paused"]
+"103__unpause" -> "103_whenPaused"
+"103__pause" -> "103_whenNotPaused"
+}subgraph cluster_332_MPCAdminControl {
+label = "MPCAdminControl"
+"332_changeAdmin" [label="changeAdmin"]
+"332_constructor" [label="constructor"]
+"332_changeAdmin" -> "332_onlyMPC"
+"332_constructor" -> "332_constructor"
+}subgraph cluster_268_MPCManageable {
+label = "MPCManageable"
+"268_applyMPC" [label="applyMPC"]
+"268_constructor" [label="constructor"]
+"268_changeMPC" [label="changeMPC"]
+"268_changeMPC" -> "268_onlyMPC"
+}subgraph cluster_462_IRetrySwapinAndExec {
+label = "IRetrySwapinAndExec"
+"462_retrySwapinAndExec" [label="retrySwapinAndExec"]
+}subgraph cluster_565_ReentrancyGuard {
+label = "ReentrancyGuard"
+"565_constructor" [label="constructor"]
+}subgraph cluster_374_MPCAdminPausableControl {
+label = "MPCAdminPausableControl"
+"374_constructor" [label="constructor"]
+"374_unpause" [label="unpause"]
+"374_pause" [label="pause"]
+"374_unpause" -> "374__unpause"
+"374_constructor" -> "374_constructor"
+"374_pause" -> "374__pause"
+"374_pause" -> "374_onlyAdmin"
+"374_unpause" -> "374_onlyAdmin"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"abi.encode()" 
+"assert(bool)" 
+"require(bool,string)" 
+"code(address)" 
+"keccak256(bytes)" 
+"require(bool)" 
+"3044_anySwapInUnderlyingAndExec" -> "abi.encode()"
+"268_applyMPC" -> "code(address)"
+"3044_anySwapInAndExec" -> "assert(bool)"
+"3044_anySwapOutAndCall" -> "assert(bool)"
+"3044__anySwapOutUnderlying" -> "require(bool)"
+"3044_anySwapInUnderlying" -> "assert(bool)"
+"3044_anySwapInUnderlying" -> "require(bool,string)"
+"268_applyMPC" -> "require(bool,string)"
+"3044_retrySwapinAndExec" -> "require(bool,string)"
+"3044_anySwapInAndExec" -> "require(bool,string)"
+"3044_anySwapOutUnderlyingAndCall" -> "require(bool,string)"
+"3044__anySwapOutUnderlying" -> "require(bool,string)"
+"3044_anySwapInUnderlyingAndExec" -> "keccak256(bytes)"
+"3044_constructor" -> "require(bool,string)"
+"3044_retrySwapinAndExec" -> "abi.encode()"
+"3044__anySwapOutNative" -> "require(bool,string)"
+"3044_slitherConstructorConstantVariables" -> "keccak256(bytes)"
+"3044_anySwapOutNativeAndCall" -> "require(bool,string)"
+"3044_anySwapInNative" -> "assert(bool)"
+"3044_anySwapOutAndCall" -> "require(bool,string)"
+"3044_anySwapInNative" -> "require(bool,string)"
+"3044_retrySwapinAndExec" -> "assert(bool)"
+"3044_retrySwapinAndExec" -> "keccak256(bytes)"
+"3044__anySwapOutNative" -> "require(bool)"
+"3044_addAnycallProxies" -> "require(bool,string)"
+"268_constructor" -> "require(bool,string)"
+"3044_anySwapInUnderlyingAndExec" -> "assert(bool)"
+"3044_anySwapInAuto" -> "assert(bool)"
+"268_changeMPC" -> "require(bool,string)"
+"3044_anySwapIn" -> "assert(bool)"
+"3044_anySwapInUnderlyingAndExec" -> "require(bool,string)"
+"3044_receive" -> "assert(bool)"
+"3044_anySwapOut" -> "assert(bool)"
+}
+}

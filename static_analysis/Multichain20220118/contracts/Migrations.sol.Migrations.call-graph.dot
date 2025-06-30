@@ -1,0 +1,12 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_32_Migrations {
+label = "Migrations"
+"32_slitherConstructorVariables" [label="slitherConstructorVariables"]
+"32_setCompleted" [label="setCompleted"]
+"32_setCompleted" -> "32_restricted"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+}
+}

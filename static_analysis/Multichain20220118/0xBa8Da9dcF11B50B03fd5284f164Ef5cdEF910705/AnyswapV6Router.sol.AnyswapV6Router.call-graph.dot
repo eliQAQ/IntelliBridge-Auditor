@@ -1,0 +1,100 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_2744_AnyswapV6Router {
+label = "AnyswapV6Router"
+"2744_getAmountOut" [label="getAmountOut"]
+"2744_changeMPC" [label="changeMPC"]
+"2744_cID" [label="cID"]
+"2744_depositNative" [label="depositNative"]
+"2744__anySwapIn" [label="_anySwapIn"]
+"2744_withdrawNative" [label="withdrawNative"]
+"2744_constructor" [label="constructor"]
+"2744_mpc" [label="mpc"]
+"2744_anySwapInUnderlying" [label="anySwapInUnderlying"]
+"2744_revokeMinter" [label="revokeMinter"]
+"2744_anySwapInExactTokensForNative" [label="anySwapInExactTokensForNative"]
+"2744_getAmountIn" [label="getAmountIn"]
+"2744_anySwapOutExactTokensForNative" [label="anySwapOutExactTokensForNative"]
+"2744_quote" [label="quote"]
+"2744__swap" [label="_swap"]
+"2744_anySwapOut" [label="anySwapOut"]
+"2744_anySwapOutUnderlying" [label="anySwapOutUnderlying"]
+"2744_anySwapFeeTo" [label="anySwapFeeTo"]
+"2744_getAmountsOut" [label="getAmountsOut"]
+"2744_anySwapOutExactTokensForTokensUnderlying" [label="anySwapOutExactTokensForTokensUnderlying"]
+"2744__anySwapOut" [label="_anySwapOut"]
+"2744_anySwapOutExactTokensForTokens" [label="anySwapOutExactTokensForTokens"]
+"2744_anySwapIn" [label="anySwapIn"]
+"2744_changeVault" [label="changeVault"]
+"2744_receive" [label="receive"]
+"2744_anySwapOutExactTokensForNativeUnderlying" [label="anySwapOutExactTokensForNativeUnderlying"]
+"2744_setMinter" [label="setMinter"]
+"2744_applyMinter" [label="applyMinter"]
+"2744_getAmountsIn" [label="getAmountsIn"]
+"2744_anySwapInAuto" [label="anySwapInAuto"]
+"2744_anySwapOutNative" [label="anySwapOutNative"]
+"2744_setEnableSwapTrade" [label="setEnableSwapTrade"]
+"2744_anySwapInExactTokensForTokens" [label="anySwapInExactTokensForTokens"]
+"2744_anySwapFeeTo" -> "2744_mpc"
+"2744_anySwapInUnderlying" -> "2744_onlyMPC"
+"2744_anySwapInAuto" -> "2744__anySwapIn"
+"2744_anySwapOutExactTokensForNativeUnderlying" -> "2744_swapTradeEnabled"
+"2744_anySwapInExactTokensForTokens" -> "2744__anySwapIn"
+"2744_anySwapInExactTokensForTokens" -> "2744_ensure"
+"2744_anySwapOut" -> "2744_cID"
+"2744_anySwapOutUnderlying" -> "2744_cID"
+"2744_anySwapOutExactTokensForTokens" -> "2744_cID"
+"2744_anySwapOutExactTokensForTokensUnderlying" -> "2744_cID"
+"2744_applyMinter" -> "2744_onlyMPC"
+"2744_anySwapOutNative" -> "2744_cID"
+"2744_anySwapIn" -> "2744__anySwapIn"
+"2744_anySwapIn" -> "2744_onlyMPC"
+"2744_setEnableSwapTrade" -> "2744_onlyMPC"
+"2744_anySwapInExactTokensForNative" -> "2744__swap"
+"2744_anySwapInExactTokensForNative" -> "2744_ensure"
+"2744_anySwapInAuto" -> "2744_onlyMPC"
+"2744_anySwapInExactTokensForNative" -> "2744_onlyMPC"
+"2744_anySwapInExactTokensForTokens" -> "2744_onlyMPC"
+"2744_anySwapInExactTokensForNative" -> "2744_swapTradeEnabled"
+"2744_anySwapOutExactTokensForNative" -> "2744_ensure"
+"2744_anySwapOut" -> "2744__anySwapOut"
+"2744_anySwapOutExactTokensForNativeUnderlying" -> "2744_cID"
+"2744_changeMPC" -> "2744_mpc"
+"2744_anySwapInExactTokensForTokens" -> "2744_swapTradeEnabled"
+"2744_anySwapOutExactTokensForNative" -> "2744_swapTradeEnabled"
+"2744_changeMPC" -> "2744_onlyMPC"
+"2744_anySwapOutExactTokensForTokens" -> "2744_ensure"
+"2744_anySwapOutExactTokensForTokensUnderlying" -> "2744_swapTradeEnabled"
+"2744_changeMPC" -> "2744_cID"
+"2744_anySwapOutExactTokensForNativeUnderlying" -> "2744_ensure"
+"2744__anySwapIn" -> "2744_cID"
+"2744_setMinter" -> "2744_onlyMPC"
+"2744_anySwapInUnderlying" -> "2744__anySwapIn"
+"2744_anySwapInExactTokensForNative" -> "2744__anySwapIn"
+"2744_anySwapOutExactTokensForNative" -> "2744_cID"
+"2744_revokeMinter" -> "2744_onlyMPC"
+"2744_changeVault" -> "2744_onlyMPC"
+"2744_anySwapOutExactTokensForTokens" -> "2744_swapTradeEnabled"
+"2744_anySwapFeeTo" -> "2744_onlyMPC"
+"2744__anySwapOut" -> "2744_cID"
+"2744_anySwapInExactTokensForTokens" -> "2744__swap"
+"2744_anySwapOutExactTokensForTokensUnderlying" -> "2744_ensure"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"chainid()" 
+"assert(bool)" 
+"2744_changeVault" -> "require(bool,string)"
+"2744_depositNative" -> "assert(bool)"
+"2744_anySwapInExactTokensForTokens" -> "require(bool,string)"
+"2744_anySwapInExactTokensForNative" -> "require(bool,string)"
+"2744_changeMPC" -> "require(bool,string)"
+"2744_receive" -> "assert(bool)"
+"2744_depositNative" -> "require(bool,string)"
+"2744_cID" -> "chainid()"
+"2744_withdrawNative" -> "require(bool,string)"
+"2744_anySwapOutNative" -> "assert(bool)"
+"2744_anySwapOutNative" -> "require(bool,string)"
+}
+}

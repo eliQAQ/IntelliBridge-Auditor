@@ -1,0 +1,107 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterAnyswapV6RouterWithProof" {
+  graph [ label = "AnyswapV6RouterWithProof", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "AnyswapV6RouterWithProof.checkCompletion" [ label = "checkCompletion", color = "yellow" ];
+  "AnyswapV6RouterWithProof.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "AnyswapV6RouterWithProof._anySwapInWithProof" [ label = "_anySwapInWithProof", color = "white" ];
+  "AnyswapV6RouterWithProof.anySwapInWithProof" [ label = "anySwapInWithProof", color = "blue" ];
+  "AnyswapV6RouterWithProof.anySwapInUnderlyingWithProof" [ label = "anySwapInUnderlyingWithProof", color = "blue" ];
+  "AnyswapV6RouterWithProof.anySwapInAutoWithProof" [ label = "anySwapInAutoWithProof", color = "blue" ];
+  "AnyswapV6RouterWithProof.getAllProofSigners" [ label = "getAllProofSigners", color = "blue" ];
+  "AnyswapV6RouterWithProof.setCheckCompletion" [ label = "setCheckCompletion", color = "blue" ];
+  "AnyswapV6RouterWithProof.addProofSigners" [ label = "addProofSigners", color = "blue" ];
+  "AnyswapV6RouterWithProof.removeProofSigners" [ label = "removeProofSigners", color = "blue" ];
+  "AnyswapV6RouterWithProof._addProofSigners" [ label = "_addProofSigners" ];
+  "AnyswapV6RouterWithProof._removeProofSigners" [ label = "_removeProofSigners" ];
+  "AnyswapV6RouterWithProof._popProofSigner" [ label = "_popProofSigner" ];
+  "AnyswapV6RouterWithProof.address" [ label = "address" ];
+  "AnyswapV6RouterWithProof.AnyswapV1ERC20" [ label = "AnyswapV1ERC20" ];
+  "AnyswapV6RouterWithProof.cID" [ label = "cID" ];
+  "AnyswapV6RouterWithProof.IERC20" [ label = "IERC20" ];
+  "AnyswapV6RouterWithProof.IwNATIVE" [ label = "IwNATIVE" ];
+}
+
+subgraph "clusterAnyswapV1ERC20" {
+  graph [ label = "AnyswapV1ERC20", color = "lightgray" ];
+  "AnyswapV1ERC20.underlying" [ label = "underlying" ];
+  "AnyswapV1ERC20.withdrawVault" [ label = "withdrawVault" ];
+}
+
+subgraph "clusterTransferHelper" {
+  graph [ label = "TransferHelper", color = "lightgray" ];
+  "TransferHelper.safeTransferNative" [ label = "safeTransferNative" ];
+}
+
+  "AnyswapV6RouterWithProof.<Constructor>";
+  "AnyswapV6RouterWithProof._addProofSigners";
+  "AnyswapV6RouterWithProof._anySwapInWithProof";
+  "AnyswapV6RouterWithProof.address";
+  "AnyswapV6RouterWithProof.AnyswapV1ERC20";
+  "AnyswapV6RouterWithProof.cID";
+  "AnyswapV6RouterWithProof.anySwapInWithProof";
+  "AnyswapV6RouterWithProof.anySwapInUnderlyingWithProof";
+  "AnyswapV6RouterWithProof.anySwapInAutoWithProof";
+  "AnyswapV1ERC20.underlying";
+  "AnyswapV6RouterWithProof.IERC20";
+  "AnyswapV1ERC20.withdrawVault";
+  "AnyswapV6RouterWithProof.IwNATIVE";
+  "TransferHelper.safeTransferNative";
+  "AnyswapV6RouterWithProof.addProofSigners";
+  "AnyswapV6RouterWithProof.removeProofSigners";
+  "AnyswapV6RouterWithProof._removeProofSigners";
+  "AnyswapV6RouterWithProof._popProofSigner";
+  "AnyswapV6RouterWithProof.<Constructor>" -> "AnyswapV6RouterWithProof._addProofSigners" [ color = "green" ];
+  "AnyswapV6RouterWithProof._anySwapInWithProof" -> "AnyswapV6RouterWithProof.address" [ color = "green" ];
+  "AnyswapV6RouterWithProof._anySwapInWithProof" -> "AnyswapV6RouterWithProof.AnyswapV1ERC20" [ color = "green" ];
+  "AnyswapV6RouterWithProof._anySwapInWithProof" -> "AnyswapV6RouterWithProof.cID" [ color = "green" ];
+  "AnyswapV6RouterWithProof.anySwapInWithProof" -> "AnyswapV6RouterWithProof._anySwapInWithProof" [ color = "green" ];
+  "AnyswapV6RouterWithProof.anySwapInUnderlyingWithProof" -> "AnyswapV6RouterWithProof.AnyswapV1ERC20" [ color = "green" ];
+  "AnyswapV6RouterWithProof.anySwapInUnderlyingWithProof" -> "AnyswapV6RouterWithProof.address" [ color = "green" ];
+  "AnyswapV6RouterWithProof.anySwapInUnderlyingWithProof" -> "AnyswapV6RouterWithProof._anySwapInWithProof" [ color = "green" ];
+  "AnyswapV6RouterWithProof.anySwapInUnderlyingWithProof" -> "AnyswapV6RouterWithProof.AnyswapV1ERC20" [ color = "green" ];
+  "AnyswapV6RouterWithProof.anySwapInAutoWithProof" -> "AnyswapV6RouterWithProof._anySwapInWithProof" [ color = "green" ];
+  "AnyswapV6RouterWithProof.anySwapInAutoWithProof" -> "AnyswapV6RouterWithProof.AnyswapV1ERC20" [ color = "green" ];
+  "AnyswapV6RouterWithProof.anySwapInAutoWithProof" -> "AnyswapV1ERC20.underlying" [ color = "orange" ];
+  "AnyswapV6RouterWithProof.anySwapInAutoWithProof" -> "AnyswapV6RouterWithProof.address" [ color = "green" ];
+  "AnyswapV6RouterWithProof.anySwapInAutoWithProof" -> "AnyswapV6RouterWithProof.IERC20" [ color = "green" ];
+  "AnyswapV6RouterWithProof.anySwapInAutoWithProof" -> "AnyswapV1ERC20.withdrawVault" [ color = "orange" ];
+  "AnyswapV6RouterWithProof.anySwapInAutoWithProof" -> "AnyswapV6RouterWithProof.address" [ color = "green" ];
+  "AnyswapV6RouterWithProof.anySwapInAutoWithProof" -> "AnyswapV6RouterWithProof.IwNATIVE" [ color = "green" ];
+  "AnyswapV6RouterWithProof.anySwapInAutoWithProof" -> "TransferHelper.safeTransferNative" [ color = "orange" ];
+  "AnyswapV6RouterWithProof.anySwapInAutoWithProof" -> "AnyswapV1ERC20.withdrawVault" [ color = "orange" ];
+  "AnyswapV6RouterWithProof.addProofSigners" -> "AnyswapV6RouterWithProof._addProofSigners" [ color = "green" ];
+  "AnyswapV6RouterWithProof.removeProofSigners" -> "AnyswapV6RouterWithProof._removeProofSigners" [ color = "green" ];
+  "AnyswapV6RouterWithProof._addProofSigners" -> "AnyswapV6RouterWithProof.address" [ color = "green" ];
+  "AnyswapV6RouterWithProof._removeProofSigners" -> "AnyswapV6RouterWithProof._popProofSigner" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

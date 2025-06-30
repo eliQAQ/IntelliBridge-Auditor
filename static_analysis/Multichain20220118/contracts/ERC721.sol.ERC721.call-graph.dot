@@ -1,0 +1,73 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_689_IERC721 {
+label = "IERC721"
+"689_isApprovedForAll" [label="isApprovedForAll"]
+"689_transferFrom" [label="transferFrom"]
+"689_getApproved" [label="getApproved"]
+"689_setApprovalForAll" [label="setApprovalForAll"]
+"689_ownerOf" [label="ownerOf"]
+"689_safeTransferFrom" [label="safeTransferFrom"]
+"689_approve" [label="approve"]
+"689_balanceOf" [label="balanceOf"]
+}subgraph cluster_588_ERC721 {
+label = "ERC721"
+"588_getApproved" [label="getApproved"]
+"588_approve" [label="approve"]
+"588_constructor" [label="constructor"]
+"588__transfer" [label="_transfer"]
+"588_ownerOf" [label="ownerOf"]
+"588__mint" [label="_mint"]
+"588__safeMint" [label="_safeMint"]
+"588__setApprovalForAll" [label="_setApprovalForAll"]
+"588__approve" [label="_approve"]
+"588_setApprovalForAll" [label="setApprovalForAll"]
+"588_balanceOf" [label="balanceOf"]
+"588__burn" [label="_burn"]
+"588__isApprovedOrOwner" [label="_isApprovedOrOwner"]
+"588_name" [label="name"]
+"588_safeTransferFrom" [label="safeTransferFrom"]
+"588_transferFrom" [label="transferFrom"]
+"588_symbol" [label="symbol"]
+"588__exists" [label="_exists"]
+"588__safeTransfer" [label="_safeTransfer"]
+"588_isApprovedForAll" [label="isApprovedForAll"]
+"588__requireMinted" [label="_requireMinted"]
+"588__requireMinted" -> "588__exists"
+"588__safeMint" -> "588__safeMint"
+"588__isApprovedOrOwner" -> "588_ownerOf"
+"588_approve" -> "588_isApprovedForAll"
+"588_getApproved" -> "588__requireMinted"
+"588_transferFrom" -> "588__isApprovedOrOwner"
+"588__safeTransfer" -> "588__transfer"
+"588_safeTransferFrom" -> "588_safeTransferFrom"
+"588__isApprovedOrOwner" -> "588_getApproved"
+"588_approve" -> "588__approve"
+"588__burn" -> "588_ownerOf"
+"588__transfer" -> "588__approve"
+"588__safeMint" -> "588__mint"
+"588_safeTransferFrom" -> "588__safeTransfer"
+"588_transferFrom" -> "588__transfer"
+"588_setApprovalForAll" -> "588__setApprovalForAll"
+"588__mint" -> "588__exists"
+"588_approve" -> "588_ownerOf"
+"588__approve" -> "588_ownerOf"
+"588__isApprovedOrOwner" -> "588_isApprovedForAll"
+"588_safeTransferFrom" -> "588__isApprovedOrOwner"
+"588__burn" -> "588__approve"
+"588__transfer" -> "588_ownerOf"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"588_approve" -> "require(bool,string)"
+"588__transfer" -> "require(bool,string)"
+"588__mint" -> "require(bool,string)"
+"588_transferFrom" -> "require(bool,string)"
+"588__setApprovalForAll" -> "require(bool,string)"
+"588_ownerOf" -> "require(bool,string)"
+"588__requireMinted" -> "require(bool,string)"
+"588_balanceOf" -> "require(bool,string)"
+"588_safeTransferFrom" -> "require(bool,string)"
+}
+}

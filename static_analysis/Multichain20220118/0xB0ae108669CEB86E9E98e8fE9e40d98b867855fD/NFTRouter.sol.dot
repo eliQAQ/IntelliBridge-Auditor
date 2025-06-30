@@ -1,0 +1,94 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterMPCManageable" {
+  graph [ label = "MPCManageable", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "MPCManageable.onlyMPC" [ label = "onlyMPC", color = "yellow" ];
+  "MPCManageable.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "MPCManageable.changeMPC" [ label = "changeMPC", color = "blue" ];
+  "MPCManageable.applyMPC" [ label = "applyMPC", color = "blue" ];
+  "MPCManageable.address" [ label = "address" ];
+}
+
+subgraph "clusterIERC721Transfer" {
+  graph [ label = "IERC721Transfer  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IERC721Transfer.safeTransferFrom" [ label = "safeTransferFrom", color = "blue" ];
+}
+
+subgraph "clusterIERC1155Transfer" {
+  graph [ label = "IERC1155Transfer  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IERC1155Transfer.safeTransferFrom" [ label = "safeTransferFrom", color = "blue" ];
+  "IERC1155Transfer.safeBatchTransferFrom" [ label = "safeBatchTransferFrom", color = "blue" ];
+}
+
+subgraph "clusterNFTRouter" {
+  graph [ label = "NFTRouter", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "NFTRouter.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "NFTRouter.adjustFeePerTransaction" [ label = "adjustFeePerTransaction", color = "blue" ];
+  "NFTRouter.adjustFeePerUnitInBatch" [ label = "adjustFeePerUnitInBatch", color = "blue" ];
+  "NFTRouter.nft721SwapIn" [ label = "nft721SwapIn", color = "blue" ];
+  "NFTRouter.nft1155SwapIn" [ label = "nft1155SwapIn", color = "blue" ];
+  "NFTRouter.nft1155BatchSwapIn" [ label = "nft1155BatchSwapIn", color = "blue" ];
+  "NFTRouter.nft721SwapOut" [ label = "nft721SwapOut", color = "blue" ];
+  "NFTRouter.nft1155SwapOut" [ label = "nft1155SwapOut", color = "blue" ];
+  "NFTRouter.nft1155BatchSwapOut" [ label = "nft1155BatchSwapOut", color = "blue" ];
+  "NFTRouter._transferFee" [ label = "_transferFee" ];
+  "NFTRouter.onERC721Received" [ label = "onERC721Received", color = "blue" ];
+  "NFTRouter.onERC1155Received" [ label = "onERC1155Received", color = "blue" ];
+  "NFTRouter.onERC1155BatchReceived" [ label = "onERC1155BatchReceived", color = "blue" ];
+}
+
+  "MPCManageable.<Constructor>";
+  "MPCManageable.address";
+  "MPCManageable.changeMPC";
+  "MPCManageable.applyMPC";
+  "NFTRouter.nft721SwapIn";
+  "NFTRouter.nft1155SwapIn";
+  "NFTRouter.nft1155BatchSwapIn";
+  "NFTRouter.nft721SwapOut";
+  "NFTRouter._transferFee";
+  "NFTRouter.nft1155SwapOut";
+  "NFTRouter.nft1155BatchSwapOut";
+  "MPCManageable.<Constructor>" -> "MPCManageable.address" [ color = "green" ];
+  "MPCManageable.<Constructor>" -> "MPCManageable.address" [ color = "green" ];
+  "MPCManageable.changeMPC" -> "MPCManageable.address" [ color = "green" ];
+  "MPCManageable.applyMPC" -> "MPCManageable.address" [ color = "green" ];
+  "NFTRouter.nft721SwapIn" -> "MPCManageable.address" [ color = "green" ];
+  "NFTRouter.nft1155SwapIn" -> "MPCManageable.address" [ color = "green" ];
+  "NFTRouter.nft1155BatchSwapIn" -> "MPCManageable.address" [ color = "green" ];
+  "NFTRouter.nft721SwapOut" -> "NFTRouter._transferFee" [ color = "green" ];
+  "NFTRouter.nft721SwapOut" -> "MPCManageable.address" [ color = "green" ];
+  "NFTRouter.nft1155SwapOut" -> "NFTRouter._transferFee" [ color = "green" ];
+  "NFTRouter.nft1155SwapOut" -> "MPCManageable.address" [ color = "green" ];
+  "NFTRouter.nft1155BatchSwapOut" -> "NFTRouter._transferFee" [ color = "green" ];
+  "NFTRouter.nft1155BatchSwapOut" -> "MPCManageable.address" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

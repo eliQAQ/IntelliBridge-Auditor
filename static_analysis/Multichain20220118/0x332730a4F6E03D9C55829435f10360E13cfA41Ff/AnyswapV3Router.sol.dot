@@ -1,0 +1,363 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterISushiswapV2Pair" {
+  graph [ label = "ISushiswapV2Pair  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ISushiswapV2Pair.name" [ label = "name", color = "blue" ];
+  "ISushiswapV2Pair.symbol" [ label = "symbol", color = "blue" ];
+  "ISushiswapV2Pair.decimals" [ label = "decimals", color = "blue" ];
+  "ISushiswapV2Pair.totalSupply" [ label = "totalSupply", color = "blue" ];
+  "ISushiswapV2Pair.balanceOf" [ label = "balanceOf", color = "blue" ];
+  "ISushiswapV2Pair.allowance" [ label = "allowance", color = "blue" ];
+  "ISushiswapV2Pair.approve" [ label = "approve", color = "blue" ];
+  "ISushiswapV2Pair.transfer" [ label = "transfer", color = "blue" ];
+  "ISushiswapV2Pair.transferFrom" [ label = "transferFrom", color = "blue" ];
+  "ISushiswapV2Pair.DOMAIN_SEPARATOR" [ label = "DOMAIN_SEPARATOR", color = "blue" ];
+  "ISushiswapV2Pair.PERMIT_TYPEHASH" [ label = "PERMIT_TYPEHASH", color = "blue" ];
+  "ISushiswapV2Pair.nonces" [ label = "nonces", color = "blue" ];
+  "ISushiswapV2Pair.permit" [ label = "permit", color = "blue" ];
+  "ISushiswapV2Pair.MINIMUM_LIQUIDITY" [ label = "MINIMUM_LIQUIDITY", color = "blue" ];
+  "ISushiswapV2Pair.factory" [ label = "factory", color = "blue" ];
+  "ISushiswapV2Pair.token0" [ label = "token0", color = "blue" ];
+  "ISushiswapV2Pair.token1" [ label = "token1", color = "blue" ];
+  "ISushiswapV2Pair.getReserves" [ label = "getReserves", color = "blue" ];
+  "ISushiswapV2Pair.price0CumulativeLast" [ label = "price0CumulativeLast", color = "blue" ];
+  "ISushiswapV2Pair.price1CumulativeLast" [ label = "price1CumulativeLast", color = "blue" ];
+  "ISushiswapV2Pair.kLast" [ label = "kLast", color = "blue" ];
+  "ISushiswapV2Pair.mint" [ label = "mint", color = "blue" ];
+  "ISushiswapV2Pair.burn" [ label = "burn", color = "blue" ];
+  "ISushiswapV2Pair.swap" [ label = "swap", color = "blue" ];
+  "ISushiswapV2Pair.skim" [ label = "skim", color = "blue" ];
+  "ISushiswapV2Pair.sync" [ label = "sync", color = "blue" ];
+  "ISushiswapV2Pair.initialize" [ label = "initialize", color = "blue" ];
+}
+
+subgraph "clusterSafeMathSushiswap" {
+  graph [ label = "SafeMathSushiswap  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "SafeMathSushiswap.add" [ label = "add", color = "white" ];
+  "SafeMathSushiswap.sub" [ label = "sub", color = "white" ];
+  "SafeMathSushiswap.mul" [ label = "mul", color = "white" ];
+}
+
+subgraph "clusterSushiswapV2Library" {
+  graph [ label = "SushiswapV2Library  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "SushiswapV2Library.sortTokens" [ label = "sortTokens", color = "white" ];
+  "SushiswapV2Library.pairFor" [ label = "pairFor", color = "white" ];
+  "SushiswapV2Library.getReserves" [ label = "getReserves", color = "white" ];
+  "SushiswapV2Library.quote" [ label = "quote", color = "white" ];
+  "SushiswapV2Library.getAmountOut" [ label = "getAmountOut", color = "white" ];
+  "SushiswapV2Library.getAmountIn" [ label = "getAmountIn", color = "white" ];
+  "SushiswapV2Library.getAmountsOut" [ label = "getAmountsOut", color = "white" ];
+  "SushiswapV2Library.getAmountsIn" [ label = "getAmountsIn", color = "white" ];
+  "SushiswapV2Library.address" [ label = "address" ];
+}
+
+subgraph "clusterTransferHelper" {
+  graph [ label = "TransferHelper  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "TransferHelper.safeApprove" [ label = "safeApprove", color = "white" ];
+  "TransferHelper.safeTransfer" [ label = "safeTransfer", color = "white" ];
+  "TransferHelper.safeTransferFrom" [ label = "safeTransferFrom", color = "white" ];
+  "TransferHelper.safeTransferNative" [ label = "safeTransferNative" ];
+}
+
+subgraph "clusterISushiswapV2Factory" {
+  graph [ label = "ISushiswapV2Factory  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ISushiswapV2Factory.feeTo" [ label = "feeTo", color = "blue" ];
+  "ISushiswapV2Factory.feeToSetter" [ label = "feeToSetter", color = "blue" ];
+  "ISushiswapV2Factory.migrator" [ label = "migrator", color = "blue" ];
+  "ISushiswapV2Factory.getPair" [ label = "getPair", color = "blue" ];
+  "ISushiswapV2Factory.allPairs" [ label = "allPairs", color = "blue" ];
+  "ISushiswapV2Factory.allPairsLength" [ label = "allPairsLength", color = "blue" ];
+  "ISushiswapV2Factory.createPair" [ label = "createPair", color = "blue" ];
+  "ISushiswapV2Factory.setFeeTo" [ label = "setFeeTo", color = "blue" ];
+  "ISushiswapV2Factory.setFeeToSetter" [ label = "setFeeToSetter", color = "blue" ];
+  "ISushiswapV2Factory.setMigrator" [ label = "setMigrator", color = "blue" ];
+}
+
+subgraph "clusterIwNATIVE" {
+  graph [ label = "IwNATIVE  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IwNATIVE.deposit" [ label = "deposit", color = "blue" ];
+  "IwNATIVE.transfer" [ label = "transfer", color = "blue" ];
+  "IwNATIVE.withdraw" [ label = "withdraw", color = "blue" ];
+}
+
+subgraph "clusterAnyswapV1ERC20" {
+  graph [ label = "AnyswapV1ERC20  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "AnyswapV1ERC20.mint" [ label = "mint", color = "blue" ];
+  "AnyswapV1ERC20.burn" [ label = "burn", color = "blue" ];
+  "AnyswapV1ERC20.changeVault" [ label = "changeVault", color = "blue" ];
+  "AnyswapV1ERC20.depositVault" [ label = "depositVault", color = "blue" ];
+  "AnyswapV1ERC20.withdrawVault" [ label = "withdrawVault" ];
+  "AnyswapV1ERC20.underlying" [ label = "underlying" ];
+}
+
+subgraph "clusterIERC20" {
+  graph [ label = "IERC20  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IERC20.totalSupply" [ label = "totalSupply", color = "blue" ];
+  "IERC20.balanceOf" [ label = "balanceOf", color = "blue" ];
+  "IERC20.transfer" [ label = "transfer", color = "blue" ];
+  "IERC20.allowance" [ label = "allowance" ];
+  "IERC20.approve" [ label = "approve", color = "blue" ];
+  "IERC20.permit" [ label = "permit", color = "blue" ];
+  "IERC20.transferFrom" [ label = "transferFrom", color = "blue" ];
+  "IERC20.transferWithPermit" [ label = "transferWithPermit", color = "blue" ];
+  "IERC20.isContract" [ label = "isContract" ];
+  "IERC20.data" [ label = "data" ];
+}
+
+subgraph "clusterAddress" {
+  graph [ label = "Address  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Address.isContract" [ label = "isContract", color = "white" ];
+}
+
+subgraph "clusterSafeERC20" {
+  graph [ label = "SafeERC20  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "SafeERC20.safeTransfer" [ label = "safeTransfer", color = "white" ];
+  "SafeERC20.safeTransferFrom" [ label = "safeTransferFrom", color = "white" ];
+  "SafeERC20.safeApprove" [ label = "safeApprove", color = "white" ];
+  "SafeERC20.callOptionalReturn" [ label = "callOptionalReturn" ];
+  "SafeERC20.address" [ label = "address" ];
+}
+
+subgraph "clusterAnyswapV3Router" {
+  graph [ label = "AnyswapV3Router", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "AnyswapV3Router.ensure" [ label = "ensure", color = "yellow" ];
+  "AnyswapV3Router.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "AnyswapV3Router.<Receive Ether>" [ label = "<Receive Ether>", color = "blue" ];
+  "AnyswapV3Router.onlyMPC" [ label = "onlyMPC", color = "yellow" ];
+  "AnyswapV3Router.mpc" [ label = "mpc" ];
+  "AnyswapV3Router.cID" [ label = "cID" ];
+  "AnyswapV3Router.changeMPC" [ label = "changeMPC", color = "green" ];
+  "AnyswapV3Router.changeVault" [ label = "changeVault", color = "green" ];
+  "AnyswapV3Router._anySwapOut" [ label = "_anySwapOut", color = "white" ];
+  "AnyswapV3Router.anySwapOut" [ label = "anySwapOut", color = "blue" ];
+  "AnyswapV3Router.anySwapOutUnderlying" [ label = "anySwapOutUnderlying", color = "blue" ];
+  "AnyswapV3Router.anySwapOutNative" [ label = "anySwapOutNative", color = "blue" ];
+  "AnyswapV3Router.anySwapOutUnderlyingWithPermit" [ label = "anySwapOutUnderlyingWithPermit", color = "blue" ];
+  "AnyswapV3Router.anySwapOutUnderlyingWithTransferPermit" [ label = "anySwapOutUnderlyingWithTransferPermit", color = "blue" ];
+  "AnyswapV3Router._anySwapIn" [ label = "_anySwapIn", color = "white" ];
+  "AnyswapV3Router.anySwapIn" [ label = "anySwapIn", color = "blue" ];
+  "AnyswapV3Router.anySwapInUnderlying" [ label = "anySwapInUnderlying", color = "blue" ];
+  "AnyswapV3Router.anySwapInAuto" [ label = "anySwapInAuto", color = "blue" ];
+  "AnyswapV3Router.anySwapFeeTo" [ label = "anySwapFeeTo", color = "blue" ];
+  "AnyswapV3Router._swap" [ label = "_swap", color = "white" ];
+  "AnyswapV3Router.anySwapOutExactTokensForTokens" [ label = "anySwapOutExactTokensForTokens", color = "blue" ];
+  "AnyswapV3Router.anySwapOutExactTokensForTokensUnderlying" [ label = "anySwapOutExactTokensForTokensUnderlying", color = "blue" ];
+  "AnyswapV3Router.anySwapOutExactTokensForTokensUnderlyingWithPermit" [ label = "anySwapOutExactTokensForTokensUnderlyingWithPermit", color = "blue" ];
+  "AnyswapV3Router.anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" [ label = "anySwapOutExactTokensForTokensUnderlyingWithTransferPermit", color = "blue" ];
+  "AnyswapV3Router.anySwapInExactTokensForTokens" [ label = "anySwapInExactTokensForTokens", color = "blue" ];
+  "AnyswapV3Router.anySwapOutExactTokensForNative" [ label = "anySwapOutExactTokensForNative", color = "blue" ];
+  "AnyswapV3Router.anySwapOutExactTokensForNativeUnderlying" [ label = "anySwapOutExactTokensForNativeUnderlying", color = "blue" ];
+  "AnyswapV3Router.anySwapOutExactTokensForNativeUnderlyingWithPermit" [ label = "anySwapOutExactTokensForNativeUnderlyingWithPermit", color = "blue" ];
+  "AnyswapV3Router.anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" [ label = "anySwapOutExactTokensForNativeUnderlyingWithTransferPermit", color = "blue" ];
+  "AnyswapV3Router.anySwapInExactTokensForNative" [ label = "anySwapInExactTokensForNative", color = "blue" ];
+  "AnyswapV3Router.quote" [ label = "quote", color = "green" ];
+  "AnyswapV3Router.getAmountOut" [ label = "getAmountOut", color = "green" ];
+  "AnyswapV3Router.getAmountIn" [ label = "getAmountIn", color = "green" ];
+  "AnyswapV3Router.getAmountsOut" [ label = "getAmountsOut", color = "green" ];
+  "AnyswapV3Router.getAmountsIn" [ label = "getAmountsIn", color = "green" ];
+  "AnyswapV3Router.address" [ label = "address" ];
+}
+
+subgraph "clusteramountA" {
+  graph [ label = "amountA", color = "lightgray" ];
+  "amountA.mul" [ label = "mul" ];
+}
+
+subgraph "clusteramountIn" {
+  graph [ label = "amountIn", color = "lightgray" ];
+  "amountIn.mul" [ label = "mul" ];
+}
+
+subgraph "clusteramountInWithFee" {
+  graph [ label = "amountInWithFee", color = "lightgray" ];
+  "amountInWithFee.mul" [ label = "mul" ];
+}
+
+subgraph "clusterreserveIn" {
+  graph [ label = "reserveIn", color = "lightgray" ];
+  "reserveIn.mul" [ label = "mul" ];
+}
+
+subgraph "clusterreserveOut" {
+  graph [ label = "reserveOut", color = "lightgray" ];
+  "reserveOut.sub" [ label = "sub" ];
+}
+
+subgraph "clustertoken" {
+  graph [ label = "token", color = "lightgray" ];
+  "token.call" [ label = "call" ];
+}
+
+  "SushiswapV2Library.sortTokens";
+  "SushiswapV2Library.address";
+  "SushiswapV2Library.pairFor";
+  "SushiswapV2Library.getReserves";
+  "SushiswapV2Library.quote";
+  "amountA.mul";
+  "SushiswapV2Library.getAmountOut";
+  "amountIn.mul";
+  "amountInWithFee.mul";
+  "reserveIn.mul";
+  "SushiswapV2Library.getAmountIn";
+  "reserveOut.sub";
+  "SushiswapV2Library.getAmountsOut";
+  "SushiswapV2Library.getAmountsIn";
+  "TransferHelper.safeApprove";
+  "token.call";
+  "TransferHelper.safeTransfer";
+  "TransferHelper.safeTransferFrom";
+  "SafeERC20.safeTransfer";
+  "SafeERC20.callOptionalReturn";
+  "SafeERC20.safeTransferFrom";
+  "SafeERC20.safeApprove";
+  "IERC20.allowance";
+  "SafeERC20.address";
+  "IERC20.isContract";
+  "IERC20.data";
+  "AnyswapV3Router.onlyMPC";
+  "AnyswapV3Router.mpc";
+  "AnyswapV3Router.changeMPC";
+  "AnyswapV3Router.address";
+  "AnyswapV3Router.cID";
+  "AnyswapV3Router.changeVault";
+  "AnyswapV3Router._anySwapOut";
+  "AnyswapV3Router.anySwapOut";
+  "AnyswapV3Router.anySwapOutUnderlying";
+  "AnyswapV3Router.anySwapOutNative";
+  "AnyswapV3Router.anySwapOutUnderlyingWithPermit";
+  "AnyswapV3Router.anySwapOutUnderlyingWithTransferPermit";
+  "AnyswapV3Router._anySwapIn";
+  "AnyswapV3Router.anySwapIn";
+  "AnyswapV3Router.anySwapInUnderlying";
+  "AnyswapV3Router.anySwapInAuto";
+  "AnyswapV1ERC20.underlying";
+  "AnyswapV1ERC20.withdrawVault";
+  "TransferHelper.safeTransferNative";
+  "AnyswapV3Router.anySwapFeeTo";
+  "AnyswapV3Router._swap";
+  "AnyswapV3Router.anySwapOutExactTokensForTokens";
+  "AnyswapV3Router.anySwapOutExactTokensForTokensUnderlying";
+  "AnyswapV3Router.anySwapOutExactTokensForTokensUnderlyingWithPermit";
+  "AnyswapV3Router.anySwapOutExactTokensForTokensUnderlyingWithTransferPermit";
+  "AnyswapV3Router.anySwapInExactTokensForTokens";
+  "AnyswapV3Router.anySwapOutExactTokensForNative";
+  "AnyswapV3Router.anySwapOutExactTokensForNativeUnderlying";
+  "AnyswapV3Router.anySwapOutExactTokensForNativeUnderlyingWithPermit";
+  "AnyswapV3Router.anySwapOutExactTokensForNativeUnderlyingWithTransferPermit";
+  "AnyswapV3Router.anySwapInExactTokensForNative";
+  "AnyswapV3Router.quote";
+  "AnyswapV3Router.getAmountOut";
+  "AnyswapV3Router.getAmountIn";
+  "AnyswapV3Router.getAmountsOut";
+  "AnyswapV3Router.getAmountsIn";
+  "SushiswapV2Library.sortTokens" -> "SushiswapV2Library.address" [ color = "green" ];
+  "SushiswapV2Library.pairFor" -> "SushiswapV2Library.sortTokens" [ color = "green" ];
+  "SushiswapV2Library.pairFor" -> "SushiswapV2Library.address" [ color = "green" ];
+  "SushiswapV2Library.getReserves" -> "SushiswapV2Library.sortTokens" [ color = "green" ];
+  "SushiswapV2Library.getReserves" -> "SushiswapV2Library.pairFor" [ color = "green" ];
+  "SushiswapV2Library.quote" -> "amountA.mul" [ color = "orange" ];
+  "SushiswapV2Library.getAmountOut" -> "amountIn.mul" [ color = "orange" ];
+  "SushiswapV2Library.getAmountOut" -> "amountInWithFee.mul" [ color = "orange" ];
+  "SushiswapV2Library.getAmountOut" -> "reserveIn.mul" [ color = "orange" ];
+  "SushiswapV2Library.getAmountIn" -> "reserveIn.mul" [ color = "orange" ];
+  "SushiswapV2Library.getAmountIn" -> "reserveOut.sub" [ color = "orange" ];
+  "SushiswapV2Library.getAmountsOut" -> "SushiswapV2Library.getReserves" [ color = "green" ];
+  "SushiswapV2Library.getAmountsOut" -> "SushiswapV2Library.getAmountOut" [ color = "green" ];
+  "SushiswapV2Library.getAmountsIn" -> "SushiswapV2Library.getReserves" [ color = "green" ];
+  "SushiswapV2Library.getAmountsIn" -> "SushiswapV2Library.getAmountIn" [ color = "green" ];
+  "TransferHelper.safeApprove" -> "token.call" [ color = "orange" ];
+  "TransferHelper.safeTransfer" -> "token.call" [ color = "orange" ];
+  "TransferHelper.safeTransferFrom" -> "token.call" [ color = "orange" ];
+  "SafeERC20.safeTransfer" -> "SafeERC20.callOptionalReturn" [ color = "green" ];
+  "SafeERC20.safeTransferFrom" -> "SafeERC20.callOptionalReturn" [ color = "green" ];
+  "SafeERC20.safeApprove" -> "IERC20.allowance" [ color = "orange" ];
+  "SafeERC20.safeApprove" -> "SafeERC20.address" [ color = "green" ];
+  "SafeERC20.safeApprove" -> "SafeERC20.callOptionalReturn" [ color = "green" ];
+  "SafeERC20.callOptionalReturn" -> "IERC20.isContract" [ color = "orange" ];
+  "SafeERC20.callOptionalReturn" -> "SafeERC20.address" [ color = "green" ];
+  "SafeERC20.callOptionalReturn" -> "IERC20.data" [ color = "orange" ];
+  "SafeERC20.callOptionalReturn" -> "SafeERC20.address" [ color = "green" ];
+  "AnyswapV3Router.onlyMPC" -> "AnyswapV3Router.mpc" [ color = "green" ];
+  "AnyswapV3Router.changeMPC" -> "AnyswapV3Router.address" [ color = "green" ];
+  "AnyswapV3Router.changeMPC" -> "AnyswapV3Router.mpc" [ color = "green" ];
+  "AnyswapV3Router.changeMPC" -> "AnyswapV3Router.cID" [ color = "green" ];
+  "AnyswapV3Router.changeVault" -> "AnyswapV3Router.address" [ color = "green" ];
+  "AnyswapV3Router._anySwapOut" -> "AnyswapV3Router.cID" [ color = "green" ];
+  "AnyswapV3Router.anySwapOut" -> "AnyswapV3Router._anySwapOut" [ color = "green" ];
+  "AnyswapV3Router.anySwapOutUnderlying" -> "AnyswapV3Router._anySwapOut" [ color = "green" ];
+  "AnyswapV3Router.anySwapOutNative" -> "AnyswapV3Router._anySwapOut" [ color = "green" ];
+  "AnyswapV3Router.anySwapOutUnderlyingWithPermit" -> "AnyswapV3Router.address" [ color = "green" ];
+  "AnyswapV3Router.anySwapOutUnderlyingWithPermit" -> "AnyswapV3Router._anySwapOut" [ color = "green" ];
+  "AnyswapV3Router.anySwapOutUnderlyingWithTransferPermit" -> "AnyswapV3Router._anySwapOut" [ color = "green" ];
+  "AnyswapV3Router.anySwapOut" -> "AnyswapV3Router._anySwapOut" [ color = "green" ];
+  "AnyswapV3Router._anySwapIn" -> "AnyswapV3Router.cID" [ color = "green" ];
+  "AnyswapV3Router.anySwapIn" -> "AnyswapV3Router._anySwapIn" [ color = "green" ];
+  "AnyswapV3Router.anySwapInUnderlying" -> "AnyswapV3Router._anySwapIn" [ color = "green" ];
+  "AnyswapV3Router.anySwapInAuto" -> "AnyswapV3Router._anySwapIn" [ color = "green" ];
+  "AnyswapV3Router.anySwapInAuto" -> "AnyswapV1ERC20.underlying" [ color = "orange" ];
+  "AnyswapV3Router.anySwapInAuto" -> "AnyswapV3Router.address" [ color = "green" ];
+  "AnyswapV3Router.anySwapInAuto" -> "AnyswapV1ERC20.withdrawVault" [ color = "orange" ];
+  "AnyswapV3Router.anySwapInAuto" -> "AnyswapV3Router.address" [ color = "green" ];
+  "AnyswapV3Router.anySwapInAuto" -> "TransferHelper.safeTransferNative" [ color = "orange" ];
+  "AnyswapV3Router.anySwapInAuto" -> "AnyswapV1ERC20.withdrawVault" [ color = "orange" ];
+  "AnyswapV3Router.anySwapFeeTo" -> "AnyswapV3Router.mpc" [ color = "green" ];
+  "AnyswapV3Router.anySwapIn" -> "AnyswapV3Router._anySwapIn" [ color = "green" ];
+  "AnyswapV3Router._swap" -> "SushiswapV2Library.sortTokens" [ color = "orange" ];
+  "AnyswapV3Router._swap" -> "SushiswapV2Library.pairFor" [ color = "orange" ];
+  "AnyswapV3Router._swap" -> "SushiswapV2Library.pairFor" [ color = "orange" ];
+  "AnyswapV3Router.anySwapOutExactTokensForTokens" -> "AnyswapV3Router.cID" [ color = "green" ];
+  "AnyswapV3Router.anySwapOutExactTokensForTokensUnderlying" -> "AnyswapV3Router.cID" [ color = "green" ];
+  "AnyswapV3Router.anySwapOutExactTokensForTokensUnderlyingWithPermit" -> "AnyswapV3Router.address" [ color = "green" ];
+  "AnyswapV3Router.anySwapOutExactTokensForTokensUnderlyingWithPermit" -> "AnyswapV3Router.cID" [ color = "green" ];
+  "AnyswapV3Router.anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" -> "AnyswapV3Router.cID" [ color = "green" ];
+  "AnyswapV3Router.anySwapInExactTokensForTokens" -> "SushiswapV2Library.getAmountsOut" [ color = "orange" ];
+  "AnyswapV3Router.anySwapInExactTokensForTokens" -> "AnyswapV3Router._anySwapIn" [ color = "green" ];
+  "AnyswapV3Router.anySwapInExactTokensForTokens" -> "SushiswapV2Library.pairFor" [ color = "orange" ];
+  "AnyswapV3Router.anySwapInExactTokensForTokens" -> "AnyswapV3Router._swap" [ color = "green" ];
+  "AnyswapV3Router.anySwapOutExactTokensForNative" -> "AnyswapV3Router.cID" [ color = "green" ];
+  "AnyswapV3Router.anySwapOutExactTokensForNativeUnderlying" -> "AnyswapV3Router.cID" [ color = "green" ];
+  "AnyswapV3Router.anySwapOutExactTokensForNativeUnderlyingWithPermit" -> "AnyswapV3Router.address" [ color = "green" ];
+  "AnyswapV3Router.anySwapOutExactTokensForNativeUnderlyingWithPermit" -> "AnyswapV3Router.cID" [ color = "green" ];
+  "AnyswapV3Router.anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" -> "AnyswapV3Router.cID" [ color = "green" ];
+  "AnyswapV3Router.anySwapInExactTokensForNative" -> "SushiswapV2Library.getAmountsOut" [ color = "orange" ];
+  "AnyswapV3Router.anySwapInExactTokensForNative" -> "AnyswapV3Router._anySwapIn" [ color = "green" ];
+  "AnyswapV3Router.anySwapInExactTokensForNative" -> "SushiswapV2Library.pairFor" [ color = "orange" ];
+  "AnyswapV3Router.anySwapInExactTokensForNative" -> "AnyswapV3Router._swap" [ color = "green" ];
+  "AnyswapV3Router.anySwapInExactTokensForNative" -> "AnyswapV3Router.address" [ color = "green" ];
+  "AnyswapV3Router.anySwapInExactTokensForNative" -> "TransferHelper.safeTransferNative" [ color = "orange" ];
+  "AnyswapV3Router.quote" -> "SushiswapV2Library.quote" [ color = "orange" ];
+  "AnyswapV3Router.getAmountOut" -> "SushiswapV2Library.getAmountOut" [ color = "orange" ];
+  "AnyswapV3Router.getAmountIn" -> "SushiswapV2Library.getAmountIn" [ color = "orange" ];
+  "AnyswapV3Router.getAmountsOut" -> "SushiswapV2Library.getAmountsOut" [ color = "orange" ];
+  "AnyswapV3Router.getAmountsIn" -> "SushiswapV2Library.getAmountsIn" [ color = "orange" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

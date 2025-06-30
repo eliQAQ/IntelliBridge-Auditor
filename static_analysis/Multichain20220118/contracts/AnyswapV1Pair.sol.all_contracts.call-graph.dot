@@ -1,0 +1,196 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_258_SafeERC20 {
+label = "SafeERC20"
+"258_safeTransferFrom" [label="safeTransferFrom"]
+"258_callOptionalReturn" [label="callOptionalReturn"]
+"258_safeTransfer" [label="safeTransfer"]
+"258_safeApprove" [label="safeApprove"]
+"258_safeApprove" -> "258_callOptionalReturn"
+"258_safeTransferFrom" -> "258_callOptionalReturn"
+"258_safeTransfer" -> "258_callOptionalReturn"
+}subgraph cluster_998_IAnyswapV1Callee {
+label = "IAnyswapV1Callee"
+"998_AnyswapV1Call" [label="AnyswapV1Call"]
+}subgraph cluster_904_UQ112x112 {
+label = "UQ112x112"
+"904_uqdiv" [label="uqdiv"]
+"904_encode" [label="encode"]
+}subgraph cluster_329_IAnyswapV1Factory {
+label = "IAnyswapV1Factory"
+"329_setMigrator" [label="setMigrator"]
+"329_setFeeToSetter" [label="setFeeToSetter"]
+"329_migrator" [label="migrator"]
+"329_setFeeTo" [label="setFeeTo"]
+"329_getPair" [label="getPair"]
+"329_createPair" [label="createPair"]
+"329_feeToSetter" [label="feeToSetter"]
+"329_allPairs" [label="allPairs"]
+"329_allPairsLength" [label="allPairsLength"]
+"329_feeTo" [label="feeTo"]
+}subgraph cluster_2539_AnyswapV1Pair {
+label = "AnyswapV1Pair"
+"2539_swap" [label="swap"]
+"2539__getAmountIn" [label="_getAmountIn"]
+"2539__mintFee" [label="_mintFee"]
+"2539_sync" [label="sync"]
+"2539_skim" [label="skim"]
+"2539__safeTransfer" [label="_safeTransfer"]
+"2539_mint" [label="mint"]
+"2539__getAmountOut" [label="_getAmountOut"]
+"2539_getAmountIn" [label="getAmountIn"]
+"2539_constructor" [label="constructor"]
+"2539_initialize" [label="initialize"]
+"2539__update" [label="_update"]
+"2539_getAmountOut" [label="getAmountOut"]
+"2539_getReserves" [label="getReserves"]
+"2539_burn" [label="burn"]
+"2539_skim" -> "2539_lock"
+"2539_getAmountIn" -> "2539__getAmountIn"
+"2539_mint" -> "2539_getReserves"
+"2539_mint" -> "2539__update"
+"2539_skim" -> "2539__safeTransfer"
+"2539_burn" -> "2539__mintFee"
+"2539_burn" -> "2539_getReserves"
+"2539_sync" -> "2539__update"
+"2539_swap" -> "2539__safeTransfer"
+"2539_mint" -> "2539__mintFee"
+"2539_burn" -> "2539__burn"
+"2539_burn" -> "2539__update"
+"2539_swap" -> "2539__getAmountOut"
+"2539__mintFee" -> "2539__mint"
+"2539_mint" -> "2539_lock"
+"2539_mint" -> "2539__mint"
+"2539_getAmountIn" -> "2539_getReserves"
+"2539_sync" -> "2539_lock"
+"2539_swap" -> "2539__update"
+"2539_burn" -> "2539_lock"
+"2539_swap" -> "2539_getReserves"
+"2539_swap" -> "2539_lock"
+"2539_burn" -> "2539__safeTransfer"
+"2539_getAmountOut" -> "2539_getReserves"
+"2539_getAmountOut" -> "2539__getAmountOut"
+}subgraph cluster_109_Address {
+label = "Address"
+"109_isContract" [label="isContract"]
+}subgraph cluster_402_SafeMathAnyswap {
+label = "SafeMathAnyswap"
+"402_add" [label="add"]
+"402_sub" [label="sub"]
+"402_mul" [label="mul"]
+}subgraph cluster_83_IERC20 {
+label = "IERC20"
+"83_balanceOf" [label="balanceOf"]
+"83_transferFrom" [label="transferFrom"]
+"83_allowance" [label="allowance"]
+"83_transfer" [label="transfer"]
+"83_decimals" [label="decimals"]
+"83_approve" [label="approve"]
+"83_totalSupply" [label="totalSupply"]
+"83_symbol" [label="symbol"]
+"83_name" [label="name"]
+}subgraph cluster_788_AnyswapV1ERC20 {
+label = "AnyswapV1ERC20"
+"788_permit" [label="permit"]
+"788_transfer" [label="transfer"]
+"788__approve" [label="_approve"]
+"788__mint" [label="_mint"]
+"788__burn" [label="_burn"]
+"788_transferFrom" [label="transferFrom"]
+"788_constructor" [label="constructor"]
+"788__transfer" [label="_transfer"]
+"788_approve" [label="approve"]
+"788_permit" -> "788__approve"
+"788_transfer" -> "788__transfer"
+"788_transferFrom" -> "788__transfer"
+"788_approve" -> "788__approve"
+}subgraph cluster_986_IERC20Anyswap {
+label = "IERC20Anyswap"
+"986_totalSupply" [label="totalSupply"]
+"986_symbol" [label="symbol"]
+"986_transfer" [label="transfer"]
+"986_allowance" [label="allowance"]
+"986_decimals" [label="decimals"]
+"986_approve" [label="approve"]
+"986_balanceOf" [label="balanceOf"]
+"986_name" [label="name"]
+"986_transferFrom" [label="transferFrom"]
+}subgraph cluster_862_Math {
+label = "Math"
+"862_min" [label="min"]
+"862_sqrt" [label="sqrt"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"abi.encode()" 
+"abi.decode()" 
+"abi.encodePacked()" 
+"chainid()" 
+"require(bool,string)" 
+"keccak256(bytes)" 
+"ecrecover(bytes32,uint8,bytes32,bytes32)" 
+"abi.encodeWithSelector()" 
+"extcodehash(uint256)" 
+"788_constructor" -> "abi.encode()"
+"2539__safeTransfer" -> "require(bool,string)"
+"2539__safeTransfer" -> "abi.decode()"
+"788_permit" -> "ecrecover(bytes32,uint8,bytes32,bytes32)"
+"788_permit" -> "abi.encodePacked()"
+"788_permit" -> "keccak256(bytes)"
+"2539_mint" -> "require(bool,string)"
+"788_constructor" -> "chainid()"
+"109_isContract" -> "extcodehash(uint256)"
+"258_safeTransfer" -> "abi.encodeWithSelector()"
+"2539_swap" -> "require(bool,string)"
+"788_permit" -> "abi.encode()"
+"402_mul" -> "require(bool,string)"
+"2539_burn" -> "require(bool,string)"
+"258_safeApprove" -> "abi.encodeWithSelector()"
+"2539_initialize" -> "require(bool,string)"
+"2539__safeTransfer" -> "abi.encodeWithSelector()"
+"788_permit" -> "require(bool,string)"
+"2539__update" -> "require(bool,string)"
+"258_callOptionalReturn" -> "require(bool,string)"
+"788_constructor" -> "keccak256(bytes)"
+"2539__getAmountIn" -> "require(bool,string)"
+"258_safeTransferFrom" -> "abi.encodeWithSelector()"
+"402_sub" -> "require(bool,string)"
+"402_add" -> "require(bool,string)"
+"2539__getAmountOut" -> "require(bool,string)"
+"258_safeApprove" -> "require(bool,string)"
+"258_callOptionalReturn" -> "abi.decode()"
+}"2539_skim" -> "402_sub"
+"788__mint" -> "402_add"
+"2539_skim" -> "986_balanceOf"
+"2539__mintFee" -> "402_mul"
+"2539_sync" -> "986_balanceOf"
+"2539_swap" -> "402_sub"
+"2539_mint" -> "986_balanceOf"
+"788__transfer" -> "402_sub"
+"2539__getAmountIn" -> "402_sub"
+"2539__getAmountIn" -> "402_add"
+"788__burn" -> "402_sub"
+"2539__mintFee" -> "329_feeTo"
+"2539__getAmountIn" -> "402_mul"
+"2539__mintFee" -> "402_add"
+"2539_burn" -> "986_balanceOf"
+"788_transferFrom" -> "402_sub"
+"2539__mintFee" -> "402_sub"
+"2539_mint" -> "862_sqrt"
+"258_safeApprove" -> "83_allowance"
+"2539__getAmountOut" -> "402_mul"
+"2539_burn" -> "402_mul"
+"2539__getAmountOut" -> "402_add"
+"2539_mint" -> "402_mul"
+"258_callOptionalReturn" -> "109_isContract"
+"2539__update" -> "904_encode"
+"2539_mint" -> "862_min"
+"2539__update" -> "904_uqdiv"
+"2539_mint" -> "402_sub"
+"2539_swap" -> "258_safeTransferFrom"
+"2539_swap" -> "998_AnyswapV1Call"
+"2539_swap" -> "402_mul"
+"2539_swap" -> "986_balanceOf"
+"2539__mintFee" -> "862_sqrt"
+"788__transfer" -> "402_add"
+}

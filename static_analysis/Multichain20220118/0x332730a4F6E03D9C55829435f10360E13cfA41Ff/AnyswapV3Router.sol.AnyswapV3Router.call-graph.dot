@@ -1,0 +1,96 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_3269_AnyswapV3Router {
+label = "AnyswapV3Router"
+"3269_getAmountOut" [label="getAmountOut"]
+"3269_anySwapInAuto" [label="anySwapInAuto"]
+"3269_getAmountIn" [label="getAmountIn"]
+"3269_changeMPC" [label="changeMPC"]
+"3269_cID" [label="cID"]
+"3269__anySwapOut" [label="_anySwapOut"]
+"3269_anySwapOutNative" [label="anySwapOutNative"]
+"3269_anySwapFeeTo" [label="anySwapFeeTo"]
+"3269_anySwapOutExactTokensForTokensUnderlyingWithPermit" [label="anySwapOutExactTokensForTokensUnderlyingWithPermit"]
+"3269_anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" [label="anySwapOutExactTokensForTokensUnderlyingWithTransferPermit"]
+"3269_anySwapOutExactTokensForTokensUnderlying" [label="anySwapOutExactTokensForTokensUnderlying"]
+"3269_anySwapOutUnderlying" [label="anySwapOutUnderlying"]
+"3269_getAmountsOut" [label="getAmountsOut"]
+"3269_anySwapInExactTokensForNative" [label="anySwapInExactTokensForNative"]
+"3269_constructor" [label="constructor"]
+"3269_anySwapInExactTokensForTokens" [label="anySwapInExactTokensForTokens"]
+"3269_anySwapIn" [label="anySwapIn"]
+"3269_anySwapOutExactTokensForNativeUnderlying" [label="anySwapOutExactTokensForNativeUnderlying"]
+"3269_anySwapOut" [label="anySwapOut"]
+"3269_anySwapInUnderlying" [label="anySwapInUnderlying"]
+"3269_anySwapOutExactTokensForTokens" [label="anySwapOutExactTokensForTokens"]
+"3269_getAmountsIn" [label="getAmountsIn"]
+"3269_anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" [label="anySwapOutExactTokensForNativeUnderlyingWithTransferPermit"]
+"3269_anySwapOutUnderlyingWithPermit" [label="anySwapOutUnderlyingWithPermit"]
+"3269_changeVault" [label="changeVault"]
+"3269_anySwapOutUnderlyingWithTransferPermit" [label="anySwapOutUnderlyingWithTransferPermit"]
+"3269__swap" [label="_swap"]
+"3269_anySwapOutExactTokensForNative" [label="anySwapOutExactTokensForNative"]
+"3269_mpc" [label="mpc"]
+"3269_anySwapOutExactTokensForNativeUnderlyingWithPermit" [label="anySwapOutExactTokensForNativeUnderlyingWithPermit"]
+"3269_receive" [label="receive"]
+"3269_quote" [label="quote"]
+"3269__anySwapIn" [label="_anySwapIn"]
+"3269_anySwapOutExactTokensForNativeUnderlying" -> "3269_ensure"
+"3269_anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" -> "3269_cID"
+"3269_changeMPC" -> "3269_onlyMPC"
+"3269_changeMPC" -> "3269_cID"
+"3269_anySwapOutExactTokensForTokens" -> "3269_ensure"
+"3269_anySwapOutExactTokensForNativeUnderlyingWithPermit" -> "3269_cID"
+"3269_anySwapFeeTo" -> "3269_mpc"
+"3269_anySwapInExactTokensForNative" -> "3269_onlyMPC"
+"3269_anySwapOut" -> "3269__anySwapOut"
+"3269_anySwapInExactTokensForTokens" -> "3269__anySwapIn"
+"3269_anySwapInUnderlying" -> "3269__anySwapIn"
+"3269_anySwapOutExactTokensForTokensUnderlying" -> "3269_cID"
+"3269_anySwapOutExactTokensForNativeUnderlying" -> "3269_cID"
+"3269_anySwapOutExactTokensForNative" -> "3269_cID"
+"3269_anySwapOutExactTokensForNativeUnderlyingWithPermit" -> "3269_ensure"
+"3269_anySwapOutUnderlying" -> "3269__anySwapOut"
+"3269_anySwapOutNative" -> "3269__anySwapOut"
+"3269_anySwapInAuto" -> "3269_onlyMPC"
+"3269_anySwapIn" -> "3269__anySwapIn"
+"3269_anySwapIn" -> "3269_onlyMPC"
+"3269_anySwapOutExactTokensForTokensUnderlyingWithPermit" -> "3269_ensure"
+"3269_anySwapOutExactTokensForNative" -> "3269_ensure"
+"3269_anySwapInExactTokensForTokens" -> "3269__swap"
+"3269_anySwapInExactTokensForNative" -> "3269__anySwapIn"
+"3269_anySwapInExactTokensForTokens" -> "3269_ensure"
+"3269_anySwapInAuto" -> "3269__anySwapIn"
+"3269_anySwapOutExactTokensForTokensUnderlyingWithPermit" -> "3269_cID"
+"3269_changeVault" -> "3269_onlyMPC"
+"3269_anySwapOutExactTokensForTokensUnderlying" -> "3269_ensure"
+"3269_anySwapInExactTokensForNative" -> "3269__swap"
+"3269_anySwapInExactTokensForTokens" -> "3269_onlyMPC"
+"3269_anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" -> "3269_ensure"
+"3269_anySwapFeeTo" -> "3269_onlyMPC"
+"3269__anySwapIn" -> "3269_cID"
+"3269_changeMPC" -> "3269_mpc"
+"3269_anySwapOutExactTokensForTokens" -> "3269_cID"
+"3269_anySwapInUnderlying" -> "3269_onlyMPC"
+"3269_anySwapOutUnderlyingWithPermit" -> "3269__anySwapOut"
+"3269_anySwapInExactTokensForNative" -> "3269_ensure"
+"3269_anySwapOutUnderlyingWithTransferPermit" -> "3269__anySwapOut"
+"3269_anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" -> "3269_cID"
+"3269_anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" -> "3269_ensure"
+"3269__anySwapOut" -> "3269_cID"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"chainid()" 
+"assert(bool)" 
+"3269_anySwapInExactTokensForNative" -> "require(bool,string)"
+"3269_anySwapOutNative" -> "assert(bool)"
+"3269_receive" -> "assert(bool)"
+"3269_anySwapOutNative" -> "require(bool,string)"
+"3269_anySwapInExactTokensForTokens" -> "require(bool,string)"
+"3269_changeMPC" -> "require(bool,string)"
+"3269_changeVault" -> "require(bool,string)"
+"3269_cID" -> "chainid()"
+}
+}

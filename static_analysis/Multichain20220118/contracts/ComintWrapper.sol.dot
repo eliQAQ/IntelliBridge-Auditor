@@ -1,0 +1,92 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterIComintToken" {
+  graph [ label = "IComintToken  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IComintToken.mint" [ label = "mint", color = "blue" ];
+  "IComintToken.burnFrom" [ label = "burnFrom", color = "blue" ];
+}
+
+subgraph "clusterComintWrapper" {
+  graph [ label = "ComintWrapper", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ComintWrapper.onlyAuth" [ label = "onlyAuth", color = "yellow" ];
+  "ComintWrapper.onlyVault" [ label = "onlyVault", color = "yellow" ];
+  "ComintWrapper.owner" [ label = "owner", color = "blue" ];
+  "ComintWrapper.mpc" [ label = "mpc", color = "blue" ];
+  "ComintWrapper.setVaultOnly" [ label = "setVaultOnly", color = "blue" ];
+  "ComintWrapper.initVault" [ label = "initVault", color = "blue" ];
+  "ComintWrapper.setVault" [ label = "setVault", color = "blue" ];
+  "ComintWrapper.applyVault" [ label = "applyVault", color = "blue" ];
+  "ComintWrapper.setMinter" [ label = "setMinter", color = "blue" ];
+  "ComintWrapper.applyMinter" [ label = "applyMinter", color = "blue" ];
+  "ComintWrapper.revokeMinter" [ label = "revokeMinter", color = "blue" ];
+  "ComintWrapper.getAllMinters" [ label = "getAllMinters", color = "blue" ];
+  "ComintWrapper.changeVault" [ label = "changeVault", color = "blue" ];
+  "ComintWrapper.mint" [ label = "mint", color = "blue" ];
+  "ComintWrapper.burn" [ label = "burn", color = "blue" ];
+  "ComintWrapper.Swapin" [ label = "Swapin", color = "blue" ];
+  "ComintWrapper.Swapout" [ label = "Swapout", color = "blue" ];
+  "ComintWrapper.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "ComintWrapper.totalSupply" [ label = "totalSupply", color = "blue" ];
+  "ComintWrapper._mint" [ label = "_mint" ];
+  "ComintWrapper._burn" [ label = "_burn" ];
+  "ComintWrapper.address" [ label = "address" ];
+}
+
+  "ComintWrapper.setVault";
+  "ComintWrapper.address";
+  "ComintWrapper.applyVault";
+  "ComintWrapper.setMinter";
+  "ComintWrapper.applyMinter";
+  "ComintWrapper.changeVault";
+  "ComintWrapper.mint";
+  "ComintWrapper._mint";
+  "ComintWrapper.burn";
+  "ComintWrapper._burn";
+  "ComintWrapper.Swapin";
+  "ComintWrapper.Swapout";
+  "ComintWrapper.<Constructor>";
+  "ComintWrapper.setVault" -> "ComintWrapper.address" [ color = "green" ];
+  "ComintWrapper.applyVault" -> "ComintWrapper.address" [ color = "green" ];
+  "ComintWrapper.applyVault" -> "ComintWrapper.address" [ color = "green" ];
+  "ComintWrapper.setMinter" -> "ComintWrapper.address" [ color = "green" ];
+  "ComintWrapper.applyMinter" -> "ComintWrapper.address" [ color = "green" ];
+  "ComintWrapper.applyMinter" -> "ComintWrapper.address" [ color = "green" ];
+  "ComintWrapper.changeVault" -> "ComintWrapper.address" [ color = "green" ];
+  "ComintWrapper.changeVault" -> "ComintWrapper.address" [ color = "green" ];
+  "ComintWrapper.mint" -> "ComintWrapper._mint" [ color = "green" ];
+  "ComintWrapper.burn" -> "ComintWrapper._burn" [ color = "green" ];
+  "ComintWrapper.Swapin" -> "ComintWrapper._mint" [ color = "green" ];
+  "ComintWrapper.Swapout" -> "ComintWrapper.address" [ color = "green" ];
+  "ComintWrapper.Swapout" -> "ComintWrapper._burn" [ color = "green" ];
+  "ComintWrapper.<Constructor>" -> "ComintWrapper.address" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

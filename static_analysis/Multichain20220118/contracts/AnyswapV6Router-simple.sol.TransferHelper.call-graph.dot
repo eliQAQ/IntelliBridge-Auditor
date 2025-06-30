@@ -1,0 +1,12 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_27_TransferHelper {
+label = "TransferHelper"
+"27_safeTransferNative" [label="safeTransferNative"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"27_safeTransferNative" -> "require(bool,string)"
+}
+}

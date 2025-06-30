@@ -1,0 +1,73 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterAnyCallApp" {
+  graph [ label = "AnyCallApp", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "AnyCallApp.onlyExecutor" [ label = "onlyExecutor", color = "yellow" ];
+  "AnyCallApp.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "AnyCallApp.setSenders" [ label = "setSenders", color = "green" ];
+  "AnyCallApp.setAnyCallProxy" [ label = "setAnyCallProxy", color = "green" ];
+  "AnyCallApp._anyExecute" [ label = "_anyExecute" ];
+  "AnyCallApp.anyExecute" [ label = "anyExecute", color = "blue" ];
+  "AnyCallApp._anyCall" [ label = "_anyCall", color = "white" ];
+  "AnyCallApp._anyFallback" [ label = "_anyFallback" ];
+  "AnyCallApp.anyFallback" [ label = "anyFallback", color = "blue" ];
+  "AnyCallApp.depositAnyCallFee" [ label = "depositAnyCallFee", color = "green" ];
+  "AnyCallApp.withdrawAnyCallFee" [ label = "withdrawAnyCallFee", color = "green" ];
+  "AnyCallApp.approve" [ label = "approve", color = "green" ];
+  "AnyCallApp.IAnyCallProxyV7" [ label = "IAnyCallProxyV7" ];
+  "AnyCallApp.address" [ label = "address" ];
+}
+
+  "AnyCallApp.onlyExecutor";
+  "AnyCallApp.IAnyCallProxyV7";
+  "AnyCallApp.anyExecute";
+  "AnyCallApp._anyExecute";
+  "AnyCallApp._anyCall";
+  "AnyCallApp.anyFallback";
+  "AnyCallApp._anyFallback";
+  "AnyCallApp.depositAnyCallFee";
+  "AnyCallApp.address";
+  "AnyCallApp.withdrawAnyCallFee";
+  "AnyCallApp.approve";
+  "AnyCallApp.onlyExecutor" -> "AnyCallApp.IAnyCallProxyV7" [ color = "green" ];
+  "AnyCallApp.anyExecute" -> "AnyCallApp._anyExecute" [ color = "green" ];
+  "AnyCallApp._anyCall" -> "AnyCallApp.IAnyCallProxyV7" [ color = "green" ];
+  "AnyCallApp.anyFallback" -> "AnyCallApp.IAnyCallProxyV7" [ color = "green" ];
+  "AnyCallApp.anyFallback" -> "AnyCallApp._anyFallback" [ color = "green" ];
+  "AnyCallApp.depositAnyCallFee" -> "AnyCallApp.IAnyCallProxyV7" [ color = "green" ];
+  "AnyCallApp.depositAnyCallFee" -> "AnyCallApp.address" [ color = "green" ];
+  "AnyCallApp.withdrawAnyCallFee" -> "AnyCallApp.IAnyCallProxyV7" [ color = "green" ];
+  "AnyCallApp.withdrawAnyCallFee" -> "AnyCallApp.address" [ color = "green" ];
+  "AnyCallApp.approve" -> "AnyCallApp.IAnyCallProxyV7" [ color = "green" ];
+  "AnyCallApp.approve" -> "AnyCallApp.address" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

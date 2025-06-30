@@ -1,0 +1,413 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterIERC20" {
+  graph [ label = "IERC20  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IERC20.name" [ label = "name", color = "blue" ];
+  "IERC20.symbol" [ label = "symbol", color = "blue" ];
+  "IERC20.decimals" [ label = "decimals", color = "blue" ];
+  "IERC20.totalSupply" [ label = "totalSupply", color = "blue" ];
+  "IERC20.balanceOf" [ label = "balanceOf", color = "blue" ];
+  "IERC20.allowance" [ label = "allowance" ];
+  "IERC20.approve" [ label = "approve", color = "blue" ];
+  "IERC20.transfer" [ label = "transfer", color = "blue" ];
+  "IERC20.transferFrom" [ label = "transferFrom", color = "blue" ];
+  "IERC20.isContract" [ label = "isContract" ];
+  "IERC20.data" [ label = "data" ];
+}
+
+subgraph "clusterAddress" {
+  graph [ label = "Address  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Address.isContract" [ label = "isContract", color = "white" ];
+}
+
+subgraph "clusterSafeERC20" {
+  graph [ label = "SafeERC20  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "SafeERC20.safeTransfer" [ label = "safeTransfer", color = "white" ];
+  "SafeERC20.safeTransferFrom" [ label = "safeTransferFrom", color = "white" ];
+  "SafeERC20.safeApprove" [ label = "safeApprove", color = "white" ];
+  "SafeERC20.callOptionalReturn" [ label = "callOptionalReturn" ];
+  "SafeERC20.address" [ label = "address" ];
+}
+
+subgraph "clusterIAnyswapV1Factory" {
+  graph [ label = "IAnyswapV1Factory  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IAnyswapV1Factory.feeTo" [ label = "feeTo", color = "blue" ];
+  "IAnyswapV1Factory.feeToSetter" [ label = "feeToSetter", color = "blue" ];
+  "IAnyswapV1Factory.migrator" [ label = "migrator", color = "blue" ];
+  "IAnyswapV1Factory.getPair" [ label = "getPair", color = "blue" ];
+  "IAnyswapV1Factory.allPairs" [ label = "allPairs", color = "blue" ];
+  "IAnyswapV1Factory.allPairsLength" [ label = "allPairsLength", color = "blue" ];
+  "IAnyswapV1Factory.createPair" [ label = "createPair", color = "blue" ];
+  "IAnyswapV1Factory.setFeeTo" [ label = "setFeeTo", color = "blue" ];
+  "IAnyswapV1Factory.setFeeToSetter" [ label = "setFeeToSetter", color = "blue" ];
+  "IAnyswapV1Factory.setMigrator" [ label = "setMigrator", color = "blue" ];
+}
+
+subgraph "clusterSafeMathAnyswap" {
+  graph [ label = "SafeMathAnyswap  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "SafeMathAnyswap.add" [ label = "add", color = "white" ];
+  "SafeMathAnyswap.sub" [ label = "sub", color = "white" ];
+  "SafeMathAnyswap.mul" [ label = "mul", color = "white" ];
+}
+
+subgraph "clusterAnyswapV1ERC20" {
+  graph [ label = "AnyswapV1ERC20", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "AnyswapV1ERC20.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "AnyswapV1ERC20._mint" [ label = "_mint", color = "white" ];
+  "AnyswapV1ERC20._burn" [ label = "_burn", color = "white" ];
+  "AnyswapV1ERC20._approve" [ label = "_approve" ];
+  "AnyswapV1ERC20._transfer" [ label = "_transfer" ];
+  "AnyswapV1ERC20.approve" [ label = "approve", color = "blue" ];
+  "AnyswapV1ERC20.transfer" [ label = "transfer", color = "blue" ];
+  "AnyswapV1ERC20.transferFrom" [ label = "transferFrom", color = "blue" ];
+  "AnyswapV1ERC20.permit" [ label = "permit", color = "blue" ];
+  "AnyswapV1ERC20.address" [ label = "address" ];
+  "AnyswapV1ERC20.type" [ label = "type" ];
+}
+
+subgraph "clusterMath" {
+  graph [ label = "Math  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Math.min" [ label = "min" ];
+  "Math.sqrt" [ label = "sqrt" ];
+}
+
+subgraph "clusterUQ112x112" {
+  graph [ label = "UQ112x112  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "UQ112x112.encode" [ label = "encode", color = "white" ];
+  "UQ112x112.uqdiv" [ label = "uqdiv", color = "white" ];
+}
+
+subgraph "clusterIERC20Anyswap" {
+  graph [ label = "IERC20Anyswap  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IERC20Anyswap.name" [ label = "name", color = "blue" ];
+  "IERC20Anyswap.symbol" [ label = "symbol", color = "blue" ];
+  "IERC20Anyswap.decimals" [ label = "decimals", color = "blue" ];
+  "IERC20Anyswap.totalSupply" [ label = "totalSupply", color = "blue" ];
+  "IERC20Anyswap.balanceOf" [ label = "balanceOf", color = "blue" ];
+  "IERC20Anyswap.allowance" [ label = "allowance", color = "blue" ];
+  "IERC20Anyswap.approve" [ label = "approve", color = "blue" ];
+  "IERC20Anyswap.transfer" [ label = "transfer", color = "blue" ];
+  "IERC20Anyswap.transferFrom" [ label = "transferFrom", color = "blue" ];
+}
+
+subgraph "clusterIAnyswapV1Callee" {
+  graph [ label = "IAnyswapV1Callee  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IAnyswapV1Callee.AnyswapV1Call" [ label = "AnyswapV1Call", color = "blue" ];
+}
+
+subgraph "clusterAnyswapV1Pair" {
+  graph [ label = "AnyswapV1Pair", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "AnyswapV1Pair.lock" [ label = "lock", color = "yellow" ];
+  "AnyswapV1Pair.getAmountOut" [ label = "getAmountOut", color = "blue" ];
+  "AnyswapV1Pair._getAmountOut" [ label = "_getAmountOut" ];
+  "AnyswapV1Pair.getAmountIn" [ label = "getAmountIn", color = "blue" ];
+  "AnyswapV1Pair._getAmountIn" [ label = "_getAmountIn" ];
+  "AnyswapV1Pair.getReserves" [ label = "getReserves" ];
+  "AnyswapV1Pair._safeTransfer" [ label = "_safeTransfer", color = "red" ];
+  "AnyswapV1Pair.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "AnyswapV1Pair.initialize" [ label = "initialize", color = "blue" ];
+  "AnyswapV1Pair._update" [ label = "_update", color = "red" ];
+  "AnyswapV1Pair._mintFee" [ label = "_mintFee", color = "red" ];
+  "AnyswapV1Pair.mint" [ label = "mint", color = "blue" ];
+  "AnyswapV1Pair.burn" [ label = "burn", color = "blue" ];
+  "AnyswapV1Pair.swap" [ label = "swap", color = "blue" ];
+  "AnyswapV1Pair.skim" [ label = "skim", color = "blue" ];
+  "AnyswapV1Pair.sync" [ label = "sync", color = "blue" ];
+}
+
+subgraph "clustertotalSupply" {
+  graph [ label = "totalSupply", color = "lightgray" ];
+  "totalSupply.add" [ label = "add" ];
+  "totalSupply.sub" [ label = "sub" ];
+  "totalSupply.mul" [ label = "mul" ];
+}
+
+subgraph "clusteramountIn" {
+  graph [ label = "amountIn", color = "lightgray" ];
+  "amountIn.mul" [ label = "mul" ];
+}
+
+subgraph "clusteramountInWithFee" {
+  graph [ label = "amountInWithFee", color = "lightgray" ];
+  "amountInWithFee.mul" [ label = "mul" ];
+}
+
+subgraph "clusterreserveIn" {
+  graph [ label = "reserveIn", color = "lightgray" ];
+  "reserveIn.mul" [ label = "mul" ];
+}
+
+subgraph "clusterreserveOut" {
+  graph [ label = "reserveOut", color = "lightgray" ];
+  "reserveOut.sub" [ label = "sub" ];
+}
+
+subgraph "clustertoken" {
+  graph [ label = "token", color = "lightgray" ];
+  "token.call" [ label = "call" ];
+}
+
+subgraph "clusterrootK" {
+  graph [ label = "rootK", color = "lightgray" ];
+  "rootK.sub" [ label = "sub" ];
+  "rootK.mul" [ label = "mul" ];
+}
+
+subgraph "clusterbalance0" {
+  graph [ label = "balance0", color = "lightgray" ];
+  "balance0.sub" [ label = "sub" ];
+  "balance0.mul" [ label = "mul" ];
+}
+
+subgraph "clusterbalance1" {
+  graph [ label = "balance1", color = "lightgray" ];
+  "balance1.sub" [ label = "sub" ];
+  "balance1.mul" [ label = "mul" ];
+}
+
+subgraph "clusteramount0" {
+  graph [ label = "amount0", color = "lightgray" ];
+  "amount0.mul" [ label = "mul" ];
+}
+
+subgraph "clusteramount1" {
+  graph [ label = "amount1", color = "lightgray" ];
+  "amount1.mul" [ label = "mul" ];
+}
+
+subgraph "clusterliquidity" {
+  graph [ label = "liquidity", color = "lightgray" ];
+  "liquidity.mul" [ label = "mul" ];
+}
+
+subgraph "cluster_balance0" {
+  graph [ label = "_balance0", color = "lightgray" ];
+  "_balance0.mul" [ label = "mul" ];
+}
+
+subgraph "cluster_amount0In" {
+  graph [ label = "_amount0In", color = "lightgray" ];
+  "_amount0In.mul" [ label = "mul" ];
+}
+
+subgraph "cluster_balance1" {
+  graph [ label = "_balance1", color = "lightgray" ];
+  "_balance1.mul" [ label = "mul" ];
+}
+
+subgraph "cluster_amount1In" {
+  graph [ label = "_amount1In", color = "lightgray" ];
+  "_amount1In.mul" [ label = "mul" ];
+}
+
+subgraph "cluster_balance0Adjusted" {
+  graph [ label = "_balance0Adjusted", color = "lightgray" ];
+  "_balance0Adjusted.mul" [ label = "mul" ];
+}
+
+subgraph "clusteramount0In" {
+  graph [ label = "amount0In", color = "lightgray" ];
+  "amount0In.mul" [ label = "mul" ];
+}
+
+subgraph "clusteramount1In" {
+  graph [ label = "amount1In", color = "lightgray" ];
+  "amount1In.mul" [ label = "mul" ];
+}
+
+subgraph "clusterbalance0Adjusted" {
+  graph [ label = "balance0Adjusted", color = "lightgray" ];
+  "balance0Adjusted.mul" [ label = "mul" ];
+}
+
+  "SafeERC20.safeTransfer";
+  "SafeERC20.callOptionalReturn";
+  "SafeERC20.safeTransferFrom";
+  "SafeERC20.safeApprove";
+  "IERC20.allowance";
+  "SafeERC20.address";
+  "IERC20.isContract";
+  "IERC20.data";
+  "AnyswapV1ERC20.<Constructor>";
+  "AnyswapV1ERC20.address";
+  "AnyswapV1ERC20._mint";
+  "totalSupply.add";
+  "AnyswapV1ERC20._burn";
+  "totalSupply.sub";
+  "AnyswapV1ERC20.approve";
+  "AnyswapV1ERC20._approve";
+  "AnyswapV1ERC20.transfer";
+  "AnyswapV1ERC20._transfer";
+  "AnyswapV1ERC20.transferFrom";
+  "AnyswapV1ERC20.type";
+  "AnyswapV1ERC20.permit";
+  "AnyswapV1Pair.getAmountOut";
+  "AnyswapV1Pair.getReserves";
+  "AnyswapV1Pair._getAmountOut";
+  "amountIn.mul";
+  "amountInWithFee.mul";
+  "reserveIn.mul";
+  "AnyswapV1Pair.getAmountIn";
+  "AnyswapV1Pair._getAmountIn";
+  "reserveOut.sub";
+  "AnyswapV1Pair._safeTransfer";
+  "token.call";
+  "AnyswapV1Pair._update";
+  "AnyswapV1Pair._mintFee";
+  "Math.sqrt";
+  "totalSupply.mul";
+  "rootK.sub";
+  "rootK.mul";
+  "AnyswapV1Pair.mint";
+  "balance0.sub";
+  "balance1.sub";
+  "amount0.mul";
+  "Math.min";
+  "amount1.mul";
+  "AnyswapV1Pair.burn";
+  "liquidity.mul";
+  "AnyswapV1Pair.swap";
+  "_balance0.mul";
+  "_amount0In.mul";
+  "_balance1.mul";
+  "_amount1In.mul";
+  "_balance0Adjusted.mul";
+  "balance0.mul";
+  "amount0In.mul";
+  "balance1.mul";
+  "amount1In.mul";
+  "balance0Adjusted.mul";
+  "AnyswapV1Pair.skim";
+  "AnyswapV1Pair.sync";
+  "SafeERC20.safeTransfer" -> "SafeERC20.callOptionalReturn" [ color = "green" ];
+  "SafeERC20.safeTransferFrom" -> "SafeERC20.callOptionalReturn" [ color = "green" ];
+  "SafeERC20.safeApprove" -> "IERC20.allowance" [ color = "orange" ];
+  "SafeERC20.safeApprove" -> "SafeERC20.address" [ color = "green" ];
+  "SafeERC20.safeApprove" -> "SafeERC20.callOptionalReturn" [ color = "green" ];
+  "SafeERC20.callOptionalReturn" -> "IERC20.isContract" [ color = "orange" ];
+  "SafeERC20.callOptionalReturn" -> "SafeERC20.address" [ color = "green" ];
+  "SafeERC20.callOptionalReturn" -> "IERC20.data" [ color = "orange" ];
+  "SafeERC20.callOptionalReturn" -> "SafeERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20.<Constructor>" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20._mint" -> "totalSupply.add" [ color = "orange" ];
+  "AnyswapV1ERC20._mint" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20._burn" -> "totalSupply.sub" [ color = "orange" ];
+  "AnyswapV1ERC20._burn" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20.approve" -> "AnyswapV1ERC20._approve" [ color = "green" ];
+  "AnyswapV1ERC20.transfer" -> "AnyswapV1ERC20._transfer" [ color = "green" ];
+  "AnyswapV1ERC20.transferFrom" -> "AnyswapV1ERC20.type" [ color = "green" ];
+  "AnyswapV1ERC20.transferFrom" -> "AnyswapV1ERC20._transfer" [ color = "green" ];
+  "AnyswapV1ERC20.permit" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20.permit" -> "AnyswapV1ERC20._approve" [ color = "green" ];
+  "AnyswapV1Pair.getAmountOut" -> "AnyswapV1Pair.getReserves" [ color = "green" ];
+  "AnyswapV1Pair.getAmountOut" -> "AnyswapV1Pair._getAmountOut" [ color = "green" ];
+  "AnyswapV1Pair.getAmountOut" -> "AnyswapV1Pair._getAmountOut" [ color = "green" ];
+  "AnyswapV1Pair._getAmountOut" -> "amountIn.mul" [ color = "orange" ];
+  "AnyswapV1Pair._getAmountOut" -> "amountInWithFee.mul" [ color = "orange" ];
+  "AnyswapV1Pair._getAmountOut" -> "reserveIn.mul" [ color = "orange" ];
+  "AnyswapV1Pair.getAmountIn" -> "AnyswapV1Pair.getReserves" [ color = "green" ];
+  "AnyswapV1Pair.getAmountIn" -> "AnyswapV1Pair._getAmountIn" [ color = "green" ];
+  "AnyswapV1Pair.getAmountIn" -> "AnyswapV1Pair._getAmountIn" [ color = "green" ];
+  "AnyswapV1Pair._getAmountIn" -> "reserveIn.mul" [ color = "orange" ];
+  "AnyswapV1Pair._getAmountIn" -> "reserveOut.sub" [ color = "orange" ];
+  "AnyswapV1Pair._safeTransfer" -> "token.call" [ color = "orange" ];
+  "AnyswapV1Pair._update" -> "AnyswapV1ERC20.type" [ color = "green" ];
+  "AnyswapV1Pair._update" -> "AnyswapV1ERC20.type" [ color = "green" ];
+  "AnyswapV1Pair._mintFee" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1Pair._mintFee" -> "Math.sqrt" [ color = "orange" ];
+  "AnyswapV1Pair._mintFee" -> "Math.sqrt" [ color = "orange" ];
+  "AnyswapV1Pair._mintFee" -> "totalSupply.mul" [ color = "orange" ];
+  "AnyswapV1Pair._mintFee" -> "rootK.sub" [ color = "orange" ];
+  "AnyswapV1Pair._mintFee" -> "rootK.mul" [ color = "orange" ];
+  "AnyswapV1Pair._mintFee" -> "AnyswapV1ERC20._mint" [ color = "green" ];
+  "AnyswapV1Pair.mint" -> "AnyswapV1Pair.getReserves" [ color = "green" ];
+  "AnyswapV1Pair.mint" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1Pair.mint" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1Pair.mint" -> "balance0.sub" [ color = "orange" ];
+  "AnyswapV1Pair.mint" -> "balance1.sub" [ color = "orange" ];
+  "AnyswapV1Pair.mint" -> "AnyswapV1Pair._mintFee" [ color = "green" ];
+  "AnyswapV1Pair.mint" -> "Math.sqrt" [ color = "orange" ];
+  "AnyswapV1Pair.mint" -> "amount0.mul" [ color = "orange" ];
+  "AnyswapV1Pair.mint" -> "AnyswapV1ERC20._mint" [ color = "green" ];
+  "AnyswapV1Pair.mint" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1Pair.mint" -> "Math.min" [ color = "orange" ];
+  "AnyswapV1Pair.mint" -> "amount0.mul" [ color = "orange" ];
+  "AnyswapV1Pair.mint" -> "amount1.mul" [ color = "orange" ];
+  "AnyswapV1Pair.mint" -> "AnyswapV1ERC20._mint" [ color = "green" ];
+  "AnyswapV1Pair.mint" -> "AnyswapV1Pair._update" [ color = "green" ];
+  "AnyswapV1Pair.burn" -> "AnyswapV1Pair.getReserves" [ color = "green" ];
+  "AnyswapV1Pair.burn" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1Pair.burn" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1Pair.burn" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1Pair.burn" -> "AnyswapV1Pair._mintFee" [ color = "green" ];
+  "AnyswapV1Pair.burn" -> "liquidity.mul" [ color = "orange" ];
+  "AnyswapV1Pair.burn" -> "liquidity.mul" [ color = "orange" ];
+  "AnyswapV1Pair.burn" -> "AnyswapV1ERC20._burn" [ color = "green" ];
+  "AnyswapV1Pair.burn" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1Pair.burn" -> "AnyswapV1Pair._safeTransfer" [ color = "green" ];
+  "AnyswapV1Pair.burn" -> "AnyswapV1Pair._safeTransfer" [ color = "green" ];
+  "AnyswapV1Pair.burn" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1Pair.burn" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1Pair.burn" -> "AnyswapV1Pair._update" [ color = "green" ];
+  "AnyswapV1Pair.swap" -> "AnyswapV1Pair.getReserves" [ color = "green" ];
+  "AnyswapV1Pair.swap" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1Pair.swap" -> "AnyswapV1Pair._getAmountOut" [ color = "green" ];
+  "AnyswapV1Pair.swap" -> "AnyswapV1Pair._getAmountOut" [ color = "green" ];
+  "AnyswapV1Pair.swap" -> "AnyswapV1Pair._safeTransfer" [ color = "green" ];
+  "AnyswapV1Pair.swap" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1Pair.swap" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1Pair.swap" -> "_balance0.mul" [ color = "orange" ];
+  "AnyswapV1Pair.swap" -> "_amount0In.mul" [ color = "orange" ];
+  "AnyswapV1Pair.swap" -> "_balance1.mul" [ color = "orange" ];
+  "AnyswapV1Pair.swap" -> "_amount1In.mul" [ color = "orange" ];
+  "AnyswapV1Pair.swap" -> "_balance0Adjusted.mul" [ color = "orange" ];
+  "AnyswapV1Pair.swap" -> "AnyswapV1Pair._update" [ color = "green" ];
+  "AnyswapV1Pair.swap" -> "AnyswapV1Pair.getReserves" [ color = "green" ];
+  "AnyswapV1Pair.swap" -> "AnyswapV1Pair._safeTransfer" [ color = "green" ];
+  "AnyswapV1Pair.swap" -> "AnyswapV1Pair._safeTransfer" [ color = "green" ];
+  "AnyswapV1Pair.swap" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1Pair.swap" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1Pair.swap" -> "balance0.mul" [ color = "orange" ];
+  "AnyswapV1Pair.swap" -> "amount0In.mul" [ color = "orange" ];
+  "AnyswapV1Pair.swap" -> "balance1.mul" [ color = "orange" ];
+  "AnyswapV1Pair.swap" -> "amount1In.mul" [ color = "orange" ];
+  "AnyswapV1Pair.swap" -> "balance0Adjusted.mul" [ color = "orange" ];
+  "AnyswapV1Pair.swap" -> "AnyswapV1Pair._update" [ color = "green" ];
+  "AnyswapV1Pair.skim" -> "AnyswapV1Pair._safeTransfer" [ color = "green" ];
+  "AnyswapV1Pair.skim" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1Pair.skim" -> "AnyswapV1Pair._safeTransfer" [ color = "green" ];
+  "AnyswapV1Pair.skim" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1Pair.sync" -> "AnyswapV1Pair._update" [ color = "green" ];
+  "AnyswapV1Pair.sync" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1Pair.sync" -> "AnyswapV1ERC20.address" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

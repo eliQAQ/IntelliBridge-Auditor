@@ -1,0 +1,137 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_249_SafeERC20 {
+label = "SafeERC20"
+"249_callOptionalReturn" [label="callOptionalReturn"]
+"249_safeTransferFrom" [label="safeTransferFrom"]
+"249_safeApprove" [label="safeApprove"]
+"249_safeTransfer" [label="safeTransfer"]
+"249_safeApprove" -> "249_callOptionalReturn"
+"249_safeTransfer" -> "249_callOptionalReturn"
+"249_safeTransferFrom" -> "249_callOptionalReturn"
+}subgraph cluster_1626_AnyswapV6ERC20 {
+label = "AnyswapV6ERC20"
+"1626_transfer" [label="transfer"]
+"1626_acceptCubeAdmin" [label="acceptCubeAdmin"]
+"1626__burn" [label="_burn"]
+"1626_Swapout" [label="Swapout"]
+"1626_getQuota" [label="getQuota"]
+"1626_setQuota" [label="setQuota"]
+"1626_getAllMinters" [label="getAllMinters"]
+"1626_setVaultOnly" [label="setVaultOnly"]
+"1626__mint" [label="_mint"]
+"1626_owner" [label="owner"]
+"1626_burn" [label="burn"]
+"1626_withdraw" [label="withdraw"]
+"1626_setPaused" [label="setPaused"]
+"1626_initVault" [label="initVault"]
+"1626_deposit" [label="deposit"]
+"1626_setMinter" [label="setMinter"]
+"1626_setLowQuota" [label="setLowQuota"]
+"1626__withdraw" [label="_withdraw"]
+"1626_setDailySwapoutLimit" [label="setDailySwapoutLimit"]
+"1626_Swapin" [label="Swapin"]
+"1626_constructor" [label="constructor"]
+"1626_checkQuota" [label="checkQuota"]
+"1626_approve" [label="approve"]
+"1626_transferFrom" [label="transferFrom"]
+"1626_mpc" [label="mpc"]
+"1626_depositVault" [label="depositVault"]
+"1626__deposit" [label="_deposit"]
+"1626_setVault" [label="setVault"]
+"1626_totalSupply" [label="totalSupply"]
+"1626_withdrawVault" [label="withdrawVault"]
+"1626_mint" [label="mint"]
+"1626_applyMinter" [label="applyMinter"]
+"1626_changeVault" [label="changeVault"]
+"1626_applyVault" [label="applyVault"]
+"1626_revokeMinter" [label="revokeMinter"]
+"1626_changeCubeAdmin" [label="changeCubeAdmin"]
+"1626_checkQuota" -> "1626_getQuota"
+"1626_setPaused" -> "1626_onlyCubeAdmin"
+"1626_Swapin" -> "1626__mint"
+"1626_withdrawVault" -> "1626__withdraw"
+"1626_depositVault" -> "1626_onlyVault"
+"1626_changeVault" -> "1626_onlyVault"
+"1626_Swapin" -> "1626_onlyAuth"
+"1626_changeCubeAdmin" -> "1626_onlyCubeAdmin"
+"1626_setQuota" -> "1626_onlyCubeAdmin"
+"1626_depositVault" -> "1626__deposit"
+"1626_deposit" -> "1626__deposit"
+"1626_withdrawVault" -> "1626_onlyVault"
+"1626_initVault" -> "1626_onlyVault"
+"1626__deposit" -> "1626__mint"
+"1626_burn" -> "1626__burn"
+"1626_withdraw" -> "1626__withdraw"
+"1626_setLowQuota" -> "1626_onlyCubeAdmin"
+"1626__withdraw" -> "1626__burn"
+"1626_applyVault" -> "1626_onlyVault"
+"1626_burn" -> "1626_checkQuota"
+"1626_setMinter" -> "1626_onlyVault"
+"1626_Swapout" -> "1626__burn"
+"1626_burn" -> "1626_onlyAuth"
+"1626_revokeMinter" -> "1626_onlyVault"
+"1626_Swapout" -> "1626_checkQuota"
+"1626_setVaultOnly" -> "1626_onlyVault"
+"1626_applyMinter" -> "1626_onlyVault"
+"1626_setVault" -> "1626_onlyVault"
+"1626_mint" -> "1626_onlyAuth"
+"1626_setDailySwapoutLimit" -> "1626_onlyCubeAdmin"
+"1626_mint" -> "1626__mint"
+}subgraph cluster_100_Address {
+label = "Address"
+"100_isContract" [label="isContract"]
+}subgraph cluster_74_IERC20 {
+label = "IERC20"
+"74_decimals" [label="decimals"]
+"74_allowance" [label="allowance"]
+"74_totalSupply" [label="totalSupply"]
+"74_transfer" [label="transfer"]
+"74_balanceOf" [label="balanceOf"]
+"74_approve" [label="approve"]
+"74_transferFrom" [label="transferFrom"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool)" 
+"abi.decode()" 
+"abi.encodeWithSelector()" 
+"require(bool,string)" 
+"extcodehash(uint256)" 
+"249_safeTransferFrom" -> "abi.encodeWithSelector()"
+"1626_setQuota" -> "require(bool)"
+"1626_setVault" -> "require(bool,string)"
+"1626_applyMinter" -> "require(bool)"
+"1626__withdraw" -> "require(bool)"
+"1626_acceptCubeAdmin" -> "require(bool)"
+"1626_constructor" -> "require(bool)"
+"1626__burn" -> "require(bool,string)"
+"249_callOptionalReturn" -> "require(bool,string)"
+"1626__deposit" -> "require(bool)"
+"249_safeApprove" -> "require(bool,string)"
+"1626_transfer" -> "require(bool,string)"
+"1626_setMinter" -> "require(bool,string)"
+"249_callOptionalReturn" -> "abi.decode()"
+"1626_applyVault" -> "require(bool)"
+"1626_transferFrom" -> "require(bool,string)"
+"249_safeApprove" -> "abi.encodeWithSelector()"
+"1626_transfer" -> "require(bool)"
+"1626_initVault" -> "require(bool)"
+"1626_checkQuota" -> "require(bool,string)"
+"1626_Swapout" -> "require(bool,string)"
+"1626_burn" -> "require(bool,string)"
+"249_safeTransfer" -> "abi.encodeWithSelector()"
+"1626_changeVault" -> "require(bool,string)"
+"1626__mint" -> "require(bool,string)"
+"1626_transferFrom" -> "require(bool)"
+"100_isContract" -> "extcodehash(uint256)"
+}"1626__withdraw" -> "249_safeTransfer"
+"1626_Swapin" -> "249_safeTransfer"
+"1626_Swapout" -> "249_safeTransferFrom"
+"249_safeApprove" -> "74_allowance"
+"1626_deposit" -> "249_safeTransferFrom"
+"249_callOptionalReturn" -> "100_isContract"
+"1626_deposit" -> "74_balanceOf"
+"1626_Swapin" -> "74_balanceOf"
+"1626_constructor" -> "74_decimals"
+}

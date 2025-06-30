@@ -1,0 +1,221 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterIERC20" {
+  graph [ label = "IERC20  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IERC20.totalSupply" [ label = "totalSupply", color = "blue" ];
+  "IERC20.decimals" [ label = "decimals", color = "blue" ];
+  "IERC20.balanceOf" [ label = "balanceOf", color = "blue" ];
+  "IERC20.transfer" [ label = "transfer", color = "blue" ];
+  "IERC20.allowance" [ label = "allowance" ];
+  "IERC20.approve" [ label = "approve", color = "blue" ];
+  "IERC20.transferFrom" [ label = "transferFrom", color = "blue" ];
+  "IERC20.permit" [ label = "permit", color = "blue" ];
+  "IERC20.transferWithPermit" [ label = "transferWithPermit", color = "blue" ];
+  "IERC20.isContract" [ label = "isContract" ];
+  "IERC20.data" [ label = "data" ];
+}
+
+subgraph "clusterIERC2612" {
+  graph [ label = "IERC2612  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IERC2612.nonces" [ label = "nonces", color = "blue" ];
+}
+
+subgraph "clusterIAnyswapV3ERC20" {
+  graph [ label = "IAnyswapV3ERC20  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IAnyswapV3ERC20.approveAndCall" [ label = "approveAndCall", color = "blue" ];
+  "IAnyswapV3ERC20.transferAndCall" [ label = "transferAndCall", color = "blue" ];
+}
+
+subgraph "clusterITransferReceiver" {
+  graph [ label = "ITransferReceiver  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ITransferReceiver.onTokenTransfer" [ label = "onTokenTransfer", color = "blue" ];
+}
+
+subgraph "clusterIApprovalReceiver" {
+  graph [ label = "IApprovalReceiver  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IApprovalReceiver.onTokenApproval" [ label = "onTokenApproval", color = "blue" ];
+}
+
+subgraph "clusterAddress" {
+  graph [ label = "Address  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Address.isContract" [ label = "isContract", color = "white" ];
+}
+
+subgraph "clusterSafeERC20" {
+  graph [ label = "SafeERC20  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "SafeERC20.safeTransfer" [ label = "safeTransfer", color = "white" ];
+  "SafeERC20.safeTransferFrom" [ label = "safeTransferFrom", color = "white" ];
+  "SafeERC20.safeApprove" [ label = "safeApprove", color = "white" ];
+  "SafeERC20.callOptionalReturn" [ label = "callOptionalReturn" ];
+  "SafeERC20.address" [ label = "address" ];
+}
+
+subgraph "clusterAnyswapV1ERC20" {
+  graph [ label = "AnyswapV1ERC20", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "AnyswapV1ERC20.onlyVault" [ label = "onlyVault", color = "yellow" ];
+  "AnyswapV1ERC20.vault" [ label = "vault" ];
+  "AnyswapV1ERC20.owner" [ label = "owner", color = "green" ];
+  "AnyswapV1ERC20.changeVault" [ label = "changeVault", color = "blue" ];
+  "AnyswapV1ERC20.changeMPCOwner" [ label = "changeMPCOwner", color = "green" ];
+  "AnyswapV1ERC20.mint" [ label = "mint", color = "blue" ];
+  "AnyswapV1ERC20.burn" [ label = "burn", color = "blue" ];
+  "AnyswapV1ERC20.Swapin" [ label = "Swapin", color = "green" ];
+  "AnyswapV1ERC20.Swapout" [ label = "Swapout", color = "green" ];
+  "AnyswapV1ERC20.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "AnyswapV1ERC20.totalSupply" [ label = "totalSupply", color = "blue" ];
+  "AnyswapV1ERC20.depositWithPermit" [ label = "depositWithPermit", color = "blue" ];
+  "AnyswapV1ERC20.depositWithTransferPermit" [ label = "depositWithTransferPermit", color = "blue" ];
+  "AnyswapV1ERC20.deposit" [ label = "deposit", color = "blue" ];
+  "AnyswapV1ERC20.depositVault" [ label = "depositVault", color = "blue" ];
+  "AnyswapV1ERC20._deposit" [ label = "_deposit" ];
+  "AnyswapV1ERC20.withdraw" [ label = "withdraw", color = "blue" ];
+  "AnyswapV1ERC20.withdrawVault" [ label = "withdrawVault", color = "blue" ];
+  "AnyswapV1ERC20._withdraw" [ label = "_withdraw" ];
+  "AnyswapV1ERC20._mint" [ label = "_mint" ];
+  "AnyswapV1ERC20._burn" [ label = "_burn" ];
+  "AnyswapV1ERC20.approve" [ label = "approve", color = "blue" ];
+  "AnyswapV1ERC20.approveAndCall" [ label = "approveAndCall", color = "blue" ];
+  "AnyswapV1ERC20.permit" [ label = "permit", color = "blue" ];
+  "AnyswapV1ERC20.transferWithPermit" [ label = "transferWithPermit", color = "blue" ];
+  "AnyswapV1ERC20.verifyEIP712" [ label = "verifyEIP712" ];
+  "AnyswapV1ERC20.verifyPersonalSign" [ label = "verifyPersonalSign" ];
+  "AnyswapV1ERC20.prefixed" [ label = "prefixed" ];
+  "AnyswapV1ERC20.transfer" [ label = "transfer", color = "blue" ];
+  "AnyswapV1ERC20.transferFrom" [ label = "transferFrom", color = "blue" ];
+  "AnyswapV1ERC20.transferAndCall" [ label = "transferAndCall", color = "blue" ];
+  "AnyswapV1ERC20.address" [ label = "address" ];
+  "AnyswapV1ERC20.type" [ label = "type" ];
+}
+
+  "SafeERC20.safeTransfer";
+  "SafeERC20.callOptionalReturn";
+  "SafeERC20.safeTransferFrom";
+  "SafeERC20.safeApprove";
+  "IERC20.allowance";
+  "SafeERC20.address";
+  "IERC20.isContract";
+  "IERC20.data";
+  "AnyswapV1ERC20.onlyVault";
+  "AnyswapV1ERC20.vault";
+  "AnyswapV1ERC20.owner";
+  "AnyswapV1ERC20.changeVault";
+  "AnyswapV1ERC20.address";
+  "AnyswapV1ERC20.changeMPCOwner";
+  "AnyswapV1ERC20.mint";
+  "AnyswapV1ERC20._mint";
+  "AnyswapV1ERC20.burn";
+  "AnyswapV1ERC20._burn";
+  "AnyswapV1ERC20.Swapin";
+  "AnyswapV1ERC20.Swapout";
+  "AnyswapV1ERC20.<Constructor>";
+  "AnyswapV1ERC20.depositWithPermit";
+  "AnyswapV1ERC20._deposit";
+  "AnyswapV1ERC20.depositWithTransferPermit";
+  "AnyswapV1ERC20.deposit";
+  "AnyswapV1ERC20.depositVault";
+  "AnyswapV1ERC20.withdraw";
+  "AnyswapV1ERC20._withdraw";
+  "AnyswapV1ERC20.withdrawVault";
+  "AnyswapV1ERC20.permit";
+  "AnyswapV1ERC20.verifyEIP712";
+  "AnyswapV1ERC20.verifyPersonalSign";
+  "AnyswapV1ERC20.transferWithPermit";
+  "AnyswapV1ERC20.prefixed";
+  "AnyswapV1ERC20.transfer";
+  "AnyswapV1ERC20.transferFrom";
+  "AnyswapV1ERC20.type";
+  "AnyswapV1ERC20.transferAndCall";
+  "SafeERC20.safeTransfer" -> "SafeERC20.callOptionalReturn" [ color = "green" ];
+  "SafeERC20.safeTransferFrom" -> "SafeERC20.callOptionalReturn" [ color = "green" ];
+  "SafeERC20.safeApprove" -> "IERC20.allowance" [ color = "orange" ];
+  "SafeERC20.safeApprove" -> "SafeERC20.address" [ color = "green" ];
+  "SafeERC20.safeApprove" -> "SafeERC20.callOptionalReturn" [ color = "green" ];
+  "SafeERC20.callOptionalReturn" -> "IERC20.isContract" [ color = "orange" ];
+  "SafeERC20.callOptionalReturn" -> "SafeERC20.address" [ color = "green" ];
+  "SafeERC20.callOptionalReturn" -> "IERC20.data" [ color = "orange" ];
+  "SafeERC20.callOptionalReturn" -> "SafeERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20.onlyVault" -> "AnyswapV1ERC20.vault" [ color = "green" ];
+  "AnyswapV1ERC20.owner" -> "AnyswapV1ERC20.vault" [ color = "green" ];
+  "AnyswapV1ERC20.changeVault" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20.changeVault" -> "AnyswapV1ERC20.vault" [ color = "green" ];
+  "AnyswapV1ERC20.changeMPCOwner" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20.changeMPCOwner" -> "AnyswapV1ERC20.vault" [ color = "green" ];
+  "AnyswapV1ERC20.mint" -> "AnyswapV1ERC20._mint" [ color = "green" ];
+  "AnyswapV1ERC20.burn" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20.burn" -> "AnyswapV1ERC20._burn" [ color = "green" ];
+  "AnyswapV1ERC20.Swapin" -> "AnyswapV1ERC20._mint" [ color = "green" ];
+  "AnyswapV1ERC20.Swapout" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20.Swapout" -> "AnyswapV1ERC20._burn" [ color = "green" ];
+  "AnyswapV1ERC20.<Constructor>" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20.<Constructor>" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20.depositWithPermit" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20.depositWithPermit" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20.depositWithPermit" -> "AnyswapV1ERC20._deposit" [ color = "green" ];
+  "AnyswapV1ERC20.depositWithTransferPermit" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20.depositWithTransferPermit" -> "AnyswapV1ERC20._deposit" [ color = "green" ];
+  "AnyswapV1ERC20.deposit" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20.deposit" -> "AnyswapV1ERC20._deposit" [ color = "green" ];
+  "AnyswapV1ERC20.deposit" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20.deposit" -> "AnyswapV1ERC20._deposit" [ color = "green" ];
+  "AnyswapV1ERC20.deposit" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20.deposit" -> "AnyswapV1ERC20._deposit" [ color = "green" ];
+  "AnyswapV1ERC20.depositVault" -> "AnyswapV1ERC20._deposit" [ color = "green" ];
+  "AnyswapV1ERC20._deposit" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20._deposit" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20._deposit" -> "AnyswapV1ERC20._mint" [ color = "green" ];
+  "AnyswapV1ERC20.withdraw" -> "AnyswapV1ERC20._withdraw" [ color = "green" ];
+  "AnyswapV1ERC20.withdraw" -> "AnyswapV1ERC20._withdraw" [ color = "green" ];
+  "AnyswapV1ERC20.withdraw" -> "AnyswapV1ERC20._withdraw" [ color = "green" ];
+  "AnyswapV1ERC20.withdrawVault" -> "AnyswapV1ERC20._withdraw" [ color = "green" ];
+  "AnyswapV1ERC20._withdraw" -> "AnyswapV1ERC20._burn" [ color = "green" ];
+  "AnyswapV1ERC20._mint" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20._mint" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20._burn" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20._burn" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20.permit" -> "AnyswapV1ERC20.verifyEIP712" [ color = "green" ];
+  "AnyswapV1ERC20.permit" -> "AnyswapV1ERC20.verifyPersonalSign" [ color = "green" ];
+  "AnyswapV1ERC20.transferWithPermit" -> "AnyswapV1ERC20.verifyEIP712" [ color = "green" ];
+  "AnyswapV1ERC20.transferWithPermit" -> "AnyswapV1ERC20.verifyPersonalSign" [ color = "green" ];
+  "AnyswapV1ERC20.transferWithPermit" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20.transferWithPermit" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20.verifyEIP712" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20.verifyPersonalSign" -> "AnyswapV1ERC20.prefixed" [ color = "green" ];
+  "AnyswapV1ERC20.verifyPersonalSign" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20.transfer" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20.transfer" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20.transferFrom" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20.transferFrom" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20.transferFrom" -> "AnyswapV1ERC20.type" [ color = "green" ];
+  "AnyswapV1ERC20.transferAndCall" -> "AnyswapV1ERC20.address" [ color = "green" ];
+  "AnyswapV1ERC20.transferAndCall" -> "AnyswapV1ERC20.address" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

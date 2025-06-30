@@ -1,0 +1,304 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterPausableControl" {
+  graph [ label = "PausableControl", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "PausableControl.whenNotPaused" [ label = "whenNotPaused", color = "yellow" ];
+  "PausableControl.whenPaused" [ label = "whenPaused", color = "yellow" ];
+  "PausableControl.paused" [ label = "paused" ];
+  "PausableControl._pause" [ label = "_pause", color = "white" ];
+  "PausableControl._unpause" [ label = "_unpause", color = "white" ];
+}
+
+subgraph "clusterMPCManageable" {
+  graph [ label = "MPCManageable", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "MPCManageable.onlyMPC" [ label = "onlyMPC", color = "yellow" ];
+  "MPCManageable.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "MPCManageable.changeMPC" [ label = "changeMPC", color = "blue" ];
+  "MPCManageable.applyMPC" [ label = "applyMPC", color = "blue" ];
+  "MPCManageable.address" [ label = "address" ];
+}
+
+subgraph "clusterMPCAdminControl" {
+  graph [ label = "MPCAdminControl", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "MPCAdminControl.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "MPCAdminControl.onlyAdmin" [ label = "onlyAdmin", color = "yellow" ];
+  "MPCAdminControl.changeAdmin" [ label = "changeAdmin", color = "blue" ];
+}
+
+subgraph "clusterMPCAdminPausableControl" {
+  graph [ label = "MPCAdminPausableControl", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "MPCAdminPausableControl.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "MPCAdminPausableControl.pause" [ label = "pause", color = "blue" ];
+  "MPCAdminPausableControl.unpause" [ label = "unpause", color = "blue" ];
+  "MPCAdminPausableControl._pause" [ label = "_pause" ];
+  "MPCAdminPausableControl._unpause" [ label = "_unpause" ];
+}
+
+subgraph "clusterIAnycallExecutor" {
+  graph [ label = "IAnycallExecutor  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IAnycallExecutor.execute" [ label = "execute", color = "blue" ];
+}
+
+subgraph "clusterIRouterSecurity" {
+  graph [ label = "IRouterSecurity  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IRouterSecurity.registerSwapin" [ label = "registerSwapin", color = "blue" ];
+  "IRouterSecurity.registerSwapout" [ label = "registerSwapout", color = "blue" ];
+  "IRouterSecurity.isSwapCompleted" [ label = "isSwapCompleted", color = "blue" ];
+}
+
+subgraph "clusterIRetrySwapinAndExec" {
+  graph [ label = "IRetrySwapinAndExec  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IRetrySwapinAndExec.retrySwapinAndExec" [ label = "retrySwapinAndExec", color = "blue" ];
+}
+
+subgraph "clusterIUnderlying" {
+  graph [ label = "IUnderlying  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IUnderlying.underlying" [ label = "underlying", color = "blue" ];
+  "IUnderlying.deposit" [ label = "deposit", color = "blue" ];
+  "IUnderlying.withdraw" [ label = "withdraw", color = "blue" ];
+}
+
+subgraph "clusterIAnyswapERC20Auth" {
+  graph [ label = "IAnyswapERC20Auth  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IAnyswapERC20Auth.changeVault" [ label = "changeVault", color = "blue" ];
+}
+
+subgraph "clusterIwNATIVE" {
+  graph [ label = "IwNATIVE  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IwNATIVE.deposit" [ label = "deposit", color = "blue" ];
+  "IwNATIVE.withdraw" [ label = "withdraw", color = "blue" ];
+}
+
+subgraph "clusterIRouterMintBurn" {
+  graph [ label = "IRouterMintBurn  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IRouterMintBurn.mint" [ label = "mint", color = "blue" ];
+  "IRouterMintBurn.burn" [ label = "burn", color = "blue" ];
+}
+
+subgraph "clusterReentrancyGuard" {
+  graph [ label = "ReentrancyGuard", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ReentrancyGuard.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "ReentrancyGuard.nonReentrant" [ label = "nonReentrant", color = "yellow" ];
+}
+
+subgraph "clusterAddress" {
+  graph [ label = "Address  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Address.isContract" [ label = "isContract" ];
+  "Address.sendValue" [ label = "sendValue", color = "white" ];
+  "Address.functionCall" [ label = "functionCall" ];
+  "Address.functionCallWithValue" [ label = "functionCallWithValue" ];
+  "Address.functionStaticCall" [ label = "functionStaticCall" ];
+  "Address.functionDelegateCall" [ label = "functionDelegateCall" ];
+  "Address.verifyCallResult" [ label = "verifyCallResult" ];
+  "Address.address" [ label = "address" ];
+}
+
+subgraph "clusterIERC20" {
+  graph [ label = "IERC20  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IERC20.totalSupply" [ label = "totalSupply", color = "blue" ];
+  "IERC20.balanceOf" [ label = "balanceOf", color = "blue" ];
+  "IERC20.transfer" [ label = "transfer", color = "blue" ];
+  "IERC20.allowance" [ label = "allowance" ];
+  "IERC20.approve" [ label = "approve", color = "blue" ];
+  "IERC20.transferFrom" [ label = "transferFrom", color = "blue" ];
+  "IERC20.functionCall" [ label = "functionCall" ];
+}
+
+subgraph "clusterIERC20Permit" {
+  graph [ label = "IERC20Permit  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IERC20Permit.permit" [ label = "permit" ];
+  "IERC20Permit.nonces" [ label = "nonces" ];
+  "IERC20Permit.DOMAIN_SEPARATOR" [ label = "DOMAIN_SEPARATOR", color = "blue" ];
+}
+
+subgraph "clusterSafeERC20" {
+  graph [ label = "SafeERC20  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "SafeERC20.safeTransfer" [ label = "safeTransfer", color = "white" ];
+  "SafeERC20.safeTransferFrom" [ label = "safeTransferFrom", color = "white" ];
+  "SafeERC20.safeApprove" [ label = "safeApprove", color = "white" ];
+  "SafeERC20.safeIncreaseAllowance" [ label = "safeIncreaseAllowance", color = "white" ];
+  "SafeERC20.safeDecreaseAllowance" [ label = "safeDecreaseAllowance", color = "white" ];
+  "SafeERC20.safePermit" [ label = "safePermit", color = "white" ];
+  "SafeERC20._callOptionalReturn" [ label = "_callOptionalReturn" ];
+  "SafeERC20.address" [ label = "address" ];
+}
+
+subgraph "clusterMultichainV7Router" {
+  graph [ label = "MultichainV7Router", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "MultichainV7Router.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "MultichainV7Router.<Receive Ether>" [ label = "<Receive Ether>", color = "blue" ];
+  "MultichainV7Router.setRouterSecurity" [ label = "setRouterSecurity", color = "blue" ];
+  "MultichainV7Router.changeVault" [ label = "changeVault", color = "blue" ];
+  "MultichainV7Router.addAnycallProxies" [ label = "addAnycallProxies", color = "blue" ];
+  "MultichainV7Router.removeAnycallProxies" [ label = "removeAnycallProxies", color = "blue" ];
+  "MultichainV7Router.anySwapOut" [ label = "anySwapOut", color = "blue" ];
+  "MultichainV7Router.anySwapOutAndCall" [ label = "anySwapOutAndCall", color = "blue" ];
+  "MultichainV7Router._anySwapOutUnderlying" [ label = "_anySwapOutUnderlying", color = "white" ];
+  "MultichainV7Router.anySwapOutUnderlying" [ label = "anySwapOutUnderlying", color = "blue" ];
+  "MultichainV7Router.anySwapOutUnderlyingAndCall" [ label = "anySwapOutUnderlyingAndCall", color = "blue" ];
+  "MultichainV7Router._anySwapOutNative" [ label = "_anySwapOutNative", color = "white" ];
+  "MultichainV7Router.anySwapOutNative" [ label = "anySwapOutNative", color = "blue" ];
+  "MultichainV7Router.anySwapOutNativeAndCall" [ label = "anySwapOutNativeAndCall", color = "blue" ];
+  "MultichainV7Router.anySwapIn" [ label = "anySwapIn", color = "blue" ];
+  "MultichainV7Router.anySwapInUnderlying" [ label = "anySwapInUnderlying", color = "blue" ];
+  "MultichainV7Router.anySwapInNative" [ label = "anySwapInNative", color = "blue" ];
+  "MultichainV7Router.anySwapInAuto" [ label = "anySwapInAuto", color = "blue" ];
+  "MultichainV7Router.anySwapInAndExec" [ label = "anySwapInAndExec", color = "blue" ];
+  "MultichainV7Router.anySwapInUnderlyingAndExec" [ label = "anySwapInUnderlyingAndExec", color = "blue" ];
+  "MultichainV7Router.retrySwapinAndExec" [ label = "retrySwapinAndExec", color = "blue" ];
+  "MultichainV7Router.anySwapFeeTo" [ label = "anySwapFeeTo", color = "blue" ];
+  "MultichainV7Router.payable" [ label = "payable" ];
+}
+
+subgraph "clustertarget" {
+  graph [ label = "target", color = "lightgray" ];
+  "target.staticcall" [ label = "staticcall" ];
+  "target.delegatecall" [ label = "delegatecall" ];
+}
+
+  "PausableControl.whenNotPaused";
+  "PausableControl.paused";
+  "PausableControl.whenPaused";
+  "MPCManageable.<Constructor>";
+  "MPCManageable.address";
+  "MPCManageable.changeMPC";
+  "MPCManageable.applyMPC";
+  "MPCAdminControl.<Constructor>";
+  "MPCAdminPausableControl.pause";
+  "MPCAdminPausableControl._pause";
+  "MPCAdminPausableControl.unpause";
+  "MPCAdminPausableControl._unpause";
+  "Address.sendValue";
+  "Address.address";
+  "Address.functionCall";
+  "Address.functionCallWithValue";
+  "Address.isContract";
+  "Address.verifyCallResult";
+  "Address.functionStaticCall";
+  "target.staticcall";
+  "Address.functionDelegateCall";
+  "target.delegatecall";
+  "SafeERC20.safeTransfer";
+  "SafeERC20._callOptionalReturn";
+  "SafeERC20.safeTransferFrom";
+  "SafeERC20.safeApprove";
+  "IERC20.allowance";
+  "SafeERC20.address";
+  "SafeERC20.safeIncreaseAllowance";
+  "SafeERC20.safeDecreaseAllowance";
+  "SafeERC20.safePermit";
+  "IERC20Permit.nonces";
+  "IERC20Permit.permit";
+  "IERC20.functionCall";
+  "MultichainV7Router.<Constructor>";
+  "MultichainV7Router._anySwapOutUnderlying";
+  "MultichainV7Router.anySwapOutUnderlying";
+  "MultichainV7Router.anySwapOutUnderlyingAndCall";
+  "MultichainV7Router._anySwapOutNative";
+  "MultichainV7Router.anySwapOutNative";
+  "MultichainV7Router.anySwapOutNativeAndCall";
+  "MultichainV7Router.anySwapInUnderlying";
+  "MultichainV7Router.anySwapInNative";
+  "MultichainV7Router.payable";
+  "MultichainV7Router.anySwapInAuto";
+  "MultichainV7Router.anySwapInUnderlyingAndExec";
+  "MultichainV7Router.retrySwapinAndExec";
+  "MultichainV7Router.anySwapFeeTo";
+  "PausableControl.whenNotPaused" -> "PausableControl.paused" [ color = "green" ];
+  "PausableControl.whenNotPaused" -> "PausableControl.paused" [ color = "green" ];
+  "PausableControl.whenPaused" -> "PausableControl.paused" [ color = "green" ];
+  "PausableControl.whenPaused" -> "PausableControl.paused" [ color = "green" ];
+  "MPCManageable.<Constructor>" -> "MPCManageable.address" [ color = "green" ];
+  "MPCManageable.<Constructor>" -> "MPCManageable.address" [ color = "green" ];
+  "MPCManageable.changeMPC" -> "MPCManageable.address" [ color = "green" ];
+  "MPCManageable.applyMPC" -> "MPCManageable.address" [ color = "green" ];
+  "MPCManageable.applyMPC" -> "MPCManageable.address" [ color = "green" ];
+  "MPCAdminControl.<Constructor>" -> "MPCManageable.address" [ color = "green" ];
+  "MPCAdminPausableControl.pause" -> "MPCAdminPausableControl._pause" [ color = "green" ];
+  "MPCAdminPausableControl.unpause" -> "MPCAdminPausableControl._unpause" [ color = "green" ];
+  "Address.sendValue" -> "Address.address" [ color = "green" ];
+  "Address.functionCall" -> "Address.functionCall" [ color = "green" ];
+  "Address.functionCall" -> "Address.functionCallWithValue" [ color = "green" ];
+  "Address.functionCallWithValue" -> "Address.functionCallWithValue" [ color = "green" ];
+  "Address.functionCallWithValue" -> "Address.address" [ color = "green" ];
+  "Address.functionCallWithValue" -> "Address.isContract" [ color = "green" ];
+  "Address.functionCallWithValue" -> "Address.verifyCallResult" [ color = "green" ];
+  "Address.functionStaticCall" -> "Address.functionStaticCall" [ color = "green" ];
+  "Address.functionStaticCall" -> "Address.isContract" [ color = "green" ];
+  "Address.functionStaticCall" -> "target.staticcall" [ color = "orange" ];
+  "Address.functionStaticCall" -> "Address.verifyCallResult" [ color = "green" ];
+  "Address.functionDelegateCall" -> "Address.functionDelegateCall" [ color = "green" ];
+  "Address.functionDelegateCall" -> "Address.isContract" [ color = "green" ];
+  "Address.functionDelegateCall" -> "target.delegatecall" [ color = "orange" ];
+  "Address.functionDelegateCall" -> "Address.verifyCallResult" [ color = "green" ];
+  "SafeERC20.safeTransfer" -> "SafeERC20._callOptionalReturn" [ color = "green" ];
+  "SafeERC20.safeTransferFrom" -> "SafeERC20._callOptionalReturn" [ color = "green" ];
+  "SafeERC20.safeApprove" -> "IERC20.allowance" [ color = "orange" ];
+  "SafeERC20.safeApprove" -> "SafeERC20.address" [ color = "green" ];
+  "SafeERC20.safeApprove" -> "SafeERC20._callOptionalReturn" [ color = "green" ];
+  "SafeERC20.safeIncreaseAllowance" -> "IERC20.allowance" [ color = "orange" ];
+  "SafeERC20.safeIncreaseAllowance" -> "SafeERC20.address" [ color = "green" ];
+  "SafeERC20.safeIncreaseAllowance" -> "SafeERC20._callOptionalReturn" [ color = "green" ];
+  "SafeERC20.safeDecreaseAllowance" -> "IERC20.allowance" [ color = "orange" ];
+  "SafeERC20.safeDecreaseAllowance" -> "SafeERC20.address" [ color = "green" ];
+  "SafeERC20.safeDecreaseAllowance" -> "SafeERC20._callOptionalReturn" [ color = "green" ];
+  "SafeERC20.safePermit" -> "IERC20Permit.nonces" [ color = "orange" ];
+  "SafeERC20.safePermit" -> "IERC20Permit.permit" [ color = "orange" ];
+  "SafeERC20.safePermit" -> "IERC20Permit.nonces" [ color = "orange" ];
+  "SafeERC20._callOptionalReturn" -> "IERC20.functionCall" [ color = "orange" ];
+  "SafeERC20._callOptionalReturn" -> "SafeERC20.address" [ color = "green" ];
+  "MultichainV7Router.<Constructor>" -> "MPCManageable.address" [ color = "green" ];
+  "MultichainV7Router._anySwapOutUnderlying" -> "MPCManageable.address" [ color = "green" ];
+  "MultichainV7Router.anySwapOutUnderlying" -> "MultichainV7Router._anySwapOutUnderlying" [ color = "green" ];
+  "MultichainV7Router.anySwapOutUnderlyingAndCall" -> "MultichainV7Router._anySwapOutUnderlying" [ color = "green" ];
+  "MultichainV7Router._anySwapOutNative" -> "MPCManageable.address" [ color = "green" ];
+  "MultichainV7Router.anySwapOutNative" -> "MultichainV7Router._anySwapOutNative" [ color = "green" ];
+  "MultichainV7Router.anySwapOutNativeAndCall" -> "MultichainV7Router._anySwapOutNative" [ color = "green" ];
+  "MultichainV7Router.anySwapInUnderlying" -> "MPCManageable.address" [ color = "green" ];
+  "MultichainV7Router.anySwapInUnderlying" -> "MPCManageable.address" [ color = "green" ];
+  "MultichainV7Router.anySwapInNative" -> "MPCManageable.address" [ color = "green" ];
+  "MultichainV7Router.anySwapInNative" -> "MPCManageable.address" [ color = "green" ];
+  "MultichainV7Router.anySwapInNative" -> "MPCManageable.address" [ color = "green" ];
+  "MultichainV7Router.anySwapInNative" -> "Address.sendValue" [ color = "orange" ];
+  "MultichainV7Router.anySwapInNative" -> "MultichainV7Router.payable" [ color = "green" ];
+  "MultichainV7Router.anySwapInAuto" -> "MPCManageable.address" [ color = "green" ];
+  "MultichainV7Router.anySwapInAuto" -> "MPCManageable.address" [ color = "green" ];
+  "MultichainV7Router.anySwapInAuto" -> "MPCManageable.address" [ color = "green" ];
+  "MultichainV7Router.anySwapInAuto" -> "Address.sendValue" [ color = "orange" ];
+  "MultichainV7Router.anySwapInAuto" -> "MultichainV7Router.payable" [ color = "green" ];
+  "MultichainV7Router.anySwapInUnderlyingAndExec" -> "MPCManageable.address" [ color = "green" ];
+  "MultichainV7Router.anySwapInUnderlyingAndExec" -> "MPCManageable.address" [ color = "green" ];
+  "MultichainV7Router.retrySwapinAndExec" -> "MPCManageable.address" [ color = "green" ];
+  "MultichainV7Router.retrySwapinAndExec" -> "MPCManageable.address" [ color = "green" ];
+  "MultichainV7Router.anySwapFeeTo" -> "MPCManageable.address" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

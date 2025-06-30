@@ -1,0 +1,170 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_84_IERC20 {
+label = "IERC20"
+"84_approve" [label="approve"]
+"84_allowance" [label="allowance"]
+"84_transferFrom" [label="transferFrom"]
+"84_totalSupply" [label="totalSupply"]
+"84_balanceOf" [label="balanceOf"]
+"84_transfer" [label="transfer"]
+"84_name" [label="name"]
+"84_symbol" [label="symbol"]
+"84_decimals" [label="decimals"]
+}subgraph cluster_332_SafeERC20 {
+label = "SafeERC20"
+"332_safeTransferFrom" [label="safeTransferFrom"]
+"332_callOptionalReturn" [label="callOptionalReturn"]
+"332_safeTransfer" [label="safeTransfer"]
+"332_safeTransfer" -> "332_callOptionalReturn"
+"332_safeTransferFrom" -> "332_callOptionalReturn"
+}subgraph cluster_222_LocalAsset {
+label = "LocalAsset"
+"222_freezeAsset" [label="freezeAsset"]
+"222_transferOwnership" [label="transferOwnership"]
+"222_set_team" [label="set_team"]
+"222_mint" [label="mint"]
+"222_transfer_ownership" [label="transfer_ownership"]
+"222_freeze_asset" [label="freeze_asset"]
+"222_clear_metadata" [label="clear_metadata"]
+"222_set_metadata" [label="set_metadata"]
+"222_setMetadata" [label="setMetadata"]
+"222_thawAsset" [label="thawAsset"]
+"222_setTeam" [label="setTeam"]
+"222_thaw_asset" [label="thaw_asset"]
+"222_clearMetadata" [label="clearMetadata"]
+"222_thaw" [label="thaw"]
+"222_burn" [label="burn"]
+"222_freeze" [label="freeze"]
+}subgraph cluster_1935_AnyswapV6ERC20_XC20Wrapper {
+label = "AnyswapV6ERC20_XC20Wrapper"
+"1935_isMintableXC20" [label="isMintableXC20"]
+"1935_freeze_asset" [label="freeze_asset"]
+"1935_thaw" [label="thaw"]
+"1935__deposit" [label="_deposit"]
+"1935__mint" [label="_mint"]
+"1935_owner" [label="owner"]
+"1935__withdraw" [label="_withdraw"]
+"1935_constructor" [label="constructor"]
+"1935_transfer" [label="transfer"]
+"1935_freezeAsset" [label="freezeAsset"]
+"1935_setMinter" [label="setMinter"]
+"1935_set_team" [label="set_team"]
+"1935_deposit" [label="deposit"]
+"1935_thaw_asset" [label="thaw_asset"]
+"1935_withdraw" [label="withdraw"]
+"1935_mint" [label="mint"]
+"1935__initMetaData" [label="_initMetaData"]
+"1935__swapin" [label="_swapin"]
+"1935_Swapout" [label="Swapout"]
+"1935__swapout" [label="_swapout"]
+"1935_setTeam" [label="setTeam"]
+"1935_thawAsset" [label="thawAsset"]
+"1935_transferFrom" [label="transferFrom"]
+"1935_depositVault" [label="depositVault"]
+"1935_revokeMinter" [label="revokeMinter"]
+"1935_withdrawVault" [label="withdrawVault"]
+"1935_setVaultOnly" [label="setVaultOnly"]
+"1935_totalSupply" [label="totalSupply"]
+"1935_mpc" [label="mpc"]
+"1935_Swapin" [label="Swapin"]
+"1935_approve" [label="approve"]
+"1935_freeze" [label="freeze"]
+"1935_getAllMinters" [label="getAllMinters"]
+"1935_transfer_ownership" [label="transfer_ownership"]
+"1935_init" [label="init"]
+"1935_applyMinter" [label="applyMinter"]
+"1935_changeVault" [label="changeVault"]
+"1935__burn" [label="_burn"]
+"1935_burn" [label="burn"]
+"1935_transferOwnership" [label="transferOwnership"]
+"1935_applyMinter" -> "1935_onlyVault"
+"1935_transferOwnership" -> "1935_onlyMintableXC20"
+"1935_setTeam" -> "1935_onlyVault"
+"1935__withdraw" -> "1935__burn"
+"1935_setTeam" -> "1935_onlyMintableXC20"
+"1935_thaw" -> "1935_onlyVault"
+"1935_freezeAsset" -> "1935_onlyVault"
+"1935_thawAsset" -> "1935_onlyVault"
+"1935_init" -> "1935__initMetaData"
+"1935_transferOwnership" -> "1935_onlyVault"
+"1935_depositVault" -> "1935__deposit"
+"1935_freeze" -> "1935_onlyMintableXC20"
+"1935_thaw" -> "1935_onlyMintableXC20"
+"1935_freeze_asset" -> "1935_onlyMintableXC20"
+"1935_transfer_ownership" -> "1935_onlyMintableXC20"
+"1935__swapin" -> "1935__mint"
+"1935_withdrawVault" -> "1935__withdraw"
+"1935_mint" -> "1935_onlyAuth"
+"1935_thaw_asset" -> "1935_onlyMintableXC20"
+"1935_depositVault" -> "1935_onlyVault"
+"1935__swapin" -> "1935_isMintableXC20"
+"1935_setVaultOnly" -> "1935_onlyVault"
+"1935_Swapin" -> "1935_onlyAuth"
+"1935_withdraw" -> "1935__withdraw"
+"1935_transfer_ownership" -> "1935_onlyVault"
+"1935_setMinter" -> "1935_onlyVault"
+"1935_Swapin" -> "1935__swapin"
+"1935_revokeMinter" -> "1935_onlyVault"
+"1935_thawAsset" -> "1935_onlyMintableXC20"
+"1935__deposit" -> "1935__mint"
+"1935__swapout" -> "1935__burn"
+"1935_set_team" -> "1935_onlyVault"
+"1935_freeze_asset" -> "1935_onlyVault"
+"1935_freezeAsset" -> "1935_onlyMintableXC20"
+"1935_init" -> "1935_onlyVault"
+"1935_thaw_asset" -> "1935_onlyVault"
+"1935_freeze" -> "1935_onlyVault"
+"1935__swapout" -> "1935_isMintableXC20"
+"1935_burn" -> "1935_onlyAuth"
+"1935_deposit" -> "1935__deposit"
+"1935_mint" -> "1935__swapin"
+"1935_withdrawVault" -> "1935_onlyVault"
+"1935__deposit" -> "1935_onlyExternalXC20"
+"1935_burn" -> "1935__swapout"
+"1935__withdraw" -> "1935_onlyExternalXC20"
+"1935_set_team" -> "1935_onlyMintableXC20"
+"1935_Swapout" -> "1935__swapout"
+"1935_changeVault" -> "1935_onlyVault"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"abi.encodeWithSelector()" 
+"balance(address)" 
+"require(bool)" 
+"code(address)" 
+"assert(bool)" 
+"require(bool,string)" 
+"abi.decode()" 
+"1935_transfer" -> "require(bool,string)"
+"1935_transferFrom" -> "require(bool,string)"
+"1935_init" -> "require(bool)"
+"1935_init" -> "balance(address)"
+"1935__swapout" -> "require(bool,string)"
+"1935_Swapout" -> "require(bool,string)"
+"332_callOptionalReturn" -> "abi.decode()"
+"1935_applyMinter" -> "require(bool)"
+"1935__mint" -> "require(bool,string)"
+"1935_changeVault" -> "require(bool,string)"
+"1935__initMetaData" -> "require(bool,string)"
+"1935_transferFrom" -> "require(bool)"
+"1935__swapin" -> "assert(bool)"
+"1935_setMinter" -> "require(bool,string)"
+"1935_transfer" -> "require(bool)"
+"332_callOptionalReturn" -> "code(address)"
+"332_safeTransfer" -> "abi.encodeWithSelector()"
+"332_callOptionalReturn" -> "require(bool,string)"
+"332_safeTransferFrom" -> "abi.encodeWithSelector()"
+"1935__swapout" -> "assert(bool)"
+"1935__burn" -> "require(bool,string)"
+"1935_init" -> "require(bool,string)"
+}"1935_deposit" -> "84_balanceOf"
+"1935_init" -> "84_symbol"
+"1935__swapin" -> "332_safeTransfer"
+"1935_deposit" -> "332_safeTransferFrom"
+"1935__swapout" -> "332_safeTransferFrom"
+"1935__swapin" -> "84_balanceOf"
+"1935__swapout" -> "84_balanceOf"
+"1935_init" -> "84_decimals"
+"1935__withdraw" -> "332_safeTransfer"
+}

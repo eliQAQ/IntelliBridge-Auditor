@@ -1,0 +1,192 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterIERC20" {
+  graph [ label = "IERC20  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IERC20.totalSupply" [ label = "totalSupply", color = "blue" ];
+  "IERC20.decimals" [ label = "decimals", color = "blue" ];
+  "IERC20.balanceOf" [ label = "balanceOf", color = "blue" ];
+  "IERC20.transfer" [ label = "transfer", color = "blue" ];
+  "IERC20.allowance" [ label = "allowance", color = "blue" ];
+  "IERC20.approve" [ label = "approve", color = "blue" ];
+  "IERC20.transferFrom" [ label = "transferFrom", color = "blue" ];
+  "IERC20.isContract" [ label = "isContract" ];
+  "IERC20.data" [ label = "data" ];
+}
+
+subgraph "clusterISwapCanoToken" {
+  graph [ label = "ISwapCanoToken  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ISwapCanoToken.swapBridgeForCanonical" [ label = "swapBridgeForCanonical", color = "blue" ];
+  "ISwapCanoToken.swapCanonicalForBridge" [ label = "swapCanonicalForBridge", color = "blue" ];
+}
+
+subgraph "clusterAddress" {
+  graph [ label = "Address  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Address.isContract" [ label = "isContract", color = "white" ];
+}
+
+subgraph "clusterSafeERC20" {
+  graph [ label = "SafeERC20  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "SafeERC20.safeTransfer" [ label = "safeTransfer", color = "white" ];
+  "SafeERC20.safeTransferFrom" [ label = "safeTransferFrom", color = "white" ];
+  "SafeERC20.callOptionalReturn" [ label = "callOptionalReturn" ];
+  "SafeERC20.address" [ label = "address" ];
+}
+
+subgraph "clusterAnyswapV6ERC20" {
+  graph [ label = "AnyswapV6ERC20", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "AnyswapV6ERC20.onlyAuth" [ label = "onlyAuth", color = "yellow" ];
+  "AnyswapV6ERC20.onlyVault" [ label = "onlyVault", color = "yellow" ];
+  "AnyswapV6ERC20.owner" [ label = "owner", color = "blue" ];
+  "AnyswapV6ERC20.mpc" [ label = "mpc", color = "blue" ];
+  "AnyswapV6ERC20.setWrapper" [ label = "setWrapper", color = "blue" ];
+  "AnyswapV6ERC20.setVaultOnly" [ label = "setVaultOnly", color = "blue" ];
+  "AnyswapV6ERC20.initVault" [ label = "initVault", color = "blue" ];
+  "AnyswapV6ERC20.setVault" [ label = "setVault", color = "blue" ];
+  "AnyswapV6ERC20.applyVault" [ label = "applyVault", color = "blue" ];
+  "AnyswapV6ERC20.setMinter" [ label = "setMinter", color = "blue" ];
+  "AnyswapV6ERC20.applyMinter" [ label = "applyMinter", color = "blue" ];
+  "AnyswapV6ERC20.revokeMinter" [ label = "revokeMinter", color = "blue" ];
+  "AnyswapV6ERC20.getAllMinters" [ label = "getAllMinters", color = "blue" ];
+  "AnyswapV6ERC20.changeVault" [ label = "changeVault", color = "blue" ];
+  "AnyswapV6ERC20.mint" [ label = "mint", color = "blue" ];
+  "AnyswapV6ERC20.burn" [ label = "burn", color = "blue" ];
+  "AnyswapV6ERC20.Swapin" [ label = "Swapin", color = "blue" ];
+  "AnyswapV6ERC20.Swapout" [ label = "Swapout", color = "blue" ];
+  "AnyswapV6ERC20._swapin" [ label = "_swapin" ];
+  "AnyswapV6ERC20._swapout" [ label = "_swapout" ];
+  "AnyswapV6ERC20.refundCanonicalToken" [ label = "refundCanonicalToken", color = "blue" ];
+  "AnyswapV6ERC20.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "AnyswapV6ERC20.totalSupply" [ label = "totalSupply", color = "blue" ];
+  "AnyswapV6ERC20.deposit" [ label = "deposit", color = "blue" ];
+  "AnyswapV6ERC20.depositVault" [ label = "depositVault", color = "blue" ];
+  "AnyswapV6ERC20._deposit" [ label = "_deposit" ];
+  "AnyswapV6ERC20.withdraw" [ label = "withdraw", color = "blue" ];
+  "AnyswapV6ERC20.withdrawVault" [ label = "withdrawVault", color = "blue" ];
+  "AnyswapV6ERC20._withdraw" [ label = "_withdraw" ];
+  "AnyswapV6ERC20._mint" [ label = "_mint" ];
+  "AnyswapV6ERC20._burn" [ label = "_burn" ];
+  "AnyswapV6ERC20.approve" [ label = "approve", color = "blue" ];
+  "AnyswapV6ERC20.transfer" [ label = "transfer" ];
+  "AnyswapV6ERC20.transferFrom" [ label = "transferFrom", color = "blue" ];
+  "AnyswapV6ERC20.address" [ label = "address" ];
+  "AnyswapV6ERC20.type" [ label = "type" ];
+}
+
+  "SafeERC20.safeTransfer";
+  "SafeERC20.callOptionalReturn";
+  "SafeERC20.safeTransferFrom";
+  "IERC20.isContract";
+  "SafeERC20.address";
+  "IERC20.data";
+  "AnyswapV6ERC20.setVault";
+  "AnyswapV6ERC20.address";
+  "AnyswapV6ERC20.applyVault";
+  "AnyswapV6ERC20.setMinter";
+  "AnyswapV6ERC20.applyMinter";
+  "AnyswapV6ERC20.changeVault";
+  "AnyswapV6ERC20.mint";
+  "AnyswapV6ERC20._swapin";
+  "AnyswapV6ERC20.burn";
+  "AnyswapV6ERC20._swapout";
+  "AnyswapV6ERC20.Swapin";
+  "AnyswapV6ERC20.Swapout";
+  "AnyswapV6ERC20._mint";
+  "AnyswapV6ERC20.transfer";
+  "AnyswapV6ERC20._burn";
+  "AnyswapV6ERC20.refundCanonicalToken";
+  "AnyswapV6ERC20.<Constructor>";
+  "AnyswapV6ERC20.deposit";
+  "AnyswapV6ERC20._deposit";
+  "AnyswapV6ERC20.depositVault";
+  "AnyswapV6ERC20.withdraw";
+  "AnyswapV6ERC20._withdraw";
+  "AnyswapV6ERC20.withdrawVault";
+  "AnyswapV6ERC20.transferFrom";
+  "AnyswapV6ERC20.type";
+  "SafeERC20.safeTransfer" -> "SafeERC20.callOptionalReturn" [ color = "green" ];
+  "SafeERC20.safeTransferFrom" -> "SafeERC20.callOptionalReturn" [ color = "green" ];
+  "SafeERC20.callOptionalReturn" -> "IERC20.isContract" [ color = "orange" ];
+  "SafeERC20.callOptionalReturn" -> "SafeERC20.address" [ color = "green" ];
+  "SafeERC20.callOptionalReturn" -> "IERC20.data" [ color = "orange" ];
+  "SafeERC20.callOptionalReturn" -> "SafeERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20.setVault" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20.applyVault" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20.applyVault" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20.setMinter" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20.applyMinter" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20.applyMinter" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20.changeVault" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20.changeVault" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20.mint" -> "AnyswapV6ERC20._swapin" [ color = "green" ];
+  "AnyswapV6ERC20.burn" -> "AnyswapV6ERC20._swapout" [ color = "green" ];
+  "AnyswapV6ERC20.Swapin" -> "AnyswapV6ERC20._swapin" [ color = "green" ];
+  "AnyswapV6ERC20.Swapout" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20.Swapout" -> "AnyswapV6ERC20._swapout" [ color = "green" ];
+  "AnyswapV6ERC20._swapin" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20._swapin" -> "AnyswapV6ERC20._mint" [ color = "green" ];
+  "AnyswapV6ERC20._swapin" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20._swapin" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20._swapin" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20._swapin" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20._swapin" -> "AnyswapV6ERC20.transfer" [ color = "green" ];
+  "AnyswapV6ERC20._swapout" -> "AnyswapV6ERC20._burn" [ color = "green" ];
+  "AnyswapV6ERC20._swapout" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20.refundCanonicalToken" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20.refundCanonicalToken" -> "AnyswapV6ERC20._burn" [ color = "green" ];
+  "AnyswapV6ERC20.<Constructor>" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20.<Constructor>" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20.<Constructor>" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20.<Constructor>" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20.deposit" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20.deposit" -> "AnyswapV6ERC20._deposit" [ color = "green" ];
+  "AnyswapV6ERC20.deposit" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20.deposit" -> "AnyswapV6ERC20._deposit" [ color = "green" ];
+  "AnyswapV6ERC20.deposit" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20.deposit" -> "AnyswapV6ERC20._deposit" [ color = "green" ];
+  "AnyswapV6ERC20.depositVault" -> "AnyswapV6ERC20._deposit" [ color = "green" ];
+  "AnyswapV6ERC20._deposit" -> "AnyswapV6ERC20._mint" [ color = "green" ];
+  "AnyswapV6ERC20.withdraw" -> "AnyswapV6ERC20._withdraw" [ color = "green" ];
+  "AnyswapV6ERC20.withdraw" -> "AnyswapV6ERC20._withdraw" [ color = "green" ];
+  "AnyswapV6ERC20.withdraw" -> "AnyswapV6ERC20._withdraw" [ color = "green" ];
+  "AnyswapV6ERC20.withdrawVault" -> "AnyswapV6ERC20._withdraw" [ color = "green" ];
+  "AnyswapV6ERC20._withdraw" -> "AnyswapV6ERC20._burn" [ color = "green" ];
+  "AnyswapV6ERC20._mint" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20._mint" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20._burn" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20._burn" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20.transfer" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20.transfer" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20.transferFrom" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20.transferFrom" -> "AnyswapV6ERC20.address" [ color = "green" ];
+  "AnyswapV6ERC20.transferFrom" -> "AnyswapV6ERC20.type" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

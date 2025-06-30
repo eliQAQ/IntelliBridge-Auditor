@@ -1,0 +1,196 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_929_SafeERC20 {
+label = "SafeERC20"
+"929_safeTransfer" [label="safeTransfer"]
+"929_safeApprove" [label="safeApprove"]
+"929_callOptionalReturn" [label="callOptionalReturn"]
+"929_safeTransferFrom" [label="safeTransferFrom"]
+"929_safeApprove" -> "929_callOptionalReturn"
+"929_safeTransfer" -> "929_callOptionalReturn"
+"929_safeTransferFrom" -> "929_callOptionalReturn"
+}subgraph cluster_615_IwNATIVE {
+label = "IwNATIVE"
+"615_deposit" [label="deposit"]
+"615_withdraw" [label="withdraw"]
+"615_transfer" [label="transfer"]
+}subgraph cluster_780_Address {
+label = "Address"
+"780_isContract" [label="isContract"]
+}subgraph cluster_569_AnyswapV6RouterWithProof {
+label = "AnyswapV6RouterWithProof"
+"569_removeProofSigners" [label="removeProofSigners"]
+"569__anySwapInWithProof" [label="_anySwapInWithProof"]
+"569_anySwapInUnderlyingWithProof" [label="anySwapInUnderlyingWithProof"]
+"569__popProofSigner" [label="_popProofSigner"]
+"569_addProofSigners" [label="addProofSigners"]
+"569_constructor" [label="constructor"]
+"569__addProofSigners" [label="_addProofSigners"]
+"569_anySwapInWithProof" [label="anySwapInWithProof"]
+"569_anySwapInAutoWithProof" [label="anySwapInAutoWithProof"]
+"569__removeProofSigners" [label="_removeProofSigners"]
+"569_setCheckCompletion" [label="setCheckCompletion"]
+"569_getAllProofSigners" [label="getAllProofSigners"]
+"569_setCheckCompletion" -> "569_onlyMPC"
+"569_anySwapInWithProof" -> "569__anySwapInWithProof"
+"569_anySwapInAutoWithProof" -> "569__anySwapInWithProof"
+"569_constructor" -> "569_constructor"
+"569__anySwapInWithProof" -> "569_checkCompletion"
+"569_removeProofSigners" -> "569__removeProofSigners"
+"569_anySwapInUnderlyingWithProof" -> "569__anySwapInWithProof"
+"569__removeProofSigners" -> "569__popProofSigner"
+"569__anySwapInWithProof" -> "569_cID"
+"569_removeProofSigners" -> "569_onlyMPC"
+"569_constructor" -> "569__addProofSigners"
+"569_addProofSigners" -> "569_onlyMPC"
+"569_addProofSigners" -> "569__addProofSigners"
+}subgraph cluster_597_TransferHelper {
+label = "TransferHelper"
+"597_safeTransferNative" [label="safeTransferNative"]
+}subgraph cluster_2008_AnyswapV6Router {
+label = "AnyswapV6Router"
+"2008_cID" [label="cID"]
+"2008__anySwapOut" [label="_anySwapOut"]
+"2008_mpc" [label="mpc"]
+"2008_setMinter" [label="setMinter"]
+"2008_anySwapOut" [label="anySwapOut"]
+"2008__anySwapIn" [label="_anySwapIn"]
+"2008__anySwapOutUnderlying" [label="_anySwapOutUnderlying"]
+"2008_revokeMinter" [label="revokeMinter"]
+"2008_anySwapIn" [label="anySwapIn"]
+"2008_applyMinter" [label="applyMinter"]
+"2008_anySwapOutNative" [label="anySwapOutNative"]
+"2008_depositNative" [label="depositNative"]
+"2008_anySwapFeeTo" [label="anySwapFeeTo"]
+"2008_anySwapInAuto" [label="anySwapInAuto"]
+"2008_withdrawNative" [label="withdrawNative"]
+"2008_receive" [label="receive"]
+"2008_changeMPC" [label="changeMPC"]
+"2008_anySwapOutUnderlying" [label="anySwapOutUnderlying"]
+"2008__anySwapOutNative" [label="_anySwapOutNative"]
+"2008_changeVault" [label="changeVault"]
+"2008_constructor" [label="constructor"]
+"2008_anySwapInUnderlying" [label="anySwapInUnderlying"]
+"2008_anySwapInAuto" -> "2008_onlyMPC"
+"2008_changeMPC" -> "2008_mpc"
+"2008_changeMPC" -> "2008_cID"
+"2008_anySwapFeeTo" -> "2008_mpc"
+"2008_anySwapInUnderlying" -> "2008_onlyMPC"
+"2008_anySwapInUnderlying" -> "2008__anySwapIn"
+"2008_changeMPC" -> "2008_onlyMPC"
+"2008_anySwapOutUnderlying" -> "2008_cID"
+"2008_setMinter" -> "2008_onlyMPC"
+"2008__anySwapOut" -> "2008_cID"
+"2008_anySwapOut" -> "2008__anySwapOut"
+"2008_anySwapIn" -> "2008_onlyMPC"
+"2008_anySwapOutNative" -> "2008__anySwapOutNative"
+"2008_anySwapOutUnderlying" -> "2008__anySwapOutUnderlying"
+"2008_anySwapOut" -> "2008_cID"
+"2008_changeVault" -> "2008_onlyMPC"
+"2008_revokeMinter" -> "2008_onlyMPC"
+"2008_anySwapOutNative" -> "2008_cID"
+"2008__anySwapIn" -> "2008_cID"
+"2008_anySwapIn" -> "2008__anySwapIn"
+"2008_anySwapFeeTo" -> "2008_onlyMPC"
+"2008_anySwapInAuto" -> "2008__anySwapIn"
+"2008_applyMinter" -> "2008_onlyMPC"
+}subgraph cluster_697_AnyswapV1ERC20 {
+label = "AnyswapV1ERC20"
+"697_underlying" [label="underlying"]
+"697_withdraw" [label="withdraw"]
+"697_withdrawVault" [label="withdrawVault"]
+"697_changeVault" [label="changeVault"]
+"697_burn" [label="burn"]
+"697_deposit" [label="deposit"]
+"697_revokeMinter" [label="revokeMinter"]
+"697_setMinter" [label="setMinter"]
+"697_depositVault" [label="depositVault"]
+"697_applyMinter" [label="applyMinter"]
+"697_mint" [label="mint"]
+}subgraph cluster_765_IERC20 {
+label = "IERC20"
+"765_transferFrom" [label="transferFrom"]
+"765_totalSupply" [label="totalSupply"]
+"765_allowance" [label="allowance"]
+"765_approve" [label="approve"]
+"765_balanceOf" [label="balanceOf"]
+"765_transfer" [label="transfer"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"abi.encodeWithSelector()" 
+"code(address)" 
+"require(bool)" 
+"keccak256(bytes)" 
+"ecrecover(bytes32,uint8,bytes32,bytes32)" 
+"abi.decode()" 
+"abi.encode()" 
+"require(bool,string)" 
+"assert(bool)" 
+"2008__anySwapOutNative" -> "require(bool)"
+"569__addProofSigners" -> "require(bool,string)"
+"569__anySwapInWithProof" -> "keccak256(bytes)"
+"929_callOptionalReturn" -> "abi.decode()"
+"569__removeProofSigners" -> "require(bool,string)"
+"2008__anySwapOutUnderlying" -> "require(bool)"
+"569__anySwapInWithProof" -> "require(bool,string)"
+"929_safeApprove" -> "require(bool,string)"
+"569_anySwapInUnderlyingWithProof" -> "require(bool,string)"
+"569__anySwapInWithProof" -> "ecrecover(bytes32,uint8,bytes32,bytes32)"
+"780_isContract" -> "code(address)"
+"2008__anySwapOutUnderlying" -> "require(bool,string)"
+"929_safeApprove" -> "abi.encodeWithSelector()"
+"597_safeTransferNative" -> "require(bool,string)"
+"569__anySwapInWithProof" -> "abi.encode()"
+"929_safeTransfer" -> "abi.encodeWithSelector()"
+"929_callOptionalReturn" -> "require(bool,string)"
+"2008_receive" -> "assert(bool)"
+"2008__anySwapOutNative" -> "require(bool,string)"
+"2008_withdrawNative" -> "require(bool,string)"
+"929_safeTransferFrom" -> "abi.encodeWithSelector()"
+"2008_changeMPC" -> "require(bool,string)"
+"2008_withdrawNative" -> "assert(bool)"
+"2008_depositNative" -> "assert(bool)"
+"2008_depositNative" -> "require(bool,string)"
+}"2008_applyMinter" -> "697_applyMinter"
+"2008_anySwapInAuto" -> "697_withdrawVault"
+"2008_withdrawNative" -> "697_withdrawVault"
+"569_anySwapInAutoWithProof" -> "615_withdraw"
+"2008_withdrawNative" -> "615_withdraw"
+"929_safeApprove" -> "765_allowance"
+"2008_anySwapFeeTo" -> "697_withdrawVault"
+"2008__anySwapOutNative" -> "697_underlying"
+"2008_setMinter" -> "697_setMinter"
+"2008__anySwapOutNative" -> "765_balanceOf"
+"569_anySwapInAutoWithProof" -> "597_safeTransferNative"
+"2008_revokeMinter" -> "697_revokeMinter"
+"2008__anySwapIn" -> "697_mint"
+"2008_changeVault" -> "697_changeVault"
+"2008_anySwapInUnderlying" -> "697_withdrawVault"
+"2008_anySwapFeeTo" -> "697_mint"
+"2008_anySwapInAuto" -> "765_balanceOf"
+"2008_depositNative" -> "615_deposit"
+"2008_depositNative" -> "697_depositVault"
+"929_callOptionalReturn" -> "780_isContract"
+"2008__anySwapOutNative" -> "615_deposit"
+"2008_depositNative" -> "615_transfer"
+"569__anySwapInWithProof" -> "697_mint"
+"2008__anySwapOutUnderlying" -> "765_balanceOf"
+"2008_depositNative" -> "697_underlying"
+"569_anySwapInAutoWithProof" -> "765_balanceOf"
+"2008__anySwapOut" -> "697_burn"
+"2008_withdrawNative" -> "765_balanceOf"
+"2008_anySwapInAuto" -> "697_underlying"
+"2008__anySwapOutUnderlying" -> "929_safeTransferFrom"
+"2008_anySwapInAuto" -> "615_withdraw"
+"2008_withdrawNative" -> "697_underlying"
+"569_anySwapInAutoWithProof" -> "697_withdrawVault"
+"2008_withdrawNative" -> "597_safeTransferNative"
+"569_anySwapInAutoWithProof" -> "697_underlying"
+"2008_anySwapInAuto" -> "597_safeTransferNative"
+"569_anySwapInUnderlyingWithProof" -> "697_underlying"
+"2008__anySwapOutNative" -> "929_safeTransfer"
+"569_anySwapInUnderlyingWithProof" -> "697_withdrawVault"
+"2008__anySwapOutUnderlying" -> "697_underlying"
+"2008_anySwapOut" -> "697_burn"
+}

@@ -1,0 +1,160 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_162_ITransferReceiver {
+label = "ITransferReceiver"
+"162_onTokenTransfer" [label="onTokenTransfer"]
+}subgraph cluster_200_Address {
+label = "Address"
+"200_isContract" [label="isContract"]
+}subgraph cluster_110_IERC20 {
+label = "IERC20"
+"110_permit" [label="permit"]
+"110_approve" [label="approve"]
+"110_totalSupply" [label="totalSupply"]
+"110_transferFrom" [label="transferFrom"]
+"110_transfer" [label="transfer"]
+"110_allowance" [label="allowance"]
+"110_decimals" [label="decimals"]
+"110_balanceOf" [label="balanceOf"]
+"110_transferWithPermit" [label="transferWithPermit"]
+}subgraph cluster_174_IApprovalReceiver {
+label = "IApprovalReceiver"
+"174_onTokenApproval" [label="onTokenApproval"]
+}subgraph cluster_150_IAnyswapV3ERC20 {
+label = "IAnyswapV3ERC20"
+"150_transferAndCall" [label="transferAndCall"]
+"150_approveAndCall" [label="approveAndCall"]
+}subgraph cluster_1816_AnyswapV1ERC20 {
+label = "AnyswapV1ERC20"
+"1816_totalSupply" [label="totalSupply"]
+"1816_depositWithPermit" [label="depositWithPermit"]
+"1816_transferFrom" [label="transferFrom"]
+"1816_approveAndCall" [label="approveAndCall"]
+"1816_prefixed" [label="prefixed"]
+"1816_transferWithPermit" [label="transferWithPermit"]
+"1816__withdraw" [label="_withdraw"]
+"1816_owner" [label="owner"]
+"1816_mint" [label="mint"]
+"1816_constructor" [label="constructor"]
+"1816_permit" [label="permit"]
+"1816_depositWithTransferPermit" [label="depositWithTransferPermit"]
+"1816_verifyPersonalSign" [label="verifyPersonalSign"]
+"1816_withdraw" [label="withdraw"]
+"1816__mint" [label="_mint"]
+"1816_deposit" [label="deposit"]
+"1816_withdrawVault" [label="withdrawVault"]
+"1816_depositVault" [label="depositVault"]
+"1816_Swapin" [label="Swapin"]
+"1816_Swapout" [label="Swapout"]
+"1816_changeVault" [label="changeVault"]
+"1816_transfer" [label="transfer"]
+"1816_burn" [label="burn"]
+"1816_vault" [label="vault"]
+"1816_approve" [label="approve"]
+"1816_verifyEIP712" [label="verifyEIP712"]
+"1816__deposit" [label="_deposit"]
+"1816__burn" [label="_burn"]
+"1816_transferAndCall" [label="transferAndCall"]
+"1816_changeMPCOwner" [label="changeMPCOwner"]
+"1816_owner" -> "1816_vault"
+"1816_changeVault" -> "1816_vault"
+"1816_transferWithPermit" -> "1816_verifyPersonalSign"
+"1816_permit" -> "1816_verifyEIP712"
+"1816_depositVault" -> "1816_onlyVault"
+"1816_transferWithPermit" -> "1816_verifyEIP712"
+"1816_deposit" -> "1816__deposit"
+"1816__deposit" -> "1816__mint"
+"1816_Swapin" -> "1816__mint"
+"1816_withdrawVault" -> "1816__withdraw"
+"1816_depositVault" -> "1816__deposit"
+"1816__withdraw" -> "1816__burn"
+"1816_depositWithTransferPermit" -> "1816__deposit"
+"1816_depositWithPermit" -> "1816__deposit"
+"1816_changeVault" -> "1816_onlyVault"
+"1816_changeMPCOwner" -> "1816_vault"
+"1816_mint" -> "1816_onlyVault"
+"1816_mint" -> "1816__mint"
+"1816_withdraw" -> "1816__withdraw"
+"1816_Swapout" -> "1816__burn"
+"1816_burn" -> "1816__burn"
+"1816_withdrawVault" -> "1816_onlyVault"
+"1816_Swapin" -> "1816_onlyVault"
+"1816_verifyPersonalSign" -> "1816_prefixed"
+"1816_burn" -> "1816_onlyVault"
+"1816_changeMPCOwner" -> "1816_onlyVault"
+"1816_permit" -> "1816_verifyPersonalSign"
+}subgraph cluster_120_IERC2612 {
+label = "IERC2612"
+"120_nonces" [label="nonces"]
+}subgraph cluster_349_SafeERC20 {
+label = "SafeERC20"
+"349_callOptionalReturn" [label="callOptionalReturn"]
+"349_safeApprove" [label="safeApprove"]
+"349_safeTransfer" [label="safeTransfer"]
+"349_safeTransferFrom" [label="safeTransferFrom"]
+"349_safeApprove" -> "349_callOptionalReturn"
+"349_safeTransfer" -> "349_callOptionalReturn"
+"349_safeTransferFrom" -> "349_callOptionalReturn"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"abi.encode()" 
+"ecrecover(bytes32,uint8,bytes32,bytes32)" 
+"keccak256(bytes)" 
+"abi.encodePacked()" 
+"abi.encodeWithSelector()" 
+"abi.decode()" 
+"chainid()" 
+"extcodehash(uint256)" 
+"require(bool)" 
+"1816_transferWithPermit" -> "require(bool)"
+"1816_transfer" -> "require(bool,string)"
+"1816_permit" -> "abi.encode()"
+"1816__burn" -> "require(bool,string)"
+"1816_verifyEIP712" -> "keccak256(bytes)"
+"1816_transferAndCall" -> "require(bool)"
+"1816_constructor" -> "require(bool)"
+"349_safeApprove" -> "abi.encodeWithSelector()"
+"1816_transferWithPermit" -> "require(bool,string)"
+"1816_transferWithPermit" -> "abi.encode()"
+"1816_transferWithPermit" -> "keccak256(bytes)"
+"1816_verifyEIP712" -> "ecrecover(bytes32,uint8,bytes32,bytes32)"
+"349_safeTransferFrom" -> "abi.encodeWithSelector()"
+"349_safeTransfer" -> "abi.encodeWithSelector()"
+"1816_transferFrom" -> "require(bool,string)"
+"1816_transferAndCall" -> "require(bool,string)"
+"349_safeApprove" -> "require(bool,string)"
+"1816_permit" -> "require(bool,string)"
+"1816_transferFrom" -> "require(bool)"
+"1816_constructor" -> "chainid()"
+"1816_burn" -> "require(bool,string)"
+"1816_constructor" -> "keccak256(bytes)"
+"200_isContract" -> "extcodehash(uint256)"
+"1816_prefixed" -> "abi.encodePacked()"
+"1816_changeVault" -> "require(bool,string)"
+"1816_verifyPersonalSign" -> "ecrecover(bytes32,uint8,bytes32,bytes32)"
+"1816_verifyEIP712" -> "abi.encodePacked()"
+"1816_transfer" -> "require(bool)"
+"1816_constructor" -> "abi.encode()"
+"1816_permit" -> "keccak256(bytes)"
+"349_callOptionalReturn" -> "require(bool,string)"
+"1816_permit" -> "require(bool)"
+"1816_prefixed" -> "keccak256(bytes)"
+"349_callOptionalReturn" -> "abi.decode()"
+"1816_Swapout" -> "require(bool,string)"
+"1816_changeMPCOwner" -> "require(bool,string)"
+"1816__deposit" -> "require(bool)"
+"1816__mint" -> "require(bool,string)"
+}"1816_deposit" -> "110_balanceOf"
+"349_callOptionalReturn" -> "200_isContract"
+"1816_depositWithTransferPermit" -> "110_transferWithPermit"
+"1816_depositWithPermit" -> "110_permit"
+"1816__withdraw" -> "349_safeTransfer"
+"1816_constructor" -> "110_decimals"
+"1816_deposit" -> "349_safeTransferFrom"
+"1816_transferAndCall" -> "162_onTokenTransfer"
+"1816_approveAndCall" -> "174_onTokenApproval"
+"1816_depositWithPermit" -> "349_safeTransferFrom"
+"349_safeApprove" -> "110_allowance"
+}

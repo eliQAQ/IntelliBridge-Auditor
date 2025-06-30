@@ -1,0 +1,121 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_2627_AnyCallV6Proxy {
+label = "AnyCallV6Proxy"
+"2627_deposit" [label="deposit"]
+"2627_addAdmin" [label="addAdmin"]
+"2627_retryExec" [label="retryExec"]
+"2627__paySrcFees" [label="_paySrcFees"]
+"2627__isSet" [label="_isSet"]
+"2627_calcUniqID" [label="calcUniqID"]
+"2627_setMinReserveBudget" [label="setMinReserveBudget"]
+"2627_setBlacklist" [label="setBlacklist"]
+"2627_setPremium" [label="setPremium"]
+"2627_anyExec" [label="anyExec"]
+"2627_setDefaultSrcFees" [label="setDefaultSrcFees"]
+"2627_updateAppConfig" [label="updateAppConfig"]
+"2627_premium" [label="premium"]
+"2627_getHistoryWhitelistLength" [label="getHistoryWhitelistLength"]
+"2627_initAppConfig" [label="initAppConfig"]
+"2627_setCustomSrcFees" [label="setCustomSrcFees"]
+"2627_getAllHistoryWhitelist" [label="getAllHistoryWhitelist"]
+"2627_upgradeApp" [label="upgradeApp"]
+"2627_changeMPC" [label="changeMPC"]
+"2627_constructor" [label="constructor"]
+"2627_setBlacklists" [label="setBlacklists"]
+"2627_accruedFees" [label="accruedFees"]
+"2627_removeAdmin" [label="removeAdmin"]
+"2627_isUseCustomSrcFees" [label="isUseCustomSrcFees"]
+"2627_withdraw" [label="withdraw"]
+"2627_anyCall" [label="anyCall"]
+"2627_withdrawAccruedFees" [label="withdrawAccruedFees"]
+"2627_getAllAdmins" [label="getAllAdmins"]
+"2627__calcSrcFees" [label="_calcSrcFees"]
+"2627_removeWhitelist" [label="removeWhitelist"]
+"2627_addWhitelist" [label="addWhitelist"]
+"2627_applyMPC" [label="applyMPC"]
+"2627_setMode" [label="setMode"]
+"2627_setAppModes" [label="setAppModes"]
+"2627_calcSrcFees" [label="calcSrcFees"]
+"2627_tidyHistoryWhitelist" [label="tidyHistoryWhitelist"]
+"2627_setPaused" [label="setPaused"]
+"2627__setAppWhitelist" [label="_setAppWhitelist"]
+"2627_setDefaultSrcFees" -> "2627_onlyAdmin"
+"2627_initAppConfig" -> "2627_onlyAdmin"
+"2627_anyExec" -> "2627_charge"
+"2627_setPaused" -> "2627_onlyAdmin"
+"2627_setBlacklists" -> "2627_onlyAdmin"
+"2627_anyExec" -> "2627_lock"
+"2627_anyExec" -> "2627_whenNotPaused"
+"2627_removeWhitelist" -> "2627__setAppWhitelist"
+"2627_isUseCustomSrcFees" -> "2627__isSet"
+"2627_addWhitelist" -> "2627__setAppWhitelist"
+"2627_setCustomSrcFees" -> "2627__isSet"
+"2627_setMode" -> "2627_onlyAdmin"
+"2627__calcSrcFees" -> "2627_isUseCustomSrcFees"
+"2627_anyExec" -> "2627__isSet"
+"2627_calcSrcFees" -> "2627__calcSrcFees"
+"2627_anyCall" -> "2627_lock"
+"2627_anyExec" -> "2627_onlyMPC"
+"2627_anyExec" -> "2627_calcUniqID"
+"2627_anyCall" -> "2627__isSet"
+"2627_anyCall" -> "2627__paySrcFees"
+"2627_retryExec" -> "2627_calcUniqID"
+"2627_setAppModes" -> "2627_onlyAdmin"
+"2627_setCustomSrcFees" -> "2627_onlyAdmin"
+"2627_setPremium" -> "2627_onlyAdmin"
+"2627_setMinReserveBudget" -> "2627_onlyAdmin"
+"2627_anyCall" -> "2627_whenNotPaused"
+"2627_updateAppConfig" -> "2627__setAppWhitelist"
+"2627_addAdmin" -> "2627_onlyMPC"
+"2627_removeAdmin" -> "2627_onlyMPC"
+"2627_initAppConfig" -> "2627__setAppWhitelist"
+"2627_anyCall" -> "2627__calcSrcFees"
+"2627_setBlacklist" -> "2627_onlyAdmin"
+"2627_changeMPC" -> "2627_onlyMPC"
+}subgraph cluster_21_IApp {
+label = "IApp"
+"21_anyFallback" [label="anyFallback"]
+"21_anyExecute" [label="anyExecute"]
+}subgraph cluster_102_AnyCallExecutor {
+label = "AnyCallExecutor"
+"102_execute" [label="execute"]
+"102_constructor" [label="constructor"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"keccak256(bytes)" 
+"abi.encodeWithSelector()" 
+"abi.encode()" 
+"require(bool)" 
+"2627_setAppModes" -> "require(bool,string)"
+"2627_anyCall" -> "require(bool,string)"
+"2627_setCustomSrcFees" -> "require(bool)"
+"2627__paySrcFees" -> "require(bool,string)"
+"2627_removeAdmin" -> "require(bool)"
+"2627_updateAppConfig" -> "require(bool,string)"
+"2627_initAppConfig" -> "require(bool,string)"
+"2627_withdraw" -> "require(bool)"
+"2627_removeWhitelist" -> "require(bool,string)"
+"2627_calcUniqID" -> "abi.encode()"
+"2627_upgradeApp" -> "require(bool,string)"
+"2627_calcUniqID" -> "keccak256(bytes)"
+"2627_anyExec" -> "abi.encodeWithSelector()"
+"2627_setDefaultSrcFees" -> "require(bool)"
+"2627_setAppModes" -> "require(bool)"
+"2627__paySrcFees" -> "require(bool)"
+"2627_withdrawAccruedFees" -> "require(bool)"
+"2627_anyExec" -> "require(bool,string)"
+"2627_constructor" -> "require(bool,string)"
+"2627_retryExec" -> "require(bool)"
+"2627_addWhitelist" -> "require(bool,string)"
+"2627_setCustomSrcFees" -> "require(bool,string)"
+"2627_addAdmin" -> "require(bool)"
+"2627_retryExec" -> "require(bool,string)"
+"2627_applyMPC" -> "require(bool)"
+}"102_execute" -> "21_anyExecute"
+"2627_retryExec" -> "102_execute"
+"2627_anyExec" -> "102_execute"
+"2627_setBlacklists" -> "2627_setBlacklist"
+}

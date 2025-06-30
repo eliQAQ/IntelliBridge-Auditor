@@ -1,0 +1,165 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterContext" {
+  graph [ label = "Context", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Context.<Constructor>" [ label = "<Constructor>", color = "white" ];
+  "Context._msgSender" [ label = "_msgSender", color = "white" ];
+  "Context._msgData" [ label = "_msgData", color = "white" ];
+}
+
+subgraph "clusterIERC20" {
+  graph [ label = "IERC20  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IERC20.totalSupply" [ label = "totalSupply", color = "blue" ];
+  "IERC20.balanceOf" [ label = "balanceOf", color = "blue" ];
+  "IERC20.transfer" [ label = "transfer", color = "blue" ];
+  "IERC20.allowance" [ label = "allowance", color = "blue" ];
+  "IERC20.approve" [ label = "approve", color = "blue" ];
+  "IERC20.transferFrom" [ label = "transferFrom", color = "blue" ];
+}
+
+subgraph "clusterSafeMath" {
+  graph [ label = "SafeMath  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "SafeMath.add" [ label = "add", color = "white" ];
+  "SafeMath.sub" [ label = "sub" ];
+  "SafeMath.mul" [ label = "mul", color = "white" ];
+  "SafeMath.div" [ label = "div" ];
+  "SafeMath.mod" [ label = "mod" ];
+}
+
+subgraph "clusterERC20" {
+  graph [ label = "ERC20", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ERC20.totalSupply" [ label = "totalSupply", color = "green" ];
+  "ERC20.balanceOf" [ label = "balanceOf", color = "green" ];
+  "ERC20.transfer" [ label = "transfer", color = "green" ];
+  "ERC20.allowance" [ label = "allowance", color = "green" ];
+  "ERC20.approve" [ label = "approve", color = "green" ];
+  "ERC20.transferFrom" [ label = "transferFrom", color = "green" ];
+  "ERC20.increaseAllowance" [ label = "increaseAllowance", color = "green" ];
+  "ERC20.decreaseAllowance" [ label = "decreaseAllowance", color = "green" ];
+  "ERC20._transfer" [ label = "_transfer" ];
+  "ERC20._mint" [ label = "_mint", color = "white" ];
+  "ERC20._burn" [ label = "_burn", color = "white" ];
+  "ERC20._approve" [ label = "_approve" ];
+  "ERC20._burnFrom" [ label = "_burnFrom", color = "white" ];
+  "ERC20._msgSender" [ label = "_msgSender" ];
+  "ERC20.address" [ label = "address" ];
+}
+
+subgraph "clusterERC20Detailed" {
+  graph [ label = "ERC20Detailed", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ERC20Detailed.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "ERC20Detailed.name" [ label = "name", color = "green" ];
+  "ERC20Detailed.symbol" [ label = "symbol", color = "green" ];
+  "ERC20Detailed.decimals" [ label = "decimals", color = "green" ];
+}
+
+subgraph "clusterLtcSwapAsset" {
+  graph [ label = "LtcSwapAsset", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "LtcSwapAsset.onlyOwner" [ label = "onlyOwner", color = "yellow" ];
+  "LtcSwapAsset.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "LtcSwapAsset.owner" [ label = "owner" ];
+  "LtcSwapAsset.changeDCRMOwner" [ label = "changeDCRMOwner", color = "green" ];
+  "LtcSwapAsset.Swapin" [ label = "Swapin", color = "green" ];
+  "LtcSwapAsset.Swapout" [ label = "Swapout", color = "green" ];
+  "LtcSwapAsset.verifyBindAddr" [ label = "verifyBindAddr" ];
+}
+
+subgraph "cluster_totalSupply" {
+  graph [ label = "_totalSupply", color = "lightgray" ];
+  "_totalSupply.add" [ label = "add" ];
+  "_totalSupply.sub" [ label = "sub" ];
+}
+
+  "SafeMath.sub";
+  "SafeMath.div";
+  "SafeMath.mod";
+  "ERC20.transfer";
+  "ERC20._transfer";
+  "ERC20._msgSender";
+  "ERC20.approve";
+  "ERC20._approve";
+  "ERC20.transferFrom";
+  "ERC20.increaseAllowance";
+  "ERC20.decreaseAllowance";
+  "ERC20.address";
+  "ERC20._mint";
+  "_totalSupply.add";
+  "ERC20._burn";
+  "_totalSupply.sub";
+  "ERC20._burnFrom";
+  "LtcSwapAsset.onlyOwner";
+  "LtcSwapAsset.owner";
+  "LtcSwapAsset.changeDCRMOwner";
+  "LtcSwapAsset.Swapin";
+  "LtcSwapAsset.Swapout";
+  "LtcSwapAsset.verifyBindAddr";
+  "SafeMath.sub" -> "SafeMath.sub" [ color = "green" ];
+  "SafeMath.div" -> "SafeMath.div" [ color = "green" ];
+  "SafeMath.mod" -> "SafeMath.mod" [ color = "green" ];
+  "ERC20.transfer" -> "ERC20._transfer" [ color = "green" ];
+  "ERC20.transfer" -> "ERC20._msgSender" [ color = "green" ];
+  "ERC20.approve" -> "ERC20._approve" [ color = "green" ];
+  "ERC20.approve" -> "ERC20._msgSender" [ color = "green" ];
+  "ERC20.transferFrom" -> "ERC20._transfer" [ color = "green" ];
+  "ERC20.transferFrom" -> "ERC20._approve" [ color = "green" ];
+  "ERC20.transferFrom" -> "ERC20._msgSender" [ color = "green" ];
+  "ERC20.transferFrom" -> "ERC20._msgSender" [ color = "green" ];
+  "ERC20.increaseAllowance" -> "ERC20._approve" [ color = "green" ];
+  "ERC20.increaseAllowance" -> "ERC20._msgSender" [ color = "green" ];
+  "ERC20.increaseAllowance" -> "ERC20._msgSender" [ color = "green" ];
+  "ERC20.decreaseAllowance" -> "ERC20._approve" [ color = "green" ];
+  "ERC20.decreaseAllowance" -> "ERC20._msgSender" [ color = "green" ];
+  "ERC20.decreaseAllowance" -> "ERC20._msgSender" [ color = "green" ];
+  "ERC20._transfer" -> "ERC20.address" [ color = "green" ];
+  "ERC20._transfer" -> "ERC20.address" [ color = "green" ];
+  "ERC20._mint" -> "ERC20.address" [ color = "green" ];
+  "ERC20._mint" -> "_totalSupply.add" [ color = "orange" ];
+  "ERC20._mint" -> "ERC20.address" [ color = "green" ];
+  "ERC20._burn" -> "ERC20.address" [ color = "green" ];
+  "ERC20._burn" -> "_totalSupply.sub" [ color = "orange" ];
+  "ERC20._burn" -> "ERC20.address" [ color = "green" ];
+  "ERC20._approve" -> "ERC20.address" [ color = "green" ];
+  "ERC20._approve" -> "ERC20.address" [ color = "green" ];
+  "ERC20._burnFrom" -> "ERC20._burn" [ color = "green" ];
+  "ERC20._burnFrom" -> "ERC20._approve" [ color = "green" ];
+  "ERC20._burnFrom" -> "ERC20._msgSender" [ color = "green" ];
+  "ERC20._burnFrom" -> "ERC20._msgSender" [ color = "green" ];
+  "LtcSwapAsset.onlyOwner" -> "LtcSwapAsset.owner" [ color = "green" ];
+  "LtcSwapAsset.changeDCRMOwner" -> "ERC20.address" [ color = "green" ];
+  "LtcSwapAsset.changeDCRMOwner" -> "LtcSwapAsset.owner" [ color = "green" ];
+  "LtcSwapAsset.Swapin" -> "ERC20._mint" [ color = "green" ];
+  "LtcSwapAsset.Swapout" -> "LtcSwapAsset.verifyBindAddr" [ color = "green" ];
+  "LtcSwapAsset.Swapout" -> "ERC20._burn" [ color = "green" ];
+  "LtcSwapAsset.Swapout" -> "ERC20._msgSender" [ color = "green" ];
+  "LtcSwapAsset.Swapout" -> "ERC20._msgSender" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

@@ -1,0 +1,36 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_84_IERC20 {
+label = "IERC20"
+"84_approve" [label="approve"]
+"84_allowance" [label="allowance"]
+"84_transferFrom" [label="transferFrom"]
+"84_totalSupply" [label="totalSupply"]
+"84_balanceOf" [label="balanceOf"]
+"84_transfer" [label="transfer"]
+"84_name" [label="name"]
+"84_symbol" [label="symbol"]
+"84_decimals" [label="decimals"]
+}subgraph cluster_222_LocalAsset {
+label = "LocalAsset"
+"222_freezeAsset" [label="freezeAsset"]
+"222_transferOwnership" [label="transferOwnership"]
+"222_set_team" [label="set_team"]
+"222_mint" [label="mint"]
+"222_freeze_asset" [label="freeze_asset"]
+"222_transfer_ownership" [label="transfer_ownership"]
+"222_set_metadata" [label="set_metadata"]
+"222_clear_metadata" [label="clear_metadata"]
+"222_setMetadata" [label="setMetadata"]
+"222_thawAsset" [label="thawAsset"]
+"222_setTeam" [label="setTeam"]
+"222_thaw_asset" [label="thaw_asset"]
+"222_clearMetadata" [label="clearMetadata"]
+"222_thaw" [label="thaw"]
+"222_burn" [label="burn"]
+"222_freeze" [label="freeze"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+}
+}

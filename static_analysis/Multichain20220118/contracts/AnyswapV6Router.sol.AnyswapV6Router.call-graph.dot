@@ -1,0 +1,106 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_2691_AnyswapV6Router {
+label = "AnyswapV6Router"
+"2691_mpc" [label="mpc"]
+"2691_anySwapOutUnderlying" [label="anySwapOutUnderlying"]
+"2691__swap" [label="_swap"]
+"2691_anySwapFeeTo" [label="anySwapFeeTo"]
+"2691_anySwapInUnderlying" [label="anySwapInUnderlying"]
+"2691_changeVault" [label="changeVault"]
+"2691_withdrawNative" [label="withdrawNative"]
+"2691_anySwapOutExactTokensForTokens" [label="anySwapOutExactTokensForTokens"]
+"2691_getAmountsOut" [label="getAmountsOut"]
+"2691_setEnableSwapTrade" [label="setEnableSwapTrade"]
+"2691_anySwapOutExactTokensForNative" [label="anySwapOutExactTokensForNative"]
+"2691_revokeMinter" [label="revokeMinter"]
+"2691_getAmountsIn" [label="getAmountsIn"]
+"2691_anySwapInAuto" [label="anySwapInAuto"]
+"2691_anySwapOutExactTokensForTokensUnderlying" [label="anySwapOutExactTokensForTokensUnderlying"]
+"2691_getAmountOut" [label="getAmountOut"]
+"2691_receive" [label="receive"]
+"2691_slitherConstructorConstantVariables" [label="slitherConstructorConstantVariables"]
+"2691__anySwapOutUnderlying" [label="_anySwapOutUnderlying"]
+"2691_depositNative" [label="depositNative"]
+"2691__anySwapIn" [label="_anySwapIn"]
+"2691_anySwapOutExactTokensForNativeUnderlying" [label="anySwapOutExactTokensForNativeUnderlying"]
+"2691__anySwapOutNative" [label="_anySwapOutNative"]
+"2691_anySwapOutNative" [label="anySwapOutNative"]
+"2691_anySwapOut" [label="anySwapOut"]
+"2691_constructor" [label="constructor"]
+"2691_cID" [label="cID"]
+"2691_quote" [label="quote"]
+"2691_anySwapInExactTokensForTokens" [label="anySwapInExactTokensForTokens"]
+"2691__anySwapOut" [label="_anySwapOut"]
+"2691_anySwapIn" [label="anySwapIn"]
+"2691_getAmountIn" [label="getAmountIn"]
+"2691_anySwapInExactTokensForNative" [label="anySwapInExactTokensForNative"]
+"2691_setMinter" [label="setMinter"]
+"2691_applyMinter" [label="applyMinter"]
+"2691_changeMPC" [label="changeMPC"]
+"2691_anySwapInAuto" -> "2691_onlyMPC"
+"2691_applyMinter" -> "2691_onlyMPC"
+"2691_setEnableSwapTrade" -> "2691_onlyMPC"
+"2691_anySwapOutUnderlying" -> "2691__anySwapOutUnderlying"
+"2691_anySwapFeeTo" -> "2691_onlyMPC"
+"2691_changeVault" -> "2691_onlyMPC"
+"2691_anySwapInExactTokensForNative" -> "2691__swap"
+"2691_anySwapInAuto" -> "2691__anySwapIn"
+"2691_anySwapOutExactTokensForNativeUnderlying" -> "2691_swapTradeEnabled"
+"2691_anySwapInExactTokensForTokens" -> "2691__anySwapIn"
+"2691_revokeMinter" -> "2691_onlyMPC"
+"2691_anySwapOutExactTokensForNativeUnderlying" -> "2691_cID"
+"2691_setMinter" -> "2691_onlyMPC"
+"2691_anySwapOutNative" -> "2691__anySwapOutNative"
+"2691_anySwapFeeTo" -> "2691_mpc"
+"2691_anySwapInExactTokensForTokens" -> "2691_swapTradeEnabled"
+"2691_changeMPC" -> "2691_onlyMPC"
+"2691_anySwapInExactTokensForNative" -> "2691_onlyMPC"
+"2691_anySwapOutExactTokensForTokens" -> "2691_cID"
+"2691_anySwapOutExactTokensForNative" -> "2691_swapTradeEnabled"
+"2691_anySwapInUnderlying" -> "2691__anySwapIn"
+"2691__anySwapOut" -> "2691_cID"
+"2691_anySwapOutExactTokensForTokens" -> "2691_ensure"
+"2691_anySwapOutExactTokensForTokensUnderlying" -> "2691_swapTradeEnabled"
+"2691_anySwapOutExactTokensForNativeUnderlying" -> "2691_ensure"
+"2691_anySwapOutExactTokensForTokens" -> "2691_swapTradeEnabled"
+"2691_changeMPC" -> "2691_cID"
+"2691_anySwapInExactTokensForNative" -> "2691_swapTradeEnabled"
+"2691_anySwapOutExactTokensForTokensUnderlying" -> "2691_cID"
+"2691_anySwapInUnderlying" -> "2691_onlyMPC"
+"2691_anySwapOut" -> "2691__anySwapOut"
+"2691_anySwapInExactTokensForNative" -> "2691__anySwapIn"
+"2691_anySwapOutUnderlying" -> "2691_cID"
+"2691_anySwapInExactTokensForTokens" -> "2691__swap"
+"2691__anySwapIn" -> "2691_cID"
+"2691_anySwapOut" -> "2691_cID"
+"2691_anySwapOutExactTokensForNative" -> "2691_ensure"
+"2691_changeMPC" -> "2691_mpc"
+"2691_anySwapInExactTokensForNative" -> "2691_ensure"
+"2691_anySwapInExactTokensForTokens" -> "2691_ensure"
+"2691_anySwapOutExactTokensForTokensUnderlying" -> "2691_ensure"
+"2691_anySwapOutNative" -> "2691_cID"
+"2691_anySwapIn" -> "2691__anySwapIn"
+"2691_anySwapIn" -> "2691_onlyMPC"
+"2691_anySwapInExactTokensForTokens" -> "2691_onlyMPC"
+"2691_anySwapOutExactTokensForNative" -> "2691_cID"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool)" 
+"assert(bool)" 
+"require(bool,string)" 
+"2691__anySwapOutUnderlying" -> "require(bool)"
+"2691_changeMPC" -> "require(bool,string)"
+"2691_withdrawNative" -> "assert(bool)"
+"2691_depositNative" -> "assert(bool)"
+"2691_anySwapInExactTokensForNative" -> "require(bool,string)"
+"2691_receive" -> "assert(bool)"
+"2691__anySwapOutUnderlying" -> "require(bool,string)"
+"2691_anySwapInExactTokensForTokens" -> "require(bool,string)"
+"2691_withdrawNative" -> "require(bool,string)"
+"2691_depositNative" -> "require(bool,string)"
+"2691__anySwapOutNative" -> "require(bool,string)"
+"2691__anySwapOutNative" -> "require(bool)"
+}
+}

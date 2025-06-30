@@ -1,0 +1,122 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_1445_AnyswapV6ERC20 {
+label = "AnyswapV6ERC20"
+"1445_burn" [label="burn"]
+"1445_Swapout" [label="Swapout"]
+"1445_Swapin" [label="Swapin"]
+"1445_applyMinter" [label="applyMinter"]
+"1445_revokeMinter" [label="revokeMinter"]
+"1445_getAllMinters" [label="getAllMinters"]
+"1445__burn" [label="_burn"]
+"1445_setVaultOnly" [label="setVaultOnly"]
+"1445_withdraw" [label="withdraw"]
+"1445_owner" [label="owner"]
+"1445__mint" [label="_mint"]
+"1445_initVault" [label="initVault"]
+"1445_setVault" [label="setVault"]
+"1445_mpc" [label="mpc"]
+"1445_setMinter" [label="setMinter"]
+"1445_depositVault" [label="depositVault"]
+"1445_totalSupply" [label="totalSupply"]
+"1445_transferFrom" [label="transferFrom"]
+"1445_withdrawVault" [label="withdrawVault"]
+"1445__withdraw" [label="_withdraw"]
+"1445_constructor" [label="constructor"]
+"1445_deposit" [label="deposit"]
+"1445_approve" [label="approve"]
+"1445__deposit" [label="_deposit"]
+"1445_transfer" [label="transfer"]
+"1445_applyVault" [label="applyVault"]
+"1445_mint" [label="mint"]
+"1445_changeVault" [label="changeVault"]
+"1445_withdraw" -> "1445__withdraw"
+"1445_Swapin" -> "1445_onlyAuth"
+"1445_initVault" -> "1445_onlyVault"
+"1445_burn" -> "1445_onlyAuth"
+"1445_withdrawVault" -> "1445__withdraw"
+"1445__deposit" -> "1445__mint"
+"1445_revokeMinter" -> "1445_onlyVault"
+"1445_setMinter" -> "1445_onlyVault"
+"1445__withdraw" -> "1445__burn"
+"1445_setVault" -> "1445_onlyVault"
+"1445_depositVault" -> "1445_onlyVault"
+"1445_mint" -> "1445_onlyAuth"
+"1445_applyMinter" -> "1445_onlyVault"
+"1445_withdrawVault" -> "1445_onlyVault"
+"1445_setVaultOnly" -> "1445_onlyVault"
+"1445_deposit" -> "1445__deposit"
+"1445_changeVault" -> "1445_onlyVault"
+"1445_depositVault" -> "1445__deposit"
+"1445_applyVault" -> "1445_onlyVault"
+}subgraph cluster_264_SafeERC20 {
+label = "SafeERC20"
+"264_safeTransferFrom" [label="safeTransferFrom"]
+"264_safeTransfer" [label="safeTransfer"]
+"264_safeApprove" [label="safeApprove"]
+"264_callOptionalReturn" [label="callOptionalReturn"]
+"264_safeTransferFrom" -> "264_callOptionalReturn"
+"264_safeApprove" -> "264_callOptionalReturn"
+"264_safeTransfer" -> "264_callOptionalReturn"
+}subgraph cluster_74_IERC20 {
+label = "IERC20"
+"74_allowance" [label="allowance"]
+"74_balanceOf" [label="balanceOf"]
+"74_totalSupply" [label="totalSupply"]
+"74_decimals" [label="decimals"]
+"74_approve" [label="approve"]
+"74_transferFrom" [label="transferFrom"]
+"74_transfer" [label="transfer"]
+}subgraph cluster_115_Address {
+label = "Address"
+"115_isContract" [label="isContract"]
+}subgraph cluster_89_IComintToken {
+label = "IComintToken"
+"89_mint" [label="mint"]
+"89_burnFrom" [label="burnFrom"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"abi.decode()" 
+"require(bool)" 
+"abi.encodeWithSelector()" 
+"require(bool,string)" 
+"extcodehash(uint256)" 
+"1445_Swapin" -> "require(bool)"
+"264_callOptionalReturn" -> "require(bool,string)"
+"1445_transfer" -> "require(bool)"
+"115_isContract" -> "extcodehash(uint256)"
+"1445_setMinter" -> "require(bool,string)"
+"1445_Swapout" -> "require(bool,string)"
+"264_callOptionalReturn" -> "abi.decode()"
+"1445_transferFrom" -> "require(bool)"
+"264_safeApprove" -> "require(bool,string)"
+"264_safeTransferFrom" -> "abi.encodeWithSelector()"
+"264_safeApprove" -> "abi.encodeWithSelector()"
+"1445_transferFrom" -> "require(bool,string)"
+"1445_burn" -> "require(bool)"
+"264_safeTransfer" -> "abi.encodeWithSelector()"
+"1445__burn" -> "require(bool,string)"
+"1445_constructor" -> "require(bool)"
+"1445__deposit" -> "require(bool)"
+"1445__mint" -> "require(bool,string)"
+"1445_applyVault" -> "require(bool)"
+"1445_mint" -> "require(bool)"
+"1445__withdraw" -> "require(bool)"
+"1445_changeVault" -> "require(bool,string)"
+"1445_initVault" -> "require(bool)"
+"1445_transfer" -> "require(bool,string)"
+"1445_setVault" -> "require(bool,string)"
+"1445_Swapout" -> "require(bool)"
+"1445_applyMinter" -> "require(bool)"
+}"1445__withdraw" -> "264_safeTransfer"
+"1445_Swapout" -> "89_burnFrom"
+"1445_burn" -> "89_burnFrom"
+"1445_mint" -> "89_mint"
+"1445_deposit" -> "264_safeTransferFrom"
+"1445_Swapin" -> "89_mint"
+"264_safeApprove" -> "74_allowance"
+"1445_constructor" -> "74_decimals"
+"264_callOptionalReturn" -> "115_isContract"
+"1445_deposit" -> "74_balanceOf"
+}

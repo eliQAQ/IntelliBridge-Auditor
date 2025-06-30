@@ -1,0 +1,17 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_32_IUniGas {
+label = "IUniGas"
+"32_uniGasToEth" [label="uniGasToEth"]
+"32_ethToUniGas" [label="ethToUniGas"]
+}subgraph cluster_65_UniGas {
+label = "UniGas"
+"65_constructor" [label="constructor"]
+"65_setEthPrice" [label="setEthPrice"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool)" 
+"65_setEthPrice" -> "require(bool)"
+}
+}

@@ -1,0 +1,35 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_581_SushiswapV2Library {
+label = "SushiswapV2Library"
+"581_getAmountsIn" [label="getAmountsIn"]
+"581_quote" [label="quote"]
+"581_pairFor" [label="pairFor"]
+"581_sortTokens" [label="sortTokens"]
+"581_getReserves" [label="getReserves"]
+"581_getAmountOut" [label="getAmountOut"]
+"581_getAmountsOut" [label="getAmountsOut"]
+"581_getAmountIn" [label="getAmountIn"]
+"581_getReserves" -> "581_pairFor"
+"581_pairFor" -> "581_sortTokens"
+"581_getAmountsOut" -> "581_getReserves"
+"581_getAmountsOut" -> "581_getAmountOut"
+"581_getAmountsIn" -> "581_getAmountIn"
+"581_getAmountsIn" -> "581_getReserves"
+"581_getReserves" -> "581_sortTokens"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"abi.encodePacked()" 
+"require(bool,string)" 
+"keccak256(bytes)" 
+"581_pairFor" -> "abi.encodePacked()"
+"581_pairFor" -> "keccak256(bytes)"
+"581_getAmountOut" -> "require(bool,string)"
+"581_getAmountsIn" -> "require(bool,string)"
+"581_quote" -> "require(bool,string)"
+"581_getAmountIn" -> "require(bool,string)"
+"581_getAmountsOut" -> "require(bool,string)"
+"581_sortTokens" -> "require(bool,string)"
+}
+}

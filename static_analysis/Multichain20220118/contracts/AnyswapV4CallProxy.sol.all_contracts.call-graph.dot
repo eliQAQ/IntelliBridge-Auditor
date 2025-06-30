@@ -1,0 +1,35 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_541_AnyCallProxy {
+label = "AnyCallProxy"
+"541_deposit" [label="deposit"]
+"541_effectiveTime" [label="effectiveTime"]
+"541_constructor" [label="constructor"]
+"541_setBlacklist" [label="setBlacklist"]
+"541_setPremium" [label="setPremium"]
+"541_setWhitelist" [label="setWhitelist"]
+"541_withdrawAccruedFees" [label="withdrawAccruedFees"]
+"541_premium" [label="premium"]
+"541_changeMPC" [label="changeMPC"]
+"541_pendingMPC" [label="pendingMPC"]
+"541_withdraw" [label="withdraw"]
+"541_anyExec" [label="anyExec"]
+"541_accruedFees" [label="accruedFees"]
+"541_anyCall" [label="anyCall"]
+"541_anyExec" -> "541_charge"
+"541_anyExec" -> "541_onlyMPC"
+"541_setWhitelist" -> "541_onlyMPC"
+"541_setBlacklist" -> "541_onlyMPC"
+"541_setPremium" -> "541_onlyMPC"
+"541_changeMPC" -> "541_onlyMPC"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool)" 
+"abi.encodeWithSignature()" 
+"541_withdrawAccruedFees" -> "require(bool)"
+"541_anyExec" -> "abi.encodeWithSignature()"
+"541_withdraw" -> "require(bool)"
+"541_anyCall" -> "require(bool)"
+}
+}

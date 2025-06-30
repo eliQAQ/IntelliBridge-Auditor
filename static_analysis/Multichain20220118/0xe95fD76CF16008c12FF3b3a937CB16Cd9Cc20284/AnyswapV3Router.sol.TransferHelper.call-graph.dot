@@ -1,0 +1,26 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_943_TransferHelper {
+label = "TransferHelper"
+"943_safeApprove" [label="safeApprove"]
+"943_safeTransferNative" [label="safeTransferNative"]
+"943_safeTransferFrom" [label="safeTransferFrom"]
+"943_safeTransfer" [label="safeTransfer"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"abi.decode()" 
+"abi.encodeWithSelector()" 
+"943_safeApprove" -> "abi.decode()"
+"943_safeTransferNative" -> "require(bool,string)"
+"943_safeTransferFrom" -> "abi.decode()"
+"943_safeTransfer" -> "abi.encodeWithSelector()"
+"943_safeTransferFrom" -> "abi.encodeWithSelector()"
+"943_safeApprove" -> "require(bool,string)"
+"943_safeTransfer" -> "require(bool,string)"
+"943_safeTransferFrom" -> "require(bool,string)"
+"943_safeApprove" -> "abi.encodeWithSelector()"
+"943_safeTransfer" -> "abi.decode()"
+}
+}

@@ -1,0 +1,21 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_218_SafeERC20 {
+label = "SafeERC20"
+"218_callOptionalReturn" [label="callOptionalReturn"]
+"218_safeTransferFrom" [label="safeTransferFrom"]
+"218_safeTransfer" [label="safeTransfer"]
+"218_safeTransferFrom" -> "218_callOptionalReturn"
+"218_safeTransfer" -> "218_callOptionalReturn"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"abi.decode()" 
+"abi.encodeWithSelector()" 
+"require(bool,string)" 
+"218_callOptionalReturn" -> "abi.decode()"
+"218_safeTransferFrom" -> "abi.encodeWithSelector()"
+"218_safeTransfer" -> "abi.encodeWithSelector()"
+"218_callOptionalReturn" -> "require(bool,string)"
+}
+}

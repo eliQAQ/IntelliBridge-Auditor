@@ -1,0 +1,56 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterERC721GatewayFallback" {
+  graph [ label = "ERC721GatewayFallback", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ERC721GatewayFallback._swapoutFallback" [ label = "_swapoutFallback" ];
+  "ERC721GatewayFallback.Swapout" [ label = "Swapout", color = "blue" ];
+  "ERC721GatewayFallback._anyFallback" [ label = "_anyFallback", color = "white" ];
+  "ERC721GatewayFallback._swapout" [ label = "_swapout" ];
+  "ERC721GatewayFallback._anyCall" [ label = "_anyCall" ];
+  "ERC721GatewayFallback.address" [ label = "address" ];
+  "ERC721GatewayFallback.LogAnySwapOut" [ label = "LogAnySwapOut" ];
+}
+
+  "ERC721GatewayFallback.Swapout";
+  "ERC721GatewayFallback._swapout";
+  "ERC721GatewayFallback._anyCall";
+  "ERC721GatewayFallback.address";
+  "ERC721GatewayFallback.LogAnySwapOut";
+  "ERC721GatewayFallback._anyFallback";
+  "ERC721GatewayFallback._swapoutFallback";
+  "ERC721GatewayFallback.Swapout" -> "ERC721GatewayFallback._swapout" [ color = "green" ];
+  "ERC721GatewayFallback.Swapout" -> "ERC721GatewayFallback._anyCall" [ color = "green" ];
+  "ERC721GatewayFallback.Swapout" -> "ERC721GatewayFallback.address" [ color = "green" ];
+  "ERC721GatewayFallback.Swapout" -> "ERC721GatewayFallback.LogAnySwapOut" [ color = "green" ];
+  "ERC721GatewayFallback._anyFallback" -> "ERC721GatewayFallback._swapoutFallback" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

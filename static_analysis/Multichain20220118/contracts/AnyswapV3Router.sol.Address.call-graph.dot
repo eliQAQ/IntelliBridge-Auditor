@@ -1,0 +1,12 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_1231_Address {
+label = "Address"
+"1231_isContract" [label="isContract"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"extcodehash(uint256)" 
+"1231_isContract" -> "extcodehash(uint256)"
+}
+}

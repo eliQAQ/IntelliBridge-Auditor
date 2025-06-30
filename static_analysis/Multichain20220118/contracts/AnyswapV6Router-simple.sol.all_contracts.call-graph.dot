@@ -1,0 +1,151 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_195_IERC20 {
+label = "IERC20"
+"195_allowance" [label="allowance"]
+"195_transfer" [label="transfer"]
+"195_balanceOf" [label="balanceOf"]
+"195_approve" [label="approve"]
+"195_totalSupply" [label="totalSupply"]
+"195_transferFrom" [label="transferFrom"]
+}subgraph cluster_359_SafeERC20 {
+label = "SafeERC20"
+"359_safeTransferFrom" [label="safeTransferFrom"]
+"359_callOptionalReturn" [label="callOptionalReturn"]
+"359_safeTransfer" [label="safeTransfer"]
+"359_safeApprove" [label="safeApprove"]
+"359_safeTransferFrom" -> "359_callOptionalReturn"
+"359_safeTransfer" -> "359_callOptionalReturn"
+"359_safeApprove" -> "359_callOptionalReturn"
+}subgraph cluster_45_IwNATIVE {
+label = "IwNATIVE"
+"45_deposit" [label="deposit"]
+"45_transfer" [label="transfer"]
+"45_withdraw" [label="withdraw"]
+}subgraph cluster_210_Address {
+label = "Address"
+"210_isContract" [label="isContract"]
+}subgraph cluster_27_TransferHelper {
+label = "TransferHelper"
+"27_safeTransferNative" [label="safeTransferNative"]
+}subgraph cluster_1438_AnyswapV6Router {
+label = "AnyswapV6Router"
+"1438_constructor" [label="constructor"]
+"1438__anySwapOutUnderlying" [label="_anySwapOutUnderlying"]
+"1438_withdrawNative" [label="withdrawNative"]
+"1438_receive" [label="receive"]
+"1438_anySwapOutUnderlying" [label="anySwapOutUnderlying"]
+"1438_anySwapOut" [label="anySwapOut"]
+"1438_applyMinter" [label="applyMinter"]
+"1438__anySwapOut" [label="_anySwapOut"]
+"1438_depositNative" [label="depositNative"]
+"1438_anySwapInAuto" [label="anySwapInAuto"]
+"1438_mpc" [label="mpc"]
+"1438_changeMPC" [label="changeMPC"]
+"1438__anySwapIn" [label="_anySwapIn"]
+"1438_setMinter" [label="setMinter"]
+"1438_anySwapIn" [label="anySwapIn"]
+"1438_revokeMinter" [label="revokeMinter"]
+"1438_anySwapInUnderlying" [label="anySwapInUnderlying"]
+"1438__anySwapOutNative" [label="_anySwapOutNative"]
+"1438_cID" [label="cID"]
+"1438_anySwapOutNative" [label="anySwapOutNative"]
+"1438_changeVault" [label="changeVault"]
+"1438_anySwapFeeTo" [label="anySwapFeeTo"]
+"1438_changeMPC" -> "1438_cID"
+"1438_revokeMinter" -> "1438_onlyMPC"
+"1438_anySwapFeeTo" -> "1438_onlyMPC"
+"1438_anySwapOut" -> "1438__anySwapOut"
+"1438_anySwapInUnderlying" -> "1438_onlyMPC"
+"1438_changeMPC" -> "1438_onlyMPC"
+"1438_changeVault" -> "1438_onlyMPC"
+"1438_anySwapInUnderlying" -> "1438__anySwapIn"
+"1438_anySwapOutUnderlying" -> "1438_cID"
+"1438_anySwapOutNative" -> "1438_cID"
+"1438_anySwapOutUnderlying" -> "1438__anySwapOutUnderlying"
+"1438_anySwapOut" -> "1438_cID"
+"1438_changeMPC" -> "1438_mpc"
+"1438__anySwapOut" -> "1438_cID"
+"1438_anySwapFeeTo" -> "1438_mpc"
+"1438_setMinter" -> "1438_onlyMPC"
+"1438__anySwapIn" -> "1438_cID"
+"1438_anySwapInAuto" -> "1438_onlyMPC"
+"1438_applyMinter" -> "1438_onlyMPC"
+"1438_anySwapIn" -> "1438__anySwapIn"
+"1438_anySwapIn" -> "1438_onlyMPC"
+"1438_anySwapInAuto" -> "1438__anySwapIn"
+"1438_anySwapOutNative" -> "1438__anySwapOutNative"
+}subgraph cluster_127_AnyswapV1ERC20 {
+label = "AnyswapV1ERC20"
+"127_revokeMinter" [label="revokeMinter"]
+"127_changeVault" [label="changeVault"]
+"127_burn" [label="burn"]
+"127_withdrawVault" [label="withdrawVault"]
+"127_withdraw" [label="withdraw"]
+"127_depositVault" [label="depositVault"]
+"127_mint" [label="mint"]
+"127_deposit" [label="deposit"]
+"127_underlying" [label="underlying"]
+"127_setMinter" [label="setMinter"]
+"127_applyMinter" [label="applyMinter"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"abi.encodeWithSelector()" 
+"code(address)" 
+"assert(bool)" 
+"require(bool)" 
+"abi.decode()" 
+"210_isContract" -> "code(address)"
+"1438_changeMPC" -> "require(bool,string)"
+"1438_withdrawNative" -> "assert(bool)"
+"27_safeTransferNative" -> "require(bool,string)"
+"1438__anySwapOutNative" -> "require(bool)"
+"359_safeTransferFrom" -> "abi.encodeWithSelector()"
+"1438_depositNative" -> "require(bool,string)"
+"1438__anySwapOutNative" -> "require(bool,string)"
+"1438__anySwapOutUnderlying" -> "require(bool)"
+"359_safeApprove" -> "require(bool,string)"
+"1438_receive" -> "assert(bool)"
+"1438_depositNative" -> "assert(bool)"
+"1438__anySwapOutUnderlying" -> "require(bool,string)"
+"359_callOptionalReturn" -> "abi.decode()"
+"359_safeApprove" -> "abi.encodeWithSelector()"
+"1438_withdrawNative" -> "require(bool,string)"
+"359_callOptionalReturn" -> "require(bool,string)"
+"359_safeTransfer" -> "abi.encodeWithSelector()"
+}"1438_depositNative" -> "45_transfer"
+"1438_depositNative" -> "127_underlying"
+"1438_anySwapOut" -> "127_burn"
+"1438__anySwapOutNative" -> "195_balanceOf"
+"1438__anySwapIn" -> "127_mint"
+"1438__anySwapOutNative" -> "45_deposit"
+"1438_changeVault" -> "127_changeVault"
+"1438_depositNative" -> "127_depositVault"
+"1438_anySwapInAuto" -> "45_withdraw"
+"1438_setMinter" -> "127_setMinter"
+"1438_revokeMinter" -> "127_revokeMinter"
+"1438_withdrawNative" -> "45_withdraw"
+"1438_withdrawNative" -> "195_balanceOf"
+"1438_anySwapInAuto" -> "127_withdrawVault"
+"1438__anySwapOut" -> "127_burn"
+"1438_anySwapInUnderlying" -> "127_withdrawVault"
+"1438__anySwapOutUnderlying" -> "359_safeTransferFrom"
+"1438_anySwapInAuto" -> "195_balanceOf"
+"1438__anySwapOutUnderlying" -> "195_balanceOf"
+"1438_depositNative" -> "45_deposit"
+"1438_withdrawNative" -> "127_underlying"
+"1438__anySwapOutNative" -> "359_safeTransfer"
+"1438__anySwapOutNative" -> "127_underlying"
+"1438_withdrawNative" -> "127_withdrawVault"
+"1438_withdrawNative" -> "27_safeTransferNative"
+"1438__anySwapOutUnderlying" -> "127_underlying"
+"1438_anySwapFeeTo" -> "127_mint"
+"1438_anySwapFeeTo" -> "127_withdrawVault"
+"359_callOptionalReturn" -> "210_isContract"
+"1438_anySwapInAuto" -> "27_safeTransferNative"
+"1438_applyMinter" -> "127_applyMinter"
+"1438_anySwapInAuto" -> "127_underlying"
+"359_safeApprove" -> "195_allowance"
+}

@@ -1,0 +1,161 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterIAnycallExecutor" {
+  graph [ label = "IAnycallExecutor  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IAnycallExecutor.context" [ label = "context", color = "blue" ];
+  "IAnycallExecutor.execute" [ label = "execute", color = "blue" ];
+}
+
+subgraph "clusterIAnycallV6Proxy" {
+  graph [ label = "IAnycallV6Proxy  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IAnycallV6Proxy.executor" [ label = "executor", color = "blue" ];
+  "IAnycallV6Proxy.anyCall" [ label = "anyCall", color = "blue" ];
+}
+
+subgraph "clusterAnyCallV6Proxy" {
+  graph [ label = "AnyCallV6Proxy", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "AnyCallV6Proxy.lock" [ label = "lock", color = "yellow" ];
+  "AnyCallV6Proxy.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "AnyCallV6Proxy.onlyMPC" [ label = "onlyMPC", color = "yellow" ];
+  "AnyCallV6Proxy.onlyAdmin" [ label = "onlyAdmin", color = "yellow" ];
+  "AnyCallV6Proxy.whenNotPaused" [ label = "whenNotPaused", color = "yellow" ];
+  "AnyCallV6Proxy.charge" [ label = "charge", color = "yellow" ];
+  "AnyCallV6Proxy.setPaused" [ label = "setPaused", color = "blue" ];
+  "AnyCallV6Proxy._paySrcFees" [ label = "_paySrcFees" ];
+  "AnyCallV6Proxy.anyCall" [ label = "anyCall", color = "blue" ];
+  "AnyCallV6Proxy.anyExec" [ label = "anyExec", color = "blue" ];
+  "AnyCallV6Proxy._isSet" [ label = "_isSet" ];
+  "AnyCallV6Proxy.calcUniqID" [ label = "calcUniqID" ];
+  "AnyCallV6Proxy.retryExec" [ label = "retryExec", color = "blue" ];
+  "AnyCallV6Proxy.deposit" [ label = "deposit", color = "blue" ];
+  "AnyCallV6Proxy.withdraw" [ label = "withdraw", color = "blue" ];
+  "AnyCallV6Proxy.withdrawAccruedFees" [ label = "withdrawAccruedFees", color = "blue" ];
+  "AnyCallV6Proxy.setBlacklist" [ label = "setBlacklist" ];
+  "AnyCallV6Proxy.setBlacklists" [ label = "setBlacklists", color = "blue" ];
+  "AnyCallV6Proxy.setPremium" [ label = "setPremium", color = "blue" ];
+  "AnyCallV6Proxy.setMinReserveBudget" [ label = "setMinReserveBudget", color = "blue" ];
+  "AnyCallV6Proxy.setMode" [ label = "setMode", color = "blue" ];
+  "AnyCallV6Proxy.changeMPC" [ label = "changeMPC", color = "blue" ];
+  "AnyCallV6Proxy.applyMPC" [ label = "applyMPC", color = "blue" ];
+  "AnyCallV6Proxy.setExecutor" [ label = "setExecutor", color = "blue" ];
+  "AnyCallV6Proxy.accruedFees" [ label = "accruedFees", color = "blue" ];
+  "AnyCallV6Proxy.premium" [ label = "premium", color = "blue" ];
+  "AnyCallV6Proxy.addAdmin" [ label = "addAdmin", color = "blue" ];
+  "AnyCallV6Proxy.removeAdmin" [ label = "removeAdmin", color = "blue" ];
+  "AnyCallV6Proxy.getAllAdmins" [ label = "getAllAdmins", color = "blue" ];
+  "AnyCallV6Proxy.initAppConfig" [ label = "initAppConfig", color = "blue" ];
+  "AnyCallV6Proxy.updateAppConfig" [ label = "updateAppConfig", color = "blue" ];
+  "AnyCallV6Proxy.upgradeApp" [ label = "upgradeApp", color = "blue" ];
+  "AnyCallV6Proxy.addWhitelist" [ label = "addWhitelist", color = "blue" ];
+  "AnyCallV6Proxy.removeWhitelist" [ label = "removeWhitelist", color = "blue" ];
+  "AnyCallV6Proxy._setAppWhitelist" [ label = "_setAppWhitelist" ];
+  "AnyCallV6Proxy.getHistoryWhitelistLength" [ label = "getHistoryWhitelistLength", color = "blue" ];
+  "AnyCallV6Proxy.getAllHistoryWhitelist" [ label = "getAllHistoryWhitelist", color = "blue" ];
+  "AnyCallV6Proxy.tidyHistoryWhitelist" [ label = "tidyHistoryWhitelist", color = "blue" ];
+  "AnyCallV6Proxy.setDefaultSrcFees" [ label = "setDefaultSrcFees", color = "blue" ];
+  "AnyCallV6Proxy.setCustomSrcFees" [ label = "setCustomSrcFees", color = "blue" ];
+  "AnyCallV6Proxy.setAppModes" [ label = "setAppModes", color = "blue" ];
+  "AnyCallV6Proxy.calcSrcFees" [ label = "calcSrcFees", color = "blue" ];
+  "AnyCallV6Proxy.isUseCustomSrcFees" [ label = "isUseCustomSrcFees", color = "green" ];
+  "AnyCallV6Proxy._calcSrcFees" [ label = "_calcSrcFees" ];
+  "AnyCallV6Proxy.address" [ label = "address" ];
+}
+
+  "AnyCallV6Proxy.<Constructor>";
+  "AnyCallV6Proxy.address";
+  "AnyCallV6Proxy.charge";
+  "AnyCallV6Proxy._isSet";
+  "AnyCallV6Proxy.anyCall";
+  "AnyCallV6Proxy._calcSrcFees";
+  "AnyCallV6Proxy._paySrcFees";
+  "AnyCallV6Proxy.anyExec";
+  "AnyCallV6Proxy.calcUniqID";
+  "AnyCallV6Proxy.retryExec";
+  "AnyCallV6Proxy.setBlacklists";
+  "AnyCallV6Proxy.setBlacklist";
+  "AnyCallV6Proxy.applyMPC";
+  "AnyCallV6Proxy.initAppConfig";
+  "AnyCallV6Proxy._setAppWhitelist";
+  "AnyCallV6Proxy.updateAppConfig";
+  "AnyCallV6Proxy.upgradeApp";
+  "AnyCallV6Proxy.addWhitelist";
+  "AnyCallV6Proxy.removeWhitelist";
+  "AnyCallV6Proxy.setCustomSrcFees";
+  "AnyCallV6Proxy.setAppModes";
+  "AnyCallV6Proxy.calcSrcFees";
+  "AnyCallV6Proxy.isUseCustomSrcFees";
+  "AnyCallV6Proxy.<Constructor>" -> "AnyCallV6Proxy.address" [ color = "green" ];
+  "AnyCallV6Proxy.<Constructor>" -> "AnyCallV6Proxy.address" [ color = "green" ];
+  "AnyCallV6Proxy.<Constructor>" -> "AnyCallV6Proxy.address" [ color = "green" ];
+  "AnyCallV6Proxy.charge" -> "AnyCallV6Proxy._isSet" [ color = "green" ];
+  "AnyCallV6Proxy.charge" -> "AnyCallV6Proxy._isSet" [ color = "green" ];
+  "AnyCallV6Proxy.anyCall" -> "AnyCallV6Proxy.address" [ color = "green" ];
+  "AnyCallV6Proxy.anyCall" -> "AnyCallV6Proxy._isSet" [ color = "green" ];
+  "AnyCallV6Proxy.anyCall" -> "AnyCallV6Proxy._isSet" [ color = "green" ];
+  "AnyCallV6Proxy.anyCall" -> "AnyCallV6Proxy.address" [ color = "green" ];
+  "AnyCallV6Proxy.anyCall" -> "AnyCallV6Proxy._isSet" [ color = "green" ];
+  "AnyCallV6Proxy.anyCall" -> "AnyCallV6Proxy._isSet" [ color = "green" ];
+  "AnyCallV6Proxy.anyCall" -> "AnyCallV6Proxy._calcSrcFees" [ color = "green" ];
+  "AnyCallV6Proxy.anyCall" -> "AnyCallV6Proxy._paySrcFees" [ color = "green" ];
+  "AnyCallV6Proxy.anyCall" -> "AnyCallV6Proxy._paySrcFees" [ color = "green" ];
+  "AnyCallV6Proxy.anyExec" -> "AnyCallV6Proxy.address" [ color = "green" ];
+  "AnyCallV6Proxy.anyExec" -> "AnyCallV6Proxy._isSet" [ color = "green" ];
+  "AnyCallV6Proxy.anyExec" -> "AnyCallV6Proxy.calcUniqID" [ color = "green" ];
+  "AnyCallV6Proxy.anyExec" -> "AnyCallV6Proxy._isSet" [ color = "green" ];
+  "AnyCallV6Proxy.anyExec" -> "AnyCallV6Proxy.address" [ color = "green" ];
+  "AnyCallV6Proxy.anyExec" -> "AnyCallV6Proxy.address" [ color = "green" ];
+  "AnyCallV6Proxy.retryExec" -> "AnyCallV6Proxy.calcUniqID" [ color = "green" ];
+  "AnyCallV6Proxy.retryExec" -> "AnyCallV6Proxy.address" [ color = "green" ];
+  "AnyCallV6Proxy.retryExec" -> "AnyCallV6Proxy.address" [ color = "green" ];
+  "AnyCallV6Proxy.setBlacklists" -> "AnyCallV6Proxy.setBlacklist" [ color = "green" ];
+  "AnyCallV6Proxy.applyMPC" -> "AnyCallV6Proxy.address" [ color = "green" ];
+  "AnyCallV6Proxy.initAppConfig" -> "AnyCallV6Proxy.address" [ color = "green" ];
+  "AnyCallV6Proxy.initAppConfig" -> "AnyCallV6Proxy.address" [ color = "green" ];
+  "AnyCallV6Proxy.initAppConfig" -> "AnyCallV6Proxy._setAppWhitelist" [ color = "green" ];
+  "AnyCallV6Proxy.updateAppConfig" -> "AnyCallV6Proxy.address" [ color = "green" ];
+  "AnyCallV6Proxy.updateAppConfig" -> "AnyCallV6Proxy.address" [ color = "green" ];
+  "AnyCallV6Proxy.updateAppConfig" -> "AnyCallV6Proxy._setAppWhitelist" [ color = "green" ];
+  "AnyCallV6Proxy.upgradeApp" -> "AnyCallV6Proxy.address" [ color = "green" ];
+  "AnyCallV6Proxy.addWhitelist" -> "AnyCallV6Proxy.address" [ color = "green" ];
+  "AnyCallV6Proxy.addWhitelist" -> "AnyCallV6Proxy._setAppWhitelist" [ color = "green" ];
+  "AnyCallV6Proxy.removeWhitelist" -> "AnyCallV6Proxy.address" [ color = "green" ];
+  "AnyCallV6Proxy.removeWhitelist" -> "AnyCallV6Proxy._setAppWhitelist" [ color = "green" ];
+  "AnyCallV6Proxy.setCustomSrcFees" -> "AnyCallV6Proxy.address" [ color = "green" ];
+  "AnyCallV6Proxy.setCustomSrcFees" -> "AnyCallV6Proxy._isSet" [ color = "green" ];
+  "AnyCallV6Proxy.setAppModes" -> "AnyCallV6Proxy.address" [ color = "green" ];
+  "AnyCallV6Proxy.calcSrcFees" -> "AnyCallV6Proxy._calcSrcFees" [ color = "green" ];
+  "AnyCallV6Proxy.calcSrcFees" -> "AnyCallV6Proxy._calcSrcFees" [ color = "green" ];
+  "AnyCallV6Proxy.isUseCustomSrcFees" -> "AnyCallV6Proxy._isSet" [ color = "green" ];
+  "AnyCallV6Proxy.isUseCustomSrcFees" -> "AnyCallV6Proxy._isSet" [ color = "green" ];
+  "AnyCallV6Proxy._calcSrcFees" -> "AnyCallV6Proxy.isUseCustomSrcFees" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

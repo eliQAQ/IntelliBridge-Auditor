@@ -1,0 +1,323 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_3392_AnyswapV3Router {
+label = "AnyswapV3Router"
+"3392_changeVault" [label="changeVault"]
+"3392_anySwapOutExactTokensForTokens" [label="anySwapOutExactTokensForTokens"]
+"3392_anySwapInExactTokensForTokens" [label="anySwapInExactTokensForTokens"]
+"3392_anySwapOut" [label="anySwapOut"]
+"3392_anySwapOutExactTokensForTokensUnderlyingWithPermit" [label="anySwapOutExactTokensForTokensUnderlyingWithPermit"]
+"3392_anySwapOutExactTokensForTokensUnderlying" [label="anySwapOutExactTokensForTokensUnderlying"]
+"3392_getAmountsOut" [label="getAmountsOut"]
+"3392_getAmountsIn" [label="getAmountsIn"]
+"3392_depositNative" [label="depositNative"]
+"3392_cID" [label="cID"]
+"3392_anySwapIn" [label="anySwapIn"]
+"3392_constructor" [label="constructor"]
+"3392_anySwapOutExactTokensForNativeUnderlying" [label="anySwapOutExactTokensForNativeUnderlying"]
+"3392_getAmountIn" [label="getAmountIn"]
+"3392_anySwapOutExactTokensForNativeUnderlyingWithPermit" [label="anySwapOutExactTokensForNativeUnderlyingWithPermit"]
+"3392_anySwapOutUnderlyingWithPermit" [label="anySwapOutUnderlyingWithPermit"]
+"3392_withdrawNative" [label="withdrawNative"]
+"3392_anySwapOutUnderlyingWithTransferPermit" [label="anySwapOutUnderlyingWithTransferPermit"]
+"3392__anySwapOut" [label="_anySwapOut"]
+"3392_anySwapInAuto" [label="anySwapInAuto"]
+"3392_anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" [label="anySwapOutExactTokensForTokensUnderlyingWithTransferPermit"]
+"3392_anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" [label="anySwapOutExactTokensForNativeUnderlyingWithTransferPermit"]
+"3392_changeMPC" [label="changeMPC"]
+"3392_quote" [label="quote"]
+"3392_mpc" [label="mpc"]
+"3392__anySwapIn" [label="_anySwapIn"]
+"3392_receive" [label="receive"]
+"3392_anySwapOutExactTokensForNative" [label="anySwapOutExactTokensForNative"]
+"3392_anySwapInExactTokensForNative" [label="anySwapInExactTokensForNative"]
+"3392_anySwapOutNative" [label="anySwapOutNative"]
+"3392_getAmountOut" [label="getAmountOut"]
+"3392_anySwapInUnderlying" [label="anySwapInUnderlying"]
+"3392__swap" [label="_swap"]
+"3392_anySwapOutUnderlying" [label="anySwapOutUnderlying"]
+"3392_anySwapFeeTo" [label="anySwapFeeTo"]
+"3392_anySwapInExactTokensForNative" -> "3392__anySwapIn"
+"3392_anySwapOutExactTokensForNativeUnderlying" -> "3392_cID"
+"3392_anySwapOutUnderlyingWithTransferPermit" -> "3392__anySwapOut"
+"3392_anySwapFeeTo" -> "3392_onlyMPC"
+"3392_anySwapOutExactTokensForTokensUnderlying" -> "3392_ensure"
+"3392_anySwapInAuto" -> "3392_onlyMPC"
+"3392_anySwapOut" -> "3392__anySwapOut"
+"3392_anySwapInUnderlying" -> "3392__anySwapIn"
+"3392_anySwapOutExactTokensForTokens" -> "3392_ensure"
+"3392_anySwapOutExactTokensForTokensUnderlyingWithPermit" -> "3392_cID"
+"3392_anySwapOutUnderlying" -> "3392__anySwapOut"
+"3392__anySwapOut" -> "3392_cID"
+"3392_anySwapOutUnderlyingWithPermit" -> "3392__anySwapOut"
+"3392_anySwapInExactTokensForTokens" -> "3392__swap"
+"3392_anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" -> "3392_ensure"
+"3392_anySwapOutExactTokensForNative" -> "3392_ensure"
+"3392_anySwapOutExactTokensForNativeUnderlyingWithPermit" -> "3392_ensure"
+"3392_anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" -> "3392_cID"
+"3392_anySwapInAuto" -> "3392__anySwapIn"
+"3392_changeMPC" -> "3392_mpc"
+"3392_anySwapInExactTokensForNative" -> "3392__swap"
+"3392_anySwapOutExactTokensForNativeUnderlying" -> "3392_ensure"
+"3392_changeMPC" -> "3392_cID"
+"3392_anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" -> "3392_ensure"
+"3392_anySwapInExactTokensForNative" -> "3392_ensure"
+"3392_anySwapIn" -> "3392__anySwapIn"
+"3392_anySwapOutExactTokensForNativeUnderlyingWithPermit" -> "3392_cID"
+"3392_anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" -> "3392_cID"
+"3392_anySwapOutExactTokensForTokensUnderlyingWithPermit" -> "3392_ensure"
+"3392_anySwapOutExactTokensForNative" -> "3392_cID"
+"3392_anySwapInUnderlying" -> "3392_onlyMPC"
+"3392_anySwapOutExactTokensForTokens" -> "3392_cID"
+"3392__anySwapIn" -> "3392_cID"
+"3392_anySwapIn" -> "3392_onlyMPC"
+"3392_anySwapInExactTokensForTokens" -> "3392_onlyMPC"
+"3392_anySwapInExactTokensForTokens" -> "3392_ensure"
+"3392_changeVault" -> "3392_onlyMPC"
+"3392_anySwapInExactTokensForNative" -> "3392_onlyMPC"
+"3392_anySwapOutNative" -> "3392__anySwapOut"
+"3392_anySwapFeeTo" -> "3392_mpc"
+"3392_changeMPC" -> "3392_onlyMPC"
+"3392_anySwapInExactTokensForTokens" -> "3392__anySwapIn"
+"3392_anySwapOutExactTokensForTokensUnderlying" -> "3392_cID"
+}subgraph cluster_1380_SafeERC20 {
+label = "SafeERC20"
+"1380_callOptionalReturn" [label="callOptionalReturn"]
+"1380_safeTransferFrom" [label="safeTransferFrom"]
+"1380_safeApprove" [label="safeApprove"]
+"1380_safeTransfer" [label="safeTransfer"]
+"1380_safeTransferFrom" -> "1380_callOptionalReturn"
+"1380_safeApprove" -> "1380_callOptionalReturn"
+"1380_safeTransfer" -> "1380_callOptionalReturn"
+}subgraph cluster_1032_IwNATIVE {
+label = "IwNATIVE"
+"1032_deposit" [label="deposit"]
+"1032_transfer" [label="transfer"]
+"1032_withdraw" [label="withdraw"]
+}subgraph cluster_1101_AnyswapV1ERC20 {
+label = "AnyswapV1ERC20"
+"1101_mint" [label="mint"]
+"1101_withdraw" [label="withdraw"]
+"1101_depositVault" [label="depositVault"]
+"1101_changeVault" [label="changeVault"]
+"1101_burn" [label="burn"]
+"1101_deposit" [label="deposit"]
+"1101_withdrawVault" [label="withdrawVault"]
+"1101_underlying" [label="underlying"]
+}subgraph cluster_943_TransferHelper {
+label = "TransferHelper"
+"943_safeTransferNative" [label="safeTransferNative"]
+"943_safeTransfer" [label="safeTransfer"]
+"943_safeApprove" [label="safeApprove"]
+"943_safeTransferFrom" [label="safeTransferFrom"]
+}subgraph cluster_1231_Address {
+label = "Address"
+"1231_isContract" [label="isContract"]
+}subgraph cluster_241_ISushiswapV2Pair {
+label = "ISushiswapV2Pair"
+"241_price1CumulativeLast" [label="price1CumulativeLast"]
+"241_skim" [label="skim"]
+"241_factory" [label="factory"]
+"241_sync" [label="sync"]
+"241_mint" [label="mint"]
+"241_getReserves" [label="getReserves"]
+"241_permit" [label="permit"]
+"241_allowance" [label="allowance"]
+"241_swap" [label="swap"]
+"241_decimals" [label="decimals"]
+"241_nonces" [label="nonces"]
+"241_name" [label="name"]
+"241_burn" [label="burn"]
+"241_DOMAIN_SEPARATOR" [label="DOMAIN_SEPARATOR"]
+"241_symbol" [label="symbol"]
+"241_totalSupply" [label="totalSupply"]
+"241_price0CumulativeLast" [label="price0CumulativeLast"]
+"241_token1" [label="token1"]
+"241_transfer" [label="transfer"]
+"241_approve" [label="approve"]
+"241_PERMIT_TYPEHASH" [label="PERMIT_TYPEHASH"]
+"241_transferFrom" [label="transferFrom"]
+"241_token0" [label="token0"]
+"241_initialize" [label="initialize"]
+"241_kLast" [label="kLast"]
+"241_MINIMUM_LIQUIDITY" [label="MINIMUM_LIQUIDITY"]
+"241_balanceOf" [label="balanceOf"]
+}subgraph cluster_785_SushiswapV2Library {
+label = "SushiswapV2Library"
+"785_getAmountsIn" [label="getAmountsIn"]
+"785_pairFor" [label="pairFor"]
+"785_sortTokens" [label="sortTokens"]
+"785_getReserves" [label="getReserves"]
+"785_getAmountsOut" [label="getAmountsOut"]
+"785_quote" [label="quote"]
+"785_getAmountIn" [label="getAmountIn"]
+"785_getAmountOut" [label="getAmountOut"]
+"785_getReserves" -> "785_pairFor"
+"785_getAmountsOut" -> "785_getAmountOut"
+"785_getAmountsOut" -> "785_getReserves"
+"785_pairFor" -> "785_sortTokens"
+"785_getAmountsIn" -> "785_getAmountIn"
+"785_getReserves" -> "785_sortTokens"
+"785_getAmountsIn" -> "785_getReserves"
+}subgraph cluster_1205_IERC20 {
+label = "IERC20"
+"1205_allowance" [label="allowance"]
+"1205_transfer" [label="transfer"]
+"1205_totalSupply" [label="totalSupply"]
+"1205_transferFrom" [label="transferFrom"]
+"1205_transferWithPermit" [label="transferWithPermit"]
+"1205_permit" [label="permit"]
+"1205_balanceOf" [label="balanceOf"]
+"1205_approve" [label="approve"]
+}subgraph cluster_1014_ISushiswapV2Factory {
+label = "ISushiswapV2Factory"
+"1014_migrator" [label="migrator"]
+"1014_setMigrator" [label="setMigrator"]
+"1014_getPair" [label="getPair"]
+"1014_allPairsLength" [label="allPairsLength"]
+"1014_allPairs" [label="allPairs"]
+"1014_feeTo" [label="feeTo"]
+"1014_setFeeToSetter" [label="setFeeToSetter"]
+"1014_createPair" [label="createPair"]
+"1014_setFeeTo" [label="setFeeTo"]
+"1014_feeToSetter" [label="feeToSetter"]
+}subgraph cluster_314_SafeMathSushiswap {
+label = "SafeMathSushiswap"
+"314_add" [label="add"]
+"314_sub" [label="sub"]
+"314_mul" [label="mul"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"chainid()" 
+"extcodehash(uint256)" 
+"abi.encodePacked()" 
+"keccak256(bytes)" 
+"require(bool,string)" 
+"abi.encodeWithSelector()" 
+"abi.decode()" 
+"assert(bool)" 
+"943_safeTransferNative" -> "require(bool,string)"
+"785_quote" -> "require(bool,string)"
+"3392_changeVault" -> "require(bool,string)"
+"314_sub" -> "require(bool,string)"
+"3392_depositNative" -> "require(bool,string)"
+"943_safeTransferFrom" -> "abi.encodeWithSelector()"
+"785_getAmountsIn" -> "require(bool,string)"
+"1380_callOptionalReturn" -> "require(bool,string)"
+"314_mul" -> "require(bool,string)"
+"943_safeApprove" -> "abi.encodeWithSelector()"
+"1380_safeApprove" -> "require(bool,string)"
+"943_safeTransferFrom" -> "abi.decode()"
+"1380_callOptionalReturn" -> "abi.decode()"
+"1380_safeApprove" -> "abi.encodeWithSelector()"
+"1380_safeTransfer" -> "abi.encodeWithSelector()"
+"314_add" -> "require(bool,string)"
+"3392_cID" -> "chainid()"
+"1380_safeTransferFrom" -> "abi.encodeWithSelector()"
+"785_getAmountsOut" -> "require(bool,string)"
+"3392_anySwapInExactTokensForNative" -> "require(bool,string)"
+"943_safeTransfer" -> "abi.decode()"
+"943_safeTransfer" -> "require(bool,string)"
+"3392_anySwapOutNative" -> "require(bool,string)"
+"943_safeApprove" -> "abi.decode()"
+"3392_anySwapInExactTokensForTokens" -> "require(bool,string)"
+"943_safeTransfer" -> "abi.encodeWithSelector()"
+"3392_anySwapOutNative" -> "assert(bool)"
+"785_pairFor" -> "keccak256(bytes)"
+"3392_withdrawNative" -> "require(bool,string)"
+"3392_changeMPC" -> "require(bool,string)"
+"785_pairFor" -> "abi.encodePacked()"
+"785_getAmountIn" -> "require(bool,string)"
+"785_sortTokens" -> "require(bool,string)"
+"3392_receive" -> "assert(bool)"
+"1231_isContract" -> "extcodehash(uint256)"
+"785_getAmountOut" -> "require(bool,string)"
+"943_safeTransferFrom" -> "require(bool,string)"
+"3392_depositNative" -> "assert(bool)"
+"943_safeApprove" -> "require(bool,string)"
+}"3392_anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" -> "1101_depositVault"
+"3392_withdrawNative" -> "1101_withdrawVault"
+"3392_anySwapOutNative" -> "1032_transfer"
+"3392_anySwapInAuto" -> "1101_underlying"
+"3392_anySwapOutExactTokensForNativeUnderlying" -> "1101_burn"
+"3392_depositNative" -> "1032_deposit"
+"3392__swap" -> "785_sortTokens"
+"3392_getAmountsOut" -> "785_getAmountsOut"
+"3392_anySwapInAuto" -> "943_safeTransferNative"
+"3392_anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" -> "1101_underlying"
+"3392_anySwapInUnderlying" -> "1101_withdrawVault"
+"3392_depositNative" -> "1032_transfer"
+"3392_anySwapOutExactTokensForTokensUnderlying" -> "1101_underlying"
+"3392_anySwapOutUnderlyingWithPermit" -> "1380_safeTransferFrom"
+"3392__anySwapOut" -> "1101_burn"
+"3392_anySwapOutExactTokensForTokensUnderlyingWithPermit" -> "1101_burn"
+"3392_getAmountsIn" -> "785_getAmountsIn"
+"3392_anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" -> "1101_burn"
+"3392_depositNative" -> "1101_depositVault"
+"3392_anySwapOutUnderlying" -> "1101_depositVault"
+"3392_anySwapOutExactTokensForNative" -> "1101_burn"
+"3392_anySwapInAuto" -> "1205_balanceOf"
+"3392_anySwapOutExactTokensForTokensUnderlying" -> "1380_safeTransferFrom"
+"3392_anySwapOutExactTokensForNativeUnderlyingWithPermit" -> "1205_permit"
+"785_getAmountIn" -> "314_add"
+"3392_anySwapInExactTokensForNative" -> "1032_withdraw"
+"3392__swap" -> "785_pairFor"
+"3392_withdrawNative" -> "1032_withdraw"
+"3392_anySwapOutExactTokensForNativeUnderlying" -> "1380_safeTransferFrom"
+"3392_anySwapOutExactTokensForTokensUnderlyingWithPermit" -> "1101_underlying"
+"3392_anySwapOutExactTokensForNativeUnderlyingWithPermit" -> "1101_depositVault"
+"3392__swap" -> "241_swap"
+"3392_anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" -> "1205_transferWithPermit"
+"785_getAmountIn" -> "314_sub"
+"3392_anySwapOutExactTokensForTokensUnderlyingWithPermit" -> "1205_permit"
+"3392_getAmountIn" -> "785_getAmountIn"
+"3392_anySwapFeeTo" -> "1101_withdrawVault"
+"3392_anySwapOutExactTokensForTokensUnderlyingWithPermit" -> "1101_depositVault"
+"3392_anySwapOutExactTokensForNativeUnderlyingWithPermit" -> "1101_underlying"
+"3392_anySwapOutExactTokensForTokensUnderlyingWithPermit" -> "1380_safeTransferFrom"
+"3392_anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" -> "1101_underlying"
+"1380_safeApprove" -> "1205_allowance"
+"785_getReserves" -> "241_getReserves"
+"3392_anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" -> "1205_transferWithPermit"
+"3392_anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" -> "1101_burn"
+"3392_anySwapOutExactTokensForNativeUnderlyingWithPermit" -> "1380_safeTransferFrom"
+"3392_anySwapOutUnderlyingWithPermit" -> "1205_permit"
+"3392_anySwapInExactTokensForNative" -> "785_pairFor"
+"3392_anySwapOutExactTokensForTokensUnderlying" -> "1101_burn"
+"3392_anySwapInAuto" -> "1101_withdrawVault"
+"3392_anySwapOutExactTokensForTokensUnderlying" -> "1101_depositVault"
+"3392_withdrawNative" -> "943_safeTransferNative"
+"3392_anySwapOutNative" -> "1032_deposit"
+"785_getAmountOut" -> "314_mul"
+"3392_anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" -> "1101_depositVault"
+"785_quote" -> "314_mul"
+"3392_quote" -> "785_quote"
+"1380_callOptionalReturn" -> "1231_isContract"
+"3392_anySwapOutUnderlyingWithPermit" -> "1101_depositVault"
+"3392_anySwapOutUnderlyingWithTransferPermit" -> "1101_depositVault"
+"3392_anySwapInAuto" -> "1032_withdraw"
+"3392_anySwapOutUnderlying" -> "1101_underlying"
+"3392_anySwapFeeTo" -> "1101_mint"
+"3392_anySwapInExactTokensForTokens" -> "785_getAmountsOut"
+"3392_withdrawNative" -> "1101_underlying"
+"3392_depositNative" -> "1101_underlying"
+"3392_anySwapInExactTokensForNative" -> "785_getAmountsOut"
+"3392_anySwapOutUnderlyingWithTransferPermit" -> "1205_transferWithPermit"
+"3392_anySwapOutExactTokensForNativeUnderlying" -> "1101_underlying"
+"785_getAmountOut" -> "314_add"
+"3392_getAmountOut" -> "785_getAmountOut"
+"3392_changeVault" -> "1101_changeVault"
+"3392__anySwapIn" -> "1101_mint"
+"3392_anySwapOutNative" -> "1101_depositVault"
+"3392_anySwapInExactTokensForNative" -> "943_safeTransferNative"
+"3392_anySwapOutUnderlyingWithTransferPermit" -> "1101_underlying"
+"3392_anySwapOutExactTokensForNativeUnderlyingWithPermit" -> "1101_burn"
+"3392_anySwapOutExactTokensForTokens" -> "1101_burn"
+"3392_anySwapInExactTokensForTokens" -> "785_pairFor"
+"3392_anySwapOutExactTokensForNativeUnderlying" -> "1101_depositVault"
+"3392_anySwapOutNative" -> "1101_underlying"
+"3392_anySwapOutUnderlyingWithPermit" -> "1101_underlying"
+"3392_anySwapOutUnderlying" -> "1380_safeTransferFrom"
+"785_getAmountIn" -> "314_mul"
+}

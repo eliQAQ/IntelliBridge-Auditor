@@ -1,0 +1,37 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_216_AnyCallReceiver {
+label = "AnyCallReceiver"
+"216_setAnyCallProxy" [label="setAnyCallProxy"]
+"216__anyExecute" [label="_anyExecute"]
+"216_anyExecute" [label="anyExecute"]
+"216_constructor" [label="constructor"]
+"216_withdrawAnyCallFee" [label="withdrawAnyCallFee"]
+"216_depositAnyCallFee" [label="depositAnyCallFee"]
+"216_setSenders" [label="setSenders"]
+"216_approve" [label="approve"]
+"216_setAnyCallProxy" -> "216_onlyAdmin"
+"216_approve" -> "216_onlyAdmin"
+"216_withdrawAnyCallFee" -> "216_onlyAdmin"
+"216_anyExecute" -> "216_onlyExecutor"
+"216_setSenders" -> "216_onlyAdmin"
+"216_anyExecute" -> "216__anyExecute"
+}subgraph cluster_309_Administrable {
+label = "Administrable"
+"309_acceptAdmin" [label="acceptAdmin"]
+"309_transferAdmin" [label="transferAdmin"]
+"309_setAdmin" [label="setAdmin"]
+"309_transferAdmin" -> "309_onlyAdmin"
+}subgraph cluster_381_IAnyCallReceiver {
+label = "IAnyCallReceiver"
+"381_anyExecute" [label="anyExecute"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"require(bool)" 
+"216_withdrawAnyCallFee" -> "require(bool)"
+"216_anyExecute" -> "require(bool,string)"
+"309_acceptAdmin" -> "require(bool)"
+}
+}

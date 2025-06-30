@@ -1,0 +1,89 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_74_IERC20 {
+label = "IERC20"
+"74_allowance" [label="allowance"]
+"74_balanceOf" [label="balanceOf"]
+"74_totalSupply" [label="totalSupply"]
+"74_decimals" [label="decimals"]
+"74_approve" [label="approve"]
+"74_transferFrom" [label="transferFrom"]
+"74_transfer" [label="transfer"]
+}subgraph cluster_1445_AnyswapV6ERC20 {
+label = "AnyswapV6ERC20"
+"1445_burn" [label="burn"]
+"1445_Swapout" [label="Swapout"]
+"1445_Swapin" [label="Swapin"]
+"1445_applyMinter" [label="applyMinter"]
+"1445_revokeMinter" [label="revokeMinter"]
+"1445_getAllMinters" [label="getAllMinters"]
+"1445__burn" [label="_burn"]
+"1445_setVaultOnly" [label="setVaultOnly"]
+"1445_withdraw" [label="withdraw"]
+"1445_owner" [label="owner"]
+"1445__mint" [label="_mint"]
+"1445_initVault" [label="initVault"]
+"1445_setVault" [label="setVault"]
+"1445_mpc" [label="mpc"]
+"1445_setMinter" [label="setMinter"]
+"1445_depositVault" [label="depositVault"]
+"1445_totalSupply" [label="totalSupply"]
+"1445_slitherConstructorConstantVariables" [label="slitherConstructorConstantVariables"]
+"1445_transferFrom" [label="transferFrom"]
+"1445_constructor" [label="constructor"]
+"1445_withdrawVault" [label="withdrawVault"]
+"1445__withdraw" [label="_withdraw"]
+"1445_deposit" [label="deposit"]
+"1445_approve" [label="approve"]
+"1445__deposit" [label="_deposit"]
+"1445_transfer" [label="transfer"]
+"1445_applyVault" [label="applyVault"]
+"1445_mint" [label="mint"]
+"1445_changeVault" [label="changeVault"]
+"1445_Swapin" -> "1445_onlyAuth"
+"1445_withdraw" -> "1445__withdraw"
+"1445_initVault" -> "1445_onlyVault"
+"1445_burn" -> "1445_onlyAuth"
+"1445_withdrawVault" -> "1445__withdraw"
+"1445__deposit" -> "1445__mint"
+"1445_revokeMinter" -> "1445_onlyVault"
+"1445_setMinter" -> "1445_onlyVault"
+"1445__withdraw" -> "1445__burn"
+"1445_setVault" -> "1445_onlyVault"
+"1445_depositVault" -> "1445_onlyVault"
+"1445_mint" -> "1445_onlyAuth"
+"1445_applyMinter" -> "1445_onlyVault"
+"1445_withdrawVault" -> "1445_onlyVault"
+"1445_setVaultOnly" -> "1445_onlyVault"
+"1445_deposit" -> "1445__deposit"
+"1445_changeVault" -> "1445_onlyVault"
+"1445_depositVault" -> "1445__deposit"
+"1445_applyVault" -> "1445_onlyVault"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool)" 
+"require(bool,string)" 
+"1445_Swapin" -> "require(bool)"
+"1445_transfer" -> "require(bool)"
+"1445_setMinter" -> "require(bool,string)"
+"1445_Swapout" -> "require(bool,string)"
+"1445_transferFrom" -> "require(bool)"
+"1445_transferFrom" -> "require(bool,string)"
+"1445_burn" -> "require(bool)"
+"1445__burn" -> "require(bool,string)"
+"1445_constructor" -> "require(bool)"
+"1445__deposit" -> "require(bool)"
+"1445__mint" -> "require(bool,string)"
+"1445_applyVault" -> "require(bool)"
+"1445_mint" -> "require(bool)"
+"1445__withdraw" -> "require(bool)"
+"1445_changeVault" -> "require(bool,string)"
+"1445_setVault" -> "require(bool,string)"
+"1445_initVault" -> "require(bool)"
+"1445_transfer" -> "require(bool,string)"
+"1445_Swapout" -> "require(bool)"
+"1445_applyMinter" -> "require(bool)"
+}"1445_constructor" -> "74_decimals"
+"1445_deposit" -> "74_balanceOf"
+}

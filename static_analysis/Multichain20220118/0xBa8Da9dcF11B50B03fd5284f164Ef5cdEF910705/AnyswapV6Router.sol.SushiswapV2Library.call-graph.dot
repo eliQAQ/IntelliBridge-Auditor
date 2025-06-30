@@ -1,0 +1,35 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_569_SushiswapV2Library {
+label = "SushiswapV2Library"
+"569_sortTokens" [label="sortTokens"]
+"569_getAmountsOut" [label="getAmountsOut"]
+"569_quote" [label="quote"]
+"569_getAmountIn" [label="getAmountIn"]
+"569_getAmountsIn" [label="getAmountsIn"]
+"569_getReserves" [label="getReserves"]
+"569_pairFor" [label="pairFor"]
+"569_getAmountOut" [label="getAmountOut"]
+"569_getReserves" -> "569_pairFor"
+"569_pairFor" -> "569_sortTokens"
+"569_getReserves" -> "569_sortTokens"
+"569_getAmountsOut" -> "569_getAmountOut"
+"569_getAmountsIn" -> "569_getReserves"
+"569_getAmountsIn" -> "569_getAmountIn"
+"569_getAmountsOut" -> "569_getReserves"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"abi.encodePacked()" 
+"require(bool,string)" 
+"keccak256(bytes)" 
+"569_getAmountOut" -> "require(bool,string)"
+"569_getAmountsOut" -> "require(bool,string)"
+"569_getAmountsIn" -> "require(bool,string)"
+"569_getAmountIn" -> "require(bool,string)"
+"569_pairFor" -> "abi.encodePacked()"
+"569_quote" -> "require(bool,string)"
+"569_sortTokens" -> "require(bool,string)"
+"569_pairFor" -> "keccak256(bytes)"
+}
+}

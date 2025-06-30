@@ -1,0 +1,99 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_74_IERC20 {
+label = "IERC20"
+"74_decimals" [label="decimals"]
+"74_transfer" [label="transfer"]
+"74_allowance" [label="allowance"]
+"74_balanceOf" [label="balanceOf"]
+"74_approve" [label="approve"]
+"74_transferFrom" [label="transferFrom"]
+"74_totalSupply" [label="totalSupply"]
+}subgraph cluster_1501_AnyswapV6ERC20 {
+label = "AnyswapV6ERC20"
+"1501_Swapout" [label="Swapout"]
+"1501__withdraw" [label="_withdraw"]
+"1501_changeVault" [label="changeVault"]
+"1501_getAllMinters" [label="getAllMinters"]
+"1501_transfer" [label="transfer"]
+"1501_applyVault" [label="applyVault"]
+"1501_burn" [label="burn"]
+"1501__deposit" [label="_deposit"]
+"1501_withdrawVault" [label="withdrawVault"]
+"1501_depositVault" [label="depositVault"]
+"1501_transferFrom" [label="transferFrom"]
+"1501_withdraw" [label="withdraw"]
+"1501__mint" [label="_mint"]
+"1501__burn" [label="_burn"]
+"1501_owner" [label="owner"]
+"1501_mint" [label="mint"]
+"1501_applyMinter" [label="applyMinter"]
+"1501_deposit" [label="deposit"]
+"1501_approve" [label="approve"]
+"1501__swapin" [label="_swapin"]
+"1501__swapout" [label="_swapout"]
+"1501_revokeMinter" [label="revokeMinter"]
+"1501_Swapin" [label="Swapin"]
+"1501_setWrapper" [label="setWrapper"]
+"1501_slitherConstructorConstantVariables" [label="slitherConstructorConstantVariables"]
+"1501_setMinter" [label="setMinter"]
+"1501_constructor" [label="constructor"]
+"1501_setVault" [label="setVault"]
+"1501_mpc" [label="mpc"]
+"1501_totalSupply" [label="totalSupply"]
+"1501_initVault" [label="initVault"]
+"1501_setVaultOnly" [label="setVaultOnly"]
+"1501_refundCanonicalToken" [label="refundCanonicalToken"]
+"1501__swapin" -> "1501__mint"
+"1501_setWrapper" -> "1501_onlyVault"
+"1501_initVault" -> "1501_onlyVault"
+"1501__swapout" -> "1501__burn"
+"1501_depositVault" -> "1501_onlyVault"
+"1501__withdraw" -> "1501__burn"
+"1501_changeVault" -> "1501_onlyVault"
+"1501_deposit" -> "1501__deposit"
+"1501_withdraw" -> "1501__withdraw"
+"1501__deposit" -> "1501__mint"
+"1501_setMinter" -> "1501_onlyVault"
+"1501_revokeMinter" -> "1501_onlyVault"
+"1501_withdrawVault" -> "1501__withdraw"
+"1501_setVaultOnly" -> "1501_onlyVault"
+"1501_setVault" -> "1501_onlyVault"
+"1501_Swapout" -> "1501__swapout"
+"1501_mint" -> "1501_onlyAuth"
+"1501_Swapin" -> "1501_onlyAuth"
+"1501_refundCanonicalToken" -> "1501__burn"
+"1501_applyVault" -> "1501_onlyVault"
+"1501_burn" -> "1501__swapout"
+"1501_applyMinter" -> "1501_onlyVault"
+"1501_depositVault" -> "1501__deposit"
+"1501_Swapin" -> "1501__swapin"
+"1501_mint" -> "1501__swapin"
+"1501_burn" -> "1501_onlyAuth"
+"1501_withdrawVault" -> "1501_onlyVault"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool)" 
+"require(bool,string)" 
+"1501_setVault" -> "require(bool,string)"
+"1501_constructor" -> "require(bool,string)"
+"1501_changeVault" -> "require(bool,string)"
+"1501_transfer" -> "require(bool,string)"
+"1501_initVault" -> "require(bool)"
+"1501_applyVault" -> "require(bool)"
+"1501_Swapout" -> "require(bool,string)"
+"1501_transferFrom" -> "require(bool,string)"
+"1501_refundCanonicalToken" -> "require(bool,string)"
+"1501_setMinter" -> "require(bool,string)"
+"1501__mint" -> "require(bool,string)"
+"1501_applyMinter" -> "require(bool)"
+"1501__burn" -> "require(bool,string)"
+"1501_transfer" -> "require(bool)"
+"1501_transferFrom" -> "require(bool)"
+}"1501_deposit" -> "74_balanceOf"
+"1501__swapin" -> "1501_transfer"
+"1501__swapin" -> "74_balanceOf"
+"1501_constructor" -> "74_decimals"
+"1501_refundCanonicalToken" -> "74_balanceOf"
+}

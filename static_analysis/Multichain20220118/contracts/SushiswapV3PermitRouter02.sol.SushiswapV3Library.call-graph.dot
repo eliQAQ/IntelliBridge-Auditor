@@ -1,0 +1,35 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_786_SushiswapV3Library {
+label = "SushiswapV3Library"
+"786_getAmountIn" [label="getAmountIn"]
+"786_getAmountsOut" [label="getAmountsOut"]
+"786_pairFor" [label="pairFor"]
+"786_quote" [label="quote"]
+"786_getAmountsIn" [label="getAmountsIn"]
+"786_getAmountOut" [label="getAmountOut"]
+"786_getReserves" [label="getReserves"]
+"786_sortTokens" [label="sortTokens"]
+"786_getAmountsOut" -> "786_getReserves"
+"786_getAmountsIn" -> "786_getReserves"
+"786_getAmountsIn" -> "786_getAmountIn"
+"786_getAmountsOut" -> "786_getAmountOut"
+"786_getReserves" -> "786_sortTokens"
+"786_getReserves" -> "786_pairFor"
+"786_pairFor" -> "786_sortTokens"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"abi.encodePacked()" 
+"keccak256(bytes)" 
+"require(bool,string)" 
+"786_getAmountsIn" -> "require(bool,string)"
+"786_quote" -> "require(bool,string)"
+"786_getAmountOut" -> "require(bool,string)"
+"786_pairFor" -> "keccak256(bytes)"
+"786_pairFor" -> "abi.encodePacked()"
+"786_sortTokens" -> "require(bool,string)"
+"786_getAmountIn" -> "require(bool,string)"
+"786_getAmountsOut" -> "require(bool,string)"
+}
+}

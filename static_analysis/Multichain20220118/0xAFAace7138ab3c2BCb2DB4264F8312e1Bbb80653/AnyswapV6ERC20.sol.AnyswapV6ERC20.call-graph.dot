@@ -1,0 +1,135 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_120_IERC2612 {
+label = "IERC2612"
+"120_nonces" [label="nonces"]
+"120_permit" [label="permit"]
+"120_transferWithPermit" [label="transferWithPermit"]
+}subgraph cluster_74_IERC20 {
+label = "IERC20"
+"74_transfer" [label="transfer"]
+"74_decimals" [label="decimals"]
+"74_balanceOf" [label="balanceOf"]
+"74_allowance" [label="allowance"]
+"74_totalSupply" [label="totalSupply"]
+"74_approve" [label="approve"]
+"74_transferFrom" [label="transferFrom"]
+}subgraph cluster_1872_AnyswapV6ERC20 {
+label = "AnyswapV6ERC20"
+"1872_changeVault" [label="changeVault"]
+"1872_applyMinter" [label="applyMinter"]
+"1872_transferAndCall" [label="transferAndCall"]
+"1872__mint" [label="_mint"]
+"1872_initVault" [label="initVault"]
+"1872_mpc" [label="mpc"]
+"1872__withdraw" [label="_withdraw"]
+"1872_getAllMinters" [label="getAllMinters"]
+"1872_permit" [label="permit"]
+"1872_approve" [label="approve"]
+"1872_burn" [label="burn"]
+"1872_deposit" [label="deposit"]
+"1872_withdrawVault" [label="withdrawVault"]
+"1872_withdraw" [label="withdraw"]
+"1872_verifyEIP712" [label="verifyEIP712"]
+"1872_mint" [label="mint"]
+"1872_slitherConstructorConstantVariables" [label="slitherConstructorConstantVariables"]
+"1872_owner" [label="owner"]
+"1872_constructor" [label="constructor"]
+"1872_totalSupply" [label="totalSupply"]
+"1872_depositVault" [label="depositVault"]
+"1872_Swapin" [label="Swapin"]
+"1872_setMinter" [label="setMinter"]
+"1872_Swapout" [label="Swapout"]
+"1872_setVault" [label="setVault"]
+"1872_transferFrom" [label="transferFrom"]
+"1872_verifyPersonalSign" [label="verifyPersonalSign"]
+"1872_transfer" [label="transfer"]
+"1872_slitherConstructorVariables" [label="slitherConstructorVariables"]
+"1872_revokeMinter" [label="revokeMinter"]
+"1872_transferWithPermit" [label="transferWithPermit"]
+"1872__burn" [label="_burn"]
+"1872_setVaultOnly" [label="setVaultOnly"]
+"1872_approveAndCall" [label="approveAndCall"]
+"1872_applyVault" [label="applyVault"]
+"1872__deposit" [label="_deposit"]
+"1872_mint" -> "1872__mint"
+"1872_setVault" -> "1872_onlyVault"
+"1872_burn" -> "1872__burn"
+"1872_initVault" -> "1872_onlyVault"
+"1872_withdraw" -> "1872__withdraw"
+"1872_burn" -> "1872_onlyAuth"
+"1872_withdrawVault" -> "1872__withdraw"
+"1872_owner" -> "1872_mpc"
+"1872_setVaultOnly" -> "1872_onlyVault"
+"1872__withdraw" -> "1872__burn"
+"1872_revokeMinter" -> "1872_onlyVault"
+"1872_Swapin" -> "1872__mint"
+"1872_deposit" -> "1872__deposit"
+"1872_withdrawVault" -> "1872_onlyVault"
+"1872_transferWithPermit" -> "1872_verifyPersonalSign"
+"1872_Swapout" -> "1872__burn"
+"1872_changeVault" -> "1872_onlyVault"
+"1872_transferWithPermit" -> "1872_verifyEIP712"
+"1872_applyVault" -> "1872_onlyVault"
+"1872_mint" -> "1872_onlyAuth"
+"1872_Swapin" -> "1872_onlyAuth"
+"1872_setMinter" -> "1872_onlyVault"
+"1872_permit" -> "1872_verifyEIP712"
+"1872_applyMinter" -> "1872_onlyVault"
+"1872_depositVault" -> "1872__deposit"
+"1872_permit" -> "1872_verifyPersonalSign"
+"1872__deposit" -> "1872__mint"
+"1872_depositVault" -> "1872_onlyVault"
+}subgraph cluster_150_IAnyswapV3ERC20 {
+label = "IAnyswapV3ERC20"
+"150_approveAndCall" [label="approveAndCall"]
+"150_transferAndCall" [label="transferAndCall"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"abi.encodePacked()" 
+"abi.encode()" 
+"ecrecover(bytes32,uint8,bytes32,bytes32)" 
+"require(bool,string)" 
+"keccak256(bytes)" 
+"chainid()" 
+"require(bool)" 
+"1872_transferAndCall" -> "require(bool,string)"
+"1872_verifyEIP712" -> "keccak256(bytes)"
+"1872_transferAndCall" -> "require(bool)"
+"1872_transfer" -> "require(bool)"
+"1872_setMinter" -> "require(bool,string)"
+"1872_transferFrom" -> "require(bool)"
+"1872_initVault" -> "require(bool)"
+"1872_transferWithPermit" -> "require(bool,string)"
+"1872_constructor" -> "require(bool)"
+"1872_verifyEIP712" -> "ecrecover(bytes32,uint8,bytes32,bytes32)"
+"1872__mint" -> "require(bool,string)"
+"1872_applyMinter" -> "require(bool)"
+"1872_permit" -> "abi.encode()"
+"1872_constructor" -> "abi.encode()"
+"1872_verifyPersonalSign" -> "abi.encodePacked()"
+"1872__deposit" -> "require(bool)"
+"1872_permit" -> "keccak256(bytes)"
+"1872_slitherConstructorConstantVariables" -> "keccak256(bytes)"
+"1872_applyVault" -> "require(bool)"
+"1872_transferFrom" -> "require(bool,string)"
+"1872_Swapout" -> "require(bool,string)"
+"1872_transferWithPermit" -> "abi.encode()"
+"1872_transferWithPermit" -> "require(bool)"
+"1872_permit" -> "require(bool)"
+"1872_verifyPersonalSign" -> "keccak256(bytes)"
+"1872_constructor" -> "keccak256(bytes)"
+"1872_burn" -> "require(bool,string)"
+"1872_verifyEIP712" -> "abi.encodePacked()"
+"1872_transferWithPermit" -> "keccak256(bytes)"
+"1872_permit" -> "require(bool,string)"
+"1872_constructor" -> "chainid()"
+"1872_transfer" -> "require(bool,string)"
+"1872_setVault" -> "require(bool,string)"
+"1872__burn" -> "require(bool,string)"
+"1872_verifyPersonalSign" -> "ecrecover(bytes32,uint8,bytes32,bytes32)"
+"1872_changeVault" -> "require(bool,string)"
+}"1872_deposit" -> "74_balanceOf"
+"1872_constructor" -> "74_decimals"
+}

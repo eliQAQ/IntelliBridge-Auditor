@@ -1,0 +1,54 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_886_AnyCallProxy {
+label = "AnyCallProxy"
+"886_premium" [label="premium"]
+"886_slitherConstructorVariables" [label="slitherConstructorVariables"]
+"886_setWhitelist" [label="setWhitelist"]
+"886_removeAdmin" [label="removeAdmin"]
+"886_anyCall" [label="anyCall"]
+"886_slitherConstructorConstantVariables" [label="slitherConstructorConstantVariables"]
+"886_withdrawAccruedFees" [label="withdrawAccruedFees"]
+"886_setBlacklists" [label="setBlacklists"]
+"886_constructor" [label="constructor"]
+"886_setPremium" [label="setPremium"]
+"886_changeMPC" [label="changeMPC"]
+"886_accruedFees" [label="accruedFees"]
+"886_withdraw" [label="withdraw"]
+"886_deposit" [label="deposit"]
+"886_getAllAdmins" [label="getAllAdmins"]
+"886_setWhitelists" [label="setWhitelists"]
+"886_setBlacklist" [label="setBlacklist"]
+"886_setMinReserveBudget" [label="setMinReserveBudget"]
+"886_setPaused" [label="setPaused"]
+"886_anyExec" [label="anyExec"]
+"886_addAdmin" [label="addAdmin"]
+"886_anyExec" -> "886_onlyMPC"
+"886_removeAdmin" -> "886_onlyMPC"
+"886_setPaused" -> "886_onlyAdmin"
+"886_anyExec" -> "886_whenNotPaused"
+"886_setWhitelists" -> "886_onlyAdmin"
+"886_setBlacklists" -> "886_onlyAdmin"
+"886_anyExec" -> "886_charge"
+"886_setBlacklist" -> "886_onlyAdmin"
+"886_changeMPC" -> "886_onlyMPC"
+"886_setWhitelist" -> "886_onlyAdmin"
+"886_anyCall" -> "886_whenNotPaused"
+"886_setPremium" -> "886_onlyMPC"
+"886_setMinReserveBudget" -> "886_onlyMPC"
+"886_addAdmin" -> "886_onlyMPC"
+"886_anyExec" -> "886_lock"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"abi.encodeWithSignature()" 
+"require(bool)" 
+"886_addAdmin" -> "require(bool)"
+"886_withdraw" -> "require(bool)"
+"886_anyCall" -> "require(bool)"
+"886_removeAdmin" -> "require(bool)"
+"886_withdrawAccruedFees" -> "require(bool)"
+"886_setWhitelists" -> "require(bool)"
+"886_anyExec" -> "abi.encodeWithSignature()"
+}
+}

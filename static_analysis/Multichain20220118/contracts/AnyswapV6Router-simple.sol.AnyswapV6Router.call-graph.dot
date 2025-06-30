@@ -1,0 +1,68 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_1438_AnyswapV6Router {
+label = "AnyswapV6Router"
+"1438_changeVault" [label="changeVault"]
+"1438_constructor" [label="constructor"]
+"1438__anySwapOutUnderlying" [label="_anySwapOutUnderlying"]
+"1438_withdrawNative" [label="withdrawNative"]
+"1438_anySwapOutUnderlying" [label="anySwapOutUnderlying"]
+"1438_receive" [label="receive"]
+"1438_anySwapOut" [label="anySwapOut"]
+"1438_applyMinter" [label="applyMinter"]
+"1438__anySwapOut" [label="_anySwapOut"]
+"1438_depositNative" [label="depositNative"]
+"1438_anySwapInAuto" [label="anySwapInAuto"]
+"1438_mpc" [label="mpc"]
+"1438_changeMPC" [label="changeMPC"]
+"1438__anySwapIn" [label="_anySwapIn"]
+"1438_setMinter" [label="setMinter"]
+"1438_anySwapIn" [label="anySwapIn"]
+"1438_revokeMinter" [label="revokeMinter"]
+"1438_anySwapInUnderlying" [label="anySwapInUnderlying"]
+"1438_slitherConstructorConstantVariables" [label="slitherConstructorConstantVariables"]
+"1438_cID" [label="cID"]
+"1438_anySwapOutNative" [label="anySwapOutNative"]
+"1438__anySwapOutNative" [label="_anySwapOutNative"]
+"1438_anySwapFeeTo" [label="anySwapFeeTo"]
+"1438_changeMPC" -> "1438_cID"
+"1438_revokeMinter" -> "1438_onlyMPC"
+"1438_anySwapFeeTo" -> "1438_onlyMPC"
+"1438_anySwapOut" -> "1438__anySwapOut"
+"1438_anySwapInUnderlying" -> "1438_onlyMPC"
+"1438_changeMPC" -> "1438_onlyMPC"
+"1438_changeVault" -> "1438_onlyMPC"
+"1438_anySwapInUnderlying" -> "1438__anySwapIn"
+"1438_anySwapOutUnderlying" -> "1438_cID"
+"1438_anySwapOutNative" -> "1438_cID"
+"1438_anySwapOutUnderlying" -> "1438__anySwapOutUnderlying"
+"1438_anySwapOut" -> "1438_cID"
+"1438_changeMPC" -> "1438_mpc"
+"1438__anySwapOut" -> "1438_cID"
+"1438_anySwapFeeTo" -> "1438_mpc"
+"1438_setMinter" -> "1438_onlyMPC"
+"1438__anySwapIn" -> "1438_cID"
+"1438_anySwapInAuto" -> "1438_onlyMPC"
+"1438_applyMinter" -> "1438_onlyMPC"
+"1438_anySwapIn" -> "1438__anySwapIn"
+"1438_anySwapIn" -> "1438_onlyMPC"
+"1438_anySwapInAuto" -> "1438__anySwapIn"
+"1438_anySwapOutNative" -> "1438__anySwapOutNative"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"assert(bool)" 
+"require(bool)" 
+"1438_changeMPC" -> "require(bool,string)"
+"1438_withdrawNative" -> "assert(bool)"
+"1438__anySwapOutNative" -> "require(bool)"
+"1438_depositNative" -> "require(bool,string)"
+"1438__anySwapOutNative" -> "require(bool,string)"
+"1438__anySwapOutUnderlying" -> "require(bool)"
+"1438_depositNative" -> "assert(bool)"
+"1438__anySwapOutUnderlying" -> "require(bool,string)"
+"1438_receive" -> "assert(bool)"
+"1438_withdrawNative" -> "require(bool,string)"
+}
+}

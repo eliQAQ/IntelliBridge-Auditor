@@ -1,0 +1,120 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_249_SafeERC20 {
+label = "SafeERC20"
+"249_safeTransferFrom" [label="safeTransferFrom"]
+"249_safeApprove" [label="safeApprove"]
+"249_safeTransfer" [label="safeTransfer"]
+"249_callOptionalReturn" [label="callOptionalReturn"]
+"249_safeApprove" -> "249_callOptionalReturn"
+"249_safeTransferFrom" -> "249_callOptionalReturn"
+"249_safeTransfer" -> "249_callOptionalReturn"
+}subgraph cluster_74_IERC20 {
+label = "IERC20"
+"74_transferFrom" [label="transferFrom"]
+"74_totalSupply" [label="totalSupply"]
+"74_approve" [label="approve"]
+"74_decimals" [label="decimals"]
+"74_allowance" [label="allowance"]
+"74_transfer" [label="transfer"]
+"74_balanceOf" [label="balanceOf"]
+}subgraph cluster_100_Address {
+label = "Address"
+"100_isContract" [label="isContract"]
+}subgraph cluster_1431_AnyswapV6ERC20 {
+label = "AnyswapV6ERC20"
+"1431_transferFrom" [label="transferFrom"]
+"1431_constructor" [label="constructor"]
+"1431_transfer" [label="transfer"]
+"1431_totalSupply" [label="totalSupply"]
+"1431_Swapout" [label="Swapout"]
+"1431_getAllMinters" [label="getAllMinters"]
+"1431_burn" [label="burn"]
+"1431_Swapin" [label="Swapin"]
+"1431_deposit" [label="deposit"]
+"1431__burn" [label="_burn"]
+"1431_changeVault" [label="changeVault"]
+"1431_revokeMinter" [label="revokeMinter"]
+"1431_owner" [label="owner"]
+"1431_applyMinter" [label="applyMinter"]
+"1431_mint" [label="mint"]
+"1431_setVault" [label="setVault"]
+"1431_mpc" [label="mpc"]
+"1431_withdraw" [label="withdraw"]
+"1431_approve" [label="approve"]
+"1431__mint" [label="_mint"]
+"1431_initVault" [label="initVault"]
+"1431_verifyBindAddr" [label="verifyBindAddr"]
+"1431_withdrawVault" [label="withdrawVault"]
+"1431__withdraw" [label="_withdraw"]
+"1431_depositVault" [label="depositVault"]
+"1431_setMinter" [label="setMinter"]
+"1431_setVaultOnly" [label="setVaultOnly"]
+"1431__deposit" [label="_deposit"]
+"1431_applyVault" [label="applyVault"]
+"1431_revokeMinter" -> "1431_onlyVault"
+"1431_withdraw" -> "1431__withdraw"
+"1431_depositVault" -> "1431__deposit"
+"1431_burn" -> "1431__burn"
+"1431_initVault" -> "1431_onlyVault"
+"1431_setVault" -> "1431_onlyVault"
+"1431_applyMinter" -> "1431_onlyVault"
+"1431_applyVault" -> "1431_onlyVault"
+"1431_burn" -> "1431_onlyAuth"
+"1431_withdrawVault" -> "1431__withdraw"
+"1431_withdrawVault" -> "1431_onlyVault"
+"1431_deposit" -> "1431__deposit"
+"1431_Swapout" -> "1431__burn"
+"1431_Swapout" -> "1431_verifyBindAddr"
+"1431_setVaultOnly" -> "1431_onlyVault"
+"1431__withdraw" -> "1431__burn"
+"1431_depositVault" -> "1431_onlyVault"
+"1431_mint" -> "1431__mint"
+"1431_changeVault" -> "1431_onlyVault"
+"1431_Swapin" -> "1431__mint"
+"1431_mint" -> "1431_onlyAuth"
+"1431_Swapin" -> "1431_onlyAuth"
+"1431__deposit" -> "1431__mint"
+"1431_setMinter" -> "1431_onlyVault"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool)" 
+"abi.decode()" 
+"require(bool,string)" 
+"abi.encodeWithSelector()" 
+"extcodehash(uint256)" 
+"1431_setMinter" -> "require(bool,string)"
+"1431_setVault" -> "require(bool,string)"
+"249_safeApprove" -> "abi.encodeWithSelector()"
+"1431_applyVault" -> "require(bool)"
+"1431__burn" -> "require(bool,string)"
+"249_callOptionalReturn" -> "abi.decode()"
+"1431_transfer" -> "require(bool)"
+"1431_applyMinter" -> "require(bool)"
+"249_safeTransferFrom" -> "abi.encodeWithSelector()"
+"1431_transferFrom" -> "require(bool)"
+"1431_constructor" -> "require(bool)"
+"1431__mint" -> "require(bool,string)"
+"1431_transferFrom" -> "require(bool,string)"
+"249_callOptionalReturn" -> "require(bool,string)"
+"1431_Swapout" -> "require(bool,string)"
+"1431_changeVault" -> "require(bool,string)"
+"1431_initVault" -> "require(bool)"
+"1431__withdraw" -> "require(bool)"
+"1431_transfer" -> "require(bool,string)"
+"100_isContract" -> "extcodehash(uint256)"
+"1431__deposit" -> "require(bool)"
+"1431_verifyBindAddr" -> "require(bool)"
+"249_safeApprove" -> "require(bool,string)"
+"249_safeTransfer" -> "abi.encodeWithSelector()"
+}"1431_Swapin" -> "74_balanceOf"
+"249_callOptionalReturn" -> "100_isContract"
+"249_safeApprove" -> "74_allowance"
+"1431_Swapin" -> "249_safeTransfer"
+"1431_constructor" -> "74_decimals"
+"1431__withdraw" -> "249_safeTransfer"
+"1431_deposit" -> "249_safeTransferFrom"
+"1431_deposit" -> "74_balanceOf"
+"1431_Swapout" -> "249_safeTransferFrom"
+}

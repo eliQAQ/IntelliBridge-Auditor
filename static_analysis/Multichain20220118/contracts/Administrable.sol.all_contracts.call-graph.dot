@@ -1,0 +1,15 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_92_Administrable {
+label = "Administrable"
+"92_transferAdmin" [label="transferAdmin"]
+"92_setAdmin" [label="setAdmin"]
+"92_acceptAdmin" [label="acceptAdmin"]
+"92_transferAdmin" -> "92_onlyAdmin"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool)" 
+"92_acceptAdmin" -> "require(bool)"
+}
+}
