@@ -1,0 +1,35 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_215_LibBytes {
+label = "LibBytes"
+"215_toHexString" [label="toHexString"]
+"215_toAddress" [label="toAddress"]
+"215_slice" [label="slice"]
+}subgraph cluster_63_LibUtil {
+label = "LibUtil"
+"63_isZeroAddress" [label="isZeroAddress"]
+"63_getRevertMsg" [label="getRevertMsg"]
+"63_revertWith" [label="revertWith"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"revert SliceOverflow()" 
+"mload(uint256)" 
+"revert SliceOutOfBounds()" 
+"abi.decode()" 
+"mstore(uint256,uint256)" 
+"revert(uint256,uint256)" 
+"revert AddressOutOfBounds()" 
+"require(bool,string)" 
+"215_slice" -> "revert SliceOutOfBounds()"
+"63_getRevertMsg" -> "abi.decode()"
+"215_slice" -> "mstore(uint256,uint256)"
+"215_slice" -> "revert SliceOverflow()"
+"63_revertWith" -> "mload(uint256)"
+"215_slice" -> "mload(uint256)"
+"63_revertWith" -> "revert(uint256,uint256)"
+"215_toAddress" -> "mload(uint256)"
+"215_toAddress" -> "revert AddressOutOfBounds()"
+"215_toHexString" -> "require(bool,string)"
+}"63_getRevertMsg" -> "215_slice"
+}

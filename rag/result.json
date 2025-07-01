@@ -1,0 +1,508 @@
+{
+    "GasZipFacet.startBridgeTokensViaGasZip": {
+        "startBridgeTokensViaGasZip": {
+            "state_variables": {},
+            "called_functions": [
+                [
+                    {
+                        "visibility": "internal",
+                        "content": "function isNativeAsset(address assetId) internal pure returns (bool){ return assetId == NATIVE_ASSETID;}",
+                        "modifiers": [
+                            "pure"
+                        ],
+                        "parameters": [
+                            {
+                                "type": "address",
+                                "name": "assetId"
+                            }
+                        ],
+                        "returns": [
+                            {
+                                "type": "bool",
+                                "name": null
+                            }
+                        ],
+                        "reads": [
+                            [
+                                "NATIVE_ASSETID",
+                                "",
+                                "LibAsset"
+                            ]
+                        ],
+                        "writes": [],
+                        "external_calls": [],
+                        "is_payable": false,
+                        "md5": "90f6c601dde5476497b7b77972e5160e"
+                    }
+                ],
+                [
+                    {
+                        "visibility": "public",
+                        "content": "function depositToGasZipNative( uint256 _amountToZip, uint256 _destinationChains, address _recipient ) public payable{ gasZipRouter.deposit{ value: _amountToZip} ( _destinationChains, _recipient );}",
+                        "modifiers": [
+                            "payable"
+                        ],
+                        "parameters": [
+                            {
+                                "type": "uint256",
+                                "name": "_amountToZip"
+                            },
+                            {
+                                "type": "uint256",
+                                "name": "_destinationChains"
+                            },
+                            {
+                                "type": "address",
+                                "name": "_recipient"
+                            }
+                        ],
+                        "returns": [],
+                        "reads": [
+                            [
+                                "gasZipRouter",
+                                "",
+                                "GasZipFacet"
+                            ]
+                        ],
+                        "writes": [],
+                        "external_calls": [],
+                        "is_payable": true,
+                        "md5": "72cf710654fa4374d3d8e6aafac4997c"
+                    }
+                ],
+                [
+                    {
+                        "parameters": [
+                            {
+                                "type": "address payable",
+                                "name": "_refundReceiver"
+                            }
+                        ],
+                        "content": "modifier refundExcessNative(address payable _refundReceiver){ uint256 initialBalance = address(this).balance - msg.value; _; uint256 finalBalance = address(this).balance; if (finalBalance > initialBalance){ LibAsset.transferAsset( LibAsset.NATIVE_ASSETID, _refundReceiver, finalBalance - initialBalance );}}",
+                        "reads": [
+                            [
+                                "NATIVE_ASSETID",
+                                "C:\\Users\\wy\\Desktop\\rag\\dataset\\GasZipFacet\\src\\Libraries\\LibAsset.sol",
+                                "LibAsset"
+                            ]
+                        ],
+                        "writes": [],
+                        "external_calls": {
+                            "__set__": true,
+                            "values": [
+                                "LibAsset.transferAsset"
+                            ]
+                        },
+                        "md5": "0187cc69618da51a09c88650b1e643e3"
+                    }
+                ],
+                [
+                    {
+                        "parameters": [
+                            {
+                                "type": "ILiFi.BridgeData memory",
+                                "name": "_bridgeData"
+                            }
+                        ],
+                        "content": "modifier validateBridgeData(ILiFi.BridgeData memory _bridgeData){ if (LibUtil.isZeroAddress(_bridgeData.receiver)){ revert InvalidReceiver();} if (_bridgeData.minAmount == 0){ revert InvalidAmount();} if (_bridgeData.destinationChainId == block.chainid){ revert CannotBridgeToSameNetwork();} _;}",
+                        "reads": [],
+                        "writes": [],
+                        "external_calls": {
+                            "__set__": true,
+                            "values": [
+                                "Validatable.InvalidAmount",
+                                "Validatable.CannotBridgeToSameNetwork",
+                                "Validatable.InvalidReceiver",
+                                "LibUtil.isZeroAddress"
+                            ]
+                        },
+                        "md5": "c982dbf1de1c4474f879f81ec654c610"
+                    }
+                ],
+                [
+                    {
+                        "parameters": [
+                            {
+                                "type": "ILiFi.BridgeData memory",
+                                "name": "_bridgeData"
+                            }
+                        ],
+                        "content": "modifier doesNotContainSourceSwaps(ILiFi.BridgeData memory _bridgeData){ if (_bridgeData.hasSourceSwaps){ revert InformationMismatch();} _;}",
+                        "reads": [],
+                        "writes": [],
+                        "external_calls": {
+                            "__set__": true,
+                            "values": [
+                                "Validatable.InformationMismatch"
+                            ]
+                        },
+                        "md5": "b19939d9ff74cfdd7a3f41ff63361ce2"
+                    }
+                ],
+                [
+                    {
+                        "parameters": [],
+                        "content": "modifier nonReentrant(){ ReentrancyStorage storage s = reentrancyStorage(); if (s.status == _ENTERED) revert ReentrancyError(); s.status = _ENTERED; _; s.status = _NOT_ENTERED;}",
+                        "reads": [
+                            [
+                                "_NOT_ENTERED",
+                                "",
+                                "ReentrancyGuard"
+                            ],
+                            [
+                                "_ENTERED",
+                                "",
+                                "ReentrancyGuard"
+                            ]
+                        ],
+                        "writes": [],
+                        "external_calls": {
+                            "__set__": true,
+                            "values": [
+                                "ReentrancyGuard.ReentrancyError",
+                                "ReentrancyGuard.reentrancyStorage"
+                            ]
+                        },
+                        "md5": "cc736cd29a0e50e5494e8b9dfb01c62c"
+                    }
+                ],
+                [
+                    {
+                        "parameters": [
+                            {
+                                "type": "ILiFi.BridgeData memory",
+                                "name": "_bridgeData"
+                            }
+                        ],
+                        "content": "modifier doesNotContainDestinationCalls( ILiFi.BridgeData memory _bridgeData ){ if (_bridgeData.hasDestinationCall){ revert InformationMismatch();} _;}",
+                        "reads": [],
+                        "writes": [],
+                        "external_calls": {
+                            "__set__": true,
+                            "values": [
+                                "Validatable.InformationMismatch"
+                            ]
+                        },
+                        "md5": "6ee01eea5e8d8aa0663a9c919e3cb6a5"
+                    }
+                ]
+            ],
+            "md5": "13c2f57b461e7497b2ae89601a9cd47a"
+        },
+        "isNativeAsset": {
+            "state_variables": {
+                "NATIVE_ASSETID": "address internal constant NATIVE_ASSETID = NULL_ADDRESS;"
+            },
+            "called_functions": [],
+            "md5": "90f6c601dde5476497b7b77972e5160e"
+        },
+        "depositToGasZipNative": {
+            "state_variables": {
+                "gasZipRouter": "IGasZip public immutable gasZipRouter;"
+            },
+            "called_functions": [],
+            "md5": "72cf710654fa4374d3d8e6aafac4997c"
+        }
+    },
+    "GasZipFacet.swapAndStartBridgeTokensViaGasZip": {
+        "swapAndStartBridgeTokensViaGasZip": {
+            "state_variables": {},
+            "called_functions": [
+                [
+                    {
+                        "visibility": "internal",
+                        "content": "function isNativeAsset(address assetId) internal pure returns (bool){ return assetId == NATIVE_ASSETID;}",
+                        "modifiers": [
+                            "pure"
+                        ],
+                        "parameters": [
+                            {
+                                "type": "address",
+                                "name": "assetId"
+                            }
+                        ],
+                        "returns": [
+                            {
+                                "type": "bool",
+                                "name": null
+                            }
+                        ],
+                        "reads": [
+                            [
+                                "NATIVE_ASSETID",
+                                "",
+                                "LibAsset"
+                            ]
+                        ],
+                        "writes": [],
+                        "external_calls": [],
+                        "is_payable": false,
+                        "md5": "90f6c601dde5476497b7b77972e5160e"
+                    }
+                ],
+                [
+                    {
+                        "visibility": "public",
+                        "content": "function depositToGasZipNative( uint256 _amountToZip, uint256 _destinationChains, address _recipient ) public payable{ gasZipRouter.deposit{ value: _amountToZip} ( _destinationChains, _recipient );}",
+                        "modifiers": [
+                            "payable"
+                        ],
+                        "parameters": [
+                            {
+                                "type": "uint256",
+                                "name": "_amountToZip"
+                            },
+                            {
+                                "type": "uint256",
+                                "name": "_destinationChains"
+                            },
+                            {
+                                "type": "address",
+                                "name": "_recipient"
+                            }
+                        ],
+                        "returns": [],
+                        "reads": [
+                            [
+                                "gasZipRouter",
+                                "",
+                                "GasZipFacet"
+                            ]
+                        ],
+                        "writes": [],
+                        "external_calls": [],
+                        "is_payable": true,
+                        "md5": "72cf710654fa4374d3d8e6aafac4997c"
+                    }
+                ],
+                [
+                    {
+                        "parameters": [
+                            {
+                                "type": "address payable",
+                                "name": "_refundReceiver"
+                            }
+                        ],
+                        "content": "modifier refundExcessNative(address payable _refundReceiver){ uint256 initialBalance = address(this).balance - msg.value; _; uint256 finalBalance = address(this).balance; if (finalBalance > initialBalance){ LibAsset.transferAsset( LibAsset.NATIVE_ASSETID, _refundReceiver, finalBalance - initialBalance );}}",
+                        "reads": [
+                            [
+                                "NATIVE_ASSETID",
+                                "C:\\Users\\wy\\Desktop\\rag\\dataset\\GasZipFacet\\src\\Libraries\\LibAsset.sol",
+                                "LibAsset"
+                            ]
+                        ],
+                        "writes": [],
+                        "external_calls": {
+                            "__set__": true,
+                            "values": [
+                                "LibAsset.transferAsset"
+                            ]
+                        },
+                        "md5": "0187cc69618da51a09c88650b1e643e3"
+                    }
+                ],
+                [
+                    {
+                        "parameters": [
+                            {
+                                "type": "ILiFi.BridgeData memory",
+                                "name": "_bridgeData"
+                            }
+                        ],
+                        "content": "modifier validateBridgeData(ILiFi.BridgeData memory _bridgeData){ if (LibUtil.isZeroAddress(_bridgeData.receiver)){ revert InvalidReceiver();} if (_bridgeData.minAmount == 0){ revert InvalidAmount();} if (_bridgeData.destinationChainId == block.chainid){ revert CannotBridgeToSameNetwork();} _;}",
+                        "reads": [],
+                        "writes": [],
+                        "external_calls": {
+                            "__set__": true,
+                            "values": [
+                                "Validatable.InvalidAmount",
+                                "Validatable.CannotBridgeToSameNetwork",
+                                "Validatable.InvalidReceiver",
+                                "LibUtil.isZeroAddress"
+                            ]
+                        },
+                        "md5": "c982dbf1de1c4474f879f81ec654c610"
+                    }
+                ],
+                [
+                    {
+                        "visibility": "internal",
+                        "content": "function _depositAndSwap( bytes32 _transactionId, uint256 _minAmount, LibSwap.SwapData[] calldata _swaps, address payable _leftoverReceiver ) internal returns (uint256){ uint256 numSwaps = _swaps.length; if (numSwaps == 0){ revert NoSwapDataProvided();} address finalTokenId = _swaps[numSwaps - 1].receivingAssetId; uint256 initialBalance = LibAsset.getOwnBalance(finalTokenId); if (LibAsset.isNativeAsset(finalTokenId)){ initialBalance -= msg.value;} uint256[] memory initialBalances = _fetchBalances(_swaps); LibAsset.depositAssets(_swaps); _executeSwaps( _transactionId, _swaps, _leftoverReceiver, initialBalances ); uint256 newBalance = LibAsset.getOwnBalance(finalTokenId) - initialBalance; if (newBalance < _minAmount){ revert CumulativeSlippageTooHigh(_minAmount, newBalance);} return newBalance;}",
+                        "modifiers": [],
+                        "parameters": [
+                            {
+                                "type": "bytes32",
+                                "name": "_transactionId"
+                            },
+                            {
+                                "type": "uint256",
+                                "name": "_minAmount"
+                            },
+                            {
+                                "type": "LibSwap.SwapData[] calldata",
+                                "name": "_swaps"
+                            },
+                            {
+                                "type": "address payable",
+                                "name": "_leftoverReceiver"
+                            }
+                        ],
+                        "returns": [
+                            {
+                                "type": "uint256",
+                                "name": null
+                            }
+                        ],
+                        "reads": [],
+                        "writes": [],
+                        "external_calls": {
+                            "__set__": true,
+                            "values": [
+                                "LibAsset.isNativeAsset",
+                                "SwapperV2._fetchBalances",
+                                "SwapperV2.NoSwapDataProvided",
+                                "LibAsset.getOwnBalance",
+                                "SwapperV2._executeSwaps",
+                                "LibAsset.depositAssets",
+                                "SwapperV2.CumulativeSlippageTooHigh"
+                            ]
+                        },
+                        "is_payable": false,
+                        "md5": "cad1b7ec5a1ade21a548528517840b13"
+                    },
+                    {
+                        "visibility": "internal",
+                        "content": "function _depositAndSwap( bytes32 _transactionId, uint256 _minAmount, LibSwap.SwapData[] calldata _swaps, address payable _leftoverReceiver, uint256 _nativeReserve ) internal returns (uint256){ uint256 numSwaps = _swaps.length; if (numSwaps == 0){ revert NoSwapDataProvided();} address finalTokenId = _swaps[numSwaps - 1].receivingAssetId; uint256 initialBalance = LibAsset.getOwnBalance(finalTokenId); if (LibAsset.isNativeAsset(finalTokenId)){ initialBalance -= msg.value;} uint256[] memory initialBalances = _fetchBalances(_swaps); LibAsset.depositAssets(_swaps); ReserveData memory rd = ReserveData( _transactionId, _leftoverReceiver, _nativeReserve ); _executeSwaps(rd, _swaps, initialBalances); uint256 newBalance = LibAsset.getOwnBalance(finalTokenId) - initialBalance; if (LibAsset.isNativeAsset(finalTokenId)){ newBalance -= _nativeReserve;} if (newBalance < _minAmount){ revert CumulativeSlippageTooHigh(_minAmount, newBalance);} return newBalance;}",
+                        "modifiers": [],
+                        "parameters": [
+                            {
+                                "type": "bytes32",
+                                "name": "_transactionId"
+                            },
+                            {
+                                "type": "uint256",
+                                "name": "_minAmount"
+                            },
+                            {
+                                "type": "LibSwap.SwapData[] calldata",
+                                "name": "_swaps"
+                            },
+                            {
+                                "type": "address payable",
+                                "name": "_leftoverReceiver"
+                            },
+                            {
+                                "type": "uint256",
+                                "name": "_nativeReserve"
+                            }
+                        ],
+                        "returns": [
+                            {
+                                "type": "uint256",
+                                "name": null
+                            }
+                        ],
+                        "reads": [],
+                        "writes": [],
+                        "external_calls": {
+                            "__set__": true,
+                            "values": [
+                                "LibAsset.isNativeAsset",
+                                "SwapperV2._fetchBalances",
+                                "SwapperV2.NoSwapDataProvided",
+                                "LibAsset.getOwnBalance",
+                                "SwapperV2._executeSwaps",
+                                "LibAsset.depositAssets",
+                                "SwapperV2.CumulativeSlippageTooHigh"
+                            ]
+                        },
+                        "is_payable": false,
+                        "md5": "0f1c111ab2ce17c0262e7939c3341712"
+                    }
+                ],
+                [
+                    {
+                        "parameters": [
+                            {
+                                "type": "ILiFi.BridgeData memory",
+                                "name": "_bridgeData"
+                            }
+                        ],
+                        "content": "modifier containsSourceSwaps(ILiFi.BridgeData memory _bridgeData){ if (!_bridgeData.hasSourceSwaps){ revert InformationMismatch();} _;}",
+                        "reads": [],
+                        "writes": [],
+                        "external_calls": {
+                            "__set__": true,
+                            "values": [
+                                "Validatable.InformationMismatch"
+                            ]
+                        },
+                        "md5": "8c3bbc390a841d4f0601ea2f970a78ec"
+                    }
+                ],
+                [
+                    {
+                        "parameters": [],
+                        "content": "modifier nonReentrant(){ ReentrancyStorage storage s = reentrancyStorage(); if (s.status == _ENTERED) revert ReentrancyError(); s.status = _ENTERED; _; s.status = _NOT_ENTERED;}",
+                        "reads": [
+                            [
+                                "_NOT_ENTERED",
+                                "",
+                                "ReentrancyGuard"
+                            ],
+                            [
+                                "_ENTERED",
+                                "",
+                                "ReentrancyGuard"
+                            ]
+                        ],
+                        "writes": [],
+                        "external_calls": {
+                            "__set__": true,
+                            "values": [
+                                "ReentrancyGuard.ReentrancyError",
+                                "ReentrancyGuard.reentrancyStorage"
+                            ]
+                        },
+                        "md5": "cc736cd29a0e50e5494e8b9dfb01c62c"
+                    }
+                ],
+                [
+                    {
+                        "parameters": [
+                            {
+                                "type": "ILiFi.BridgeData memory",
+                                "name": "_bridgeData"
+                            }
+                        ],
+                        "content": "modifier doesNotContainDestinationCalls( ILiFi.BridgeData memory _bridgeData ){ if (_bridgeData.hasDestinationCall){ revert InformationMismatch();} _;}",
+                        "reads": [],
+                        "writes": [],
+                        "external_calls": {
+                            "__set__": true,
+                            "values": [
+                                "Validatable.InformationMismatch"
+                            ]
+                        },
+                        "md5": "6ee01eea5e8d8aa0663a9c919e3cb6a5"
+                    }
+                ]
+            ],
+            "md5": "bd3abda2c7672c4d35ca990fa3885547"
+        },
+        "isNativeAsset": {
+            "state_variables": {
+                "NATIVE_ASSETID": "address internal constant NATIVE_ASSETID = NULL_ADDRESS;"
+            },
+            "called_functions": [],
+            "md5": "90f6c601dde5476497b7b77972e5160e"
+        },
+        "depositToGasZipNative": {
+            "state_variables": {
+                "gasZipRouter": "IGasZip public immutable gasZipRouter;"
+            },
+            "called_functions": [],
+            "md5": "72cf710654fa4374d3d8e6aafac4997c"
+        }
+    }
+}

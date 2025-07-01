@@ -1,0 +1,397 @@
+{
+    "GasZipFacet.startBridgeTokensViaGasZip": {
+        "step1": {
+            "prompt1": "\n你是一位经验丰富的跨链协议分析专家。你的任务是将根据提供的 Solidity 代码，将指定的跨链属性映射到代码中的参数上；如果某属性在代码中找不到对应参数，则不在输出中列出该属性。请严格遵循以下定义的输入格式和输出格式：\n\n输入格式：\n你将接收一个 JSON 对象作为输入，其结构如下：\n{\n\"attribute\": [], // 给定的跨链属性数组\n\"code\": [] // Solidity 合约代码函数数组\n}\n\n输出格式：\n\n返回一个 JSON 对象数组，每项结构：\n\n- parameter: 参数名\n- attribute：对应的跨链属性\n- reason：选择的原因，以及潜在的模糊点\n\n[\n{\n\"parameter\": \"...\",  // 代码中最可能对应该属性的参数名\n\"attribute\": \"...\",  // 输入的跨链属性\n\"reason\": \"...\"      // 简要说明：为何选择此参数，以及可能的歧义\n},\n...\n]\n\n每个属性至多提供 3 种映射方案，按“最可能”排序。\n\nreason 中请同时指出该映射的核心依据和潜在的不确定点（例如：参数名相似度、上下文含义模糊等）。\n\n输入：\n{\n\"attribute\": [\"源链id\", \"目标链id\", \"代币地址\", \"转账金额\", \"交易发起方账户\", \"目标账户\"], // 给定的跨链属性数组\n\"code\": \"GasZipFacet.startBridgeTokensViaGasZip:function startBridgeTokensViaGasZip(\\n        ILiFi.BridgeData memory _bridgeData,\\n        GasZipData calldata _gasZipData\\n    )\\n        external\\n        payable\\n        nonReentrant\\n        refundExcessNative(payable(msg.sender))\\n        validateBridgeData(_bridgeData)\\n        doesNotContainSourceSwaps(_bridgeData)\\n        doesNotContainDestinationCalls(_bridgeData)\\n    {\\n        // this function shall only be used for native assets\\n        if (!LibAsset.isNativeAsset(_bridgeData.sendingAssetId))\\n            revert InvalidCallData();\\n\\n        depositToGasZipNative(\\n            _bridgeData.minAmount,\\n            _gasZipData.gasZipChainId,\\n            _bridgeData.receiver\\n        );\\n\\n        emit LiFiTransferStarted(_bridgeData);\\n    }\\nLibAsset.isNativeAsset:function isNativeAsset(address assetId) internal pure returns (bool) {\\n        return assetId == NATIVE_ASSETID;\\n    }\\nGasZipFacet.depositToGasZipNative:function depositToGasZipNative(\\n        uint256 _amountToZip,\\n        uint256 _destinationChains,\\n        address _recipient\\n    ) public payable {\\n        // call the gas zip router and deposit tokens\\n        gasZipRouter.deposit{ value: _amountToZip }(\\n            _destinationChains,\\n            _recipient\\n        );\\n    }\" // Solidity 合约代码函数数组\n}\n",
+            "outputs1": [
+                [
+                    {
+                        "parameter": "_gasZipData.gasZipChainId",
+                        "attribute": "目标链id",
+                        "reason": "参数名中包含 'ChainId'，且与跨链操作的目标链相关。潜在模糊点：无法确认是否确实是目标链而非源链，因为参数名中未明确说明是 'source' 或 'destination'。"
+                    },
+                    {
+                        "parameter": "_bridgeData.receiver",
+                        "attribute": "目标账户",
+                        "reason": "参数名 'receiver' 直接对应跨链转账的目标账户。潜在模糊点：无显著模糊点，命名清晰。"
+                    },
+                    {
+                        "parameter": "_bridgeData.sendingAssetId",
+                        "attribute": "代币地址",
+                        "reason": "参数名 'sendingAssetId' 可能对应代币地址，特别是在检查是否为原生资产时使用。潜在模糊点：该参数也可能是代币ID或其他标识符，而不仅仅是地址。"
+                    },
+                    {
+                        "parameter": "_amountToZip",
+                        "attribute": "转账金额",
+                        "reason": "参数名 '_amountToZip' 直接表示转账的金额。潜在模糊点：无显著模糊点，命名清晰。"
+                    },
+                    {
+                        "parameter": "_bridgeData.minAmount",
+                        "attribute": "转账金额",
+                        "reason": "'minAmount' 可能表示最小转账金额，因此可能与 '转账金额' 属性相关。潜在模糊点：该参数可能是最小阈值而非实际转账金额。"
+                    }
+                ]
+            ],
+            "formatted_outputs1": {
+                "_gasZipData.gasZipChainId": "目标链id",
+                "_bridgeData.receiver": "目标账户",
+                "_bridgeData.sendingAssetId": "代币地址",
+                "_amountToZip": "转账金额",
+                "_bridgeData.minAmount": "转账金额"
+            }
+        },
+        "step2": {
+            "list": [
+                {
+                    "parameter": "_gasZipData.gasZipChainId",
+                    "outputs2": [
+                        {
+                            "parameter": "_gasZipData.gasZipChainId",
+                            "dataflow": {
+                                "startBridgeTokensViaGasZip": [
+                                    "function startBridgeTokensViaGasZip(\n        ILiFi.BridgeData memory _bridgeData,\n        GasZipData calldata _gasZipData\n    )\n        external\n        payable\n        nonReentrant\n        refundExcessNative(payable(msg.sender))\n        validateBridgeData(_bridgeData)\n        doesNotContainSourceSwaps(_bridgeData)\n        doesNotContainDestinationCalls(_bridgeData)\n    {\n        // this function shall only be used for native assets\n        if (!LibAsset.isNativeAsset(_bridgeData.sendingAssetId))\n            revert InvalidCallData();\n\n        depositToGasZipNative(\n            _bridgeData.minAmount,\n            _gasZipData.gasZipChainId,\n            _bridgeData.receiver\n        );\n\n        emit LiFiTransferStarted(_bridgeData);\n    }"
+                                ],
+                                "depositToGasZipNative": [
+                                    "function depositToGasZipNative(\n        uint256 _amountToZip,\n        uint256 _destinationChains,\n        address _recipient\n    ) public payable {\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: _amountToZip }(\n            _destinationChains,\n            _recipient\n        );\n    }"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "parameter": "_bridgeData.receiver",
+                    "outputs2": [
+                        {
+                            "parameter": "_bridgeData.receiver",
+                            "dataflow": {
+                                "startBridgeTokensViaGasZip": [
+                                    "function startBridgeTokensViaGasZip(\n        ILiFi.BridgeData memory _bridgeData,\n        GasZipData calldata _gasZipData\n    )\n        external\n        payable\n        nonReentrant\n        refundExcessNative(payable(msg.sender))\n        validateBridgeData(_bridgeData)\n        doesNotContainSourceSwaps(_bridgeData)\n        doesNotContainDestinationCalls(_bridgeData)\n    {\n        // this function shall only be used for native assets\n        if (!LibAsset.isNativeAsset(_bridgeData.sendingAssetId))\n            revert InvalidCallData();\n\n        depositToGasZipNative(\n            _bridgeData.minAmount,\n            _gasZipData.gasZipChainId,\n            _bridgeData.receiver\n        );\n\n        emit LiFiTransferStarted(_bridgeData);\n    }"
+                                ],
+                                "depositToGasZipNative": [
+                                    "function depositToGasZipNative(\n        uint256 _amountToZip,\n        uint256 _destinationChains,\n        address _recipient\n    ) public payable {\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: _amountToZip }(\n            _destinationChains,\n            _recipient\n        );\n    }"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "parameter": "_bridgeData.sendingAssetId",
+                    "outputs2": [
+                        {
+                            "parameter": "_bridgeData.sendingAssetId",
+                            "dataflow": {
+                                "startBridgeTokensViaGasZip": [
+                                    "function startBridgeTokensViaGasZip(\n        ILiFi.BridgeData memory _bridgeData,\n        GasZipData calldata _gasZipData\n    )\n        external\n        payable\n        nonReentrant\n        refundExcessNative(payable(msg.sender))\n        validateBridgeData(_bridgeData)\n        doesNotContainSourceSwaps(_bridgeData)\n        doesNotContainDestinationCalls(_bridgeData)\n    {\n        // this function shall only be used for native assets\n        if (!LibAsset.isNativeAsset(_bridgeData.sendingAssetId))\n            revert InvalidCallData();\n\n        depositToGasZipNative(\n            _bridgeData.minAmount,\n            _gasZipData.gasZipChainId,\n            _bridgeData.receiver\n        );\n\n        emit LiFiTransferStarted(_bridgeData);\n    }"
+                                ],
+                                "isNativeAsset": [
+                                    "function isNativeAsset(address assetId) internal pure returns (bool) {\n        return assetId == NATIVE_ASSETID;\n    }"
+                                ],
+                                "depositToGasZipNative": [
+                                    "function depositToGasZipNative(\n        uint256 _amountToZip,\n        uint256 _destinationChains,\n        address _recipient\n    ) public payable {\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: _amountToZip }(\n            _destinationChains,\n            _recipient\n        );\n    }"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "parameter": "_amountToZip",
+                    "outputs2": [
+                        {
+                            "parameter": "_amountToZip",
+                            "dataflow": {
+                                "depositToGasZipNative": [
+                                    "function depositToGasZipNative(\n        uint256 _amountToZip,\n        uint256 _destinationChains,\n        address _recipient\n    ) public payable {\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: _amountToZip }(\n            _destinationChains,\n            _recipient\n        );\n    }"
+                                ],
+                                "startBridgeTokensViaGasZip": [
+                                    "function startBridgeTokensViaGasZip(\n        ILiFi.BridgeData memory _bridgeData,\n        GasZipData calldata _gasZipData\n    )\n        external\n        payable\n        nonReentrant\n        refundExcessNative(payable(msg.sender))\n        validateBridgeData(_bridgeData)\n        doesNotContainSourceSwaps(_bridgeData)\n        doesNotContainDestinationCalls(_bridgeData)\n    {\n        // this function shall only be used for native assets\n        if (!LibAsset.isNativeAsset(_bridgeData.sendingAssetId))\n            revert InvalidCallData();\n\n        depositToGasZipNative(\n            _bridgeData.minAmount,\n            _gasZipData.gasZipChainId,\n            _bridgeData.receiver\n        );\n\n        emit LiFiTransferStarted(_bridgeData);\n    }",
+                                    "depositToGasZipNative(\n            _bridgeData.minAmount,\n            _gasZipData.gasZipChainId,\n            _bridgeData.receiver\n        );"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "parameter": "_bridgeData.minAmount",
+                    "outputs2": [
+                        {
+                            "parameter": "_bridgeData.minAmount",
+                            "dataflow": {
+                                "startBridgeTokensViaGasZip": [
+                                    "function startBridgeTokensViaGasZip(\n        ILiFi.BridgeData memory _bridgeData,\n        GasZipData calldata _gasZipData\n    )\n        external\n        payable\n        nonReentrant\n        refundExcessNative(payable(msg.sender))\n        validateBridgeData(_bridgeData)\n        doesNotContainSourceSwaps(_bridgeData)\n        doesNotContainDestinationCalls(_bridgeData)\n    {\n        // this function shall only be used for native assets\n        if (!LibAsset.isNativeAsset(_bridgeData.sendingAssetId))\n            revert InvalidCallData();\n\n        depositToGasZipNative(\n            _bridgeData.minAmount,\n            _gasZipData.gasZipChainId,\n            _bridgeData.receiver\n        );\n\n        emit LiFiTransferStarted(_bridgeData);\n    }"
+                                ],
+                                "depositToGasZipNative": [
+                                    "function depositToGasZipNative(\n        uint256 _amountToZip,\n        uint256 _destinationChains,\n        address _recipient\n    ) public payable {\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: _amountToZip }(\n            _destinationChains,\n            _recipient\n        );\n    }"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ],
+            "dataflow": {
+                "_gasZipData.gasZipChainId": {
+                    "startBridgeTokensViaGasZip": [
+                        "function startBridgeTokensViaGasZip(\n        ILiFi.BridgeData memory _bridgeData,\n        GasZipData calldata _gasZipData\n    )\n        external\n        payable\n        nonReentrant\n        refundExcessNative(payable(msg.sender))\n        validateBridgeData(_bridgeData)\n        doesNotContainSourceSwaps(_bridgeData)\n        doesNotContainDestinationCalls(_bridgeData)\n    {\n        // this function shall only be used for native assets\n        if (!LibAsset.isNativeAsset(_bridgeData.sendingAssetId))\n            revert InvalidCallData();\n\n        depositToGasZipNative(\n            _bridgeData.minAmount,\n            _gasZipData.gasZipChainId,\n            _bridgeData.receiver\n        );\n\n        emit LiFiTransferStarted(_bridgeData);\n    }"
+                    ],
+                    "depositToGasZipNative": [
+                        "function depositToGasZipNative(\n        uint256 _amountToZip,\n        uint256 _destinationChains,\n        address _recipient\n    ) public payable {\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: _amountToZip }(\n            _destinationChains,\n            _recipient\n        );\n    }"
+                    ]
+                },
+                "_bridgeData.receiver": {
+                    "startBridgeTokensViaGasZip": [
+                        "function startBridgeTokensViaGasZip(\n        ILiFi.BridgeData memory _bridgeData,\n        GasZipData calldata _gasZipData\n    )\n        external\n        payable\n        nonReentrant\n        refundExcessNative(payable(msg.sender))\n        validateBridgeData(_bridgeData)\n        doesNotContainSourceSwaps(_bridgeData)\n        doesNotContainDestinationCalls(_bridgeData)\n    {\n        // this function shall only be used for native assets\n        if (!LibAsset.isNativeAsset(_bridgeData.sendingAssetId))\n            revert InvalidCallData();\n\n        depositToGasZipNative(\n            _bridgeData.minAmount,\n            _gasZipData.gasZipChainId,\n            _bridgeData.receiver\n        );\n\n        emit LiFiTransferStarted(_bridgeData);\n    }"
+                    ],
+                    "depositToGasZipNative": [
+                        "function depositToGasZipNative(\n        uint256 _amountToZip,\n        uint256 _destinationChains,\n        address _recipient\n    ) public payable {\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: _amountToZip }(\n            _destinationChains,\n            _recipient\n        );\n    }"
+                    ]
+                },
+                "_bridgeData.sendingAssetId": {
+                    "startBridgeTokensViaGasZip": [
+                        "function startBridgeTokensViaGasZip(\n        ILiFi.BridgeData memory _bridgeData,\n        GasZipData calldata _gasZipData\n    )\n        external\n        payable\n        nonReentrant\n        refundExcessNative(payable(msg.sender))\n        validateBridgeData(_bridgeData)\n        doesNotContainSourceSwaps(_bridgeData)\n        doesNotContainDestinationCalls(_bridgeData)\n    {\n        // this function shall only be used for native assets\n        if (!LibAsset.isNativeAsset(_bridgeData.sendingAssetId))\n            revert InvalidCallData();\n\n        depositToGasZipNative(\n            _bridgeData.minAmount,\n            _gasZipData.gasZipChainId,\n            _bridgeData.receiver\n        );\n\n        emit LiFiTransferStarted(_bridgeData);\n    }"
+                    ],
+                    "isNativeAsset": [
+                        "function isNativeAsset(address assetId) internal pure returns (bool) {\n        return assetId == NATIVE_ASSETID;\n    }"
+                    ],
+                    "depositToGasZipNative": [
+                        "function depositToGasZipNative(\n        uint256 _amountToZip,\n        uint256 _destinationChains,\n        address _recipient\n    ) public payable {\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: _amountToZip }(\n            _destinationChains,\n            _recipient\n        );\n    }"
+                    ]
+                },
+                "_amountToZip": {
+                    "depositToGasZipNative": [
+                        "function depositToGasZipNative(\n        uint256 _amountToZip,\n        uint256 _destinationChains,\n        address _recipient\n    ) public payable {\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: _amountToZip }(\n            _destinationChains,\n            _recipient\n        );\n    }"
+                    ],
+                    "startBridgeTokensViaGasZip": [
+                        "function startBridgeTokensViaGasZip(\n        ILiFi.BridgeData memory _bridgeData,\n        GasZipData calldata _gasZipData\n    )\n        external\n        payable\n        nonReentrant\n        refundExcessNative(payable(msg.sender))\n        validateBridgeData(_bridgeData)\n        doesNotContainSourceSwaps(_bridgeData)\n        doesNotContainDestinationCalls(_bridgeData)\n    {\n        // this function shall only be used for native assets\n        if (!LibAsset.isNativeAsset(_bridgeData.sendingAssetId))\n            revert InvalidCallData();\n\n        depositToGasZipNative(\n            _bridgeData.minAmount,\n            _gasZipData.gasZipChainId,\n            _bridgeData.receiver\n        );\n\n        emit LiFiTransferStarted(_bridgeData);\n    }",
+                        "depositToGasZipNative(\n            _bridgeData.minAmount,\n            _gasZipData.gasZipChainId,\n            _bridgeData.receiver\n        );"
+                    ]
+                },
+                "_bridgeData.minAmount": {
+                    "startBridgeTokensViaGasZip": [
+                        "function startBridgeTokensViaGasZip(\n        ILiFi.BridgeData memory _bridgeData,\n        GasZipData calldata _gasZipData\n    )\n        external\n        payable\n        nonReentrant\n        refundExcessNative(payable(msg.sender))\n        validateBridgeData(_bridgeData)\n        doesNotContainSourceSwaps(_bridgeData)\n        doesNotContainDestinationCalls(_bridgeData)\n    {\n        // this function shall only be used for native assets\n        if (!LibAsset.isNativeAsset(_bridgeData.sendingAssetId))\n            revert InvalidCallData();\n\n        depositToGasZipNative(\n            _bridgeData.minAmount,\n            _gasZipData.gasZipChainId,\n            _bridgeData.receiver\n        );\n\n        emit LiFiTransferStarted(_bridgeData);\n    }"
+                    ],
+                    "depositToGasZipNative": [
+                        "function depositToGasZipNative(\n        uint256 _amountToZip,\n        uint256 _destinationChains,\n        address _recipient\n    ) public payable {\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: _amountToZip }(\n            _destinationChains,\n            _recipient\n        );\n    }"
+                    ]
+                }
+            }
+        },
+        "step3": {
+            "result": {
+                "_amountToZip": [
+                    {
+                        "parameter": "_amountToZip",
+                        "constraint": "检查在锁定或销毁的操作之后用户余额的变化值是否正确，不包括ERC20函数内的相关检查。",
+                        "result": false,
+                        "details": [],
+                        "reason": "无"
+                    }
+                ],
+                "_bridgeData.minAmount": [
+                    {
+                        "parameter": "_bridgeData.minAmount",
+                        "constraint": [
+                            "检查在锁定或销毁的操作之后用户余额的变化值是否正确，不包括ERC20函数内的相关检查。"
+                        ],
+                        "result": false,
+                        "details": [],
+                        "reason": "无"
+                    }
+                ]
+            }
+        }
+    },
+    "GasZipFacet.swapAndStartBridgeTokensViaGasZip": {
+        "step1": {
+            "prompt1": "\n你是一位经验丰富的跨链协议分析专家。你的任务是将根据提供的 Solidity 代码，将指定的跨链属性映射到代码中的参数上；如果某属性在代码中找不到对应参数，则不在输出中列出该属性。请严格遵循以下定义的输入格式和输出格式：\n\n输入格式：\n你将接收一个 JSON 对象作为输入，其结构如下：\n{\n\"attribute\": [], // 给定的跨链属性数组\n\"code\": [] // Solidity 合约代码函数数组\n}\n\n输出格式：\n\n返回一个 JSON 对象数组，每项结构：\n\n- parameter: 参数名\n- attribute：对应的跨链属性\n- reason：选择的原因，以及潜在的模糊点\n\n[\n{\n\"parameter\": \"...\",  // 代码中最可能对应该属性的参数名\n\"attribute\": \"...\",  // 输入的跨链属性\n\"reason\": \"...\"      // 简要说明：为何选择此参数，以及可能的歧义\n},\n...\n]\n\n每个属性至多提供 3 种映射方案，按“最可能”排序。\n\nreason 中请同时指出该映射的核心依据和潜在的不确定点（例如：参数名相似度、上下文含义模糊等）。\n\n输入：\n{\n\"attribute\": [\"源链id\", \"目标链id\", \"代币地址\", \"转账金额\", \"交易发起方账户\", \"目标账户\"], // 给定的跨链属性数组\n\"code\": \"GasZipFacet.swapAndStartBridgeTokensViaGasZip:function swapAndStartBridgeTokensViaGasZip(\\n        ILiFi.BridgeData memory _bridgeData,\\n        LibSwap.SwapData[] calldata _swapData,\\n        GasZipData calldata _gasZipData\\n    )\\n        external\\n        payable\\n        nonReentrant\\n        refundExcessNative(payable(msg.sender))\\n        containsSourceSwaps(_bridgeData)\\n        doesNotContainDestinationCalls(_bridgeData)\\n        validateBridgeData(_bridgeData)\\n    {\\n        // this function shall only be used for ERC20 assets\\n        if (LibAsset.isNativeAsset(_bridgeData.sendingAssetId))\\n            revert InvalidCallData();\\n\\n        // deposit and swap ERC20 tokens\\n        _bridgeData.minAmount = _depositAndSwap(\\n            _bridgeData.transactionId,\\n            _bridgeData.minAmount,\\n            _swapData,\\n            payable(msg.sender)\\n        );\\n\\n        // deposit to gas.zip\\n        depositToGasZipNative(\\n            _bridgeData.minAmount,\\n            _gasZipData.gasZipChainId,\\n            _bridgeData.receiver\\n        );\\n\\n        emit LiFiTransferStarted(_bridgeData);\\n    }\\nLibAsset.isNativeAsset:function isNativeAsset(address assetId) internal pure returns (bool) {\\n        return assetId == NATIVE_ASSETID;\\n    }\\nGasZipFacet.depositToGasZipNative:function depositToGasZipNative(\\n        uint256 _amountToZip,\\n        uint256 _destinationChains,\\n        address _recipient\\n    ) public payable {\\n        // call the gas zip router and deposit tokens\\n        gasZipRouter.deposit{ value: _amountToZip }(\\n            _destinationChains,\\n            _recipient\\n        );\\n    }\" // Solidity 合约代码函数数组\n}\n",
+            "outputs1": [
+                [
+                    {
+                        "parameter": "_bridgeData.sendingAssetId",
+                        "attribute": "代币地址",
+                        "reason": "参数名'sendingAssetId'与属性'代币地址'语义匹配，且通过LibAsset.isNativeAsset函数验证其是否为原生资产（地址格式）。潜在模糊点：可能仅代表发送方代币而非目标链代币。"
+                    },
+                    {
+                        "parameter": "_gasZipData.gasZipChainId",
+                        "attribute": "目标链id",
+                        "reason": "参数名'gasZipChainId'在depositToGasZipNative函数中明确对应跨链目标链ID，且与'destinationChains'直接关联。潜在模糊点：未明确说明是否为标准ChainID格式。"
+                    },
+                    {
+                        "parameter": "_amountToZip",
+                        "attribute": "转账金额",
+                        "reason": "参数名'_amountToZip'在depositToGasZipNative函数中作为转账数值参数，且被用于value传递。核心依据：数值型参数与金额属性强相关。潜在模糊点：未明确单位（如wei或ether）。"
+                    },
+                    {
+                        "parameter": "_bridgeData.receiver",
+                        "attribute": "目标账户",
+                        "reason": "参数名'receiver'在跨桥场景下通常指代接收方地址，与depositToGasZipNative的_recipient参数联动。潜在模糊点：可能同时包含合约地址和EOA地址。"
+                    },
+                    {
+                        "parameter": "msg.sender",
+                        "attribute": "交易发起方账户",
+                        "reason": "Solidity内置变量msg.sender始终表示交易调用者地址，与发起方属性完全匹配。无模糊点。"
+                    }
+                ]
+            ],
+            "formatted_outputs1": {
+                "_bridgeData.sendingAssetId": "代币地址",
+                "_gasZipData.gasZipChainId": "目标链id",
+                "_amountToZip": "转账金额",
+                "_bridgeData.receiver": "目标账户",
+                "msg.sender": "交易发起方账户"
+            }
+        },
+        "step2": {
+            "list": [
+                {
+                    "parameter": "_bridgeData.sendingAssetId",
+                    "outputs2": [
+                        {
+                            "parameter": "_bridgeData.sendingAssetId",
+                            "dataflow": {
+                                "swapAndStartBridgeTokensViaGasZip": [
+                                    "if (LibAsset.isNativeAsset(_bridgeData.sendingAssetId))\n            revert InvalidCallData();",
+                                    "_bridgeData.minAmount = _depositAndSwap(\n            _bridgeData.transactionId,\n            _bridgeData.minAmount,\n            _swapData,\n            payable(msg.sender)\n        );",
+                                    "depositToGasZipNative(\n            _bridgeData.minAmount,\n            _gasZipData.gasZipChainId,\n            _bridgeData.receiver\n        );",
+                                    "emit LiFiTransferStarted(_bridgeData);"
+                                ],
+                                "isNativeAsset": [
+                                    "function isNativeAsset(address assetId) internal pure returns (bool) {\n        return assetId == NATIVE_ASSETID;\n    }"
+                                ],
+                                "depositToGasZipNative": [
+                                    "function depositToGasZipNative(\n        uint256 _amountToZip,\n        uint256 _destinationChains,\n        address _recipient\n    ) public payable {\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: _amountToZip }(\n            _destinationChains,\n            _recipient\n        );\n    }"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "parameter": "_gasZipData.gasZipChainId",
+                    "outputs2": [
+                        {
+                            "parameter": "_gasZipData.gasZipChainId",
+                            "dataflow": {
+                                "swapAndStartBridgeTokensViaGasZip": [
+                                    "function swapAndStartBridgeTokensViaGasZip(\n        ILiFi.BridgeData memory _bridgeData,\n        LibSwap.SwapData[] calldata _swapData,\n        GasZipData calldata _gasZipData\n    )\n        external\n        payable\n        nonReentrant\n        refundExcessNative(payable(msg.sender))\n        containsSourceSwaps(_bridgeData)\n        doesNotContainDestinationCalls(_bridgeData)\n        validateBridgeData(_bridgeData)\n    {\n        // this function shall only be used for ERC20 assets\n        if (LibAsset.isNativeAsset(_bridgeData.sendingAssetId))\n            revert InvalidCallData();\n\n        // deposit and swap ERC20 tokens\n        _bridgeData.minAmount = _depositAndSwap(\n            _bridgeData.transactionId,\n            _bridgeData.minAmount,\n            _swapData,\n            payable(msg.sender)\n        );\n\n        // deposit to gas.zip\n        depositToGasZipNative(\n            _bridgeData.minAmount,\n            _gasZipData.gasZipChainId,\n            _bridgeData.receiver\n        );\n\n        emit LiFiTransferStarted(_bridgeData);\n    }"
+                                ],
+                                "depositToGasZipNative": [
+                                    "function depositToGasZipNative(\n        uint256 _amountToZip,\n        uint256 _destinationChains,\n        address _recipient\n    ) public payable {\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: _amountToZip }(\n            _destinationChains,\n            _recipient\n        );\n    }"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "parameter": "_amountToZip",
+                    "outputs2": [
+                        {
+                            "parameter": "_amountToZip",
+                            "dataflow": {
+                                "swapAndStartBridgeTokensViaGasZip": [
+                                    "function swapAndStartBridgeTokensViaGasZip(\n        ILiFi.BridgeData memory _bridgeData,\n        LibSwap.SwapData[] calldata _swapData,\n        GasZipData calldata _gasZipData\n    )\n        external\n        payable\n        nonReentrant\n        refundExcessNative(payable(msg.sender))\n        containsSourceSwaps(_bridgeData)\n        doesNotContainDestinationCalls(_bridgeData)\n        validateBridgeData(_bridgeData)\n    {\n        // this function shall only be used for ERC20 assets\n        if (LibAsset.isNativeAsset(_bridgeData.sendingAssetId))\n            revert InvalidCallData();\n\n        // deposit and swap ERC20 tokens\n        _bridgeData.minAmount = _depositAndSwap(\n            _bridgeData.transactionId,\n            _bridgeData.minAmount,\n            _swapData,\n            payable(msg.sender)\n        );\n\n        // deposit to gas.zip\n        depositToGasZipNative(\n            _bridgeData.minAmount,\n            _gasZipData.gasZipChainId,\n            _bridgeData.receiver\n        );\n\n        emit LiFiTransferStarted(_bridgeData);\n    }"
+                                ],
+                                "depositToGasZipNative": [
+                                    "function depositToGasZipNative(\n        uint256 _amountToZip,\n        uint256 _destinationChains,\n        address _recipient\n    ) public payable {\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: _amountToZip }(\n            _destinationChains,\n            _recipient\n        );\n    }"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "parameter": "_bridgeData.receiver",
+                    "outputs2": [
+                        {
+                            "parameter": "_bridgeData.receiver",
+                            "dataflow": {
+                                "swapAndStartBridgeTokensViaGasZip": [
+                                    "function swapAndStartBridgeTokensViaGasZip(\n        ILiFi.BridgeData memory _bridgeData,\n        LibSwap.SwapData[] calldata _swapData,\n        GasZipData calldata _gasZipData\n    )\n        external\n        payable\n        nonReentrant\n        refundExcessNative(payable(msg.sender))\n        containsSourceSwaps(_bridgeData)\n        doesNotContainDestinationCalls(_bridgeData)\n        validateBridgeData(_bridgeData)\n    {\n        // this function shall only be used for ERC20 assets\n        if (LibAsset.isNativeAsset(_bridgeData.sendingAssetId))\n            revert InvalidCallData();\n\n        // deposit and swap ERC20 tokens\n        _bridgeData.minAmount = _depositAndSwap(\n            _bridgeData.transactionId,\n            _bridgeData.minAmount,\n            _swapData,\n            payable(msg.sender)\n        );\n\n        // deposit to gas.zip\n        depositToGasZipNative(\n            _bridgeData.minAmount,\n            _gasZipData.gasZipChainId,\n            _bridgeData.receiver\n        );\n\n        emit LiFiTransferStarted(_bridgeData);\n    }"
+                                ],
+                                "depositToGasZipNative": [
+                                    "function depositToGasZipNative(\n        uint256 _amountToZip,\n        uint256 _destinationChains,\n        address _recipient\n    ) public payable {\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: _amountToZip }(\n            _destinationChains,\n            _recipient\n        );\n    }"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "parameter": "msg.sender",
+                    "outputs2": [
+                        {
+                            "parameter": "msg.sender",
+                            "dataflow": {
+                                "swapAndStartBridgeTokensViaGasZip": [
+                                    "function swapAndStartBridgeTokensViaGasZip(\n        ILiFi.BridgeData memory _bridgeData,\n        LibSwap.SwapData[] calldata _swapData,\n        GasZipData calldata _gasZipData\n    )\n        external\n        payable\n        nonReentrant\n        refundExcessNative(payable(msg.sender))\n        containsSourceSwaps(_bridgeData)\n        doesNotContainDestinationCalls(_bridgeData)\n        validateBridgeData(_bridgeData)",
+                                    "_bridgeData.minAmount = _depositAndSwap(\n            _bridgeData.transactionId,\n            _bridgeData.minAmount,\n            _swapData,\n            payable(msg.sender)\n        )",
+                                    "depositToGasZipNative(\n            _bridgeData.minAmount,\n            _gasZipData.gasZipChainId,\n            _bridgeData.receiver\n        )"
+                                ],
+                                "depositToGasZipNative": [
+                                    "function depositToGasZipNative(\n        uint256 _amountToZip,\n        uint256 _destinationChains,\n        address _recipient\n    ) public payable {\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: _amountToZip }(\n            _destinationChains,\n            _recipient\n        );\n    }"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ],
+            "dataflow": {
+                "_bridgeData.sendingAssetId": {
+                    "swapAndStartBridgeTokensViaGasZip": [
+                        "if (LibAsset.isNativeAsset(_bridgeData.sendingAssetId))\n            revert InvalidCallData();",
+                        "_bridgeData.minAmount = _depositAndSwap(\n            _bridgeData.transactionId,\n            _bridgeData.minAmount,\n            _swapData,\n            payable(msg.sender)\n        );",
+                        "depositToGasZipNative(\n            _bridgeData.minAmount,\n            _gasZipData.gasZipChainId,\n            _bridgeData.receiver\n        );",
+                        "emit LiFiTransferStarted(_bridgeData);"
+                    ],
+                    "isNativeAsset": [
+                        "function isNativeAsset(address assetId) internal pure returns (bool) {\n        return assetId == NATIVE_ASSETID;\n    }"
+                    ],
+                    "depositToGasZipNative": [
+                        "function depositToGasZipNative(\n        uint256 _amountToZip,\n        uint256 _destinationChains,\n        address _recipient\n    ) public payable {\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: _amountToZip }(\n            _destinationChains,\n            _recipient\n        );\n    }"
+                    ]
+                },
+                "_gasZipData.gasZipChainId": {
+                    "swapAndStartBridgeTokensViaGasZip": [
+                        "function swapAndStartBridgeTokensViaGasZip(\n        ILiFi.BridgeData memory _bridgeData,\n        LibSwap.SwapData[] calldata _swapData,\n        GasZipData calldata _gasZipData\n    )\n        external\n        payable\n        nonReentrant\n        refundExcessNative(payable(msg.sender))\n        containsSourceSwaps(_bridgeData)\n        doesNotContainDestinationCalls(_bridgeData)\n        validateBridgeData(_bridgeData)\n    {\n        // this function shall only be used for ERC20 assets\n        if (LibAsset.isNativeAsset(_bridgeData.sendingAssetId))\n            revert InvalidCallData();\n\n        // deposit and swap ERC20 tokens\n        _bridgeData.minAmount = _depositAndSwap(\n            _bridgeData.transactionId,\n            _bridgeData.minAmount,\n            _swapData,\n            payable(msg.sender)\n        );\n\n        // deposit to gas.zip\n        depositToGasZipNative(\n            _bridgeData.minAmount,\n            _gasZipData.gasZipChainId,\n            _bridgeData.receiver\n        );\n\n        emit LiFiTransferStarted(_bridgeData);\n    }"
+                    ],
+                    "depositToGasZipNative": [
+                        "function depositToGasZipNative(\n        uint256 _amountToZip,\n        uint256 _destinationChains,\n        address _recipient\n    ) public payable {\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: _amountToZip }(\n            _destinationChains,\n            _recipient\n        );\n    }"
+                    ]
+                },
+                "_amountToZip": {
+                    "swapAndStartBridgeTokensViaGasZip": [
+                        "function swapAndStartBridgeTokensViaGasZip(\n        ILiFi.BridgeData memory _bridgeData,\n        LibSwap.SwapData[] calldata _swapData,\n        GasZipData calldata _gasZipData\n    )\n        external\n        payable\n        nonReentrant\n        refundExcessNative(payable(msg.sender))\n        containsSourceSwaps(_bridgeData)\n        doesNotContainDestinationCalls(_bridgeData)\n        validateBridgeData(_bridgeData)\n    {\n        // this function shall only be used for ERC20 assets\n        if (LibAsset.isNativeAsset(_bridgeData.sendingAssetId))\n            revert InvalidCallData();\n\n        // deposit and swap ERC20 tokens\n        _bridgeData.minAmount = _depositAndSwap(\n            _bridgeData.transactionId,\n            _bridgeData.minAmount,\n            _swapData,\n            payable(msg.sender)\n        );\n\n        // deposit to gas.zip\n        depositToGasZipNative(\n            _bridgeData.minAmount,\n            _gasZipData.gasZipChainId,\n            _bridgeData.receiver\n        );\n\n        emit LiFiTransferStarted(_bridgeData);\n    }"
+                    ],
+                    "depositToGasZipNative": [
+                        "function depositToGasZipNative(\n        uint256 _amountToZip,\n        uint256 _destinationChains,\n        address _recipient\n    ) public payable {\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: _amountToZip }(\n            _destinationChains,\n            _recipient\n        );\n    }"
+                    ]
+                },
+                "_bridgeData.receiver": {
+                    "swapAndStartBridgeTokensViaGasZip": [
+                        "function swapAndStartBridgeTokensViaGasZip(\n        ILiFi.BridgeData memory _bridgeData,\n        LibSwap.SwapData[] calldata _swapData,\n        GasZipData calldata _gasZipData\n    )\n        external\n        payable\n        nonReentrant\n        refundExcessNative(payable(msg.sender))\n        containsSourceSwaps(_bridgeData)\n        doesNotContainDestinationCalls(_bridgeData)\n        validateBridgeData(_bridgeData)\n    {\n        // this function shall only be used for ERC20 assets\n        if (LibAsset.isNativeAsset(_bridgeData.sendingAssetId))\n            revert InvalidCallData();\n\n        // deposit and swap ERC20 tokens\n        _bridgeData.minAmount = _depositAndSwap(\n            _bridgeData.transactionId,\n            _bridgeData.minAmount,\n            _swapData,\n            payable(msg.sender)\n        );\n\n        // deposit to gas.zip\n        depositToGasZipNative(\n            _bridgeData.minAmount,\n            _gasZipData.gasZipChainId,\n            _bridgeData.receiver\n        );\n\n        emit LiFiTransferStarted(_bridgeData);\n    }"
+                    ],
+                    "depositToGasZipNative": [
+                        "function depositToGasZipNative(\n        uint256 _amountToZip,\n        uint256 _destinationChains,\n        address _recipient\n    ) public payable {\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: _amountToZip }(\n            _destinationChains,\n            _recipient\n        );\n    }"
+                    ]
+                },
+                "msg.sender": {
+                    "swapAndStartBridgeTokensViaGasZip": [
+                        "function swapAndStartBridgeTokensViaGasZip(\n        ILiFi.BridgeData memory _bridgeData,\n        LibSwap.SwapData[] calldata _swapData,\n        GasZipData calldata _gasZipData\n    )\n        external\n        payable\n        nonReentrant\n        refundExcessNative(payable(msg.sender))\n        containsSourceSwaps(_bridgeData)\n        doesNotContainDestinationCalls(_bridgeData)\n        validateBridgeData(_bridgeData)",
+                        "_bridgeData.minAmount = _depositAndSwap(\n            _bridgeData.transactionId,\n            _bridgeData.minAmount,\n            _swapData,\n            payable(msg.sender)\n        )",
+                        "depositToGasZipNative(\n            _bridgeData.minAmount,\n            _gasZipData.gasZipChainId,\n            _bridgeData.receiver\n        )"
+                    ],
+                    "depositToGasZipNative": [
+                        "function depositToGasZipNative(\n        uint256 _amountToZip,\n        uint256 _destinationChains,\n        address _recipient\n    ) public payable {\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: _amountToZip }(\n            _destinationChains,\n            _recipient\n        );\n    }"
+                    ]
+                }
+            }
+        },
+        "step3": {
+            "result": {
+                "_amountToZip": [
+                    {
+                        "parameter": "_amountToZip",
+                        "constraint": "检查在锁定或销毁的操作之后用户余额的变化值是否正确，不包括ERC20函数内的相关检查。",
+                        "result": false,
+                        "details": [],
+                        "reason": "无"
+                    }
+                ]
+            }
+        }
+    }
+}
