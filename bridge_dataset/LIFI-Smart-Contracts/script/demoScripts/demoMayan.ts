@@ -1,0 +1,105 @@
+import {
+  type Quote,
+  fetchQuote,
+  getSwapFromEvmTxPayload,
+} from '@mayanfinance/swap-sdk'
+import { config } from 'dotenv'
+import { ethers, utils, constants } from 'ethers'
+
+import deployments from '../../deployments/arbitrum.staging.json'
+import {
+  MayanFacet__factory,
+  ERC20__factory,
+  IMayan__factory,
+  type ILiFi,
+  type MayanFacet,
+} from '../../typechain'
+
+config()
+
+const main = async () => {
+  const RPC_URL = process.env.ETH_NODE_URI_ARBITRUM
+  const PRIVATE_KEY = process.env.PRIVATE_KEY
+  const LIFI_ADDRESS = deployments.LiFiDiamond
+  const ARB_WETH_ADDRESS = '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1'
+  const POLYGON_USDT_ADDRESS = '0xc2132D05D31c914a87C6611C10748AEb04B58e8F'
+
+  const provider = new ethers.providers.JsonRpcProvider(RPC_URL)
+  const signer = new ethers.Wallet(PRIVATE_KEY as string, provider)
+  const mayan = MayanFacet__factory.connect(LIFI_ADDRESS, provider)
+
+  const address = await signer.getAddress()
+
+  let tx
+
+  const quote: Quote[] = await fetchQuote({
+    amount: 0.0014012345678,
+    fromToken: ARB_WETH_ADDRESS,
+    toToken: POLYGON_USDT_ADDRESS,
+    fromChain: 'arbitrum',
+    toChain: 'polygon',
+    slippageBps: 300,
+  })
+
+  const payload = getSwapFromEvmTxPayload(
+    quote[0],
+    address,
+    address,
+    null,
+    address,
+    42161,
+    null,
+    null
+  )
+
+  const iface = IMayan__factory.createInterface()
+  const parsed = iface.parseTransaction({ data: payload.data as string })
+
+  const token = ERC20__factory.connect(ARB_WETH_ADDRESS, provider)
+
+  const bridgeData: ILiFi.BridgeDataStruct = {
+    transactionId: utils.randomBytes(32),
+    bridge: 'Mayan',
+    integrator: 'ACME Devs',
+    referrer: '0x0000000000000000000000000000000000000000',
+    sendingAssetId: ARB_WETH_ADDRESS,
+    receiver: address,
+    minAmount: utils.parseUnits('10', 6),
+    destinationChainId: 137,
+    hasSourceSwaps: false,
+    hasDestinationCall: false,
+  }
+
+  const mayanData: MayanFacet.MayanDataStruct = {
+    mayanProtocol: parsed.args.mayanProtocol,
+    protocolData: parsed.args.protocolData,
+    nonEVMReceiver:
+      '0x0000000000000000000000000000000000000000000000000000000000000000',
+  }
+
+  console.info('Dev Wallet Address: ', address)
+  console.info('Approving USDC...')
+  const gasPrice = await provider.getGasPrice()
+  tx = await token
+    .connect(signer)
+    .approve(LIFI_ADDRESS, constants.MaxUint256, { gasPrice })
+  await tx.wait()
+  console.info('Approved USDC')
+  console.info('Bridging USDC...')
+  tx = await mayan
+    .connect(signer)
+    .startBridgeTokensViaMayan(bridgeData, mayanData, { gasPrice })
+  await tx.wait()
+  console.info('Bridged USDC')
+}
+
+main()
+  .then(() => {
+    console.log('Success')
+    process.exit(0)
+  })
+  .catch((error) => {
+    console.error('error')
+    console.error(error)
+    process.exit(1)
+  })
