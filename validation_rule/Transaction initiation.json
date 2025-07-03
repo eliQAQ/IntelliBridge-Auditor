@@ -1,8 +1,8 @@
 {
-    "toChainID": "Validate that toChainID is in the predefined list of supported chain IDs",
+    "toChainID": "Check whether toChainID is authorized.",
     "tokenAddress": [
-      "Validate that tokenAddress is in the predefined list of supported contract addresses",
-      "Validate that tokenAddress corresponds to a contract (not an EOA)"
+      "Check whether the tokenAddress is authorized to use.",
+      "Validate that tokenAddress corresponds to a contract (not an EOA)."
     ],
     "amount": [
       "Validate that amount is greater than 0",
@@ -11,7 +11,7 @@
       "Validate that msg.sender's balance ≥ amount"
     ],
     "recipientAddress": "Validate that recipientAddress is not the zero address",
-    "externalCallAddress": "Validate that externalCallAddress is in the allowed module whitelist",
+    "externalCallAddress": "Check whether the externalCallAddress is authorized to use.",
     "externalCallFunction": "Validate that externalCallFunction is in the allowed function signature list",
-    "routerAddress": "Validate that routerAddress is in the predefined list of supported router contracts"
+    "routerAddress": "Check whether the routerAddress is authorized to use."
   }
