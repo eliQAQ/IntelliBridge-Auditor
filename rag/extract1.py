@@ -5,8 +5,9 @@ import re
 import json
 import subprocess
 import sys
+import time
 
-from model import gpt
+from model import gpt, gpt_with_message, clean_this_cost, get_this_cost
 from read_function_call import handle
 from enum import Enum
 from prompt import *
@@ -519,8 +520,6 @@ class SolidityContextExtractor:
         source_code = re.sub(r'\s+', ' ', source_code)
         # 处理多行定义：将换行后的定义合并到前一行
         source_code = re.sub(r'(\w)\s*\n\s*(\w)', r'\1 \2', source_code)
-        # 移除不必要的空格
-        # source_code = re.sub(r'\s*([\(\)\{\}\[\],;:])\s*', r'\1', source_code)
         return source_code.strip()
 
     def _extract_imports(self, source_code):
@@ -732,7 +731,7 @@ class SolidityContextExtractor:
                 continue
 
             # 处理定义开始
-            if token in define_type_set:
+            if token in define_type_set and brace_level == 0:
                 if token == 'struct':
                     pass
                 current_definition = token
@@ -774,7 +773,7 @@ class SolidityContextExtractor:
             if not current_definition and token.endswith(';'):
                 current_data = ""
 
-        result = {}
+        result = []
         for f in function_list:
             # [filepath, contract]
             if f.startswith("constructor"):
@@ -838,13 +837,15 @@ class SolidityContextExtractor:
                         called_function_list.append(self.find_functions_by_md5(external_functions[called_function]))
                         continue
 
-                result[func_name] = {
+                d = {
+                    "func_name": func_name,
                     "state_variables": {},
                     "called_functions": []
                 }
-                result[func_name]["state_variables"] = state_variable_dict
-                result[func_name]["called_functions"] = called_function_list
-                result[func_name]["md5"] = function_info["md5"]
+                d["state_variables"] = state_variable_dict
+                d["called_functions"] = called_function_list
+                d["md5"] = function_info["md5"]
+                result.append(d)
 
         return result
 
@@ -1626,7 +1627,6 @@ class SolidityContextExtractor:
 
     @staticmethod
     def parse_graph_output(dot_output):
-        """解析 DOT 格式输出并构建调用图"""
         if not dot_output:
             return
         # print(dot_output)
@@ -1874,11 +1874,37 @@ class SolidityContextExtractor:
 #
 # """
 
-attributes = ["源链id","目标链id","代币地址","转账金额","交易发起方账户","目标账户"]
+attributes = {
+    "toChainID": "Specifies the destination blockchain network ID.",
+    "tokenAddress": "Indicates the contract address of the token to be transferred.",
+    "amount": "The number of tokens to be transferred across chains.",
+    "recipientAddress": "The address that will receive the tokens on the destination chain.",
+    "externalCallAddress": "The address of a contract to be called after the cross-chain transfer.",
+    "externalCallFunction": "The specific function or calldata to be executed on the `externalCallAddress`.",
+    "routerAddress": "The address of the cross-chain router or bridge handler."
+}
 constraints = {
-    "转账金额": ["检查在锁定或销毁的操作之后用户余额的变化值是否正确，不包括ERC20函数内的相关检查。"]
+    "toChainID": ["Check whether toChainID is authorized."],
+    "tokenAddress": [
+      "Check whether the tokenAddress is authorized to use.",
+      "Validate that tokenAddress corresponds to a contract (not an EOA)."
+    ],
+    "amount": [
+      "Validate that amount is greater than 0",
+      "Validate that msg.sender's balance change before and after equals amount",
+      "Validate that the bridge's balance change before and after equals amount",
+      "Validate that msg.sender's balance ≥ amount"
+    ],
+    "recipientAddress": ["Validate that recipientAddress is not the zero address"],
+    "externalCallAddress": ["Check whether the externalCallAddress is authorized to use."],
+    "externalCallFunction": ["Validate that externalCallFunction is in the allowed function signature list"],
+    "routerAddress": ["Check whether the routerAddress is authorized to use."]
 }
 if __name__ == "__main__":
+    # 计时
+    start = time.time()
+    clean_this_cost()
+
     parser = argparse.ArgumentParser(description="get function call graph")
     parser.add_argument("--file-directory", type=str, required=False, help="要遍历的文件目录路径")
     parser.add_argument("--event-name", type=str, required=False, help="调用的事件名称")
@@ -1909,10 +1935,10 @@ if __name__ == "__main__":
                 }
                 contained = set()
                 for f in result[relation_ship]:
-                    contained.add(result[relation_ship][f]["md5"])
+                    contained.add(f["md5"])
                 for f in result[relation_ship]:
-                    state_variables = result[relation_ship][f]["state_variables"]
-                    called_functions: list = result[relation_ship][f]["called_functions"]
+                    state_variables = f["state_variables"]
+                    called_functions: list = f["called_functions"]
                     for s in state_variables:
                         state_variables[s] = state_variables[s]['content']
                     new_called_functions = []
@@ -1926,73 +1952,206 @@ if __name__ == "__main__":
                 print(json.dumps(code_prompt, indent=4, cls=SetEncoder))
 
 
-                prompt1 = get_prompt1(attributes, code)
-                outputs1, native_completion_tokens, native_prompt_tokens = gpt(prompt1)
-                outputs1 = [json.loads(o) for o in outputs1]
                 all_output[relation_ship] = {
                     "step1": {},
                     "step2": {},
                     "step3": {},
+                    "step4": {},
+                    "final_result": {}
                 }
+
+                # step1
+                prompt1 = get_prompt1(attributes, codes)
+                outputs1, native_completion_tokens, native_prompt_tokens, messages = gpt(prompt1)
+                outputs1 = [json.loads(o) for o in outputs1]
+
                 all_output[relation_ship]["step1"] = {
                     "prompt1": prompt1,
                     "outputs1": outputs1,
+                    "v_prompt1" : '',
+                    "v_outputs1": []
                 }
 
                 attribute_to_parameter = {}
                 parameter_to_attribute = {}
+
                 for output in outputs1:
                     for item in output:
                         if item["attribute"] not in attribute_to_parameter:
-                            attribute_to_parameter[item["attribute"]] = []
-                        attribute_to_parameter[item["attribute"]].append({
-                            "parameter": item["parameter"],
+                            attribute_to_parameter[item["attribute"]] = {}
+                        attribute_to_parameter[item["attribute"]][item["parameter"]] = {
                             "reason": item["reason"],
-                        })
-                        parameter_to_attribute[item["parameter"]] = item["attribute"]
+                        }
+                        if item["parameter"] not in parameter_to_attribute:
+                            parameter_to_attribute[item["parameter"]] = {}
+                        parameter_to_attribute[item["parameter"]][item["attribute"]] = {
+                            "reason": item["reason"],
+                        }
+
+                # step1-verify
+                v_prompt1 = get_verify_prompt1([i for arr in outputs1 for i in arr], codes)
+                v_outputs1, native_completion_tokens, native_prompt_tokens, messages = gpt(v_prompt1)
+                v_outputs1 = [json.loads(o) if isinstance(o, str) else o for o in v_outputs1]
+                all_output[relation_ship]["step1"]["v_outputs1"] = v_outputs1
+                all_output[relation_ship]["step1"]["v_prompt1"] = v_prompt1
+
+                for v_output in v_outputs1:
+                    for item in v_output:
+                        if item["attribute"] not in attribute_to_parameter:
+                            attribute_to_parameter[item["attribute"]] = {}
+                        attribute_to_parameter[item["attribute"]][item["parameter"]]["score"] = item["score"]
+                        attribute_to_parameter[item["attribute"]][item["parameter"]]["s_reason"] = item["reason"]
+                        if item["parameter"] not in parameter_to_attribute:
+                            parameter_to_attribute[item["parameter"]] = {}
+                        parameter_to_attribute[item["parameter"]][item["attribute"]]["score"] = item["score"]
+                        parameter_to_attribute[item["parameter"]][item["attribute"]]["s_reason"] = item["reason"]
+
+                # 每个attribute取score前三的parameter
+                for attr in attribute_to_parameter:
+                    # 去除没有score的项
+                    attribute_to_parameter[attr] = dict(filter(lambda x: "score" in x[1], attribute_to_parameter[attr].items()))
+                    attribute_to_parameter[attr] = dict(sorted(attribute_to_parameter[attr].items(), key=lambda x:x[1]["score"], reverse=True)[:3])
+
+
                 all_output[relation_ship]["step1"]["formatted_outputs1"] = parameter_to_attribute
 
-                # 这里应该对第一步的输出选择最优的解。
-                all_output[relation_ship]["step2"]["list"] = []
+                # step2
+                all_output[relation_ship]["step2"] = {}
                 parameter_to_dataflow = {}
                 for attr in attribute_to_parameter:
-                    for item in attribute_to_parameter[attr]:
-                        parameter = item["parameter"]
-                        if parameter not in parameter_to_dataflow:
-                            prompt2 = get_prompt2(parameter, code)
-                            outputs2, native_completion_tokens, native_prompt_tokens = gpt(prompt2)
-                            outputs2 = [json.loads(o) for o in outputs2]
-                            all_output[relation_ship]["step2"]["list"].append({
-                                "parameter": parameter,
-                                "outputs2": outputs2,
-                            })
-                            parameter_to_dataflow[parameter] = outputs2[0]["dataflow"]
-                all_output[relation_ship]["step2"]["dataflow"] = parameter_to_dataflow
-                #
+                    for parameter in attribute_to_parameter[attr]:
+                        if attr not in all_output[relation_ship]["step2"]:
+                            all_output[relation_ship]["step2"][attr] = {}
+                        if parameter not in all_output[relation_ship]["step2"][attr]:
+                            all_output[relation_ship]["step2"][attr][parameter] = {}
+                            # todo 该过程可能需要重复6次
+                            prompt2 = get_prompt2(parameter, codes)
+                            for i in range(6):
+                                print(f"step2-{attr}-{parameter}-{i+1}")
+                                outputs2, native_completion_tokens, native_prompt_tokens, messages = gpt(prompt2)
+                                outputs2 = [json.loads(o) if isinstance(o, str) else o for o in outputs2]
+
+                                # step2-verify
+                                v_prompt2 = get_verify_prompt2(parameter, outputs2[0]["dataflow"], codes)
+                                v_outputs2, native_completion_tokens, native_prompt_tokens, messages = gpt(v_prompt2)
+                                v_outputs2 = [json.loads(o) if isinstance(o, str) else o for o in v_outputs2]
+
+                                # {{
+                                # "parameter": "...", // 参数名
+                                # "coverage": "...", // 覆盖程度分数
+                                # "correctness":"...", // 正确程度分数
+                                # "score": "...", // 置信度评分
+                                # "reason": "..." // 简要说明给定该置信度分数的原因
+                                # }}
+                                outputs2[0]["coverage"] = v_outputs2[0]["coverage"]
+                                outputs2[0]["correctness"] = v_outputs2[0]["correctness"]
+                                outputs2[0]["score"] = v_outputs2[0]["score"]
+                                outputs2[0]["reason"] = v_outputs2[0]["reason"]
+
+                                if "dataflows" not in all_output[relation_ship]["step2"][attr][parameter]:
+                                    all_output[relation_ship]["step2"][attr][parameter]["dataflows"] = []
+                                all_output[relation_ship]["step2"][attr][parameter]["dataflows"].append(outputs2[0])
+
+                            # 取得分前三的dataflow
+                            all_output[relation_ship]["step2"][attr][parameter]["dataflows"] = sorted(
+                                all_output[relation_ship]["step2"][attr][parameter]["dataflows"], key=lambda x: str(x["score"]), reverse=True)[:3]
+
+                            # step2-merge
+                            merge_prompt = get_merge_dataflow_prompt(parameter, [
+                                dataflow["dataflow"] for dataflow in all_output[relation_ship]["step2"][attr][parameter]["dataflows"]
+                            ])
+                            merge_outputs, native_completion_tokens, native_prompt_tokens, messages = gpt(merge_prompt)
+                            merge_outputs = [json.loads(o) if isinstance(o, str) else o for o in merge_outputs]
+                            all_output[relation_ship]["step2"][attr][parameter]["merge_dataflows"] = merge_outputs[0]["dataflows"]
+
+
+                # step3
+                all_output[relation_ship]["step3"] = {}
                 parameter_to_constraint = {}
-                for parameter in parameter_to_dataflow:
-                    attribute = parameter_to_attribute[parameter]
-                    if attribute in constraints:
-                        constraint = constraints[attribute]
-                        prompt3 = get_prompt3(parameter, constraint, parameter_to_dataflow[parameter])
-                        outputs3, native_completion_tokens, native_prompt_tokens = gpt(prompt3)
-                        outputs3 = [json.loads(o) for o in outputs3]
-                        if parameter not in parameter_to_constraint:
-                            parameter_to_constraint[parameter] = []
-                        parameter_to_constraint[parameter].append(outputs3[0])
-                all_output[relation_ship]["step3"]["result"] = parameter_to_constraint
-                # q1. ToT的思想是大模型生成多个思路，然后大模型选择更可能接近目标的思路进一步思考，随后看是利用深度优先还是广度优先，但是尽管目前
-                #     的属性映射有让大模型提供多个方案，但是一是多个方案的可能较少，至少示例的好像没有，一般情况下不会有很多容易弄混的才对；二是尽
-                #     管可能输出多个方案和依据，但是并没有让大模型选择最可能的方向，不过放在我们这里影响不大，因为第二步和第一步可以认为是独立的，
-                #     第一步的所有输出都可以在第二步单独检测。
-                # q2. 第二步生成变量相关的源码片段，但目前的情况好像是按桉树为单位输出的，就示例来说好像把所有输入的代码中的函数都做为相关片段给出，
-                #     可能是amount是函数参数导致的？但是这么粗的粒度感觉很诡异，具体效果待测试。
-                # q3. 第三步的输入代码是第二步的输出，且对于单个参数对应的约束应该是固定的，所以约束条件可能应该传入数组，毕竟code不会变，也可以
-                #     分多次询问，每次询问一个约束，但code都是一样。
+                for attr in all_output[relation_ship]["step2"]:
+                    if attr not in all_output[relation_ship]["step3"]:
+                        all_output[relation_ship]["step3"][attr] = {}
+                    for parameter in all_output[relation_ship]["step2"][attr]:
+                        if attr in constraints:
+                            if parameter not in all_output[relation_ship]["step3"][attr]:
+                                all_output[relation_ship]["step3"][attr][parameter] = {}
+                            for constraint in constraints[attr]:
+                                prompt3 = get_prompt3(parameter, constraint, all_output[relation_ship]["step2"][attr][parameter]["merge_dataflows"])
+                                print(f"step3-{attr}-{parameter}-{constraint}")
+                                outputs3, native_completion_tokens, native_prompt_tokens, messages = gpt(prompt3)
+                                outputs3 = [json.loads(o) if isinstance(o, str) else o for o in outputs3]
+                                if constraint not in all_output[relation_ship]["step3"][attr][parameter]:
+                                    all_output[relation_ship]["step3"][attr][parameter][constraint] = {}
+                                    all_output[relation_ship]["step3"][attr][parameter][constraint]["original"] = outputs3[0]["results"]
+
+                                # step3-verify
+                                # 取original中result为true的validation
+                                validations = list(filter(lambda x: "result" in x and x["result"], outputs3[0]["results"]))
+                                validations = [r["validation"] for r in validations]
+                                v_prompt3 = get_verify_prompt3(parameter, constraint, validations, codes)
+                                print(f"step3-v-{attr}-{parameter}-{constraint}")
+                                v_outputs3, native_completion_tokens, native_prompt_tokens, messages = gpt(v_prompt3)
+                                v_outputs3 = [json.loads(o) if isinstance(o, str) else o for o in v_outputs3]
+                                # 取得分前三的results
+                                all_output[relation_ship]["step3"][attr][parameter][constraint]["verify_filtered"] = sorted(list(filter(lambda x: "score" in x,v_outputs3[0])), key=lambda x: str(x["score"]), reverse=True)[:3]
+
+                # step4
+                all_output[relation_ship]["step4"] = {}
+                for attr in all_output[relation_ship]["step3"]:
+                    if attr not in all_output[relation_ship]["step4"]:
+                        all_output[relation_ship]["step4"][attr] = {}
+                    for parameter in all_output[relation_ship]["step3"][attr]:
+                        if parameter not in all_output[relation_ship]["step4"][attr]:
+                            all_output[relation_ship]["step4"][attr][parameter] = {}
+                        for constraint in all_output[relation_ship]["step3"][attr][parameter]:
+                            for r in all_output[relation_ship]["step3"][attr][parameter][constraint]["verify_filtered"]:
+                                prompt4 = get_prompt4(parameter, r["validation"], codes, code_prompt)
+                                print(f"step4-{attr}-{parameter}-{constraint}")
+                                outputs4, native_completion_tokens, native_prompt_tokens, messages = gpt(prompt4)
+                                outputs4 = [json.loads(o) if isinstance(o, str) else o for o in outputs4]
+
+                                if constraint not in all_output[relation_ship]["step4"][attr][parameter]:
+                                    all_output[relation_ship]["step4"][attr][parameter][constraint] = []
+
+                                results = list(filter(lambda x: "result" in x and x["result"], outputs4[0]))
+                                # step4-verify
+                                for r1 in results:
+                                    if r1["result"]:
+                                        print(f"step4-v-{attr}-{parameter}-{constraint}-{r['validation']}-{r1['poc']}")
+                                        v_prompt4 = get_verify_prompt4(code_prompt, parameter, r["validation"], r1["poc"], codes)
+                                        v_outputs4, native_completion_tokens, native_prompt_tokens, messages = gpt(v_prompt4)
+                                        v_outputs4 = [json.loads(o) if isinstance(o, str) else o for o in v_outputs4]
+                                        r1["score"] = v_outputs4[0]["score"]
+                                        r1["reason"] = v_outputs4[0]["reason"]
+                                        if attr not in all_output[relation_ship]["final_result"]:
+                                            all_output[relation_ship]["final_result"][attr] = {}
+                                        if parameter not in all_output[relation_ship]["final_result"][attr]:
+                                            all_output[relation_ship]["final_result"][attr][parameter] = {}
+                                        if constraint not in all_output[relation_ship]["final_result"][attr][parameter]:
+                                            all_output[relation_ship]["final_result"][attr][parameter][constraint] = []
+                                        all_output[relation_ship]["final_result"][attr][parameter][constraint].append({
+                                            "validation": r['validation'],
+                                            "poc": r1['poc'],
+                                            "score": v_outputs4[0]["score"],
+                                            "reason": v_outputs4[0]["reason"]
+                                        })
+
+                                all_output[relation_ship]["step4"][attr][parameter][constraint].append(r)
+                                all_output[relation_ship]["step4"][attr][parameter][constraint][-1]["results"] = results
+
+            break
+    end = time.time()
+    all_output["time"] = end - start
+    this_cost, this_prompt_tokens, this_completion_tokens = get_this_cost()
+    all_output["this_cost"] = this_cost
+    all_output["this_prompt_tokens"] = this_prompt_tokens
+    all_output["this_completion_tokens"] = this_completion_tokens
 
 
     with open("result.json", 'w') as file:
         json.dump(result, file, indent=4, cls=SetEncoder, ensure_ascii=False)
+    with open("context.json", 'w') as file:
+        json.dump(code_prompt, file, indent=4, cls=SetEncoder, ensure_ascii=False)
     with open("all_output.json", 'w') as file:
         json.dump(all_output, file, indent=4, cls=SetEncoder, ensure_ascii=False)
     # 解析代码

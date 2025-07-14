@@ -87,7 +87,8 @@ def traverse_files(directory):
 
 
             command = "slither " + file_path + " --print call-graph"
-            matching_files = find_files_with_prefix_and_suffix(os.path.dirname(file_path), file, "call-graph.dot")
+            # matching_files = find_files_with_prefix_and_suffix(os.path.dirname(file_path), file, "call-graph.dot")
+            matching_files = find_files_with_prefix_and_suffix(os.path.dirname(file_path), file, ".dot")
             if not matching_files:
                 try:
                     print(f"Processing path: {file_path}")
