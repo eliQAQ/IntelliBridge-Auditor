@@ -1962,6 +1962,7 @@ if __name__ == "__main__":
 
                 # step1
                 prompt1 = get_prompt1(attributes, codes)
+                print(f"step1")
                 outputs1, native_completion_tokens, native_prompt_tokens, messages = gpt(prompt1)
                 outputs1 = [json.loads(o) for o in outputs1]
 
@@ -1990,6 +1991,7 @@ if __name__ == "__main__":
 
                 # step1-verify
                 v_prompt1 = get_verify_prompt1([i for arr in outputs1 for i in arr], codes)
+                print(f"step1-v")
                 v_outputs1, native_completion_tokens, native_prompt_tokens, messages = gpt(v_prompt1)
                 v_outputs1 = [json.loads(o) if isinstance(o, str) else o for o in v_outputs1]
                 all_output[relation_ship]["step1"]["v_outputs1"] = v_outputs1
