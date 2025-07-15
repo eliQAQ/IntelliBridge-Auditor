@@ -185,6 +185,41 @@ def get_verify_prompt1(prompt1_output: list, code: list) -> str:
 
 """
 
+def get_verify_prompt1_vote(prompt1_output: list, code: list) -> str:
+    return f"""
+你是一位严谨的跨链协议审计员和数据一致性验证者。仔细审查给定的多个跨链属性与参数在代码中的含义是否一致，并为其分配一个置信度分数 (0-100%)，指出给定该置信度分数的原因。
+
+输入格式： 你将接收一个 JSON 对象作为输入，其结构如下:
+{{
+"correspondence":    // 代码中属性与参数对应的数组
+[
+{{
+"attribute": "...", // 输入的跨链属性 
+"parameter": "...", // 对应的参数
+"reason": "..." // 简要的说明：为何选择此参数，以及可能的歧义 
+}}
+...
+]，
+"code":"..." //跨链合约代码
+}}
+
+输出格式：返回一个 JSON 对象数组，每项结构如下：
+[ 
+{{
+"parameter": "...", // 代码中最可能对应该属性的参数名
+"attribute": "...", // 输入的跨链属性 
+"score":"..."， // 分配的置信度分数
+"reason": "..." // 简要说明给定该置信度分数的原因
+}}, ... 
+]
+输入：
+{{
+"correspondence": {json.dumps(prompt1_output, ensure_ascii=False)},
+"code" {json.dumps(code, ensure_ascii=False)}:
+}}
+
+"""
+
 def get_verify_prompt2(parameter: str, dataflow: dict, code: list) -> str:
     return f"""
 你是一位严谨的跨链协议审计员和数据一致性验证者。仔细审查给定参数的数据流代码与原始代码，请你从“覆盖程度”和“正确程度”两个维度，对我提取的该参数的数据流代码在原代码中的表现打出置信度评分（0-100），并给出具体的理由。

@@ -30,7 +30,7 @@ def clean_this_cost():
 
 def get_this_cost():
     return this_cost, this_prompt_tokens, this_completion_tokens
-def gpt(prompt, model='deepseek-ai/DeepSeek-V3', temperature=0.7, max_tokens=4096, stop=None, platform = "gjld") -> \
+def gpt(prompt, model='Pro/deepseek-ai/DeepSeek-V3', temperature=0.7, max_tokens=10000, stop=None, platform = "gjld") -> \
 tuple[list[str | None | Any], int, int, Any]:
     messages = [{"role": "user", "content": prompt}]
     return chatgpt(messages, model=model, temperature=temperature, max_tokens=max_tokens, stop=stop,platform=platform)
@@ -125,6 +125,8 @@ def calculate_gpt_usage(completion_tokens, prompt_tokens, platform='gjld',model=
 
     return cost
 
+
+def 
 # 转换成json字符串，输入可能是list或字符串
 def list_to_json(l:Union[list, str]):
     if isinstance(l, str) or isinstance(l, int):

@@ -1,13 +1,12 @@
 {
     "sourceChainID": "Check that sourceChainID is in the predefined list of supported chain IDs",
     "toChainID": "Verify that the toChainID specified in the transaction matches the current chain’s ID",
-    "recipientAddress": "Validate that recipientAddress is not the zero address",
     "amount": [
-      "Validate that amount is greater than 0",
       "Validate that recipientAddress's balance change before and after equals amount",
-      "Validate that the bridge's balance change before and after equals amount",
-      "Validate that the token's total supply does not exceed its preset limit on the target chain"
+      "Validate that the bridge's balance change before and after equals amount"
     ],
     "nonce": "Check and mark that nonce has not been consumed to prevent replay",
-    "proof": "Cryptographic proof that the transaction truly occurred and was finalized on the source chain (e.g., multi-signature, MPC signature, zero-knowledge proof, or Merkle proof)"
+    "proof": "Cryptographic proof that the transaction truly occurred and was finalized on the source chain (e.g., multi-signature, MPC signature, zero-knowledge proof, or Merkle proof)",
+    "externalCallAddress": "Check whether the externalCallAddress is authorized to use.",
+    "externalCallFunction": "Validate that externalCallFunction is in the allowed function signature list"
   }

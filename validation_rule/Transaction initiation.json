@@ -1,9 +1,10 @@
 {
-    "toChainID": "Check whether toChainID is authorized.",
-    "tokenAddress": [
-      "Check whether the tokenAddress is authorized to use.",
-      "Validate that tokenAddress corresponds to a contract (not an EOA)."
+    "toChainID": [
+      "Check whether toChainID is authorized.",
+      "Check that the destination chain ID is not equal to the source chain ID."
     ],
+    "tokenAddress":  "Check whether the tokenAddress is authorized to use.",
+    "nonce":  "Check if the transaction's nonce is equal to the account's current nonce.",
     "amount": [
       "Validate that amount is greater than 0",
       "Validate that msg.sender's balance change before and after equals amount",
