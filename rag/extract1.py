@@ -256,22 +256,48 @@ class SolidityContextExtractor:
             'external_functions': {}
         }
 
-    def parse_dataset(self):
+    def parse_dataset(self, dataset_name:str = ""):
         # 递归遍历所有sol文件
 
-        for root, dirs, files in os.walk(self.dataset_path):
-            for file in files:
-                if file.endswith(".sol"):
-                    file_path = os.path.join(root, file)
-                    result = self.parse_file(file_path)
-                    self.save_result(result, file_path)
-        self.save_data_as_file()
+        if not dataset_name:
+            for root, dirs, files in os.walk(self.dataset_path):
+                for file in files:
+                    if file.endswith(".sol"):
+                        file_path = os.path.join(root, file)
+                        result = self.parse_file(file_path)
+                        self.save_result(result, file_path)
+        else:
+            SolidityContextExtractor.all_data = {
+                'solidity_file': {},
+                'handled_md5': set()
+            } if not os.path.exists(f"dataset_data\\{dataset_name}\\all_data.json") else json.load(open(f"dataset_data\\{dataset_name}\\all_data.json", "r"), object_hook=set_decoder)
 
-    def save_data_as_file(self):
-        json.dump(SolidityContextExtractor.all_data, open("all_data.json", "w"), indent=4, ensure_ascii=False,
-                  cls=SetEncoder)
-        json.dump(SolidityContextExtractor.index_data, open("index_data.json", "w"), indent=4, ensure_ascii=False,
-                  cls=SetEncoder)
+            SolidityContextExtractor.index_data = {
+
+            } if not os.path.exists(f"dataset_data\\{dataset_name}\\index_data.json") else json.load(open(f"dataset_data\\{dataset_name}\\index_data.json", "r"),
+                                                                      object_hook=set_decoder)
+
+            for root, dirs, files in os.walk(os.path.join(self.dataset_path,dataset_name)):
+                for file in files:
+                    if file.endswith(".sol"):
+                        file_path = os.path.join(root, file)
+                        result = self.parse_file(file_path)
+                        self.save_result(result, file_path)
+        self.save_data_as_file(dataset_name)
+
+    def save_data_as_file(self, dataset_name:str = ""):
+        if not dataset_name:
+            json.dump(SolidityContextExtractor.all_data, open("all_data.json", "w"), indent=4, ensure_ascii=False,
+                      cls=SetEncoder)
+            json.dump(SolidityContextExtractor.index_data, open("index_data.json", "w"), indent=4, ensure_ascii=False,
+                      cls=SetEncoder)
+        else:
+            if not os.path.exists(f"dataset_data\\{dataset_name}"):
+                os.mkdir(f"dataset_data\\{dataset_name}")
+            json.dump(SolidityContextExtractor.all_data, open(f"dataset_data\\{dataset_name}\\all_data.json", "w"), indent=4, ensure_ascii=False,
+                      cls=SetEncoder)
+            json.dump(SolidityContextExtractor.index_data, open(f"dataset_data\\{dataset_name}\\index_data.json", "w"), indent=4, ensure_ascii=False,
+                      cls=SetEncoder)
 
     def save_result(self, result, file_path):
         if result:
@@ -311,6 +337,9 @@ class SolidityContextExtractor:
         encoding = chardet.detect(binary_data)["encoding"]
         source_code = binary_data.decode(encoding)
 
+        if file_path in self.all_data['solidity_file']:
+            return {}
+
         self.current_file = file_path.split("/")[-1].split("\\")[-1]
 
         self.solidity_file['filepath'] = file_path
@@ -338,7 +367,7 @@ class SolidityContextExtractor:
             # 获取处理后的内容的md5
             md5 = hashlib.md5(source_code.encode()).hexdigest()
             if md5 in self.all_data['handled_md5']:
-                # 具体输出什么暂时不重要
+                # 具体输出什么不重要
                 return {}
 
         # 提取导入声明
@@ -369,7 +398,6 @@ class SolidityContextExtractor:
                 contract_type = ContractType.CONTRACT
             elif contract_type == "library":
                 contract_type = ContractType.LIBRARY
-
             elif contract_type == "interface":
                 contract_type = ContractType.INTERFACE
             else:
@@ -390,6 +418,8 @@ class SolidityContextExtractor:
                 # 'potential_vulnerabilities': [],
                 'using_directives': {}
             }
+            if contract_type == ContractType.INTERFACE:
+                self.contracts[contract_name]["implement"] = []
 
             if self.current_file is not None:
                 self.solidity_file['md5'] = md5
@@ -400,6 +430,33 @@ class SolidityContextExtractor:
                 self.contracts[contract_name]['inherits'] = [
                     base.strip() for base in re.findall(r'\w+', inheritance)
                 ]
+                for interface in self.contracts[contract_name]['inherits']:
+                    if interface in self.contracts and self.contracts[interface]["type"] == ContractType.INTERFACE:
+                        self.contracts[interface]['implement'].append([
+                            "",
+                            contract_name
+                        ])
+                        continue
+
+                    for imported_path in self.imported_contracts:
+                        if self.imported_contracts[imported_path]["in_database"]:
+                            if self.imported_contracts[imported_path]["import_all"]:
+                                if interface in self.all_data["solidity_file"][imported_path]["contracts"] and\
+                                    self.all_data["solidity_file"][imported_path]["contracts"][interface]["type"] == ContractType.INTERFACE:
+                                    self.contracts[contract_name]['implement'].append([
+                                        self.solidity_file['filepath'],
+                                        contract_name
+                                    ])
+                                    break
+                            else:
+                                if interface in self.imported_contracts[imported_path]["imported"] and\
+                                        self.all_data["solidity_file"][imported_path]["contracts"][interface]["type"] == ContractType.INTERFACE:
+                                    self.all_data["solidity_file"][imported_path]["contracts"][interface]['implement'].append([
+                                        self.solidity_file['filepath'],
+                                        contract_name
+                                    ])
+                                    break
+
 
             # 解析合约内容
             self._parse_contract_content(contract_contents)
@@ -423,14 +480,35 @@ class SolidityContextExtractor:
                     contract = call.split(".")[0]
                     function = call.split(".")[1]
                     if contract in self.contracts:
-                        if function in self.contracts[contract]['functions']:
-                            self.solidity_file["external_functions"][call] = \
-                            self.contracts[contract]['functions'][function][0]["md5"]
-                            continue
-                        elif function in self.contracts[contract]['modifiers']:
-                            self.solidity_file["external_functions"][call] = \
-                            self.contracts[contract]['modifiers'][function]["md5"]
-                            continue
+                        if self.contracts[contract]["type"] != ContractType.INTERFACE:
+                            if function in self.contracts[contract]['functions']:
+                                self.solidity_file["external_functions"][call] = \
+                                self.contracts[contract]['functions'][function][0]["md5"]
+                                continue
+                            elif function in self.contracts[contract]['modifiers']:
+                                self.solidity_file["external_functions"][call] = \
+                                self.contracts[contract]['modifiers'][function]["md5"]
+                                continue
+                        else:
+                            if function in self.contracts[contract]['functions']:
+                                t_f = None
+                                for implement in self.contracts[contract]["implement"]:
+                                    if not implement[0] and function in self.contracts[implement[1]]['functions']:
+                                        t_f = self.contracts[implement[1]]['functions'][function][0]["md5"]
+                                        break
+                                    if not t_f and function in self.all_data["solidity_file"][implement[0]]["contracts"][implement[1]]['functions']:
+                                        t_f = self.all_data["solidity_file"][implement[0]]["contracts"][implement[1]]['functions'][function][0]["md5"]
+                                if t_f:
+                                    self.solidity_file["external_functions"][call] = t_f
+                                    continue
+                                else:
+                                    self.solidity_file["external_functions"][call] = \
+                                    self.contracts[contract]['functions'][function][0]["md5"]
+                                    continue
+                            elif function in self.contracts[contract]['modifiers']:
+                                self.solidity_file["external_functions"][call] = \
+                                self.contracts[contract]['modifiers'][function]["md5"]
+                                continue
 
                     # 遍历import进来的合约进行查找
                     flag = False
@@ -441,11 +519,30 @@ class SolidityContextExtractor:
                                     if function in \
                                             self.all_data["solidity_file"][imported_path]["contracts"][cont_name][
                                                 'functions']:
-                                        self.solidity_file["external_functions"][call] = \
-                                        self.all_data["solidity_file"][imported_path]["contracts"][cont_name][
-                                            'functions'][function][0]["md5"]
-                                        flag = True
+                                        if self.all_data["solidity_file"][imported_path]["contracts"][cont_name]["type"] != ContractType.INTERFACE:
+                                            self.solidity_file["external_functions"][call] = \
+                                            self.all_data["solidity_file"][imported_path]["contracts"][cont_name][
+                                                'functions'][function][0]["md5"]
+                                            flag = True
+                                        else:
+                                            t_f = None
+                                            for implement in self.all_data["solidity_file"][imported_path]["contracts"][cont_name]["implement"]:
+                                                if function in \
+                                                        self.all_data["solidity_file"][implement[0] if implement[0] else imported_path]["contracts"][
+                                                            implement[1]]['functions']:
+                                                    t_f = self.all_data["solidity_file"][implement[0] if implement[0] else imported_path]["contracts"][
+                                                            implement[1]]['functions'][function][0]["md5"]
+                                                    break
+                                            if t_f:
+                                                self.solidity_file["external_functions"][call] = t_f
+                                            else:
+                                                self.solidity_file["external_functions"][call] = \
+                                                    self.all_data["solidity_file"][imported_path]["contracts"][
+                                                        cont_name][
+                                                        'functions'][function][0]["md5"]
+                                            flag = True
                                         break
+
                                     elif function in \
                                             self.all_data["solidity_file"][imported_path]["contracts"][cont_name][
                                                 'modifiers']:
@@ -467,10 +564,34 @@ class SolidityContextExtractor:
                                     if function in \
                                             self.all_data["solidity_file"][imported_path]["contracts"][o_name][
                                                 'functions']:
-                                        self.solidity_file["external_functions"][call] = \
+                                        if self.all_data["solidity_file"][imported_path]["contracts"][o_name][
+                                            "type"] != ContractType.INTERFACE:
+                                            self.solidity_file["external_functions"][call] = \
+                                                self.all_data["solidity_file"][imported_path]["contracts"][o_name][
+                                                    'functions'][function][0]["md5"]
+                                            flag = True
+                                        else:
+                                            t_f = None
+                                            for implement in \
                                             self.all_data["solidity_file"][imported_path]["contracts"][o_name][
-                                                'functions'][function][0]["md5"]
-                                        flag = True
+                                                "implement"]:
+                                                if function in \
+                                                        self.all_data["solidity_file"][
+                                                            implement[0] if implement[0] else imported_path][
+                                                            "contracts"][
+                                                            implement[1]]['functions']:
+                                                    t_f = self.all_data["solidity_file"][
+                                                        implement[0] if implement[0] else imported_path]["contracts"][
+                                                        implement[1]]['functions'][function][0]["md5"]
+                                                    break
+                                            if t_f:
+                                                self.solidity_file["external_functions"][call] = t_f
+                                            else:
+                                                self.solidity_file["external_functions"][call] = \
+                                                    self.all_data["solidity_file"][imported_path]["contracts"][
+                                                        o_name][
+                                                        'functions'][function][0]["md5"]
+                                            flag = True
                                         break
                                     elif function in \
                                             self.all_data["solidity_file"][imported_path]["contracts"][o_name][
@@ -834,7 +955,51 @@ class SolidityContextExtractor:
                 called_functions = function_info['external_calls']
                 for called_function in set(called_functions):
                     if called_function in external_functions:
-                        called_function_list.append(self.find_functions_by_md5(external_functions[called_function]))
+                        funcs = self.find_functions_by_md5(external_functions[called_function])
+                        called_function_list.append(funcs)
+                        for fun in funcs:
+                            state_variables_1 = fun["reads"]
+                            for state_variable in state_variables_1:
+                                state_variable_name = state_variable[0]
+                                path = state_variable[1]
+                                contract = state_variable[2]
+                                if not path:
+                                    path = SolidityContextExtractor.index_data[external_functions[called_function]][0]
+                                if contract:
+                                    content = SolidityContextExtractor.all_data['solidity_file'][path]['contracts'][contract][
+                                        'state_variables'][state_variable_name]
+                                else:
+                                    content = SolidityContextExtractor.all_data['solidity_file'][path]['state_variables'][
+                                        state_variable_name]
+                                state_variable_dict[state_variable_name] = content
+
+                        if self.is_modifier_by_md5(external_functions[called_function]):
+                            modifier_detail = SolidityContextExtractor.index_data[external_functions[called_function]]
+                            modifier_external_functions = SolidityContextExtractor.all_data['solidity_file'][modifier_detail[0]]['external_functions']
+                            modifier_called_functions = funcs[0]["external_calls"]
+                            for modifier_called_function in set(modifier_called_functions):
+                                if modifier_called_function in modifier_external_functions:
+                                    funcs2 = self.find_functions_by_md5(modifier_external_functions[modifier_called_function])
+                                    called_function_list.append(funcs2)
+                                    for fun in funcs2:
+                                        state_variables_1 = fun["reads"]
+                                        for state_variable in state_variables_1:
+                                            state_variable_name = state_variable[0]
+                                            path = state_variable[1]
+                                            contract = state_variable[2]
+                                            if not path:
+                                                path = SolidityContextExtractor.index_data[
+                                                    external_functions[called_function]][0]
+                                            if contract:
+                                                content = \
+                                                SolidityContextExtractor.all_data['solidity_file'][path]['contracts'][
+                                                    contract][
+                                                    'state_variables'][state_variable_name]
+                                            else:
+                                                content = SolidityContextExtractor.all_data['solidity_file'][path][
+                                                    'state_variables'][
+                                                    state_variable_name]
+                                            state_variable_dict[state_variable_name] = content
                         continue
 
                 d = {
@@ -878,6 +1043,13 @@ class SolidityContextExtractor:
                     function_info = function
                     break
             return function_info
+
+    def is_modifier_by_md5(self, md5):
+        if md5 in SolidityContextExtractor.index_data:
+            detail = SolidityContextExtractor.index_data[md5]
+            if detail[2] == 1:
+                return True
+        return False
 
     def find_contract_name_by_md5(self, md5):
         if md5 in SolidityContextExtractor.index_data:
@@ -1640,27 +1812,6 @@ class SolidityContextExtractor:
             node_label = match.group(2)
             nodes[node_id] = node_label
 
-            # 识别函数节点
-            # if "function" in node_label:
-            #     # 提取合约和函数名 (格式: Contract.function)
-            #     parts = node_label.split(' ')
-            #     if len(parts) > 1 and '.' in parts[1]:
-            #         contract, func_name = parts[1].split('.')
-            #         self.contracts.append(contract)
-            #         full_name = f"{contract}.{func_name}"
-            #         self.function_details[node_id] = {
-            #             'full_name': full_name,
-            #             'contract': contract,
-            #             'name': func_name,
-            #             'type': 'function'
-            #         }
-            #     else:
-            #         self.function_details[node_id] = {
-            #             'full_name': node_label,
-            #             'type': 'other'
-            #         }
-        # print(nodes)
-
         edges = {}
         # 解析边（函数调用关系）
         for match in re.finditer(edge_pattern, dot_output):
@@ -1674,24 +1825,7 @@ class SolidityContextExtractor:
             if source_id not in edges:
                 edges[source_id] = set()
             edges[source_id].add(target_id)
-            # 只关注函数调用
-            # if source_id in self.function_details and target_id in self.function_details:
-            #     source_func = self.function_details[source_id]['full_name']
-            #     target_func = self.function_details[target_id]['full_name']
-            #
-            #     # 添加到调用图
-            #     self.call_graph[source_func].add(target_func)
-            #
-            #     # 记录调用类型
-            #     if 'function' in self.function_details[source_id]['type']:
-            #         if source_func not in self.function_details:
-            #             self.function_details[source_func] = {'calls': []}
-            #         self.function_details[source_func].setdefault('calls', []).append({
-            #             'callee': target_func,
-            #             'type': edge_label if edge_label else 'direct'
-            #         })
 
-        # print(edges)
         return edges
 
     def _generate_state_variable_to_call(self):
@@ -1874,21 +2008,23 @@ class SolidityContextExtractor:
 #
 # """
 
-attributes = {
+attributes_s = {
     "toChainID": "Specifies the destination blockchain network ID.",
     "tokenAddress": "Indicates the contract address of the token to be transferred.",
     "amount": "The number of tokens to be transferred across chains.",
+    "nonce": "Check and mark that nonce has not been consumed to prevent replay",
     "recipientAddress": "The address that will receive the tokens on the destination chain.",
     "externalCallAddress": "The address of a contract to be called after the cross-chain transfer.",
     "externalCallFunction": "The specific function or calldata to be executed on the `externalCallAddress`.",
     "routerAddress": "The address of the cross-chain router or bridge handler."
 }
-constraints = {
-    "toChainID": ["Check whether toChainID is authorized."],
-    "tokenAddress": [
-      "Check whether the tokenAddress is authorized to use.",
-      "Validate that tokenAddress corresponds to a contract (not an EOA)."
+constraints_s = {
+    "toChainID": [
+      "Check whether toChainID is authorized.",
+      "Check that the destination chain ID is not equal to the source chain ID."
     ],
+    "tokenAddress":  ["Check whether the tokenAddress is authorized to use."],
+    "nonce":  ["Check if the transaction's nonce is equal to the account's current nonce."],
     "amount": [
       "Validate that amount is greater than 0",
       "Validate that msg.sender's balance change before and after equals amount",
@@ -1900,26 +2036,55 @@ constraints = {
     "externalCallFunction": ["Validate that externalCallFunction is in the allowed function signature list"],
     "routerAddress": ["Check whether the routerAddress is authorized to use."]
 }
+
+attributes_t = {
+    "sourceChainID": "Indicates the originating blockchain network from which the cross-chain transaction is initiated.",
+    "toChainID": "Indicates the target blockchain network where the transaction is intended to be completed.",
+    "amount": "The quantity of tokens or assets to be transferred across chains.",
+    "nonce": "A unique number associated with the transaction to ensure its uniqueness and order.",
+    "proof": "A cryptographic artifact used to confirm the authenticity of the transaction data from the source chain.",
+    "externalCallAddress": "The address of a contract to be called after the cross-chain transfer.",
+    "externalCallFunction": "The specific function or calldata to be executed on the `externalCallAddress`."
+}
+constraints_t = {
+    "sourceChainID": ["Check that sourceChainID is in the predefined list of supported chain IDs"],
+    "toChainID": ["Verify that the toChainID specified in the transaction matches the current chain’s ID"],
+    "amount": [
+      "Validate that recipientAddress's balance change before and after equals amount",
+      "Validate that the bridge's balance change before and after equals amount"
+    ],
+    "nonce": ["Check and mark that nonce has not been consumed to prevent replay"],
+    "proof": ["Cryptographic proof that the transaction truly occurred and was finalized on the source chain (e.g., multi-signature, MPC signature, zero-knowledge proof, or Merkle proof)"],
+    "externalCallAddress": ["Check whether the externalCallAddress is authorized to use."],
+    "externalCallFunction": ["Validate that externalCallFunction is in the allowed function signature list"]
+  }
 if __name__ == "__main__":
     # 计时
     start = time.time()
     clean_this_cost()
 
     parser = argparse.ArgumentParser(description="get function call graph")
-    parser.add_argument("--file-directory", type=str, required=False, help="要遍历的文件目录路径")
-    parser.add_argument("--event-name", type=str, required=False, help="调用的事件名称")
+    parser.add_argument("--file-directory", type=str, required=True, help="要遍历的文件目录路径")
+    parser.add_argument("--event-name", type=str, required=True, help="调用的事件名称")
+    parser.add_argument("--position", type=str, required=False, help="源链还是目标链")
     args = parser.parse_args()
     file_directory = args.file_directory
     event_name = args.event_name
-    handle(file_directory, event_name)
+    position = args.position
     directory_name = "output/" + file_directory + "_" + event_name
+    handle_s_t = time.time()
+    if not os.path.exists(directory_name):
+        handle(file_directory, event_name)
+    print(f"handle_s_t: {time.time() - start}")
+
     extractor = SolidityContextExtractor()
-    extractor.parse_dataset()
+    extractor.parse_dataset(file_directory)
     result = {}
     all_output = {}
+    gjld_model = "deepseek-ai/DeepSeek-V3"
     # 遍历目录里面的json文件
     for file_name in os.listdir(directory_name):
-        if file_name.endswith(".json"):
+        if file_name.endswith(".json") and not file_name.startswith("all_output"):
             with open(os.path.join(directory_name, file_name), 'r') as file:
                 data = json.load(file)
                 relation_ship = data["Function call relationship"]
@@ -1930,8 +2095,9 @@ if __name__ == "__main__":
                 code_prompt = {
                     "event": event_name,
                     "call_graph": '->'.join([t.split(".")[-1] for t in relation_ship_list]),
-                    "context": {},
-                    "code": [extractor.preprocess_code(c) for c in codes]
+                    "state_variables": {},
+                    # "code": [extractor.preprocess_code(c) for c in codes]
+                    "external_functions": []
                 }
                 contained = set()
                 for f in result[relation_ship]:
@@ -1947,8 +2113,8 @@ if __name__ == "__main__":
                             if cf['md5'] not in contained:
                                 contained.add(cf['md5'])
                                 new_called_functions.append(cf['content'])
-                    code_prompt["code"].extend(new_called_functions)
-                    code_prompt["context"].update(state_variables)
+                    code_prompt["external_functions"].extend(new_called_functions)
+                    code_prompt["state_variables"].update(state_variables)
                 print(json.dumps(code_prompt, indent=4, cls=SetEncoder))
 
 
@@ -1957,19 +2123,26 @@ if __name__ == "__main__":
                     "step2": {},
                     "step3": {},
                     "step4": {},
-                    "final_result": {}
+                    "final_result": {},
+                    "context": code_prompt
                 }
 
+
                 # step1
-                prompt1 = get_prompt1(attributes, codes)
+                if position == "s":
+                    prompt1 = get_prompt1(attributes_s, codes)
+                    constraints = constraints_s
+                else:
+                    prompt1 = get_prompt1(attributes_t, codes)
+                    constraints = constraints_t
                 print(f"step1")
-                outputs1, native_completion_tokens, native_prompt_tokens, messages = gpt(prompt1)
+                outputs1, native_completion_tokens, native_prompt_tokens, messages = gpt(prompt1, model=gjld_model)
                 outputs1 = [json.loads(o) for o in outputs1]
 
                 all_output[relation_ship]["step1"] = {
                     "prompt1": prompt1,
                     "outputs1": outputs1,
-                    "v_prompt1" : '',
+                    "v_prompt1": '',
                     "v_outputs1": []
                 }
 
@@ -1992,7 +2165,8 @@ if __name__ == "__main__":
                 # step1-verify
                 v_prompt1 = get_verify_prompt1([i for arr in outputs1 for i in arr], codes)
                 print(f"step1-v")
-                v_outputs1, native_completion_tokens, native_prompt_tokens, messages = gpt(v_prompt1)
+                s1_start_time = time.time()
+                v_outputs1, native_completion_tokens, native_prompt_tokens, messages = gpt(v_prompt1, model=gjld_model)
                 v_outputs1 = [json.loads(o) if isinstance(o, str) else o for o in v_outputs1]
                 all_output[relation_ship]["step1"]["v_outputs1"] = v_outputs1
                 all_output[relation_ship]["step1"]["v_prompt1"] = v_prompt1
@@ -2002,24 +2176,28 @@ if __name__ == "__main__":
                         if item["attribute"] not in attribute_to_parameter:
                             attribute_to_parameter[item["attribute"]] = {}
                         attribute_to_parameter[item["attribute"]][item["parameter"]]["score"] = item["score"]
-                        attribute_to_parameter[item["attribute"]][item["parameter"]]["s_reason"] = item["reason"]
+                        attribute_to_parameter[item["attribute"]][item["parameter"]]["s_reason"] = item["reason"] if "reason" in item else ""
                         if item["parameter"] not in parameter_to_attribute:
                             parameter_to_attribute[item["parameter"]] = {}
                         parameter_to_attribute[item["parameter"]][item["attribute"]]["score"] = item["score"]
-                        parameter_to_attribute[item["parameter"]][item["attribute"]]["s_reason"] = item["reason"]
+                        parameter_to_attribute[item["parameter"]][item["attribute"]]["s_reason"] = item["reason"] if "reason" in item else ""
 
-                # 每个attribute取score前三的parameter
+                # 每个attribute取score第一的parameter
                 for attr in attribute_to_parameter:
                     # 去除没有score的项
                     attribute_to_parameter[attr] = dict(filter(lambda x: "score" in x[1], attribute_to_parameter[attr].items()))
-                    attribute_to_parameter[attr] = dict(sorted(attribute_to_parameter[attr].items(), key=lambda x:x[1]["score"], reverse=True)[:3])
-
-
+                    attribute_to_parameter[attr] = dict(sorted(attribute_to_parameter[attr].items(), key=lambda x:x[1]["score"], reverse=True)[:1])
                 all_output[relation_ship]["step1"]["formatted_outputs1"] = parameter_to_attribute
+                all_output[relation_ship]["step1-time"] = time.time() - s1_start_time
+
+                with open(f"{directory_name}/all_output.json", 'w') as file:
+                    json.dump(all_output, file, indent=4, cls=SetEncoder, ensure_ascii=False)
 
                 # step2
                 all_output[relation_ship]["step2"] = {}
                 parameter_to_dataflow = {}
+                s2_start_time = time.time()
+                s2_call_api_times = 0
                 for attr in attribute_to_parameter:
                     for parameter in attribute_to_parameter[attr]:
                         if attr not in all_output[relation_ship]["step2"]:
@@ -2028,14 +2206,16 @@ if __name__ == "__main__":
                             all_output[relation_ship]["step2"][attr][parameter] = {}
                             # todo 该过程可能需要重复6次
                             prompt2 = get_prompt2(parameter, codes)
-                            for i in range(6):
+                            for i in range(3):
                                 print(f"step2-{attr}-{parameter}-{i+1}")
-                                outputs2, native_completion_tokens, native_prompt_tokens, messages = gpt(prompt2)
+                                outputs2, native_completion_tokens, native_prompt_tokens, messages = gpt(prompt2, model=gjld_model)
+                                s2_call_api_times += 1
                                 outputs2 = [json.loads(o) if isinstance(o, str) else o for o in outputs2]
 
                                 # step2-verify
                                 v_prompt2 = get_verify_prompt2(parameter, outputs2[0]["dataflow"], codes)
-                                v_outputs2, native_completion_tokens, native_prompt_tokens, messages = gpt(v_prompt2)
+                                v_outputs2, native_completion_tokens, native_prompt_tokens, messages = gpt(v_prompt2, model=gjld_model)
+                                s2_call_api_times += 1
                                 v_outputs2 = [json.loads(o) if isinstance(o, str) else o for o in v_outputs2]
 
                                 # {{
@@ -2056,20 +2236,27 @@ if __name__ == "__main__":
 
                             # 取得分前三的dataflow
                             all_output[relation_ship]["step2"][attr][parameter]["dataflows"] = sorted(
-                                all_output[relation_ship]["step2"][attr][parameter]["dataflows"], key=lambda x: str(x["score"]), reverse=True)[:3]
+                                all_output[relation_ship]["step2"][attr][parameter]["dataflows"], key=lambda x: str(x["score"]), reverse=True)[:2]
 
                             # step2-merge
                             merge_prompt = get_merge_dataflow_prompt(parameter, [
                                 dataflow["dataflow"] for dataflow in all_output[relation_ship]["step2"][attr][parameter]["dataflows"]
                             ])
-                            merge_outputs, native_completion_tokens, native_prompt_tokens, messages = gpt(merge_prompt)
+                            merge_outputs, native_completion_tokens, native_prompt_tokens, messages = gpt(merge_prompt, model=gjld_model)
+                            s2_call_api_times += 1
                             merge_outputs = [json.loads(o) if isinstance(o, str) else o for o in merge_outputs]
                             all_output[relation_ship]["step2"][attr][parameter]["merge_dataflows"] = merge_outputs[0]["dataflows"]
+                all_output[relation_ship]["step2-time"] = time.time() - s2_start_time
+                all_output[relation_ship]["step2-call_api_times"] = s2_call_api_times
 
+                with open(f"{directory_name}/all_output.json", 'w', encoding='utf-8') as file:
+                    json.dump(all_output, file, indent=4, cls=SetEncoder, ensure_ascii=False)
 
                 # step3
                 all_output[relation_ship]["step3"] = {}
                 parameter_to_constraint = {}
+                s3_start_time = time.time()
+                s3_call_api_times = 0
                 for attr in all_output[relation_ship]["step2"]:
                     if attr not in all_output[relation_ship]["step3"]:
                         all_output[relation_ship]["step3"][attr] = {}
@@ -2080,7 +2267,8 @@ if __name__ == "__main__":
                             for constraint in constraints[attr]:
                                 prompt3 = get_prompt3(parameter, constraint, all_output[relation_ship]["step2"][attr][parameter]["merge_dataflows"])
                                 print(f"step3-{attr}-{parameter}-{constraint}")
-                                outputs3, native_completion_tokens, native_prompt_tokens, messages = gpt(prompt3)
+                                outputs3, native_completion_tokens, native_prompt_tokens, messages = gpt(prompt3, model=gjld_model)
+                                s3_call_api_times += 1
                                 outputs3 = [json.loads(o) if isinstance(o, str) else o for o in outputs3]
                                 if constraint not in all_output[relation_ship]["step3"][attr][parameter]:
                                     all_output[relation_ship]["step3"][attr][parameter][constraint] = {}
@@ -2092,13 +2280,21 @@ if __name__ == "__main__":
                                 validations = [r["validation"] for r in validations]
                                 v_prompt3 = get_verify_prompt3(parameter, constraint, validations, codes)
                                 print(f"step3-v-{attr}-{parameter}-{constraint}")
-                                v_outputs3, native_completion_tokens, native_prompt_tokens, messages = gpt(v_prompt3)
+                                v_outputs3, native_completion_tokens, native_prompt_tokens, messages = gpt(v_prompt3, model=gjld_model)
+                                s3_call_api_times += 1
                                 v_outputs3 = [json.loads(o) if isinstance(o, str) else o for o in v_outputs3]
-                                # 取得分前三的results
-                                all_output[relation_ship]["step3"][attr][parameter][constraint]["verify_filtered"] = sorted(list(filter(lambda x: "score" in x,v_outputs3[0])), key=lambda x: str(x["score"]), reverse=True)[:3]
+                                # 取得分第一的results
+                                all_output[relation_ship]["step3"][attr][parameter][constraint]["verify_filtered"] = sorted(list(filter(lambda x: "score" in x,v_outputs3[0])), key=lambda x: str(x["score"]), reverse=True)[:1]
+                all_output[relation_ship]["step3-time"] = time.time() - s3_start_time
+                all_output[relation_ship]["step3-call_api_times"] = s3_call_api_times
+
+                with open(f"{directory_name}/all_output.json", 'w', encoding='utf-8') as file:
+                    json.dump(all_output, file, indent=4, cls=SetEncoder, ensure_ascii=False)
 
                 # step4
                 all_output[relation_ship]["step4"] = {}
+                s4_start_time = time.time()
+                s4_call_api_times = 0
                 for attr in all_output[relation_ship]["step3"]:
                     if attr not in all_output[relation_ship]["step4"]:
                         all_output[relation_ship]["step4"][attr] = {}
@@ -2109,7 +2305,8 @@ if __name__ == "__main__":
                             for r in all_output[relation_ship]["step3"][attr][parameter][constraint]["verify_filtered"]:
                                 prompt4 = get_prompt4(parameter, r["validation"], codes, code_prompt)
                                 print(f"step4-{attr}-{parameter}-{constraint}")
-                                outputs4, native_completion_tokens, native_prompt_tokens, messages = gpt(prompt4)
+                                outputs4, native_completion_tokens, native_prompt_tokens, messages = gpt(prompt4, model=gjld_model)
+                                s4_call_api_times += 1
                                 outputs4 = [json.loads(o) if isinstance(o, str) else o for o in outputs4]
 
                                 if constraint not in all_output[relation_ship]["step4"][attr][parameter]:
@@ -2121,7 +2318,8 @@ if __name__ == "__main__":
                                     if r1["result"]:
                                         print(f"step4-v-{attr}-{parameter}-{constraint}-{r['validation']}-{r1['poc']}")
                                         v_prompt4 = get_verify_prompt4(code_prompt, parameter, r["validation"], r1["poc"], codes)
-                                        v_outputs4, native_completion_tokens, native_prompt_tokens, messages = gpt(v_prompt4)
+                                        v_outputs4, native_completion_tokens, native_prompt_tokens, messages = gpt(v_prompt4, model=gjld_model)
+                                        s4_call_api_times += 1
                                         v_outputs4 = [json.loads(o) if isinstance(o, str) else o for o in v_outputs4]
                                         r1["score"] = v_outputs4[0]["score"]
                                         r1["reason"] = v_outputs4[0]["reason"]
@@ -2140,8 +2338,12 @@ if __name__ == "__main__":
 
                                 all_output[relation_ship]["step4"][attr][parameter][constraint].append(r)
                                 all_output[relation_ship]["step4"][attr][parameter][constraint][-1]["results"] = results
+                all_output[relation_ship]["step4-time"] = time.time() - s4_start_time
+                all_output[relation_ship]["step4-call_api_times"] = s4_call_api_times
 
-            break
+                with open(f"{directory_name}/all_output.json", 'w', encoding='utf-8') as file:
+                    json.dump(all_output, file, indent=4, cls=SetEncoder, ensure_ascii=False)
+
     end = time.time()
     all_output["time"] = end - start
     this_cost, this_prompt_tokens, this_completion_tokens = get_this_cost()
@@ -2152,9 +2354,7 @@ if __name__ == "__main__":
 
     with open("result.json", 'w') as file:
         json.dump(result, file, indent=4, cls=SetEncoder, ensure_ascii=False)
-    with open("context.json", 'w') as file:
-        json.dump(code_prompt, file, indent=4, cls=SetEncoder, ensure_ascii=False)
-    with open("all_output.json", 'w') as file:
+    with open(f"{directory_name}/all_output.json", 'w', encoding='utf-8') as file:
         json.dump(all_output, file, indent=4, cls=SetEncoder, ensure_ascii=False)
     # 解析代码
 # 解析代码

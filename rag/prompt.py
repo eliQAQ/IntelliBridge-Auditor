@@ -3,7 +3,7 @@ import json
 
 def get_prompt1(attribute: dict, code: list) -> str:
     return f"""
-你是一位经验丰富的跨链协议分析专家。你的任务是将根据提供的 Solidity 代码，将指定的跨链属性映射到代码中的参数上；如果某属性在代码中找不到对应参数，则不在输出中列出该属性，如果存在多个参数对应同一属性的可能性，每个属性至多输出6种参数映射方案。请严格遵循以下定义的输入格式和输出格式：
+你是一位经验丰富的跨链协议分析专家。你的任务是将根据提供的 Solidity 代码，将指定的跨链属性映射到代码中的参数上；如果某属性在代码中找不到对应参数，则不在输出中列出该属性，如果存在多个参数对应同一属性的可能性，每个属性至多输出3种参数映射方案。请严格遵循以下定义的输入格式和输出格式：
 输入格式： 你将接收一个 JSON 对象作为输入，其结构如下： 
 {{
 "attribute": 
@@ -83,13 +83,13 @@ def get_prompt3(parameter: str, constraint: str, code: list) -> str:
 }}
 
 输出格式：
-返回一个 JSON 对象，其结构如下，包含六种可能的结果：
+返回一个 JSON 对象，其结构如下，包含三种可能的结果：
 {{
   "parameter": "...", // 给定的参数
   "constraint": "...", // 给定的约束条件
-  "results"：[ //六种可能的结果
+  "results"：[ //三种可能的结果
   {{
-  	"result": true | false, //表明该代码中是否覆盖的当前约束条件
+  	"result": true | false, //表明该代码中是否覆盖当前约束条件
   	"validation": ["...", "..."], //如果 result 为 true，列出与约束条件相关的所有代码，否则返回一个空数组。
   	"reason": "..." // 如果 result 为 true，解释怎么覆盖的当前约束条件，否则则返回无。
   }},
@@ -106,13 +106,13 @@ def get_prompt3(parameter: str, constraint: str, code: list) -> str:
 {{
 "parameter": {parameter}, // 给定的参数
 "constraint": {constraint}, // 给定的约束条件
-"code": {json.dumps(code, ensure_ascii=False)} // 参数相关合约代码字符串数组
+"code": {json.dumps(code, ensure_ascii=False)} // 参数相关合约代码字符串
 }}
 """
 
 def get_prompt4(parameter: str, validation: list, code: list, context=None) -> str:
     return f"""
-你将扮演一个专业的智能合约符号执行引擎。你的任务是根据提供的 Solidity 代码与目标验证语句，结合上下文（context）和前述相关记忆，定位并解析参数parameter相关validation中的条件判断，在 code 中查找可能绕过该验证的分支或数据流路径，验证是否存在能够规避 validation 的输入或调用序列，并提供六种可能的结果，请严格遵循以下定义的输入格式和输出格式：
+你将扮演一个专业的智能合约符号执行引擎。你的任务是根据提供的 Solidity 代码与目标验证语句，结合上下文（context），定位并解析参数parameter相关validation中的条件判断，在 code 中查找可能绕过该验证的分支或数据流路径，验证是否存在能够规避 validation 的输入或调用序列，并提供三种可能的结果，请严格遵循以下定义的输入格式和输出格式：
 
 输入格式：
 你将接收一个 JSON 对象作为输入，其结构如下：
@@ -124,11 +124,11 @@ def get_prompt4(parameter: str, validation: list, code: list, context=None) -> s
 }}
 
 输出格式：
-返回一个 JSON 对象，其结构如下，包含六种可能的结果：
+返回一个 JSON 对象，其结构如下，包含三种可能的结果：
 [
 {{
   "result": true | false, // 该验证语句是否能被绕过
-  "poc": "...", // 如果 result 为 true，解释怎么绕过的该验证语句，	否则则返回无。
+  "poc": "...", // 如果 result 为 true，解释怎么绕过的该验证语句，否则则返回无。
 }},
 {{
   "result": "...",
@@ -138,7 +138,6 @@ def get_prompt4(parameter: str, validation: list, code: list, context=None) -> s
   "result": "...",
   "poc": "..."
 }}
-...
 ]
 
 输入:
@@ -151,41 +150,6 @@ def get_prompt4(parameter: str, validation: list, code: list, context=None) -> s
 """
 
 def get_verify_prompt1(prompt1_output: list, code: list) -> str:
-    return f"""
-你是一位严谨的跨链协议审计员和数据一致性验证者。仔细审查给定的多个跨链属性与参数在代码中的含义是否一致，并为其分配一个置信度分数 (0-100%)，指出给定该置信度分数的原因。
-
-输入格式： 你将接收一个 JSON 对象作为输入，其结构如下:
-{{
-"correspondence":    // 代码中属性与参数对应的数组
-[
-{{
-"attribute": "...", // 输入的跨链属性 
-"parameter": "...", // 对应的参数
-"reason": "..." // 简要的说明：为何选择此参数，以及可能的歧义 
-}}
-...
-]，
-"code":"..." //跨链合约代码
-}}
-
-输出格式：返回一个 JSON 对象数组，每项结构如下：
-[ 
-{{
-"parameter": "...", // 代码中最可能对应该属性的参数名
-"attribute": "...", // 输入的跨链属性 
-"score":"..."， // 分配的置信度分数
-"reason": "..." // 简要说明给定该置信度分数的原因
-}}, ... 
-]
-输入：
-{{
-"correspondence": {json.dumps(prompt1_output, ensure_ascii=False)},
-"code" {json.dumps(code, ensure_ascii=False)}:
-}}
-
-"""
-
-def get_verify_prompt1_vote(prompt1_output: list, code: list) -> str:
     return f"""
 你是一位严谨的跨链协议审计员和数据一致性验证者。仔细审查给定的多个跨链属性与参数在代码中的含义是否一致，并为其分配一个置信度分数 (0-100%)，指出给定该置信度分数的原因。
 

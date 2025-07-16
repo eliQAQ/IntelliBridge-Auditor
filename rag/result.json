@@ -1,8 +1,104 @@
 {
-    "LibSwap.swap": {
-        "swap": {
-            "state_variables": {},
+    "GasZipFacet.depositToGasZipERC20->LibSwap.swap": [
+        {
+            "func_name": "depositToGasZipERC20",
+            "state_variables": {
+                "gasZipRouter": "IGasZip public immutable gasZipRouter;"
+            },
             "called_functions": [
+                [
+                    {
+                        "visibility": "internal",
+                        "content": "function swap(bytes32 transactionId, SwapData calldata _swap) internal{ if (!LibAsset.isContract(_swap.callTo)) revert InvalidContract(); uint256 fromAmount = _swap.fromAmount; if (fromAmount == 0) revert NoSwapFromZeroBalance(); uint256 nativeValue = LibAsset.isNativeAsset(_swap.sendingAssetId) ? _swap.fromAmount : 0; uint256 initialSendingAssetBalance = LibAsset.getOwnBalance( _swap.sendingAssetId ); uint256 initialReceivingAssetBalance = LibAsset.getOwnBalance( _swap.receivingAssetId ); if (nativeValue == 0){ LibAsset.maxApproveERC20( IERC20(_swap.sendingAssetId), _swap.approveTo, _swap.fromAmount );} if (initialSendingAssetBalance < _swap.fromAmount){ revert InsufficientBalance( _swap.fromAmount, initialSendingAssetBalance );} (bool success, bytes memory res) = _swap.callTo.call{ value: nativeValue} (_swap.callData); if (!success){ LibUtil.revertWith(res);} uint256 newBalance = LibAsset.getOwnBalance(_swap.receivingAssetId); emit AssetSwapped( transactionId, _swap.callTo, _swap.sendingAssetId, _swap.receivingAssetId, _swap.fromAmount, newBalance > initialReceivingAssetBalance ? newBalance - initialReceivingAssetBalance : newBalance, block.timestamp );}",
+                        "modifiers": [],
+                        "parameters": [
+                            {
+                                "type": "bytes32",
+                                "name": "transactionId"
+                            },
+                            {
+                                "type": "SwapData calldata",
+                                "name": "_swap"
+                            }
+                        ],
+                        "returns": [],
+                        "reads": [],
+                        "writes": [],
+                        "external_calls": {
+                            "__set__": true,
+                            "values": [
+                                "LibSwap.InsufficientBalance",
+                                "LibAsset.isContract",
+                                "LibSwap.InvalidContract",
+                                "LibSwap.IERC20",
+                                "LibUtil.revertWith",
+                                "LibAsset.maxApproveERC20",
+                                "LibAsset.getOwnBalance",
+                                "LibAsset.isNativeAsset",
+                                "LibSwap.NoSwapFromZeroBalance"
+                            ]
+                        },
+                        "is_payable": false,
+                        "md5": "c72e28a0b0bba4e62d9df514099bd3d5"
+                    }
+                ]
+            ],
+            "md5": "4d55dbe900e6b5f61dd13cbae36db1e3"
+        },
+        {
+            "func_name": "swap",
+            "state_variables": {
+                "NULL_ADDRESS": "address internal constant NULL_ADDRESS = address(0);",
+                "NATIVE_ASSETID": "address internal constant NATIVE_ASSETID = NULL_ADDRESS;"
+            },
+            "called_functions": [
+                [
+                    {
+                        "visibility": "internal",
+                        "content": "function isContract(address _contractAddr) internal view returns (bool){ uint256 size; assembly{ size := extcodesize(_contractAddr)} return size > 0;}",
+                        "modifiers": [
+                            "view"
+                        ],
+                        "parameters": [
+                            {
+                                "type": "address",
+                                "name": "_contractAddr"
+                            }
+                        ],
+                        "returns": [
+                            {
+                                "type": "bool",
+                                "name": null
+                            }
+                        ],
+                        "reads": [],
+                        "writes": [],
+                        "external_calls": [],
+                        "is_payable": false,
+                        "md5": "bb78c763a9d80ce729c9d29604464b86"
+                    }
+                ],
+                [
+                    {
+                        "visibility": "internal",
+                        "content": "function revertWith(bytes memory data) internal pure{ assembly{ let dataSize := mload(data) let dataPtr := add(data, 0x20) revert(dataPtr, dataSize)}}",
+                        "modifiers": [
+                            "pure"
+                        ],
+                        "parameters": [
+                            {
+                                "type": "bytes memory",
+                                "name": "data"
+                            }
+                        ],
+                        "returns": [],
+                        "reads": [],
+                        "writes": [],
+                        "external_calls": [],
+                        "is_payable": false,
+                        "md5": "d177dfe7eb3835c16af224d6f0b50345"
+                    }
+                ],
                 [
                     {
                         "visibility": "internal",
@@ -34,47 +130,15 @@
                         "external_calls": {
                             "__set__": true,
                             "values": [
+                                "LibAsset.NullAddrIsNotAValidSpender",
                                 "LibAsset.IERC20",
-                                "LibAsset.isNativeAsset",
                                 "IERC20.allowance",
                                 "SafeERC20.safeApprove",
-                                "LibAsset.NullAddrIsNotAValidSpender"
+                                "LibAsset.isNativeAsset"
                             ]
                         },
                         "is_payable": false,
                         "md5": "2763a92791c55d99853da524e26c2e6d"
-                    }
-                ],
-                [
-                    {
-                        "visibility": "internal",
-                        "content": "function isNativeAsset(address assetId) internal pure returns (bool){ return assetId == NATIVE_ASSETID;}",
-                        "modifiers": [
-                            "pure"
-                        ],
-                        "parameters": [
-                            {
-                                "type": "address",
-                                "name": "assetId"
-                            }
-                        ],
-                        "returns": [
-                            {
-                                "type": "bool",
-                                "name": null
-                            }
-                        ],
-                        "reads": [
-                            [
-                                "NATIVE_ASSETID",
-                                "",
-                                "LibAsset"
-                            ]
-                        ],
-                        "writes": [],
-                        "external_calls": [],
-                        "is_payable": false,
-                        "md5": "90f6c601dde5476497b7b77972e5160e"
                     }
                 ],
                 [
@@ -112,35 +176,14 @@
                 [
                     {
                         "visibility": "internal",
-                        "content": "function revertWith(bytes memory data) internal pure{ assembly{ let dataSize := mload(data) let dataPtr := add(data, 0x20) revert(dataPtr, dataSize)}}",
+                        "content": "function isNativeAsset(address assetId) internal pure returns (bool){ return assetId == NATIVE_ASSETID;}",
                         "modifiers": [
                             "pure"
                         ],
                         "parameters": [
                             {
-                                "type": "bytes memory",
-                                "name": "data"
-                            }
-                        ],
-                        "returns": [],
-                        "reads": [],
-                        "writes": [],
-                        "external_calls": [],
-                        "is_payable": false,
-                        "md5": "d177dfe7eb3835c16af224d6f0b50345"
-                    }
-                ],
-                [
-                    {
-                        "visibility": "internal",
-                        "content": "function isContract(address _contractAddr) internal view returns (bool){ uint256 size; assembly{ size := extcodesize(_contractAddr)} return size > 0;}",
-                        "modifiers": [
-                            "view"
-                        ],
-                        "parameters": [
-                            {
                                 "type": "address",
-                                "name": "_contractAddr"
+                                "name": "assetId"
                             }
                         ],
                         "returns": [
@@ -149,30 +192,41 @@
                                 "name": null
                             }
                         ],
-                        "reads": [],
+                        "reads": [
+                            [
+                                "NATIVE_ASSETID",
+                                "",
+                                "LibAsset"
+                            ]
+                        ],
                         "writes": [],
                         "external_calls": [],
                         "is_payable": false,
-                        "md5": "bb78c763a9d80ce729c9d29604464b86"
+                        "md5": "90f6c601dde5476497b7b77972e5160e"
                     }
                 ]
             ],
             "md5": "c72e28a0b0bba4e62d9df514099bd3d5"
         },
-        "isContract": {
+        {
+            "func_name": "isContract",
             "state_variables": {},
             "called_functions": [],
-            "md5": "d5972f1432570efe297b754cd2693d6f"
+            "md5": "bb78c763a9d80ce729c9d29604464b86"
         },
-        "isNativeAsset": {
+        {
+            "func_name": "isNativeAsset",
             "state_variables": {
                 "NATIVE_ASSETID": "address internal constant NATIVE_ASSETID = NULL_ADDRESS;"
             },
             "called_functions": [],
             "md5": "90f6c601dde5476497b7b77972e5160e"
         },
-        "getOwnBalance": {
-            "state_variables": {},
+        {
+            "func_name": "getOwnBalance",
+            "state_variables": {
+                "NATIVE_ASSETID": "address internal constant NATIVE_ASSETID = NULL_ADDRESS;"
+            },
             "called_functions": [
                 [
                     {
@@ -209,9 +263,11 @@
             ],
             "md5": "1b51ecb2290b6b3db4f241ddbeb65725"
         },
-        "maxApproveERC20": {
+        {
+            "func_name": "maxApproveERC20",
             "state_variables": {
-                "NULL_ADDRESS": "address internal constant NULL_ADDRESS = address(0);"
+                "NULL_ADDRESS": "address internal constant NULL_ADDRESS = address(0);",
+                "NATIVE_ASSETID": "address internal constant NATIVE_ASSETID = NULL_ADDRESS;"
             },
             "called_functions": [
                 [
@@ -312,12 +368,14 @@
             ],
             "md5": "2763a92791c55d99853da524e26c2e6d"
         },
-        "revertWith": {
+        {
+            "func_name": "revertWith",
             "state_variables": {},
             "called_functions": [],
             "md5": "d177dfe7eb3835c16af224d6f0b50345"
         },
-        "safeApprove": {
+        {
+            "func_name": "safeApprove",
             "state_variables": {},
             "called_functions": [
                 [
@@ -381,7 +439,8 @@
             ],
             "md5": "ab540675767ea7e50c2697d6cc9c103d"
         },
-        "_callOptionalReturn": {
+        {
+            "func_name": "_callOptionalReturn",
             "state_variables": {},
             "called_functions": [
                 [
@@ -455,7 +514,8 @@
             ],
             "md5": "bdd34585f40e945e74a5da840da04af7"
         },
-        "functionCall": {
+        {
+            "func_name": "functionCall",
             "state_variables": {},
             "called_functions": [
                 [
@@ -539,7 +599,8 @@
             ],
             "md5": "270e14dfa6c4d340344714fd6a36fd00"
         },
-        "functionCallWithValue": {
+        {
+            "func_name": "functionCallWithValue",
             "state_variables": {},
             "called_functions": [
                 [
@@ -667,10 +728,75 @@
             ],
             "md5": "9587564662cef65eec554844bed6f202"
         },
-        "_revert": {
+        {
+            "func_name": "verifyCallResultFromTarget",
+            "state_variables": {},
+            "called_functions": [
+                [
+                    {
+                        "visibility": "private",
+                        "content": "function _revert(bytes memory returndata, string memory errorMessage) private pure{ if (returndata.length > 0){ assembly{ let returndata_size := mload(returndata) revert(add(32, returndata), returndata_size)}} else{ revert(errorMessage);}}",
+                        "modifiers": [
+                            "pure"
+                        ],
+                        "parameters": [
+                            {
+                                "type": "bytes memory",
+                                "name": "returndata"
+                            },
+                            {
+                                "type": "string memory",
+                                "name": "errorMessage"
+                            }
+                        ],
+                        "returns": [],
+                        "reads": [],
+                        "writes": [],
+                        "external_calls": [],
+                        "is_payable": false,
+                        "md5": "8bb1093039f962e441f6f911e07a815f"
+                    }
+                ],
+                [
+                    {
+                        "visibility": "internal",
+                        "content": "function isContract(address account) internal view returns (bool){ return account.code.length > 0;}",
+                        "modifiers": [
+                            "view"
+                        ],
+                        "parameters": [
+                            {
+                                "type": "address",
+                                "name": "account"
+                            }
+                        ],
+                        "returns": [
+                            {
+                                "type": "bool",
+                                "name": null
+                            }
+                        ],
+                        "reads": [],
+                        "writes": [],
+                        "external_calls": [],
+                        "is_payable": false,
+                        "md5": "d5972f1432570efe297b754cd2693d6f"
+                    }
+                ]
+            ],
+            "md5": "970cb86012633b951e216a6e31e36148"
+        },
+        {
+            "func_name": "isContract",
+            "state_variables": {},
+            "called_functions": [],
+            "md5": "d5972f1432570efe297b754cd2693d6f"
+        },
+        {
+            "func_name": "_revert",
             "state_variables": {},
             "called_functions": [],
             "md5": "8bb1093039f962e441f6f911e07a815f"
         }
-    }
+    ]
 }
