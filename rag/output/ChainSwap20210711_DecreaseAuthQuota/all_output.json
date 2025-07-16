@@ -1,0 +1,551 @@
+{
+    "MappingBase.receive->MappingBase._decreaseAuthQuota": {
+        "step1": {
+            "prompt1": "\n你是一位经验丰富的跨链协议分析专家。你的任务是将根据提供的 Solidity 代码，将指定的跨链属性映射到代码中的参数上；如果某属性在代码中找不到对应参数，则不在输出中列出该属性，如果存在多个参数对应同一属性的可能性，每个属性至多输出3种参数映射方案。请严格遵循以下定义的输入格式和输出格式：\n输入格式： 你将接收一个 JSON 对象作为输入，其结构如下： \n{\n\"attribute\": \n{ \n\"<attribute>\": \"<attribute description>\" ,\n\"<attribute>\": \"<attribute description>\",\n...\n}\n\"code\": \"...\" // Solidity 合约代码字符串 \n}\n输出格式：\n返回一个 JSON 对象数组，每项结构如下：\n[ \n{\n\"parameter\": \"...\", // 代码中最可能对应该属性的参数名\n\"attribute\": \"...\", // 输入的跨链属性 \n\"reason\": \"...\" // 简要说明：为何选择此参数，以及可能的歧义 \n}, ... \n]\nreason 中请同时指出该映射的核心依据和潜在的不确定点（例如：参数名相似度、上下文含义模糊等）。\n\n输入：\n{\n\"attribute\": {\"sourceChainID\": \"Indicates the originating blockchain network from which the cross-chain transaction is initiated.\", \"toChainID\": \"Indicates the target blockchain network where the transaction is intended to be completed.\", \"amount\": \"The quantity of tokens or assets to be transferred across chains.\", \"nonce\": \"A unique number associated with the transaction to ensure its uniqueness and order.\", \"proof\": \"A cryptographic artifact used to confirm the authenticity of the transaction data from the source chain.\", \"externalCallAddress\": \"The address of a contract to be called after the cross-chain transfer.\", \"externalCallFunction\": \"The specific function or calldata to be executed on the `externalCallAddress`.\"},\n\"code\": [\"MappingBase.receive:function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\\n        _chargeFee();\\n        require(received[fromChainId][to][nonce] == 0, 'withdrawn already');\\n        uint N = signatures.length;\\n        require(N >= Factory(factory).getConfig(_minSignatures_), 'too few signatures');\\n        for(uint i=0; i<N; i++) {\\n            for(uint j=0; j<i; j++)\\n                require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');\\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\\n            bytes32 digest = keccak256(abi.encodePacked(\\\"\\\\x19\\\\x01\\\", _DOMAIN_SEPARATOR, structHash));\\n            address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);\\n            require(signatory != address(0), \\\"invalid signature\\\");\\n            require(signatory == signatures[i].signatory, \\\"unauthorized\\\");\\n            _decreaseAuthQuota(signatures[i].signatory, volume);\\n            emit Authorize(fromChainId, to, nonce, volume, signatory);\\n        }\\n        received[fromChainId][to][nonce] = volume;\\n        _receive(to, volume);\\n        emit Receive(fromChainId, to, nonce, volume);\\n    }\", \"MappingBase._decreaseAuthQuota:function _decreaseAuthQuota(address signatory, uint decrement) virtual internal updateAutoQuota(signatory) returns (uint quota) {\\n        quota = _authQuotas[signatory].sub(decrement);\\n        _authQuotas[signatory] = quota;\\n        emit DecreaseAuthQuota(signatory, decrement, quota);\\n    }\", \"MappingBase._chargeFee:function _chargeFee() virtual internal {\\n        require(msg.value >= Math.min(Factory(factory).getConfig(_fee_), 0.1 ether), 'fee is too low');\\n        address payable feeTo = address(Factory(factory).getConfig(_feeTo_));\\n        if(feeTo == address(0))\\n            feeTo = address(uint160(factory));\\n        feeTo.transfer(msg.value);\\n        emit ChargeFee(_msgSender(), feeTo, msg.value);\\n    }\", \"MappingBase._receive:function _receive(address to, uint256 volume) virtual internal;\\n    \\n    function _chargeFee() virtual internal {\\n        require(msg.value >= Math.min(Factory(factory).getConfig(_fee_), 0.1 ether), 'fee is too low');\\n        address payable feeTo = address(Factory(factory).getConfig(_feeTo_));\\n        if(feeTo == address(0))\\n            feeTo = address(uint160(factory));\\n        feeTo.transfer(msg.value);\\n        emit ChargeFee(_msgSender(), feeTo, msg.value);\\n    }\", \"Math.min:function min(uint256 a, uint256 b) internal pure returns (uint256) {\\n        return a < b ? a : b;\\n    }\", \"ERC20UpgradeSafe._transfer:function _transfer(address sender, address recipient, uint256 amount) internal virtual {\\n        require(sender != address(0), \\\"ERC20: transfer from the zero address\\\");\\n        require(recipient != address(0), \\\"ERC20: transfer to the zero address\\\");\\n\\n        _beforeTokenTransfer(sender, recipient, amount);\\n\\n        _balances[sender] = _balances[sender].sub(amount, \\\"ERC20: transfer amount exceeds balance\\\");\\n        _balances[recipient] = _balances[recipient].add(amount);\\n        emit Transfer(sender, recipient, amount);\\n    }\", \"ERC20UpgradeSafe._mint:function _mint(address account, uint256 amount) internal virtual {\\n        require(account != address(0), \\\"ERC20: mint to the zero address\\\");\\n\\n        _beforeTokenTransfer(address(0), account, amount);\\n\\n        _totalSupply = _totalSupply.add(amount);\\n        _balances[account] = _balances[account].add(amount);\\n        emit Transfer(address(0), account, amount);\\n    }\", \"ERC20UpgradeSafe._beforeTokenTransfer:function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual { }\", \"ERC20UpgradeSafe._beforeTokenTransfer:function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual { }\"]\n}\n",
+            "outputs1": [
+                [
+                    {
+                        "parameter": "fromChainId",
+                        "attribute": "sourceChainID",
+                        "reason": "The parameter 'fromChainId' directly indicates the originating blockchain network, matching the description of 'sourceChainID'. However, it is unclear if this ID follows a specific standard or if it is internally defined."
+                    },
+                    {
+                        "parameter": "nonce",
+                        "attribute": "nonce",
+                        "reason": "The parameter 'nonce' is used to ensure transaction uniqueness and order, which aligns perfectly with the attribute's description. No ambiguity here."
+                    },
+                    {
+                        "parameter": "volume",
+                        "attribute": "amount",
+                        "reason": "The parameter 'volume' represents the quantity of tokens to be transferred, which matches the 'amount' attribute. The term 'volume' might be less intuitive than 'amount', but the context confirms its purpose."
+                    },
+                    {
+                        "parameter": "signatures",
+                        "attribute": "proof",
+                        "reason": "The 'signatures' array serves as cryptographic proof to authenticate the transaction data. While it is not explicitly named 'proof', its role in verification aligns with the attribute's description. The term 'signatures' might imply a specific type of proof (e.g., multi-signature) rather than a generic cryptographic proof."
+                    }
+                ]
+            ],
+            "v_prompt1": "\n你是一位严谨的跨链协议审计员和数据一致性验证者。仔细审查给定的多个跨链属性与参数在代码中的含义是否一致，并为其分配一个置信度分数 (0-100%)，指出给定该置信度分数的原因。\n\n输入格式： 你将接收一个 JSON 对象作为输入，其结构如下:\n{\n\"correspondence\":    // 代码中属性与参数对应的数组\n[\n{\n\"attribute\": \"...\", // 输入的跨链属性 \n\"parameter\": \"...\", // 对应的参数\n\"reason\": \"...\" // 简要的说明：为何选择此参数，以及可能的歧义 \n}\n...\n]，\n\"code\":\"...\" //跨链合约代码\n}\n\n输出格式：返回一个 JSON 对象数组，每项结构如下：\n[ \n{\n\"parameter\": \"...\", // 代码中最可能对应该属性的参数名\n\"attribute\": \"...\", // 输入的跨链属性 \n\"score\":\"...\"， // 分配的置信度分数\n\"reason\": \"...\" // 简要说明给定该置信度分数的原因\n}, ... \n]\n输入：\n{\n\"correspondence\": [{\"parameter\": \"fromChainId\", \"attribute\": \"sourceChainID\", \"reason\": \"The parameter 'fromChainId' directly indicates the originating blockchain network, matching the description of 'sourceChainID'. However, it is unclear if this ID follows a specific standard or if it is internally defined.\"}, {\"parameter\": \"nonce\", \"attribute\": \"nonce\", \"reason\": \"The parameter 'nonce' is used to ensure transaction uniqueness and order, which aligns perfectly with the attribute's description. No ambiguity here.\"}, {\"parameter\": \"volume\", \"attribute\": \"amount\", \"reason\": \"The parameter 'volume' represents the quantity of tokens to be transferred, which matches the 'amount' attribute. The term 'volume' might be less intuitive than 'amount', but the context confirms its purpose.\"}, {\"parameter\": \"signatures\", \"attribute\": \"proof\", \"reason\": \"The 'signatures' array serves as cryptographic proof to authenticate the transaction data. While it is not explicitly named 'proof', its role in verification aligns with the attribute's description. The term 'signatures' might imply a specific type of proof (e.g., multi-signature) rather than a generic cryptographic proof.\"}],\n\"code\" [\"MappingBase.receive:function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\\n        _chargeFee();\\n        require(received[fromChainId][to][nonce] == 0, 'withdrawn already');\\n        uint N = signatures.length;\\n        require(N >= Factory(factory).getConfig(_minSignatures_), 'too few signatures');\\n        for(uint i=0; i<N; i++) {\\n            for(uint j=0; j<i; j++)\\n                require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');\\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\\n            bytes32 digest = keccak256(abi.encodePacked(\\\"\\\\x19\\\\x01\\\", _DOMAIN_SEPARATOR, structHash));\\n            address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);\\n            require(signatory != address(0), \\\"invalid signature\\\");\\n            require(signatory == signatures[i].signatory, \\\"unauthorized\\\");\\n            _decreaseAuthQuota(signatures[i].signatory, volume);\\n            emit Authorize(fromChainId, to, nonce, volume, signatory);\\n        }\\n        received[fromChainId][to][nonce] = volume;\\n        _receive(to, volume);\\n        emit Receive(fromChainId, to, nonce, volume);\\n    }\", \"MappingBase._decreaseAuthQuota:function _decreaseAuthQuota(address signatory, uint decrement) virtual internal updateAutoQuota(signatory) returns (uint quota) {\\n        quota = _authQuotas[signatory].sub(decrement);\\n        _authQuotas[signatory] = quota;\\n        emit DecreaseAuthQuota(signatory, decrement, quota);\\n    }\", \"MappingBase._chargeFee:function _chargeFee() virtual internal {\\n        require(msg.value >= Math.min(Factory(factory).getConfig(_fee_), 0.1 ether), 'fee is too low');\\n        address payable feeTo = address(Factory(factory).getConfig(_feeTo_));\\n        if(feeTo == address(0))\\n            feeTo = address(uint160(factory));\\n        feeTo.transfer(msg.value);\\n        emit ChargeFee(_msgSender(), feeTo, msg.value);\\n    }\", \"MappingBase._receive:function _receive(address to, uint256 volume) virtual internal;\\n    \\n    function _chargeFee() virtual internal {\\n        require(msg.value >= Math.min(Factory(factory).getConfig(_fee_), 0.1 ether), 'fee is too low');\\n        address payable feeTo = address(Factory(factory).getConfig(_feeTo_));\\n        if(feeTo == address(0))\\n            feeTo = address(uint160(factory));\\n        feeTo.transfer(msg.value);\\n        emit ChargeFee(_msgSender(), feeTo, msg.value);\\n    }\", \"Math.min:function min(uint256 a, uint256 b) internal pure returns (uint256) {\\n        return a < b ? a : b;\\n    }\", \"ERC20UpgradeSafe._transfer:function _transfer(address sender, address recipient, uint256 amount) internal virtual {\\n        require(sender != address(0), \\\"ERC20: transfer from the zero address\\\");\\n        require(recipient != address(0), \\\"ERC20: transfer to the zero address\\\");\\n\\n        _beforeTokenTransfer(sender, recipient, amount);\\n\\n        _balances[sender] = _balances[sender].sub(amount, \\\"ERC20: transfer amount exceeds balance\\\");\\n        _balances[recipient] = _balances[recipient].add(amount);\\n        emit Transfer(sender, recipient, amount);\\n    }\", \"ERC20UpgradeSafe._mint:function _mint(address account, uint256 amount) internal virtual {\\n        require(account != address(0), \\\"ERC20: mint to the zero address\\\");\\n\\n        _beforeTokenTransfer(address(0), account, amount);\\n\\n        _totalSupply = _totalSupply.add(amount);\\n        _balances[account] = _balances[account].add(amount);\\n        emit Transfer(address(0), account, amount);\\n    }\", \"ERC20UpgradeSafe._beforeTokenTransfer:function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual { }\", \"ERC20UpgradeSafe._beforeTokenTransfer:function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual { }\"]:\n}\n\n",
+            "v_outputs1": [
+                [
+                    {
+                        "parameter": "fromChainId",
+                        "attribute": "sourceChainID",
+                        "score": "90%",
+                        "reason": "The parameter 'fromChainId' clearly indicates the originating blockchain network, matching the 'sourceChainID' attribute. The high confidence score reflects this direct correspondence, though the lack of clarity on whether the ID follows a specific standard introduces minor uncertainty."
+                    },
+                    {
+                        "parameter": "nonce",
+                        "attribute": "nonce",
+                        "score": "100%",
+                        "reason": "The parameter 'nonce' perfectly aligns with the attribute's description, ensuring transaction uniqueness and order. There is no ambiguity, warranting full confidence."
+                    },
+                    {
+                        "parameter": "volume",
+                        "attribute": "amount",
+                        "score": "85%",
+                        "reason": "'volume' accurately represents the quantity of tokens to be transferred, matching the 'amount' attribute. The slightly lower score accounts for the less intuitive naming ('volume' vs. 'amount'), though the context confirms its purpose."
+                    },
+                    {
+                        "parameter": "signatures",
+                        "attribute": "proof",
+                        "score": "80%",
+                        "reason": "'signatures' serves as cryptographic proof for transaction authentication, aligning with the 'proof' attribute. The score is slightly reduced because 'signatures' implies a specific type of proof (multi-signature) rather than a generic cryptographic proof, which could introduce ambiguity in broader contexts."
+                    }
+                ]
+            ],
+            "formatted_outputs1": {
+                "fromChainId": {
+                    "sourceChainID": {
+                        "reason": "The parameter 'fromChainId' directly indicates the originating blockchain network, matching the description of 'sourceChainID'. However, it is unclear if this ID follows a specific standard or if it is internally defined.",
+                        "score": "90%",
+                        "s_reason": "The parameter 'fromChainId' clearly indicates the originating blockchain network, matching the 'sourceChainID' attribute. The high confidence score reflects this direct correspondence, though the lack of clarity on whether the ID follows a specific standard introduces minor uncertainty."
+                    }
+                },
+                "nonce": {
+                    "nonce": {
+                        "reason": "The parameter 'nonce' is used to ensure transaction uniqueness and order, which aligns perfectly with the attribute's description. No ambiguity here.",
+                        "score": "100%",
+                        "s_reason": "The parameter 'nonce' perfectly aligns with the attribute's description, ensuring transaction uniqueness and order. There is no ambiguity, warranting full confidence."
+                    }
+                },
+                "volume": {
+                    "amount": {
+                        "reason": "The parameter 'volume' represents the quantity of tokens to be transferred, which matches the 'amount' attribute. The term 'volume' might be less intuitive than 'amount', but the context confirms its purpose.",
+                        "score": "85%",
+                        "s_reason": "'volume' accurately represents the quantity of tokens to be transferred, matching the 'amount' attribute. The slightly lower score accounts for the less intuitive naming ('volume' vs. 'amount'), though the context confirms its purpose."
+                    }
+                },
+                "signatures": {
+                    "proof": {
+                        "reason": "The 'signatures' array serves as cryptographic proof to authenticate the transaction data. While it is not explicitly named 'proof', its role in verification aligns with the attribute's description. The term 'signatures' might imply a specific type of proof (e.g., multi-signature) rather than a generic cryptographic proof.",
+                        "score": "80%",
+                        "s_reason": "'signatures' serves as cryptographic proof for transaction authentication, aligning with the 'proof' attribute. The score is slightly reduced because 'signatures' implies a specific type of proof (multi-signature) rather than a generic cryptographic proof, which could introduce ambiguity in broader contexts."
+                    }
+                }
+            }
+        },
+        "step2": {
+            "sourceChainID": {
+                "fromChainId": {
+                    "dataflows": [
+                        {
+                            "parameter": "fromChainId",
+                            "dataflow": {
+                                "receive": [
+                                    "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\n        _chargeFee();\n        require(received[fromChainId][to][nonce] == 0, 'withdrawn already');\n        uint N = signatures.length;\n        require(N >= Factory(factory).getConfig(_minSignatures_), 'too few signatures');\n        for(uint i=0; i<N; i++) {\n            for(uint j=0; j<i; j++)\n                require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\n            bytes32 digest = keccak256(abi.encodePacked(\"\\x19\\x01\", _DOMAIN_SEPARATOR, structHash));\n            address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);\n            require(signatory != address(0), \"invalid signature\");\n            require(signatory == signatures[i].signatory, \"unauthorized\");\n            _decreaseAuthQuota(signatures[i].signatory, volume);\n            emit Authorize(fromChainId, to, nonce, volume, signatory);\n        }\n        received[fromChainId][to][nonce] = volume;\n        _receive(to, volume);\n        emit Receive(fromChainId, to, nonce, volume);\n    }",
+                                    "require(received[fromChainId][to][nonce] == 0, 'withdrawn already');",
+                                    "bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));",
+                                    "emit Authorize(fromChainId, to, nonce, volume, signatory);",
+                                    "received[fromChainId][to][nonce] = volume;",
+                                    "emit Receive(fromChainId, to, nonce, volume);"
+                                ]
+                            },
+                            "coverage": "95",
+                            "correctness": "90",
+                            "score": "92",
+                            "reason": "The dataflow code for 'fromChainId' covers all critical uses in the original function, including checks, hashing, and event emissions. The correctness is high as it properly implements the required logic for chain ID verification and usage in signatures. Minor deduction due to lack of explicit validation for 'fromChainId' range/validity beyond non-zero checks."
+                        },
+                        {
+                            "parameter": "fromChainId",
+                            "dataflow": {
+                                "receive": [
+                                    "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {",
+                                    "require(received[fromChainId][to][nonce] == 0, 'withdrawn already');",
+                                    "bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));",
+                                    "emit Authorize(fromChainId, to, nonce, volume, signatory);",
+                                    "received[fromChainId][to][nonce] = volume;",
+                                    "emit Receive(fromChainId, to, nonce, volume);"
+                                ]
+                            },
+                            "coverage": "95",
+                            "correctness": "90",
+                            "score": "92",
+                            "reason": "The dataflow code for 'fromChainId' covers all critical usage points in the original code, including validation, hashing, event emission, and state updates. The correctness is slightly lower due to potential implicit dependencies on external contract calls (Factory) and signature verification logic that isn't fully visible in the extracted flow. The high score reflects comprehensive parameter usage with minor uncertainty in external interactions."
+                        }
+                    ],
+                    "merge_dataflows": "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\n        _chargeFee();\n        require(received[fromChainId][to][nonce] == 0, 'withdrawn already');\n        uint N = signatures.length;\n        require(N >= Factory(factory).getConfig(_minSignatures_), 'too few signatures');\n        for(uint i=0; i<N; i++) {\n            for(uint j=0; j<i; j++)\n                require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\n            bytes32 digest = keccak256(abi.encodePacked(\"\\x19\\x01\", _DOMAIN_SEPARATOR, structHash));\n            address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);\n            require(signatory != address(0), \"invalid signature\");\n            require(signatory == signatures[i].signatory, \"unauthorized\");\n            _decreaseAuthQuota(signatures[i].signatory, volume);\n            emit Authorize(fromChainId, to, nonce, volume, signatory);\n        }\n        received[fromChainId][to][nonce] = volume;\n        _receive(to, volume);\n        emit Receive(fromChainId, to, nonce, volume);\n    }"
+                }
+            },
+            "nonce": {
+                "nonce": {
+                    "dataflows": [
+                        {
+                            "parameter": "nonce",
+                            "dataflow": {
+                                "receive": [
+                                    "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\n        _chargeFee();\n        require(received[fromChainId][to][nonce] == 0, 'withdrawn already');\n        uint N = signatures.length;\n        require(N >= Factory(factory).getConfig(_minSignatures_), 'too few signatures');\n        for(uint i=0; i<N; i++) {\n            for(uint j=0; j<i; j++)\n                require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\n            bytes32 digest = keccak256(abi.encodePacked(\"\\x19\\x01\", _DOMAIN_SEPARATOR, structHash));\n            address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);\n            require(signatory != address(0), \"invalid signature\");\n            require(signatory == signatures[i].signatory, \"unauthorized\");\n            _decreaseAuthQuota(signatures[i].signatory, volume);\n            emit Authorize(fromChainId, to, nonce, volume, signatory);\n        }\n        received[fromChainId][to][nonce] = volume;\n        _receive(to, volume);\n        emit Receive(fromChainId, to, nonce, volume);\n    }",
+                                    "require(received[fromChainId][to][nonce] == 0, 'withdrawn already');",
+                                    "bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));",
+                                    "emit Authorize(fromChainId, to, nonce, volume, signatory);",
+                                    "received[fromChainId][to][nonce] = volume;",
+                                    "emit Receive(fromChainId, to, nonce, volume);"
+                                ]
+                            },
+                            "coverage": "95",
+                            "correctness": "100",
+                            "score": "98",
+                            "reason": "The dataflow code for 'nonce' covers all instances where the parameter is used in the original code, including checks, hashing, and event emissions. The correctness is high as all usages are accurately represented and properly handled within the protocol's logic."
+                        },
+                        {
+                            "parameter": "nonce",
+                            "dataflow": {
+                                "receive": [
+                                    "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\n        _chargeFee();\n        require(received[fromChainId][to][nonce] == 0, 'withdrawn already');\n        uint N = signatures.length;\n        require(N >= Factory(factory).getConfig(_minSignatures_), 'too few signatures');\n        for(uint i=0; i<N; i++) {\n            for(uint j=0; j<i; j++)\n                require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\n            bytes32 digest = keccak256(abi.encodePacked(\"\\x19\\x01\", _DOMAIN_SEPARATOR, structHash));\n            address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);\n            require(signatory != address(0), \"invalid signature\");\n            require(signatory == signatures[i].signatory, \"unauthorized\");\n            _decreaseAuthQuota(signatures[i].signatory, volume);\n            emit Authorize(fromChainId, to, nonce, volume, signatory);\n        }\n        received[fromChainId][to][nonce] = volume;\n        _receive(to, volume);\n        emit Receive(fromChainId, to, nonce, volume);\n    }",
+                                    "require(received[fromChainId][to][nonce] == 0, 'withdrawn already');",
+                                    "bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));",
+                                    "emit Authorize(fromChainId, to, nonce, volume, signatory);",
+                                    "received[fromChainId][to][nonce] = volume;",
+                                    "emit Receive(fromChainId, to, nonce, volume);"
+                                ]
+                            },
+                            "coverage": "95",
+                            "correctness": "95",
+                            "score": "95",
+                            "reason": "The dataflow for the 'nonce' parameter is well-covered in the original code, appearing in multiple critical sections including require statements, event emissions, and state updates. The usage of 'nonce' is consistent and correctly implemented to prevent replay attacks and ensure unique transaction identification. The parameter is properly validated and utilized in all relevant parts of the receive function."
+                        }
+                    ],
+                    "merge_dataflows": "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\n        _chargeFee();\n        require(received[fromChainId][to][nonce] == 0, 'withdrawn already');\n        uint N = signatures.length;\n        require(N >= Factory(factory).getConfig(_minSignatures_), 'too few signatures');\n        for(uint i=0; i<N; i++) {\n            for(uint j=0; j<i; j++)\n                require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\n            bytes32 digest = keccak256(abi.encodePacked(\"\\x19\\x01\", _DOMAIN_SEPARATOR, structHash));\n            address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);\n            require(signatory != address(0), \"invalid signature\");\n            require(signatory == signatures[i].signatory, \"unauthorized\");\n            _decreaseAuthQuota(signatures[i].signatory, volume);\n            emit Authorize(fromChainId, to, nonce, volume, signatory);\n        }\n        received[fromChainId][to][nonce] = volume;\n        _receive(to, volume);\n        emit Receive(fromChainId, to, nonce, volume);\n    }"
+                }
+            },
+            "amount": {
+                "volume": {
+                    "dataflows": [
+                        {
+                            "parameter": "volume",
+                            "dataflow": {
+                                "receive": [
+                                    "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\n        _chargeFee();\n        require(received[fromChainId][to][nonce] == 0, 'withdrawn already');\n        uint N = signatures.length;\n        require(N >= Factory(factory).getConfig(_minSignatures_), 'too few signatures');\n        for(uint i=0; i<N; i++) {\n            for(uint j=0; j<i; j++)\n                require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\n            bytes32 digest = keccak256(abi.encodePacked(\"\\x19\\x01\", _DOMAIN_SEPARATOR, structHash));\n            address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);\n            require(signatory != address(0), \"invalid signature\");\n            require(signatory == signatures[i].signatory, \"unauthorized\");\n            _decreaseAuthQuota(signatures[i].signatory, volume);\n            emit Authorize(fromChainId, to, nonce, volume, signatory);\n        }\n        received[fromChainId][to][nonce] = volume;\n        _receive(to, volume);\n        emit Receive(fromChainId, to, nonce, volume);\n    }"
+                                ],
+                                "_decreaseAuthQuota": [
+                                    "function _decreaseAuthQuota(address signatory, uint decrement) virtual internal updateAutoQuota(signatory) returns (uint quota) {\n        quota = _authQuotas[signatory].sub(decrement);\n        _authQuotas[signatory] = quota;\n        emit DecreaseAuthQuota(signatory, decrement, quota);\n    }"
+                                ]
+                            },
+                            "coverage": "95",
+                            "correctness": "90",
+                            "score": "92",
+                            "reason": "The dataflow code for 'volume' is well-covered in the original code, appearing in multiple functions including 'receive' and '_decreaseAuthQuota'. The usage is consistent with the parameter's role in tracking transaction amounts. Minor deduction is due to lack of explicit validation on volume range (e.g., non-negative), though this is implicitly handled by uint256 type. The logic correctly propagates volume through authorization, quota reduction, and transfer operations."
+                        },
+                        {
+                            "parameter": "volume",
+                            "dataflow": {
+                                "receive": [
+                                    "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\n        _chargeFee();\n        require(received[fromChainId][to][nonce] == 0, 'withdrawn already');\n        uint N = signatures.length;\n        require(N >= Factory(factory).getConfig(_minSignatures_), 'too few signatures');\n        for(uint i=0; i<N; i++) {\n            for(uint j=0; j<i; j++)\n                require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\n            bytes32 digest = keccak256(abi.encodePacked(\"\\x19\\x01\", _DOMAIN_SEPARATOR, structHash));\n            address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);\n            require(signatory != address(0), \"invalid signature\");\n            require(signatory == signatures[i].signatory, \"unauthorized\");\n            _decreaseAuthQuota(signatures[i].signatory, volume);\n            emit Authorize(fromChainId, to, nonce, volume, signatory);\n        }\n        received[fromChainId][to][nonce] = volume;\n        _receive(to, volume);\n        emit Receive(fromChainId, to, nonce, volume);\n    }"
+                                ],
+                                "_decreaseAuthQuota": [
+                                    "function _decreaseAuthQuota(address signatory, uint decrement) virtual internal updateAutoQuota(signatory) returns (uint quota) {\n        quota = _authQuotas[signatory].sub(decrement);\n        _authQuotas[signatory] = quota;\n        emit DecreaseAuthQuota(signatory, decrement, quota);\n    }"
+                                ],
+                                "_receive": [
+                                    "function _receive(address to, uint256 volume) virtual internal;"
+                                ]
+                            },
+                            "coverage": "95",
+                            "correctness": "90",
+                            "score": "92",
+                            "reason": "The dataflow code for 'volume' covers all critical paths including signature verification, quota adjustment, and token reception. The correctness is slightly lower due to potential unchecked external calls in _receive() (marked virtual/internal) and lack of explicit visibility on how volume is ultimately processed in the token contract (though ERC20 functions are shown)."
+                        }
+                    ],
+                    "merge_dataflows": "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\n        _chargeFee();\n        require(received[fromChainId][to][nonce] == 0, 'withdrawn already');\n        uint N = signatures.length;\n        require(N >= Factory(factory).getConfig(_minSignatures_), 'too few signatures');\n        for(uint i=0; i<N; i++) {\n            for(uint j=0; j<i; j++)\n                require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\n            bytes32 digest = keccak256(abi.encodePacked(\"\\x19\\x01\", _DOMAIN_SEPARATOR, structHash));\n            address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);\n            require(signatory != address(0), \"invalid signature\");\n            require(signatory == signatures[i].signatory, \"unauthorized\");\n            _decreaseAuthQuota(signatures[i].signatory, volume);\n            emit Authorize(fromChainId, to, nonce, volume, signatory);\n        }\n        received[fromChainId][to][nonce] = volume;\n        _receive(to, volume);\n        emit Receive(fromChainId, to, nonce, volume);\n    }\n    function _decreaseAuthQuota(address signatory, uint decrement) virtual internal updateAutoQuota(signatory) returns (uint quota) {\n        quota = _authQuotas[signatory].sub(decrement);\n        _authQuotas[signatory] = quota;\n        emit DecreaseAuthQuota(signatory, decrement, quota);\n    }\n    function _receive(address to, uint256 volume) virtual internal;"
+                }
+            },
+            "proof": {
+                "signatures": {
+                    "dataflows": [
+                        {
+                            "parameter": "signatures",
+                            "dataflow": {
+                                "receive": [
+                                    "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\n        _chargeFee();\n        require(received[fromChainId][to][nonce] == 0, 'withdrawn already');\n        uint N = signatures.length;\n        require(N >= Factory(factory).getConfig(_minSignatures_), 'too few signatures');\n        for(uint i=0; i<N; i++) {\n            for(uint j=0; j<i; j++)\n                require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\n            bytes32 digest = keccak256(abi.encodePacked(\"\\x19\\x01\", _DOMAIN_SEPARATOR, structHash));\n            address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);\n            require(signatory != address(0), \"invalid signature\");\n            require(signatory == signatures[i].signatory, \"unauthorized\");\n            _decreaseAuthQuota(signatures[i].signatory, volume);\n            emit Authorize(fromChainId, to, nonce, volume, signatory);\n        }\n        received[fromChainId][to][nonce] = volume;\n        _receive(to, volume);\n        emit Receive(fromChainId, to, nonce, volume);\n    }",
+                                    "for(uint i=0; i<N; i++) {\n            for(uint j=0; j<i; j++)\n                require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');",
+                                    "bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));",
+                                    "bytes32 digest = keccak256(abi.encodePacked(\"\\x19\\x01\", _DOMAIN_SEPARATOR, structHash));",
+                                    "address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);",
+                                    "_decreaseAuthQuota(signatures[i].signatory, volume);"
+                                ],
+                                "_decreaseAuthQuota": [
+                                    "function _decreaseAuthQuota(address signatory, uint decrement) virtual internal updateAutoQuota(signatory) returns (uint quota) {\n        quota = _authQuotas[signatory].sub(decrement);\n        _authQuotas[signatory] = quota;\n        emit DecreaseAuthQuota(signatory, decrement, quota);\n    }",
+                                    "_authQuotas[signatory] = quota;",
+                                    "emit DecreaseAuthQuota(signatory, decrement, quota);"
+                                ]
+                            },
+                            "coverage": "95",
+                            "correctness": "90",
+                            "score": "92",
+                            "reason": "The dataflow code for 'signatures' covers almost all relevant operations in the original code, including signature validation, non-repetition checks, and quota management. The correctness is slightly lower due to potential risks in the ecrecover function and lack of explicit handling for signature malleability. Overall, the implementation is robust but could benefit from additional security measures."
+                        },
+                        {
+                            "parameter": "signatures",
+                            "dataflow": {
+                                "receive": [
+                                    "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {",
+                                    "        _chargeFee();",
+                                    "        require(received[fromChainId][to][nonce] == 0, 'withdrawn already');",
+                                    "        uint N = signatures.length;",
+                                    "        require(N >= Factory(factory).getConfig(_minSignatures_), 'too few signatures');",
+                                    "        for(uint i=0; i<N; i++) {",
+                                    "            for(uint j=0; j<i; j++)",
+                                    "                require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');",
+                                    "            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));",
+                                    "            bytes32 digest = keccak256(abi.encodePacked(\"\\x19\\x01\", _DOMAIN_SEPARATOR, structHash));",
+                                    "            address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);",
+                                    "            require(signatory != address(0), \"invalid signature\");",
+                                    "            require(signatory == signatures[i].signatory, \"unauthorized\");",
+                                    "            _decreaseAuthQuota(signatures[i].signatory, volume);",
+                                    "            emit Authorize(fromChainId, to, nonce, volume, signatory);",
+                                    "        }"
+                                ],
+                                "_decreaseAuthQuota": [
+                                    "function _decreaseAuthQuota(address signatory, uint decrement) virtual internal updateAutoQuota(signatory) returns (uint quota) {",
+                                    "        quota = _authQuotas[signatory].sub(decrement);",
+                                    "        _authQuotas[signatory] = quota;",
+                                    "        emit DecreaseAuthQuota(signatory, decrement, quota);"
+                                ]
+                            },
+                            "coverage": "95",
+                            "correctness": "90",
+                            "score": "92",
+                            "reason": "The dataflow code for 'signatures' covers almost all critical operations including signature validation, signatory uniqueness check, and quota adjustment. The correctness is high as it properly implements ECDSA recovery and authorization checks. Minor deduction is due to lack of explicit visibility on how signatures interact with the entire cross-chain flow beyond the receive function."
+                        }
+                    ],
+                    "merge_dataflows": "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\n        _chargeFee();\n        require(received[fromChainId][to][nonce] == 0, 'withdrawn already');\n        uint N = signatures.length;\n        require(N >= Factory(factory).getConfig(_minSignatures_), 'too few signatures');\n        for(uint i=0; i<N; i++) {\n            for(uint j=0; j<i; j++)\n                require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\n            bytes32 digest = keccak256(abi.encodePacked(\"\\x19\\x01\", _DOMAIN_SEPARATOR, structHash));\n            address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);\n            require(signatory != address(0), \"invalid signature\");\n            require(signatory == signatures[i].signatory, \"unauthorized\");\n            _decreaseAuthQuota(signatures[i].signatory, volume);\n            emit Authorize(fromChainId, to, nonce, volume, signatory);\n        }\n        received[fromChainId][to][nonce] = volume;\n        _receive(to, volume);\n        emit Receive(fromChainId, to, nonce, volume);\n    }\n    function _decreaseAuthQuota(address signatory, uint decrement) virtual internal updateAutoQuota(signatory) returns (uint quota) {\n        quota = _authQuotas[signatory].sub(decrement);\n        _authQuotas[signatory] = quota;\n        emit DecreaseAuthQuota(signatory, decrement, quota);\n    }"
+                }
+            }
+        },
+        "step3": {
+            "sourceChainID": {
+                "fromChainId": {
+                    "Check that sourceChainID is in the predefined list of supported chain IDs": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not contain any validation to check if fromChainId is in a predefined list of supported chain IDs."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The require statements in the code do not address the constraint of checking fromChainId against a list of supported chain IDs."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "No logic is present in the provided code to enforce that fromChainId must be one of the supported chain IDs."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "fromChainId",
+                                "constraint": "Check that sourceChainID is in the predefined list of supported chain IDs",
+                                "validation": "",
+                                "score": 0,
+                                "reason": "No validation code found to check if fromChainId is in the predefined list of supported chain IDs. The constraint is not implemented in the provided code.",
+                                "results": []
+                            }
+                        ]
+                    }
+                }
+            },
+            "nonce": {
+                "nonce": {
+                    "Check and mark that nonce has not been consumed to prevent replay": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": [
+                                    "require(received[fromChainId][to][nonce] == 0, 'withdrawn already');",
+                                    "received[fromChainId][to][nonce] = volume;"
+                                ],
+                                "reason": "The code checks if the nonce has been used by verifying that received[fromChainId][to][nonce] == 0, and then marks it as consumed by setting received[fromChainId][to][nonce] = volume after processing. This prevents replay attacks by ensuring each nonce can only be used once."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": ""
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": ""
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "nonce",
+                                "constraint": "Check and mark that nonce has not been consumed to prevent replay",
+                                "validation": "require(received[fromChainId][to][nonce] == 0, 'withdrawn already');",
+                                "score": 100,
+                                "reason": "该代码准确地检查了nonce是否已被使用（通过验证received[fromChainId][to][nonce]是否为0），符合约束条件中防止重放攻击的要求。",
+                                "results": []
+                            }
+                        ]
+                    }
+                }
+            },
+            "amount": {
+                "volume": {
+                    "Validate that recipientAddress's balance change before and after equals amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not explicitly check or enforce that the recipient's balance change equals the transferred volume. The `_receive` function is called but its implementation is not provided, so we cannot verify if it properly handles the balance change."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code focuses on signature validation and quota management but does not include any logic to validate the recipient's balance change. The constraint is not covered in the provided code."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "No explicit checks or operations related to the recipient's balance change are present in the code. The `_receive` function's implementation is crucial for this constraint, but it is not provided."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "volume",
+                                "constraint": "Validate that recipientAddress's balance change before and after equals amount",
+                                "validation": "ERC20UpgradeSafe._transfer:function _transfer(address sender, address recipient, uint256 amount) internal virtual {...}",
+                                "score": 70,
+                                "reason": "_transfer function updates the recipient's balance but does not explicitly validate the balance change against the amount.",
+                                "results": []
+                            }
+                        ]
+                    },
+                    "Validate that the bridge's balance change before and after equals amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not track or compare the bridge's balance before and after the transaction to validate that the change equals the volume parameter."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "No explicit balance checks are performed in the provided code snippet to verify the bridge's balance change matches the volume."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The _receive function implementation is not shown, but there's no evidence in visible code of balance validation logic for the bridge contract."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "volume",
+                                "constraint": "Validate that the bridge's balance change before and after equals amount",
+                                "validation": "",
+                                "score": "0",
+                                "reason": "No validation code found to check the bridge's balance change before and after the transaction. The constraint is not implemented in the provided code snippets.",
+                                "results": []
+                            }
+                        ]
+                    }
+                }
+            },
+            "proof": {
+                "signatures": {
+                    "Cryptographic proof that the transaction truly occurred and was finalized on the source chain (e.g., multi-signature, MPC signature, zero-knowledge proof, or Merkle proof)": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": [
+                                    "require(N >= Factory(factory).getConfig(_minSignatures_), 'too few signatures');",
+                                    "require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');",
+                                    "bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));",
+                                    "bytes32 digest = keccak256(abi.encodePacked(\"\\x19\\x01\", _DOMAIN_SEPARATOR, structHash));",
+                                    "address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);",
+                                    "require(signatory != address(0), \"invalid signature\");",
+                                    "require(signatory == signatures[i].signatory, \"unauthorized\");"
+                                ],
+                                "reason": "The code implements multi-signature verification by checking the number of signatures (N >= minSignatures), ensuring no duplicate signatories, and validating each signature using ecrecover with EIP-712 typed structured data hashing (structHash and domain separator). This provides cryptographic proof that the transaction was authorized by required signers."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": null
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": null
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "signatures",
+                                "constraint": "Cryptographic proof that the transaction truly occurred and was finalized on the source chain (e.g., multi-signature, MPC signature, zero-knowledge proof, or Merkle proof)",
+                                "validation": "bytes32 digest = keccak256(abi.encodePacked(\"\\x19\\x01\", _DOMAIN_SEPARATOR, structHash));",
+                                "score": 85,
+                                "reason": "Correct implementation of EIP-712 digest calculation for signature verification.",
+                                "results": []
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "step4": {
+            "sourceChainID": {
+                "fromChainId": {
+                    "Check that sourceChainID is in the predefined list of supported chain IDs": [
+                        {
+                            "parameter": "fromChainId",
+                            "constraint": "Check that sourceChainID is in the predefined list of supported chain IDs",
+                            "validation": "",
+                            "score": 0,
+                            "reason": "No validation code found to check if fromChainId is in the predefined list of supported chain IDs. The constraint is not implemented in the provided code.",
+                            "results": []
+                        }
+                    ]
+                }
+            },
+            "nonce": {
+                "nonce": {
+                    "Check and mark that nonce has not been consumed to prevent replay": [
+                        {
+                            "parameter": "nonce",
+                            "constraint": "Check and mark that nonce has not been consumed to prevent replay",
+                            "validation": "require(received[fromChainId][to][nonce] == 0, 'withdrawn already');",
+                            "score": 100,
+                            "reason": "该代码准确地检查了nonce是否已被使用（通过验证received[fromChainId][to][nonce]是否为0），符合约束条件中防止重放攻击的要求。",
+                            "results": []
+                        }
+                    ]
+                }
+            },
+            "amount": {
+                "volume": {
+                    "Validate that recipientAddress's balance change before and after equals amount": [
+                        {
+                            "parameter": "volume",
+                            "constraint": "Validate that recipientAddress's balance change before and after equals amount",
+                            "validation": "ERC20UpgradeSafe._transfer:function _transfer(address sender, address recipient, uint256 amount) internal virtual {...}",
+                            "score": 70,
+                            "reason": "_transfer function updates the recipient's balance but does not explicitly validate the balance change against the amount.",
+                            "results": []
+                        }
+                    ],
+                    "Validate that the bridge's balance change before and after equals amount": [
+                        {
+                            "parameter": "volume",
+                            "constraint": "Validate that the bridge's balance change before and after equals amount",
+                            "validation": "",
+                            "score": "0",
+                            "reason": "No validation code found to check the bridge's balance change before and after the transaction. The constraint is not implemented in the provided code snippets.",
+                            "results": []
+                        }
+                    ]
+                }
+            },
+            "proof": {
+                "signatures": {
+                    "Cryptographic proof that the transaction truly occurred and was finalized on the source chain (e.g., multi-signature, MPC signature, zero-knowledge proof, or Merkle proof)": [
+                        {
+                            "parameter": "signatures",
+                            "constraint": "Cryptographic proof that the transaction truly occurred and was finalized on the source chain (e.g., multi-signature, MPC signature, zero-knowledge proof, or Merkle proof)",
+                            "validation": "bytes32 digest = keccak256(abi.encodePacked(\"\\x19\\x01\", _DOMAIN_SEPARATOR, structHash));",
+                            "score": 85,
+                            "reason": "Correct implementation of EIP-712 digest calculation for signature verification.",
+                            "results": []
+                        }
+                    ]
+                }
+            }
+        },
+        "final_result": {},
+        "context": {
+            "event": "DecreaseAuthQuota",
+            "call_graph": "receive->_decreaseAuthQuota",
+            "state_variables": {
+                "_minSignatures_": "bytes32 internal constant _minSignatures_ = 'minSignatures';",
+                "RECEIVE_TYPEHASH": "bytes32 public constant RECEIVE_TYPEHASH = keccak256(\"Receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, address signatory)\");",
+                "_DOMAIN_SEPARATOR": "bytes32 internal _DOMAIN_SEPARATOR;",
+                "factory": "address public factory;",
+                "received": "mapping (uint => mapping (address => mapping (uint => uint))) public received;",
+                "_authQuotas": "mapping (address => uint) internal _authQuotas;",
+                "_fee_": "bytes32 internal constant _fee_ = 'fee';",
+                "_feeTo_": "bytes32 internal constant _feeTo_ = 'feeTo';",
+                "lasttimeUpdateQuotaOf": "mapping (address => uint) public lasttimeUpdateQuotaOf;",
+                "_autoQuotaRatio_": "bytes32 internal constant _autoQuotaRatio_ = 'autoQuotaRatio';",
+                "_autoQuotaPeriod_": "bytes32 internal constant _autoQuotaPeriod_ = 'autoQuotaPeriod';",
+                "autoQuotaRatio": "uint public autoQuotaRatio;",
+                "autoQuotaPeriod": "uint public autoQuotaPeriod;",
+                "_balances": "mapping (address => uint256) private _balances;",
+                "_totalSupply": "uint256 private _totalSupply;"
+            },
+            "external_functions": [
+                "modifier updateAutoQuota(address signatory) virtual{ uint quota = authQuotaOf(signatory); if(_authQuotas[signatory] != quota){ _authQuotas[signatory] = quota; lasttimeUpdateQuotaOf[signatory] = now;} _;}",
+                "function authQuotaOf(address signatory) virtual public view returns (uint quota){ quota = _authQuotas[signatory]; uint ratio = autoQuotaRatio != 0 ? autoQuotaRatio : Factory(factory).getConfig(_autoQuotaRatio_); uint period = autoQuotaPeriod != 0 ? autoQuotaPeriod : Factory(factory).getConfig(_autoQuotaPeriod_); if(ratio == 0 || period == 0 || period == uint(-1)) return quota; uint quotaCap = cap().mul(ratio).div(1e18); uint delta = quotaCap.mul(now.sub(lasttimeUpdateQuotaOf[signatory])).div(period); return Math.max(quota, Math.min(quotaCap, quota.add(delta)));}"
+            ]
+        },
+        "step1-time": 24.171253442764282,
+        "step2-time": 1019.2126357555389,
+        "step2-call_api_times": 28,
+        "step3-time": 498.16244173049927,
+        "step3-call_api_times": 10,
+        "step4-time": 203.89725303649902,
+        "step4-call_api_times": 5
+    }
+}
