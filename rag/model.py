@@ -17,7 +17,7 @@ client = OpenAI(api_key=OPENAI_API)
 # 硅基流动
 url = "https://api.siliconflow.cn/v1/chat/completions"
 gjld_headers = {
-    "Authorization": "",#此处输入硅基流动key，Bearer xxx 
+    "Authorization": "",
     "Content-Type": "application/json"
 }
 
@@ -30,7 +30,7 @@ def clean_this_cost():
 
 def get_this_cost():
     return this_cost, this_prompt_tokens, this_completion_tokens
-def gpt(prompt, model='Pro/deepseek-ai/DeepSeek-V3', temperature=0.7, max_tokens=10000, stop=None, platform = "gjld") -> \
+def gpt(prompt, model='deepseek-ai/DeepSeek-V3', temperature=0.7, max_tokens=4096, stop=None, platform = "gjld") -> \
 tuple[list[str | None | Any], int, int, Any]:
     messages = [{"role": "user", "content": prompt}]
     return chatgpt(messages, model=model, temperature=temperature, max_tokens=max_tokens, stop=stop,platform=platform)
@@ -70,7 +70,8 @@ tuple[list[str | None | Any], int, int, Any]:
                 res = requests.request("POST", url, json=payload, headers=gjld_headers, timeout=300)
                 res = res.json()
                 if "code" in res and res["code"] > 200:
-                    raise Exception(res["message"])
+                    print(res)
+                    continue
                 if "choices" not in res:
                     print(res)
                     # 暂停1秒
@@ -120,13 +121,15 @@ def calculate_gpt_usage(completion_tokens, prompt_tokens, platform='gjld',model=
         elif model == "gpt-3.5-turbo":
             cost = completion_tokens / 1000 * 0.002 + prompt_tokens / 1000 * 0.0015
     elif platform == 'gjld':
+        if model.startswith("Pro/"):
+            model = model.replace("Pro/", "")
         if model == 'deepseek-ai/DeepSeek-V3':
             cost = completion_tokens / 1000 * 0.008 + prompt_tokens / 1000 * 0.002
+        elif model in ['moonshotai/Kimi-K2-Instruct', "deepseek-ai/DeepSeek-R1"]:
+            cost = completion_tokens / 1000 * 0.016 + prompt_tokens / 1000 * 0.004
 
     return cost
 
-
-def 
 # 转换成json字符串，输入可能是list或字符串
 def list_to_json(l:Union[list, str]):
     if isinstance(l, str) or isinstance(l, int):
