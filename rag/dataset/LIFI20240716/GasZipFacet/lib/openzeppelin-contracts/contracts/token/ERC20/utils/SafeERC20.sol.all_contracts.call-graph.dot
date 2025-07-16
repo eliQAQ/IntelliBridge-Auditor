@@ -1,0 +1,94 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_489_IERC20Permit {
+label = "IERC20Permit"
+"489_nonces" [label="nonces"]
+"489_DOMAIN_SEPARATOR" [label="DOMAIN_SEPARATOR"]
+"489_permit" [label="permit"]
+}subgraph cluster_819_Address {
+label = "Address"
+"819_verifyCallResult" [label="verifyCallResult"]
+"819_functionStaticCall" [label="functionStaticCall"]
+"819_functionCall" [label="functionCall"]
+"819_verifyCallResultFromTarget" [label="verifyCallResultFromTarget"]
+"819__revert" [label="_revert"]
+"819_sendValue" [label="sendValue"]
+"819_functionDelegateCall" [label="functionDelegateCall"]
+"819_functionCallWithValue" [label="functionCallWithValue"]
+"819_isContract" [label="isContract"]
+"819_functionDelegateCall" -> "819_functionDelegateCall"
+"819_functionStaticCall" -> "819_functionStaticCall"
+"819_verifyCallResultFromTarget" -> "819__revert"
+"819_functionCall" -> "819_functionCallWithValue"
+"819_functionDelegateCall" -> "819_verifyCallResultFromTarget"
+"819_functionCallWithValue" -> "819_verifyCallResultFromTarget"
+"819_functionCallWithValue" -> "819_functionCallWithValue"
+"819_functionStaticCall" -> "819_verifyCallResultFromTarget"
+"819_verifyCallResultFromTarget" -> "819_isContract"
+"819_verifyCallResult" -> "819__revert"
+}subgraph cluster_453_IERC20 {
+label = "IERC20"
+"453_balanceOf" [label="balanceOf"]
+"453_approve" [label="approve"]
+"453_totalSupply" [label="totalSupply"]
+"453_transferFrom" [label="transferFrom"]
+"453_allowance" [label="allowance"]
+"453_transfer" [label="transfer"]
+}subgraph cluster_375_SafeERC20 {
+label = "SafeERC20"
+"375_safeTransferFrom" [label="safeTransferFrom"]
+"375_safeApprove" [label="safeApprove"]
+"375__callOptionalReturn" [label="_callOptionalReturn"]
+"375_safeTransfer" [label="safeTransfer"]
+"375_safeIncreaseAllowance" [label="safeIncreaseAllowance"]
+"375_safeDecreaseAllowance" [label="safeDecreaseAllowance"]
+"375_forceApprove" [label="forceApprove"]
+"375_safePermit" [label="safePermit"]
+"375__callOptionalReturnBool" [label="_callOptionalReturnBool"]
+"375_safeTransfer" -> "375__callOptionalReturn"
+"375_safeDecreaseAllowance" -> "375__callOptionalReturn"
+"375_forceApprove" -> "375__callOptionalReturn"
+"375_safeApprove" -> "375__callOptionalReturn"
+"375_safeTransferFrom" -> "375__callOptionalReturn"
+"375_forceApprove" -> "375__callOptionalReturnBool"
+"375_safeIncreaseAllowance" -> "375__callOptionalReturn"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"mload(uint256)" 
+"revert(uint256,uint256)" 
+"revert(string)" 
+"require(bool,string)" 
+"abi.encodeWithSelector()" 
+"code(address)" 
+"balance(address)" 
+"abi.decode()" 
+"819_sendValue" -> "balance(address)"
+"819__revert" -> "revert(string)"
+"819__revert" -> "revert(uint256,uint256)"
+"375_safeIncreaseAllowance" -> "abi.encodeWithSelector()"
+"375_forceApprove" -> "abi.encodeWithSelector()"
+"819_sendValue" -> "require(bool,string)"
+"375_safeApprove" -> "require(bool,string)"
+"375_safeTransfer" -> "abi.encodeWithSelector()"
+"375__callOptionalReturn" -> "require(bool,string)"
+"819_verifyCallResultFromTarget" -> "require(bool,string)"
+"375_safeTransferFrom" -> "abi.encodeWithSelector()"
+"819__revert" -> "mload(uint256)"
+"375__callOptionalReturnBool" -> "abi.decode()"
+"375_safeDecreaseAllowance" -> "abi.encodeWithSelector()"
+"375_safeApprove" -> "abi.encodeWithSelector()"
+"819_functionCallWithValue" -> "require(bool,string)"
+"819_functionCallWithValue" -> "balance(address)"
+"375_safeDecreaseAllowance" -> "require(bool,string)"
+"375__callOptionalReturn" -> "abi.decode()"
+"819_isContract" -> "code(address)"
+"375_safePermit" -> "require(bool,string)"
+}"375_safeDecreaseAllowance" -> "453_allowance"
+"375_safePermit" -> "489_nonces"
+"375_safePermit" -> "489_permit"
+"375_safeApprove" -> "453_allowance"
+"375__callOptionalReturn" -> "819_functionCall"
+"375_safeIncreaseAllowance" -> "453_allowance"
+"375__callOptionalReturnBool" -> "819_isContract"
+}

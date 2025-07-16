@@ -1,0 +1,43 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_329_Address {
+label = "Address"
+"329_sendValue" [label="sendValue"]
+"329_functionCallWithValue" [label="functionCallWithValue"]
+"329_functionDelegateCall" [label="functionDelegateCall"]
+"329_isContract" [label="isContract"]
+"329_verifyCallResult" [label="verifyCallResult"]
+"329_functionStaticCall" [label="functionStaticCall"]
+"329__revert" [label="_revert"]
+"329_verifyCallResultFromTarget" [label="verifyCallResultFromTarget"]
+"329_functionCall" [label="functionCall"]
+"329_functionStaticCall" -> "329_functionStaticCall"
+"329_functionCallWithValue" -> "329_functionCallWithValue"
+"329_functionCall" -> "329_functionCallWithValue"
+"329_functionCallWithValue" -> "329_verifyCallResultFromTarget"
+"329_functionDelegateCall" -> "329_functionDelegateCall"
+"329_verifyCallResult" -> "329__revert"
+"329_verifyCallResultFromTarget" -> "329_isContract"
+"329_verifyCallResultFromTarget" -> "329__revert"
+"329_functionDelegateCall" -> "329_verifyCallResultFromTarget"
+"329_functionStaticCall" -> "329_verifyCallResultFromTarget"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"revert(string)" 
+"balance(address)" 
+"code(address)" 
+"require(bool,string)" 
+"mload(uint256)" 
+"revert(uint256,uint256)" 
+"329_sendValue" -> "require(bool,string)"
+"329_functionCallWithValue" -> "balance(address)"
+"329__revert" -> "mload(uint256)"
+"329_functionCallWithValue" -> "require(bool,string)"
+"329__revert" -> "revert(uint256,uint256)"
+"329__revert" -> "revert(string)"
+"329_sendValue" -> "balance(address)"
+"329_isContract" -> "code(address)"
+"329_verifyCallResultFromTarget" -> "require(bool,string)"
+}
+}

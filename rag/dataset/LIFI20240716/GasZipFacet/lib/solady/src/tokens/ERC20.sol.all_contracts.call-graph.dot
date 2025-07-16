@@ -1,0 +1,132 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_418_ERC20 {
+label = "ERC20"
+"418_approve" [label="approve"]
+"418__beforeTokenTransfer" [label="_beforeTokenTransfer"]
+"418_allowance" [label="allowance"]
+"418_DOMAIN_SEPARATOR" [label="DOMAIN_SEPARATOR"]
+"418_symbol" [label="symbol"]
+"418_balanceOf" [label="balanceOf"]
+"418_totalSupply" [label="totalSupply"]
+"418__constantNameHash" [label="_constantNameHash"]
+"418_permit" [label="permit"]
+"418__transfer" [label="_transfer"]
+"418_transferFrom" [label="transferFrom"]
+"418__mint" [label="_mint"]
+"418_decimals" [label="decimals"]
+"418_transfer" [label="transfer"]
+"418_nonces" [label="nonces"]
+"418_name" [label="name"]
+"418__burn" [label="_burn"]
+"418__approve" [label="_approve"]
+"418__spendAllowance" [label="_spendAllowance"]
+"418__afterTokenTransfer" [label="_afterTokenTransfer"]
+"418__mint" -> "418__afterTokenTransfer"
+"418_DOMAIN_SEPARATOR" -> "418_name"
+"418__transfer" -> "418__beforeTokenTransfer"
+"418__transfer" -> "418__afterTokenTransfer"
+"418__burn" -> "418__beforeTokenTransfer"
+"418_permit" -> "418_name"
+"418__burn" -> "418__afterTokenTransfer"
+"418_permit" -> "418__constantNameHash"
+"418__mint" -> "418__beforeTokenTransfer"
+"418_transfer" -> "418__afterTokenTransfer"
+"418_transferFrom" -> "418__beforeTokenTransfer"
+"418_transferFrom" -> "418__afterTokenTransfer"
+"418_DOMAIN_SEPARATOR" -> "418__constantNameHash"
+"418_transfer" -> "418__beforeTokenTransfer"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"revert(uint256,uint256)" 
+"staticcall(uint256,uint256,uint256,uint256,uint256,uint256)" 
+"keccak256(uint256,uint256)" 
+"timestamp()" 
+"sstore(uint256,uint256)" 
+"mstore(uint256,uint256)" 
+"chainid()" 
+"gas()" 
+"sload(uint256)" 
+"returndatasize()" 
+"mload(uint256)" 
+"keccak256(bytes)" 
+"log3(uint256,uint256,uint256,uint256,uint256)" 
+"418__burn" -> "revert(uint256,uint256)"
+"418_permit" -> "returndatasize()"
+"418__approve" -> "mstore(uint256,uint256)"
+"418_DOMAIN_SEPARATOR" -> "keccak256(bytes)"
+"418_approve" -> "sstore(uint256,uint256)"
+"418__burn" -> "sload(uint256)"
+"418_transfer" -> "mload(uint256)"
+"418_approve" -> "mload(uint256)"
+"418__transfer" -> "keccak256(uint256,uint256)"
+"418_transfer" -> "revert(uint256,uint256)"
+"418_transfer" -> "sload(uint256)"
+"418_permit" -> "sload(uint256)"
+"418__mint" -> "keccak256(uint256,uint256)"
+"418_balanceOf" -> "mstore(uint256,uint256)"
+"418_permit" -> "sstore(uint256,uint256)"
+"418_permit" -> "log3(uint256,uint256,uint256,uint256,uint256)"
+"418__spendAllowance" -> "mstore(uint256,uint256)"
+"418_permit" -> "mload(uint256)"
+"418__mint" -> "mload(uint256)"
+"418__spendAllowance" -> "revert(uint256,uint256)"
+"418_transferFrom" -> "mload(uint256)"
+"418_permit" -> "mstore(uint256,uint256)"
+"418_DOMAIN_SEPARATOR" -> "keccak256(uint256,uint256)"
+"418_allowance" -> "sload(uint256)"
+"418_permit" -> "timestamp()"
+"418_permit" -> "staticcall(uint256,uint256,uint256,uint256,uint256,uint256)"
+"418__approve" -> "keccak256(uint256,uint256)"
+"418__mint" -> "sstore(uint256,uint256)"
+"418__burn" -> "sstore(uint256,uint256)"
+"418_permit" -> "revert(uint256,uint256)"
+"418__transfer" -> "sstore(uint256,uint256)"
+"418__spendAllowance" -> "sload(uint256)"
+"418_nonces" -> "sload(uint256)"
+"418__mint" -> "sload(uint256)"
+"418__mint" -> "log3(uint256,uint256,uint256,uint256,uint256)"
+"418_transfer" -> "keccak256(uint256,uint256)"
+"418_transferFrom" -> "log3(uint256,uint256,uint256,uint256,uint256)"
+"418__transfer" -> "log3(uint256,uint256,uint256,uint256,uint256)"
+"418__approve" -> "sstore(uint256,uint256)"
+"418_permit" -> "keccak256(uint256,uint256)"
+"418_approve" -> "log3(uint256,uint256,uint256,uint256,uint256)"
+"418_approve" -> "keccak256(uint256,uint256)"
+"418__transfer" -> "revert(uint256,uint256)"
+"418_permit" -> "gas()"
+"418_DOMAIN_SEPARATOR" -> "mstore(uint256,uint256)"
+"418_DOMAIN_SEPARATOR" -> "chainid()"
+"418_permit" -> "keccak256(bytes)"
+"418_nonces" -> "keccak256(uint256,uint256)"
+"418_balanceOf" -> "keccak256(uint256,uint256)"
+"418_transferFrom" -> "mstore(uint256,uint256)"
+"418__transfer" -> "sload(uint256)"
+"418__spendAllowance" -> "keccak256(uint256,uint256)"
+"418_transferFrom" -> "sstore(uint256,uint256)"
+"418_DOMAIN_SEPARATOR" -> "mload(uint256)"
+"418_approve" -> "mstore(uint256,uint256)"
+"418__transfer" -> "mload(uint256)"
+"418__burn" -> "keccak256(uint256,uint256)"
+"418__spendAllowance" -> "sstore(uint256,uint256)"
+"418_transferFrom" -> "revert(uint256,uint256)"
+"418_transferFrom" -> "sload(uint256)"
+"418_permit" -> "chainid()"
+"418_transfer" -> "sstore(uint256,uint256)"
+"418__mint" -> "mstore(uint256,uint256)"
+"418__burn" -> "log3(uint256,uint256,uint256,uint256,uint256)"
+"418__approve" -> "mload(uint256)"
+"418_transfer" -> "mstore(uint256,uint256)"
+"418__mint" -> "revert(uint256,uint256)"
+"418_nonces" -> "mstore(uint256,uint256)"
+"418_balanceOf" -> "sload(uint256)"
+"418_transfer" -> "log3(uint256,uint256,uint256,uint256,uint256)"
+"418__approve" -> "log3(uint256,uint256,uint256,uint256,uint256)"
+"418__burn" -> "mstore(uint256,uint256)"
+"418_transferFrom" -> "keccak256(uint256,uint256)"
+"418_allowance" -> "keccak256(uint256,uint256)"
+"418_allowance" -> "mstore(uint256,uint256)"
+"418__transfer" -> "mstore(uint256,uint256)"
+}
+}

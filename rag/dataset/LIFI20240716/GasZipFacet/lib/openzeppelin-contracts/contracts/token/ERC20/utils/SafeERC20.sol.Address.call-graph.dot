@@ -1,0 +1,43 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_819_Address {
+label = "Address"
+"819_verifyCallResult" [label="verifyCallResult"]
+"819_functionStaticCall" [label="functionStaticCall"]
+"819_functionCall" [label="functionCall"]
+"819_verifyCallResultFromTarget" [label="verifyCallResultFromTarget"]
+"819__revert" [label="_revert"]
+"819_sendValue" [label="sendValue"]
+"819_functionDelegateCall" [label="functionDelegateCall"]
+"819_functionCallWithValue" [label="functionCallWithValue"]
+"819_isContract" [label="isContract"]
+"819_functionDelegateCall" -> "819_functionDelegateCall"
+"819_functionStaticCall" -> "819_functionStaticCall"
+"819_verifyCallResultFromTarget" -> "819__revert"
+"819_functionCall" -> "819_functionCallWithValue"
+"819_functionDelegateCall" -> "819_verifyCallResultFromTarget"
+"819_functionCallWithValue" -> "819_verifyCallResultFromTarget"
+"819_functionCallWithValue" -> "819_functionCallWithValue"
+"819_functionStaticCall" -> "819_verifyCallResultFromTarget"
+"819_verifyCallResultFromTarget" -> "819_isContract"
+"819_verifyCallResult" -> "819__revert"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"mload(uint256)" 
+"revert(uint256,uint256)" 
+"revert(string)" 
+"require(bool,string)" 
+"code(address)" 
+"balance(address)" 
+"819_sendValue" -> "balance(address)"
+"819_functionCallWithValue" -> "balance(address)"
+"819_sendValue" -> "require(bool,string)"
+"819_verifyCallResultFromTarget" -> "require(bool,string)"
+"819__revert" -> "revert(string)"
+"819__revert" -> "mload(uint256)"
+"819__revert" -> "revert(uint256,uint256)"
+"819_isContract" -> "code(address)"
+"819_functionCallWithValue" -> "require(bool,string)"
+}
+}
