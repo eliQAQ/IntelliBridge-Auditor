@@ -1,0 +1,1131 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterProxy" {
+  graph [ label = "Proxy", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Proxy.<Fallback>" [ label = "<Fallback>", color = "blue" ];
+  "Proxy.<Receive Ether>" [ label = "<Receive Ether>", color = "blue" ];
+  "Proxy._implementation" [ label = "_implementation" ];
+  "Proxy._delegate" [ label = "_delegate" ];
+  "Proxy._willFallback" [ label = "_willFallback" ];
+  "Proxy._fallback" [ label = "_fallback" ];
+}
+
+subgraph "clusterBaseUpgradeabilityProxy" {
+  graph [ label = "BaseUpgradeabilityProxy", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "BaseUpgradeabilityProxy._implementation" [ label = "_implementation", color = "white" ];
+  "BaseUpgradeabilityProxy._upgradeTo" [ label = "_upgradeTo", color = "white" ];
+  "BaseUpgradeabilityProxy._setImplementation" [ label = "_setImplementation" ];
+}
+
+subgraph "clusterBaseAdminUpgradeabilityProxy" {
+  graph [ label = "BaseAdminUpgradeabilityProxy", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "BaseAdminUpgradeabilityProxy.ifAdmin" [ label = "ifAdmin", color = "yellow" ];
+  "BaseAdminUpgradeabilityProxy.admin" [ label = "admin", color = "blue" ];
+  "BaseAdminUpgradeabilityProxy.implementation" [ label = "implementation", color = "blue" ];
+  "BaseAdminUpgradeabilityProxy.changeAdmin" [ label = "changeAdmin", color = "blue" ];
+  "BaseAdminUpgradeabilityProxy.upgradeTo" [ label = "upgradeTo", color = "blue" ];
+  "BaseAdminUpgradeabilityProxy.upgradeToAndCall" [ label = "upgradeToAndCall", color = "blue" ];
+  "BaseAdminUpgradeabilityProxy._admin" [ label = "_admin" ];
+  "BaseAdminUpgradeabilityProxy._setAdmin" [ label = "_setAdmin" ];
+  "BaseAdminUpgradeabilityProxy._willFallback" [ label = "_willFallback", color = "white" ];
+  "BaseAdminUpgradeabilityProxy.address" [ label = "address" ];
+}
+
+subgraph "clusterIAdminUpgradeabilityProxyView" {
+  graph [ label = "IAdminUpgradeabilityProxyView  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IAdminUpgradeabilityProxyView.admin" [ label = "admin", color = "blue" ];
+  "IAdminUpgradeabilityProxyView.implementation" [ label = "implementation", color = "blue" ];
+}
+
+subgraph "clusterUpgradeabilityProxy" {
+  graph [ label = "UpgradeabilityProxy", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "UpgradeabilityProxy.<Constructor>" [ label = "<Constructor>", color = "green" ];
+}
+
+subgraph "clusterAdminUpgradeabilityProxy" {
+  graph [ label = "AdminUpgradeabilityProxy", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "AdminUpgradeabilityProxy.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "AdminUpgradeabilityProxy._willFallback" [ label = "_willFallback", color = "white" ];
+}
+
+subgraph "clusterInitializableUpgradeabilityProxy" {
+  graph [ label = "InitializableUpgradeabilityProxy", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "InitializableUpgradeabilityProxy.initialize" [ label = "initialize", color = "green" ];
+  "InitializableUpgradeabilityProxy.address" [ label = "address" ];
+}
+
+subgraph "clusterInitializableAdminUpgradeabilityProxy" {
+  graph [ label = "InitializableAdminUpgradeabilityProxy", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "InitializableAdminUpgradeabilityProxy.initialize" [ label = "initialize", color = "green" ];
+  "InitializableAdminUpgradeabilityProxy._willFallback" [ label = "_willFallback", color = "white" ];
+}
+
+subgraph "clusterIProxyFactory" {
+  graph [ label = "IProxyFactory  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IProxyFactory.productImplementation" [ label = "productImplementation", color = "blue" ];
+  "IProxyFactory.productImplementations" [ label = "productImplementations", color = "blue" ];
+}
+
+subgraph "clusterProductProxy" {
+  graph [ label = "ProductProxy", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ProductProxy._name" [ label = "_name" ];
+  "ProductProxy._setName" [ label = "_setName", color = "white" ];
+  "ProductProxy._setFactory" [ label = "_setFactory", color = "white" ];
+  "ProductProxy._factory" [ label = "_factory" ];
+  "ProductProxy._implementation" [ label = "_implementation", color = "white" ];
+  "ProductProxy.address" [ label = "address" ];
+}
+
+subgraph "clusterInitializableProductProxy" {
+  graph [ label = "InitializableProductProxy", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "InitializableProductProxy.__InitializableProductProxy_init" [ label = "__InitializableProductProxy_init", color = "green" ];
+  "InitializableProductProxy._setName" [ label = "_setName" ];
+}
+
+subgraph "clusterInitializable" {
+  graph [ label = "Initializable", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Initializable.initializer" [ label = "initializer", color = "yellow" ];
+  "Initializable.isConstructor" [ label = "isConstructor" ];
+  "Initializable.address" [ label = "address" ];
+}
+
+subgraph "clusterContextUpgradeSafe" {
+  graph [ label = "ContextUpgradeSafe", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ContextUpgradeSafe.__Context_init" [ label = "__Context_init", color = "white" ];
+  "ContextUpgradeSafe.__Context_init_unchained" [ label = "__Context_init_unchained" ];
+  "ContextUpgradeSafe._msgSender" [ label = "_msgSender", color = "white" ];
+  "ContextUpgradeSafe._msgData" [ label = "_msgData", color = "white" ];
+}
+
+subgraph "clusterReentrancyGuardUpgradeSafe" {
+  graph [ label = "ReentrancyGuardUpgradeSafe", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ReentrancyGuardUpgradeSafe.__ReentrancyGuard_init" [ label = "__ReentrancyGuard_init", color = "white" ];
+  "ReentrancyGuardUpgradeSafe.__ReentrancyGuard_init_unchained" [ label = "__ReentrancyGuard_init_unchained" ];
+  "ReentrancyGuardUpgradeSafe.nonReentrant" [ label = "nonReentrant", color = "yellow" ];
+}
+
+subgraph "clusterMath" {
+  graph [ label = "Math  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Math.max" [ label = "max" ];
+  "Math.min" [ label = "min" ];
+  "Math.average" [ label = "average", color = "white" ];
+}
+
+subgraph "clusterSafeMath" {
+  graph [ label = "SafeMath  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "SafeMath.add" [ label = "add", color = "white" ];
+  "SafeMath.sub" [ label = "sub" ];
+  "SafeMath.sub0" [ label = "sub0", color = "white" ];
+  "SafeMath.mul" [ label = "mul", color = "white" ];
+  "SafeMath.div" [ label = "div" ];
+  "SafeMath.mod" [ label = "mod" ];
+}
+
+subgraph "clusterOpenZeppelinUpgradesAddress" {
+  graph [ label = "OpenZeppelinUpgradesAddress  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "OpenZeppelinUpgradesAddress.isContract" [ label = "isContract" ];
+}
+
+subgraph "clusterAddress" {
+  graph [ label = "Address  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Address.isContract" [ label = "isContract", color = "white" ];
+  "Address.sendValue" [ label = "sendValue", color = "white" ];
+  "Address.address" [ label = "address" ];
+}
+
+subgraph "clusterIERC20" {
+  graph [ label = "IERC20  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IERC20.totalSupply" [ label = "totalSupply", color = "blue" ];
+  "IERC20.balanceOf" [ label = "balanceOf" ];
+  "IERC20.transfer" [ label = "transfer", color = "blue" ];
+  "IERC20.allowance" [ label = "allowance" ];
+  "IERC20.approve" [ label = "approve", color = "blue" ];
+  "IERC20.transferFrom" [ label = "transferFrom", color = "blue" ];
+  "IERC20.isContract" [ label = "isContract" ];
+  "IERC20.data" [ label = "data" ];
+  "IERC20.safeTransferFrom" [ label = "safeTransferFrom" ];
+  "IERC20.safeTransfer" [ label = "safeTransfer" ];
+}
+
+subgraph "clusterERC20UpgradeSafe" {
+  graph [ label = "ERC20UpgradeSafe", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ERC20UpgradeSafe.__ERC20_init" [ label = "__ERC20_init", color = "white" ];
+  "ERC20UpgradeSafe.__ERC20_init_unchained" [ label = "__ERC20_init_unchained" ];
+  "ERC20UpgradeSafe.name" [ label = "name", color = "green" ];
+  "ERC20UpgradeSafe.symbol" [ label = "symbol", color = "green" ];
+  "ERC20UpgradeSafe.decimals" [ label = "decimals", color = "green" ];
+  "ERC20UpgradeSafe.totalSupply" [ label = "totalSupply", color = "green" ];
+  "ERC20UpgradeSafe.balanceOf" [ label = "balanceOf", color = "green" ];
+  "ERC20UpgradeSafe.transfer" [ label = "transfer", color = "green" ];
+  "ERC20UpgradeSafe.allowance" [ label = "allowance", color = "green" ];
+  "ERC20UpgradeSafe.approve" [ label = "approve", color = "green" ];
+  "ERC20UpgradeSafe.transferFrom" [ label = "transferFrom", color = "green" ];
+  "ERC20UpgradeSafe.increaseAllowance" [ label = "increaseAllowance", color = "green" ];
+  "ERC20UpgradeSafe.decreaseAllowance" [ label = "decreaseAllowance", color = "green" ];
+  "ERC20UpgradeSafe._transfer" [ label = "_transfer" ];
+  "ERC20UpgradeSafe._mint" [ label = "_mint", color = "white" ];
+  "ERC20UpgradeSafe._burn" [ label = "_burn", color = "white" ];
+  "ERC20UpgradeSafe._approve" [ label = "_approve" ];
+  "ERC20UpgradeSafe._setupDecimals" [ label = "_setupDecimals", color = "white" ];
+  "ERC20UpgradeSafe._beforeTokenTransfer" [ label = "_beforeTokenTransfer" ];
+  "ERC20UpgradeSafe._msgSender" [ label = "_msgSender" ];
+}
+
+subgraph "clusterERC20CappedUpgradeSafe" {
+  graph [ label = "ERC20CappedUpgradeSafe", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ERC20CappedUpgradeSafe.__ERC20Capped_init" [ label = "__ERC20Capped_init", color = "white" ];
+  "ERC20CappedUpgradeSafe.__ERC20Capped_init_unchained" [ label = "__ERC20Capped_init_unchained" ];
+  "ERC20CappedUpgradeSafe.cap" [ label = "cap" ];
+  "ERC20CappedUpgradeSafe._beforeTokenTransfer" [ label = "_beforeTokenTransfer", color = "white" ];
+  "ERC20CappedUpgradeSafe.totalSupply" [ label = "totalSupply" ];
+}
+
+subgraph "clusterSafeERC20" {
+  graph [ label = "SafeERC20  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "SafeERC20.safeTransfer" [ label = "safeTransfer", color = "white" ];
+  "SafeERC20.safeTransferFrom" [ label = "safeTransferFrom", color = "white" ];
+  "SafeERC20.safeApprove" [ label = "safeApprove", color = "white" ];
+  "SafeERC20.safeIncreaseAllowance" [ label = "safeIncreaseAllowance", color = "white" ];
+  "SafeERC20.safeDecreaseAllowance" [ label = "safeDecreaseAllowance", color = "white" ];
+  "SafeERC20._callOptionalReturn" [ label = "_callOptionalReturn" ];
+  "SafeERC20.address" [ label = "address" ];
+}
+
+subgraph "clusterRLPReader" {
+  graph [ label = "RLPReader  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "RLPReader.next" [ label = "next", color = "white" ];
+  "RLPReader.hasNext" [ label = "hasNext" ];
+  "RLPReader.toRlpItem" [ label = "toRlpItem", color = "white" ];
+  "RLPReader.iterator" [ label = "iterator", color = "white" ];
+  "RLPReader.rlpLen" [ label = "rlpLen", color = "white" ];
+  "RLPReader.payloadLocation" [ label = "payloadLocation", color = "white" ];
+  "RLPReader.payloadLen" [ label = "payloadLen", color = "white" ];
+  "RLPReader.toList" [ label = "toList", color = "white" ];
+  "RLPReader.isList" [ label = "isList" ];
+  "RLPReader.rlpBytesKeccak256" [ label = "rlpBytesKeccak256", color = "white" ];
+  "RLPReader.payloadKeccak256" [ label = "payloadKeccak256", color = "white" ];
+  "RLPReader.toRlpBytes" [ label = "toRlpBytes", color = "white" ];
+  "RLPReader.toBoolean" [ label = "toBoolean", color = "white" ];
+  "RLPReader.toAddress" [ label = "toAddress", color = "white" ];
+  "RLPReader.toUint" [ label = "toUint" ];
+  "RLPReader.toUintStrict" [ label = "toUintStrict", color = "white" ];
+  "RLPReader.toBytes" [ label = "toBytes", color = "white" ];
+  "RLPReader.numItems" [ label = "numItems" ];
+  "RLPReader._itemLength" [ label = "_itemLength" ];
+  "RLPReader._payloadOffset" [ label = "_payloadOffset" ];
+  "RLPReader.copy" [ label = "copy" ];
+  "RLPReader.address" [ label = "address" ];
+}
+
+subgraph "clusterRLPEncode" {
+  graph [ label = "RLPEncode  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "RLPEncode.encodeBytes" [ label = "encodeBytes", color = "white" ];
+  "RLPEncode.encodeList" [ label = "encodeList", color = "white" ];
+  "RLPEncode.encodeString" [ label = "encodeString", color = "white" ];
+  "RLPEncode.encodeAddress" [ label = "encodeAddress", color = "white" ];
+  "RLPEncode.encodeUint" [ label = "encodeUint", color = "white" ];
+  "RLPEncode.encodeInt" [ label = "encodeInt", color = "white" ];
+  "RLPEncode.encodeBool" [ label = "encodeBool", color = "white" ];
+  "RLPEncode.encodeLength" [ label = "encodeLength" ];
+  "RLPEncode.toBinary" [ label = "toBinary" ];
+  "RLPEncode.memcpy" [ label = "memcpy" ];
+  "RLPEncode.flatten" [ label = "flatten" ];
+  "RLPEncode.concat" [ label = "concat" ];
+}
+
+subgraph "clusterGovernable" {
+  graph [ label = "Governable", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Governable.__Governable_init_unchained" [ label = "__Governable_init_unchained", color = "green" ];
+  "Governable.governance" [ label = "governance", color = "yellow" ];
+  "Governable.renounceGovernorship" [ label = "renounceGovernorship", color = "green" ];
+  "Governable.transferGovernorship" [ label = "transferGovernorship", color = "green" ];
+  "Governable._transferGovernorship" [ label = "_transferGovernorship" ];
+}
+
+subgraph "clusterConfigurableBase" {
+  graph [ label = "ConfigurableBase", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ConfigurableBase.getConfig" [ label = "getConfig", color = "green" ];
+  "ConfigurableBase.getConfigI" [ label = "getConfigI", color = "green" ];
+  "ConfigurableBase.getConfigA" [ label = "getConfigA", color = "green" ];
+  "ConfigurableBase._setConfig" [ label = "_setConfig" ];
+}
+
+subgraph "clusterConfigurable" {
+  graph [ label = "Configurable", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Configurable.setConfig" [ label = "setConfig", color = "blue" ];
+  "Configurable.setConfigI" [ label = "setConfigI", color = "blue" ];
+  "Configurable.setConfigA" [ label = "setConfigA", color = "green" ];
+}
+
+subgraph "clusterIStakingRewards" {
+  graph [ label = "IStakingRewards  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IStakingRewards.lastTimeRewardApplicable" [ label = "lastTimeRewardApplicable", color = "blue" ];
+  "IStakingRewards.rewardPerToken" [ label = "rewardPerToken", color = "blue" ];
+  "IStakingRewards.rewards" [ label = "rewards", color = "blue" ];
+  "IStakingRewards.earned" [ label = "earned", color = "blue" ];
+  "IStakingRewards.getRewardForDuration" [ label = "getRewardForDuration", color = "blue" ];
+  "IStakingRewards.totalSupply" [ label = "totalSupply", color = "blue" ];
+  "IStakingRewards.balanceOf" [ label = "balanceOf", color = "blue" ];
+  "IStakingRewards.stake" [ label = "stake", color = "blue" ];
+  "IStakingRewards.withdraw" [ label = "withdraw", color = "blue" ];
+  "IStakingRewards.getReward" [ label = "getReward", color = "blue" ];
+  "IStakingRewards.exit" [ label = "exit", color = "blue" ];
+}
+
+subgraph "clusterRewardsDistributionRecipient" {
+  graph [ label = "RewardsDistributionRecipient", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "RewardsDistributionRecipient.notifyRewardAmount" [ label = "notifyRewardAmount", color = "blue" ];
+  "RewardsDistributionRecipient.onlyRewardsDistribution" [ label = "onlyRewardsDistribution", color = "yellow" ];
+}
+
+subgraph "clusterStakingRewards" {
+  graph [ label = "StakingRewards", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "StakingRewards.__StakingRewards_init" [ label = "__StakingRewards_init", color = "green" ];
+  "StakingRewards.__StakingRewards_init_unchained" [ label = "__StakingRewards_init_unchained" ];
+  "StakingRewards.totalSupply" [ label = "totalSupply", color = "green" ];
+  "StakingRewards.balanceOf" [ label = "balanceOf", color = "green" ];
+  "StakingRewards.lastTimeRewardApplicable" [ label = "lastTimeRewardApplicable", color = "green" ];
+  "StakingRewards.rewardPerToken" [ label = "rewardPerToken", color = "green" ];
+  "StakingRewards.earned" [ label = "earned", color = "green" ];
+  "StakingRewards.getRewardForDuration" [ label = "getRewardForDuration", color = "blue" ];
+  "StakingRewards.stakeWithPermit" [ label = "stakeWithPermit", color = "green" ];
+  "StakingRewards.stake" [ label = "stake", color = "green" ];
+  "StakingRewards.withdraw" [ label = "withdraw", color = "green" ];
+  "StakingRewards.getReward" [ label = "getReward", color = "green" ];
+  "StakingRewards.exit" [ label = "exit", color = "green" ];
+  "StakingRewards.notifyRewardAmount" [ label = "notifyRewardAmount", color = "blue" ];
+  "StakingRewards.updateReward" [ label = "updateReward", color = "yellow" ];
+}
+
+subgraph "clusterIPermit" {
+  graph [ label = "IPermit  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IPermit.permit" [ label = "permit", color = "blue" ];
+}
+
+subgraph "clusterConstants" {
+  graph [ label = "Constants", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Constants._chainId" [ label = "_chainId", color = "white" ];
+}
+
+subgraph "clusterMappingBase" {
+  graph [ label = "MappingBase", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "MappingBase.DOMAIN_SEPARATOR" [ label = "DOMAIN_SEPARATOR" ];
+  "MappingBase.setAutoQuota" [ label = "setAutoQuota", color = "blue" ];
+  "MappingBase.onlyFactory" [ label = "onlyFactory", color = "yellow" ];
+  "MappingBase.updateAutoQuota" [ label = "updateAutoQuota", color = "yellow" ];
+  "MappingBase.authQuotaOf" [ label = "authQuotaOf" ];
+  "MappingBase.cap" [ label = "cap" ];
+  "MappingBase.increaseAuthQuotas" [ label = "increaseAuthQuotas", color = "blue" ];
+  "MappingBase.increaseAuthQuota" [ label = "increaseAuthQuota" ];
+  "MappingBase.decreaseAuthQuotas" [ label = "decreaseAuthQuotas", color = "blue" ];
+  "MappingBase.decreaseAuthQuota" [ label = "decreaseAuthQuota" ];
+  "MappingBase._decreaseAuthQuota" [ label = "_decreaseAuthQuota" ];
+  "MappingBase.needApprove" [ label = "needApprove", color = "green" ];
+  "MappingBase.send" [ label = "send", color = "blue" ];
+  "MappingBase.sendFrom" [ label = "sendFrom" ];
+  "MappingBase._sendFrom" [ label = "_sendFrom" ];
+  "MappingBase.receive" [ label = "receive", color = "blue" ];
+  "MappingBase._receive" [ label = "_receive" ];
+  "MappingBase._chargeFee" [ label = "_chargeFee" ];
+  "MappingBase._msgSender" [ label = "_msgSender" ];
+}
+
+subgraph "clusterTokenMapped" {
+  graph [ label = "TokenMapped", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "TokenMapped.__TokenMapped_init" [ label = "__TokenMapped_init", color = "blue" ];
+  "TokenMapped.__TokenMapped_init_unchained" [ label = "__TokenMapped_init_unchained" ];
+  "TokenMapped.cap" [ label = "cap", color = "green" ];
+  "TokenMapped.totalMapped" [ label = "totalMapped", color = "green" ];
+  "TokenMapped.needApprove" [ label = "needApprove", color = "green" ];
+  "TokenMapped._sendFrom" [ label = "_sendFrom", color = "white" ];
+  "TokenMapped._receive" [ label = "_receive", color = "white" ];
+  "TokenMapped._chainId" [ label = "_chainId" ];
+}
+
+subgraph "clusterPermit" {
+  graph [ label = "Permit", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Permit.DOMAIN_SEPARATOR" [ label = "DOMAIN_SEPARATOR" ];
+  "Permit.permit" [ label = "permit", color = "blue" ];
+  "Permit._approve" [ label = "_approve" ];
+  "Permit.address" [ label = "address" ];
+}
+
+subgraph "clusterMappableToken" {
+  graph [ label = "MappableToken", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "MappableToken.__MappableToken_init" [ label = "__MappableToken_init", color = "blue" ];
+  "MappableToken.__MappableToken_init_unchained" [ label = "__MappableToken_init_unchained" ];
+  "MappableToken.DOMAIN_SEPARATOR" [ label = "DOMAIN_SEPARATOR", color = "green" ];
+  "MappableToken.cap" [ label = "cap", color = "green" ];
+  "MappableToken.totalMapped" [ label = "totalMapped", color = "green" ];
+  "MappableToken.needApprove" [ label = "needApprove", color = "green" ];
+  "MappableToken._approve" [ label = "_approve", color = "white" ];
+  "MappableToken._sendFrom" [ label = "_sendFrom", color = "white" ];
+  "MappableToken._receive" [ label = "_receive", color = "white" ];
+  "MappableToken._setupDecimals" [ label = "_setupDecimals" ];
+  "MappableToken._chainId" [ label = "_chainId" ];
+  "MappableToken.name" [ label = "name" ];
+  "MappableToken.totalSupply" [ label = "totalSupply" ];
+}
+
+subgraph "clusterMappingToken" {
+  graph [ label = "MappingToken", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "MappingToken.__MappingToken_init" [ label = "__MappingToken_init", color = "blue" ];
+  "MappingToken.__MappingToken_init_unchained" [ label = "__MappingToken_init_unchained" ];
+  "MappingToken.DOMAIN_SEPARATOR" [ label = "DOMAIN_SEPARATOR", color = "green" ];
+  "MappingToken.cap" [ label = "cap", color = "green" ];
+  "MappingToken.needApprove" [ label = "needApprove", color = "green" ];
+  "MappingToken._approve" [ label = "_approve", color = "white" ];
+  "MappingToken._sendFrom" [ label = "_sendFrom", color = "white" ];
+  "MappingToken._receive" [ label = "_receive", color = "white" ];
+  "MappingToken._setupDecimals" [ label = "_setupDecimals" ];
+  "MappingToken.name" [ label = "name" ];
+  "MappingToken._chainId" [ label = "_chainId" ];
+}
+
+subgraph "clusterMappingTokenProxy" {
+  graph [ label = "MappingTokenProxy", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "MappingTokenProxy.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "MappingTokenProxy._setName" [ label = "_setName" ];
+}
+
+subgraph "clusterFactory" {
+  graph [ label = "Factory", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Factory.__MappingTokenFactory_init" [ label = "__MappingTokenFactory_init", color = "blue" ];
+  "Factory.__MappingTokenFactory_init_unchained" [ label = "__MappingTokenFactory_init_unchained" ];
+  "Factory.upgradeProductImplementationsTo_" [ label = "upgradeProductImplementationsTo_" ];
+  "Factory.setSignatories" [ label = "setSignatories", color = "blue" ];
+  "Factory.setAuthorty_" [ label = "setAuthorty_", color = "blue" ];
+  "Factory.setAutoQuota" [ label = "setAutoQuota", color = "blue" ];
+  "Factory.onlyAuthorty" [ label = "onlyAuthorty", color = "yellow" ];
+  "Factory._initAuthQuotas" [ label = "_initAuthQuotas", color = "white" ];
+  "Factory._increaseAuthQuotas" [ label = "_increaseAuthQuotas" ];
+  "Factory.increaseAuthQuotas_" [ label = "increaseAuthQuotas_", color = "blue" ];
+  "Factory.increaseAuthQuotas" [ label = "increaseAuthQuotas", color = "blue" ];
+  "Factory.increaseAuthQuota" [ label = "increaseAuthQuota", color = "blue" ];
+  "Factory.decreaseAuthQuotas_" [ label = "decreaseAuthQuotas_", color = "blue" ];
+  "Factory.decreaseAuthQuotas" [ label = "decreaseAuthQuotas" ];
+  "Factory.decreaseAuthQuota" [ label = "decreaseAuthQuota", color = "blue" ];
+  "Factory.increaseAuthCounts_" [ label = "increaseAuthCounts_", color = "blue" ];
+  "Factory.increaseAuthCounts" [ label = "increaseAuthCounts" ];
+  "Factory.increaseAuthCount" [ label = "increaseAuthCount" ];
+  "Factory.decreaseAuthCounts_" [ label = "decreaseAuthCounts_", color = "blue" ];
+  "Factory.decreaseAuthCounts" [ label = "decreaseAuthCounts" ];
+  "Factory.decreaseAuthCount" [ label = "decreaseAuthCount" ];
+  "Factory._decreaseAuthCount" [ label = "_decreaseAuthCount" ];
+  "Factory.supportChainCount" [ label = "supportChainCount" ];
+  "Factory.mainChainIdTokens" [ label = "mainChainIdTokens", color = "green" ];
+  "Factory.chainIdMappingTokenMappeds" [ label = "chainIdMappingTokenMappeds", color = "blue" ];
+  "Factory.isSupportChainId" [ label = "isSupportChainId", color = "green" ];
+  "Factory.registerSupportChainId_" [ label = "registerSupportChainId_", color = "blue" ];
+  "Factory._registerMapping" [ label = "_registerMapping", color = "white" ];
+  "Factory.registerMapping_" [ label = "registerMapping_", color = "blue" ];
+  "Factory.registerMapping" [ label = "registerMapping", color = "blue" ];
+  "Factory.certifiedCount" [ label = "certifiedCount", color = "blue" ];
+  "Factory.certifiedTokens" [ label = "certifiedTokens", color = "green" ];
+  "Factory.allCertifiedTokens" [ label = "allCertifiedTokens", color = "blue" ];
+  "Factory.registerCertified_" [ label = "registerCertified_", color = "blue" ];
+  "Factory.calcContract" [ label = "calcContract" ];
+  "Factory.calcMapping" [ label = "calcMapping" ];
+  "Factory.createTokenMapped" [ label = "createTokenMapped", color = "blue" ];
+  "Factory.createMappableToken" [ label = "createMappableToken", color = "blue" ];
+  "Factory._createMappingToken" [ label = "_createMappingToken", color = "white" ];
+  "Factory.createMappingToken_" [ label = "createMappingToken_", color = "green" ];
+  "Factory.createMappingToken" [ label = "createMappingToken", color = "green" ];
+  "Factory._chargeFee" [ label = "_chargeFee" ];
+  "Factory._chainId" [ label = "_chainId" ];
+  "Factory.type" [ label = "type" ];
+  "Factory._msgSender" [ label = "_msgSender" ];
+  "Factory.getConfig" [ label = "getConfig" ];
+  "Factory.payable" [ label = "payable" ];
+}
+
+subgraph "clusternewImplementation" {
+  graph [ label = "newImplementation", color = "lightgray" ];
+  "newImplementation.delegatecall" [ label = "delegatecall" ];
+}
+
+subgraph "cluster_logic" {
+  graph [ label = "_logic", color = "lightgray" ];
+  "_logic.delegatecall" [ label = "delegatecall" ];
+}
+
+subgraph "cluster_totalSupply" {
+  graph [ label = "_totalSupply", color = "lightgray" ];
+  "_totalSupply.add" [ label = "add" ];
+  "_totalSupply.sub" [ label = "sub" ];
+}
+
+subgraph "clusterrewardPerTokenStored" {
+  graph [ label = "rewardPerTokenStored", color = "lightgray" ];
+  "rewardPerTokenStored.add" [ label = "add" ];
+}
+
+subgraph "clusterrewardRate" {
+  graph [ label = "rewardRate", color = "lightgray" ];
+  "rewardRate.mul" [ label = "mul" ];
+}
+
+subgraph "clusterreward" {
+  graph [ label = "reward", color = "lightgray" ];
+  "reward.div" [ label = "div" ];
+  "reward.add" [ label = "add" ];
+}
+
+subgraph "clusterperiodFinish" {
+  graph [ label = "periodFinish", color = "lightgray" ];
+  "periodFinish.sub" [ label = "sub" ];
+}
+
+subgraph "clusterremaining" {
+  graph [ label = "remaining", color = "lightgray" ];
+  "remaining.mul" [ label = "mul" ];
+}
+
+subgraph "clusterbalance" {
+  graph [ label = "balance", color = "lightgray" ];
+  "balance.div" [ label = "div" ];
+}
+
+subgraph "clusterquotaCap" {
+  graph [ label = "quotaCap", color = "lightgray" ];
+  "quotaCap.mul" [ label = "mul" ];
+}
+
+subgraph "clusternow" {
+  graph [ label = "now", color = "lightgray" ];
+  "now.sub" [ label = "sub" ];
+}
+
+subgraph "clusterquota" {
+  graph [ label = "quota", color = "lightgray" ];
+  "quota.add" [ label = "add" ];
+}
+
+subgraph "clusterfeeTo" {
+  graph [ label = "feeTo", color = "lightgray" ];
+  "feeTo.transfer" [ label = "transfer" ];
+}
+
+subgraph "clustercap" {
+  graph [ label = "cap", color = "lightgray" ];
+  "cap.mul" [ label = "mul" ];
+}
+
+  "Proxy.<Fallback>";
+  "Proxy._fallback";
+  "Proxy.<Receive Ether>";
+  "OpenZeppelinUpgradesAddress.isContract";
+  "Proxy._willFallback";
+  "Proxy._delegate";
+  "Proxy._implementation";
+  "BaseUpgradeabilityProxy._upgradeTo";
+  "BaseUpgradeabilityProxy._setImplementation";
+  "BaseAdminUpgradeabilityProxy.ifAdmin";
+  "BaseAdminUpgradeabilityProxy._admin";
+  "BaseAdminUpgradeabilityProxy.admin";
+  "BaseAdminUpgradeabilityProxy.implementation";
+  "BaseAdminUpgradeabilityProxy.changeAdmin";
+  "BaseAdminUpgradeabilityProxy.address";
+  "BaseAdminUpgradeabilityProxy._setAdmin";
+  "BaseAdminUpgradeabilityProxy.upgradeTo";
+  "BaseAdminUpgradeabilityProxy.upgradeToAndCall";
+  "newImplementation.delegatecall";
+  "UpgradeabilityProxy.<Constructor>";
+  "_logic.delegatecall";
+  "AdminUpgradeabilityProxy.<Constructor>";
+  "InitializableUpgradeabilityProxy.initialize";
+  "InitializableUpgradeabilityProxy.address";
+  "ProductProxy._setFactory";
+  "ProductProxy._factory";
+  "ProductProxy._name";
+  "ProductProxy.address";
+  "InitializableProductProxy.__InitializableProductProxy_init";
+  "InitializableProductProxy._setName";
+  "Initializable.initializer";
+  "Initializable.isConstructor";
+  "Initializable.address";
+  "ContextUpgradeSafe.__Context_init";
+  "ContextUpgradeSafe.__Context_init_unchained";
+  "ReentrancyGuardUpgradeSafe.__ReentrancyGuard_init";
+  "ReentrancyGuardUpgradeSafe.__ReentrancyGuard_init_unchained";
+  "SafeMath.sub";
+  "SafeMath.div";
+  "SafeMath.mod";
+  "Address.sendValue";
+  "Address.address";
+  "ERC20UpgradeSafe.__ERC20_init";
+  "ERC20UpgradeSafe.__ERC20_init_unchained";
+  "ERC20UpgradeSafe.transfer";
+  "ERC20UpgradeSafe._transfer";
+  "ERC20UpgradeSafe._msgSender";
+  "ERC20UpgradeSafe.approve";
+  "ERC20UpgradeSafe._approve";
+  "ERC20UpgradeSafe.transferFrom";
+  "ERC20UpgradeSafe.increaseAllowance";
+  "ERC20UpgradeSafe.decreaseAllowance";
+  "ERC20UpgradeSafe._beforeTokenTransfer";
+  "ERC20UpgradeSafe._mint";
+  "_totalSupply.add";
+  "ERC20UpgradeSafe._burn";
+  "_totalSupply.sub";
+  "ERC20CappedUpgradeSafe.__ERC20Capped_init";
+  "ERC20CappedUpgradeSafe.__ERC20Capped_init_unchained";
+  "ERC20CappedUpgradeSafe.totalSupply";
+  "SafeERC20.safeTransfer";
+  "SafeERC20._callOptionalReturn";
+  "SafeERC20.safeTransferFrom";
+  "SafeERC20.safeApprove";
+  "IERC20.allowance";
+  "SafeERC20.address";
+  "SafeERC20.safeIncreaseAllowance";
+  "SafeERC20.safeDecreaseAllowance";
+  "IERC20.isContract";
+  "IERC20.data";
+  "RLPReader.next";
+  "RLPReader.hasNext";
+  "RLPReader._itemLength";
+  "RLPReader.iterator";
+  "RLPReader.isList";
+  "RLPReader._payloadOffset";
+  "RLPReader.payloadLocation";
+  "RLPReader.payloadLen";
+  "RLPReader.toList";
+  "RLPReader.numItems";
+  "RLPReader.payloadKeccak256";
+  "RLPReader.toRlpBytes";
+  "RLPReader.copy";
+  "RLPReader.toAddress";
+  "RLPReader.address";
+  "RLPReader.toUint";
+  "RLPReader.toBytes";
+  "RLPEncode.encodeBytes";
+  "RLPEncode.concat";
+  "RLPEncode.encodeLength";
+  "RLPEncode.encodeList";
+  "RLPEncode.flatten";
+  "RLPEncode.encodeString";
+  "RLPEncode.encodeAddress";
+  "RLPEncode.encodeUint";
+  "RLPEncode.toBinary";
+  "RLPEncode.encodeInt";
+  "RLPEncode.memcpy";
+  "Governable.__Governable_init_unchained";
+  "Governable.renounceGovernorship";
+  "Governable.transferGovernorship";
+  "Governable._transferGovernorship";
+  "ConfigurableBase._setConfig";
+  "Configurable.setConfig";
+  "Configurable.setConfigI";
+  "Configurable.setConfigA";
+  "StakingRewards.__StakingRewards_init";
+  "StakingRewards.__StakingRewards_init_unchained";
+  "StakingRewards.lastTimeRewardApplicable";
+  "Math.min";
+  "StakingRewards.rewardPerToken";
+  "rewardPerTokenStored.add";
+  "StakingRewards.earned";
+  "StakingRewards.getRewardForDuration";
+  "rewardRate.mul";
+  "StakingRewards.stakeWithPermit";
+  "IERC20.safeTransferFrom";
+  "StakingRewards.stake";
+  "StakingRewards.withdraw";
+  "IERC20.safeTransfer";
+  "StakingRewards.getReward";
+  "StakingRewards.exit";
+  "StakingRewards.notifyRewardAmount";
+  "reward.div";
+  "periodFinish.sub";
+  "remaining.mul";
+  "reward.add";
+  "IERC20.balanceOf";
+  "balance.div";
+  "StakingRewards.updateReward";
+  "MappingBase.updateAutoQuota";
+  "MappingBase.authQuotaOf";
+  "MappingBase.cap";
+  "quotaCap.mul";
+  "now.sub";
+  "Math.max";
+  "quota.add";
+  "MappingBase.increaseAuthQuotas";
+  "MappingBase.increaseAuthQuota";
+  "MappingBase.decreaseAuthQuotas";
+  "MappingBase.decreaseAuthQuota";
+  "MappingBase._decreaseAuthQuota";
+  "MappingBase.send";
+  "MappingBase.sendFrom";
+  "MappingBase._msgSender";
+  "MappingBase._chargeFee";
+  "MappingBase._sendFrom";
+  "MappingBase.receive";
+  "MappingBase._receive";
+  "feeTo.transfer";
+  "TokenMapped.__TokenMapped_init";
+  "TokenMapped.__TokenMapped_init_unchained";
+  "TokenMapped._chainId";
+  "TokenMapped.totalMapped";
+  "Permit.permit";
+  "Permit.DOMAIN_SEPARATOR";
+  "Permit.address";
+  "Permit._approve";
+  "MappableToken.__MappableToken_init";
+  "MappableToken._setupDecimals";
+  "MappableToken.__MappableToken_init_unchained";
+  "MappableToken._chainId";
+  "MappableToken.name";
+  "MappingBase.DOMAIN_SEPARATOR";
+  "MappableToken.totalSupply";
+  "MappableToken.totalMapped";
+  "MappingToken.__MappingToken_init";
+  "MappingToken._setupDecimals";
+  "MappingToken.__MappingToken_init_unchained";
+  "MappingToken.name";
+  "MappingToken._chainId";
+  "ERC20CappedUpgradeSafe.cap";
+  "MappingTokenProxy.<Constructor>";
+  "MappingTokenProxy._setName";
+  "Factory.__MappingTokenFactory_init";
+  "Factory.__MappingTokenFactory_init_unchained";
+  "Factory._chainId";
+  "Factory.upgradeProductImplementationsTo_";
+  "Factory.type";
+  "Factory.setAutoQuota";
+  "Factory.onlyAuthorty";
+  "Factory._msgSender";
+  "Factory._initAuthQuotas";
+  "cap.mul";
+  "Factory._increaseAuthQuotas";
+  "Factory.increaseAuthQuotas_";
+  "Factory.increaseAuthQuotas";
+  "Factory.increaseAuthQuota";
+  "Factory.decreaseAuthQuotas_";
+  "Factory.decreaseAuthQuotas";
+  "Factory.decreaseAuthQuota";
+  "Factory.increaseAuthCounts_";
+  "Factory.increaseAuthCounts";
+  "Factory.increaseAuthCount";
+  "Factory.decreaseAuthCounts_";
+  "Factory.decreaseAuthCounts";
+  "Factory.decreaseAuthCount";
+  "Factory._decreaseAuthCount";
+  "Factory.mainChainIdTokens";
+  "Factory.chainIdMappingTokenMappeds";
+  "Factory.supportChainCount";
+  "Factory.isSupportChainId";
+  "Factory.registerSupportChainId_";
+  "Factory._registerMapping";
+  "Factory.calcMapping";
+  "Factory.registerMapping_";
+  "Factory.registerMapping";
+  "Factory._chargeFee";
+  "Factory.calcContract";
+  "Factory.getConfig";
+  "Factory.certifiedTokens";
+  "Factory.allCertifiedTokens";
+  "Factory.registerCertified_";
+  "Factory.createTokenMapped";
+  "Factory.payable";
+  "Factory.createMappableToken";
+  "Factory._createMappingToken";
+  "Factory.createMappingToken_";
+  "Factory.createMappingToken";
+  "Proxy.<Fallback>" -> "Proxy._fallback" [ color = "green" ];
+  "Proxy.<Receive Ether>" -> "Proxy._fallback" [ color = "green" ];
+  "Proxy._fallback" -> "OpenZeppelinUpgradesAddress.isContract" [ color = "orange" ];
+  "Proxy._fallback" -> "Proxy._willFallback" [ color = "green" ];
+  "Proxy._fallback" -> "Proxy._delegate" [ color = "green" ];
+  "Proxy._fallback" -> "Proxy._implementation" [ color = "green" ];
+  "BaseUpgradeabilityProxy._upgradeTo" -> "BaseUpgradeabilityProxy._setImplementation" [ color = "green" ];
+  "BaseUpgradeabilityProxy._setImplementation" -> "OpenZeppelinUpgradesAddress.isContract" [ color = "orange" ];
+  "BaseAdminUpgradeabilityProxy.ifAdmin" -> "BaseAdminUpgradeabilityProxy._admin" [ color = "green" ];
+  "BaseAdminUpgradeabilityProxy.ifAdmin" -> "Proxy._fallback" [ color = "green" ];
+  "BaseAdminUpgradeabilityProxy.admin" -> "BaseAdminUpgradeabilityProxy._admin" [ color = "green" ];
+  "BaseAdminUpgradeabilityProxy.implementation" -> "Proxy._implementation" [ color = "green" ];
+  "BaseAdminUpgradeabilityProxy.changeAdmin" -> "BaseAdminUpgradeabilityProxy.address" [ color = "green" ];
+  "BaseAdminUpgradeabilityProxy.changeAdmin" -> "BaseAdminUpgradeabilityProxy._admin" [ color = "green" ];
+  "BaseAdminUpgradeabilityProxy.changeAdmin" -> "BaseAdminUpgradeabilityProxy._setAdmin" [ color = "green" ];
+  "BaseAdminUpgradeabilityProxy.upgradeTo" -> "BaseUpgradeabilityProxy._upgradeTo" [ color = "green" ];
+  "BaseAdminUpgradeabilityProxy.upgradeToAndCall" -> "BaseUpgradeabilityProxy._upgradeTo" [ color = "green" ];
+  "BaseAdminUpgradeabilityProxy.upgradeToAndCall" -> "newImplementation.delegatecall" [ color = "orange" ];
+  "Proxy._willFallback" -> "BaseAdminUpgradeabilityProxy._admin" [ color = "green" ];
+  "UpgradeabilityProxy.<Constructor>" -> "BaseUpgradeabilityProxy._setImplementation" [ color = "green" ];
+  "UpgradeabilityProxy.<Constructor>" -> "_logic.delegatecall" [ color = "orange" ];
+  "AdminUpgradeabilityProxy.<Constructor>" -> "BaseAdminUpgradeabilityProxy._setAdmin" [ color = "green" ];
+  "Proxy._willFallback" -> "Proxy._willFallback" [ color = "orange" ];
+  "InitializableUpgradeabilityProxy.initialize" -> "Proxy._implementation" [ color = "green" ];
+  "InitializableUpgradeabilityProxy.initialize" -> "InitializableUpgradeabilityProxy.address" [ color = "green" ];
+  "InitializableUpgradeabilityProxy.initialize" -> "BaseUpgradeabilityProxy._setImplementation" [ color = "green" ];
+  "InitializableUpgradeabilityProxy.initialize" -> "_logic.delegatecall" [ color = "orange" ];
+  "InitializableUpgradeabilityProxy.initialize" -> "Proxy._implementation" [ color = "green" ];
+  "InitializableUpgradeabilityProxy.initialize" -> "InitializableUpgradeabilityProxy.address" [ color = "green" ];
+  "InitializableUpgradeabilityProxy.initialize" -> "InitializableUpgradeabilityProxy.initialize" [ color = "orange" ];
+  "InitializableUpgradeabilityProxy.initialize" -> "BaseAdminUpgradeabilityProxy._setAdmin" [ color = "green" ];
+  "Proxy._willFallback" -> "Proxy._willFallback" [ color = "orange" ];
+  "ProductProxy._setFactory" -> "OpenZeppelinUpgradesAddress.isContract" [ color = "orange" ];
+  "Proxy._implementation" -> "ProductProxy._factory" [ color = "green" ];
+  "Proxy._implementation" -> "OpenZeppelinUpgradesAddress.isContract" [ color = "orange" ];
+  "Proxy._implementation" -> "ProductProxy._name" [ color = "green" ];
+  "Proxy._implementation" -> "ProductProxy.address" [ color = "green" ];
+  "InitializableProductProxy.__InitializableProductProxy_init" -> "ProductProxy._factory" [ color = "green" ];
+  "InitializableProductProxy.__InitializableProductProxy_init" -> "ProductProxy.address" [ color = "green" ];
+  "InitializableProductProxy.__InitializableProductProxy_init" -> "ProductProxy._setFactory" [ color = "green" ];
+  "InitializableProductProxy.__InitializableProductProxy_init" -> "InitializableProductProxy._setName" [ color = "green" ];
+  "InitializableProductProxy.__InitializableProductProxy_init" -> "Proxy._implementation" [ color = "green" ];
+  "Initializable.initializer" -> "Initializable.isConstructor" [ color = "green" ];
+  "Initializable.isConstructor" -> "Initializable.address" [ color = "green" ];
+  "ContextUpgradeSafe.__Context_init" -> "ContextUpgradeSafe.__Context_init_unchained" [ color = "green" ];
+  "ReentrancyGuardUpgradeSafe.__ReentrancyGuard_init" -> "ReentrancyGuardUpgradeSafe.__ReentrancyGuard_init_unchained" [ color = "green" ];
+  "SafeMath.sub" -> "SafeMath.sub" [ color = "green" ];
+  "SafeMath.div" -> "SafeMath.div" [ color = "green" ];
+  "SafeMath.mod" -> "SafeMath.mod" [ color = "green" ];
+  "Address.sendValue" -> "Address.address" [ color = "green" ];
+  "ERC20UpgradeSafe.__ERC20_init" -> "ContextUpgradeSafe.__Context_init_unchained" [ color = "green" ];
+  "ERC20UpgradeSafe.__ERC20_init" -> "ERC20UpgradeSafe.__ERC20_init_unchained" [ color = "green" ];
+  "ERC20UpgradeSafe.transfer" -> "ERC20UpgradeSafe._transfer" [ color = "green" ];
+  "ERC20UpgradeSafe.transfer" -> "ERC20UpgradeSafe._msgSender" [ color = "green" ];
+  "ERC20UpgradeSafe.approve" -> "ERC20UpgradeSafe._approve" [ color = "green" ];
+  "ERC20UpgradeSafe.approve" -> "ERC20UpgradeSafe._msgSender" [ color = "green" ];
+  "ERC20UpgradeSafe.transferFrom" -> "ERC20UpgradeSafe._transfer" [ color = "green" ];
+  "ERC20UpgradeSafe.transferFrom" -> "ERC20UpgradeSafe._msgSender" [ color = "green" ];
+  "ERC20UpgradeSafe.transferFrom" -> "ERC20UpgradeSafe._msgSender" [ color = "green" ];
+  "ERC20UpgradeSafe.transferFrom" -> "ERC20UpgradeSafe._approve" [ color = "green" ];
+  "ERC20UpgradeSafe.transferFrom" -> "ERC20UpgradeSafe._msgSender" [ color = "green" ];
+  "ERC20UpgradeSafe.transferFrom" -> "ERC20UpgradeSafe._msgSender" [ color = "green" ];
+  "ERC20UpgradeSafe.increaseAllowance" -> "ERC20UpgradeSafe._approve" [ color = "green" ];
+  "ERC20UpgradeSafe.increaseAllowance" -> "ERC20UpgradeSafe._msgSender" [ color = "green" ];
+  "ERC20UpgradeSafe.increaseAllowance" -> "ERC20UpgradeSafe._msgSender" [ color = "green" ];
+  "ERC20UpgradeSafe.decreaseAllowance" -> "ERC20UpgradeSafe._approve" [ color = "green" ];
+  "ERC20UpgradeSafe.decreaseAllowance" -> "ERC20UpgradeSafe._msgSender" [ color = "green" ];
+  "ERC20UpgradeSafe.decreaseAllowance" -> "ERC20UpgradeSafe._msgSender" [ color = "green" ];
+  "ERC20UpgradeSafe._transfer" -> "Initializable.address" [ color = "green" ];
+  "ERC20UpgradeSafe._transfer" -> "Initializable.address" [ color = "green" ];
+  "ERC20UpgradeSafe._transfer" -> "ERC20UpgradeSafe._beforeTokenTransfer" [ color = "green" ];
+  "ERC20UpgradeSafe._mint" -> "Initializable.address" [ color = "green" ];
+  "ERC20UpgradeSafe._mint" -> "ERC20UpgradeSafe._beforeTokenTransfer" [ color = "green" ];
+  "ERC20UpgradeSafe._mint" -> "Initializable.address" [ color = "green" ];
+  "ERC20UpgradeSafe._mint" -> "_totalSupply.add" [ color = "orange" ];
+  "ERC20UpgradeSafe._mint" -> "Initializable.address" [ color = "green" ];
+  "ERC20UpgradeSafe._burn" -> "Initializable.address" [ color = "green" ];
+  "ERC20UpgradeSafe._burn" -> "ERC20UpgradeSafe._beforeTokenTransfer" [ color = "green" ];
+  "ERC20UpgradeSafe._burn" -> "Initializable.address" [ color = "green" ];
+  "ERC20UpgradeSafe._burn" -> "_totalSupply.sub" [ color = "orange" ];
+  "ERC20UpgradeSafe._burn" -> "Initializable.address" [ color = "green" ];
+  "ERC20UpgradeSafe._approve" -> "Initializable.address" [ color = "green" ];
+  "ERC20UpgradeSafe._approve" -> "Initializable.address" [ color = "green" ];
+  "ERC20CappedUpgradeSafe.__ERC20Capped_init" -> "ContextUpgradeSafe.__Context_init_unchained" [ color = "green" ];
+  "ERC20CappedUpgradeSafe.__ERC20Capped_init" -> "ERC20CappedUpgradeSafe.__ERC20Capped_init_unchained" [ color = "green" ];
+  "ERC20UpgradeSafe._beforeTokenTransfer" -> "ERC20UpgradeSafe._beforeTokenTransfer" [ color = "orange" ];
+  "ERC20UpgradeSafe._beforeTokenTransfer" -> "Initializable.address" [ color = "green" ];
+  "ERC20UpgradeSafe._beforeTokenTransfer" -> "ERC20CappedUpgradeSafe.totalSupply" [ color = "green" ];
+  "SafeERC20.safeTransfer" -> "SafeERC20._callOptionalReturn" [ color = "green" ];
+  "SafeERC20.safeTransferFrom" -> "SafeERC20._callOptionalReturn" [ color = "green" ];
+  "SafeERC20.safeApprove" -> "IERC20.allowance" [ color = "orange" ];
+  "SafeERC20.safeApprove" -> "SafeERC20.address" [ color = "green" ];
+  "SafeERC20.safeApprove" -> "SafeERC20._callOptionalReturn" [ color = "green" ];
+  "SafeERC20.safeIncreaseAllowance" -> "IERC20.allowance" [ color = "orange" ];
+  "SafeERC20.safeIncreaseAllowance" -> "SafeERC20.address" [ color = "green" ];
+  "SafeERC20.safeIncreaseAllowance" -> "SafeERC20._callOptionalReturn" [ color = "green" ];
+  "SafeERC20.safeDecreaseAllowance" -> "IERC20.allowance" [ color = "orange" ];
+  "SafeERC20.safeDecreaseAllowance" -> "SafeERC20.address" [ color = "green" ];
+  "SafeERC20.safeDecreaseAllowance" -> "SafeERC20._callOptionalReturn" [ color = "green" ];
+  "SafeERC20._callOptionalReturn" -> "IERC20.isContract" [ color = "orange" ];
+  "SafeERC20._callOptionalReturn" -> "SafeERC20.address" [ color = "green" ];
+  "SafeERC20._callOptionalReturn" -> "IERC20.data" [ color = "orange" ];
+  "SafeERC20._callOptionalReturn" -> "SafeERC20.address" [ color = "green" ];
+  "RLPReader.next" -> "RLPReader.hasNext" [ color = "green" ];
+  "RLPReader.next" -> "RLPReader._itemLength" [ color = "green" ];
+  "RLPReader.iterator" -> "RLPReader.isList" [ color = "green" ];
+  "RLPReader.iterator" -> "RLPReader._payloadOffset" [ color = "green" ];
+  "RLPReader.payloadLocation" -> "RLPReader._payloadOffset" [ color = "green" ];
+  "RLPReader.payloadLen" -> "RLPReader.payloadLocation" [ color = "green" ];
+  "RLPReader.toList" -> "RLPReader.isList" [ color = "green" ];
+  "RLPReader.toList" -> "RLPReader.numItems" [ color = "green" ];
+  "RLPReader.toList" -> "RLPReader._payloadOffset" [ color = "green" ];
+  "RLPReader.toList" -> "RLPReader._itemLength" [ color = "green" ];
+  "RLPReader.payloadKeccak256" -> "RLPReader.payloadLocation" [ color = "green" ];
+  "RLPReader.toRlpBytes" -> "RLPReader.copy" [ color = "green" ];
+  "RLPReader.toAddress" -> "RLPReader.address" [ color = "green" ];
+  "RLPReader.toAddress" -> "RLPReader.toUint" [ color = "green" ];
+  "RLPReader.toUint" -> "RLPReader.payloadLocation" [ color = "green" ];
+  "RLPReader.toBytes" -> "RLPReader.payloadLocation" [ color = "green" ];
+  "RLPReader.toBytes" -> "RLPReader.copy" [ color = "green" ];
+  "RLPReader.numItems" -> "RLPReader._payloadOffset" [ color = "green" ];
+  "RLPReader.numItems" -> "RLPReader._itemLength" [ color = "green" ];
+  "RLPEncode.encodeBytes" -> "RLPEncode.concat" [ color = "green" ];
+  "RLPEncode.encodeBytes" -> "RLPEncode.encodeLength" [ color = "green" ];
+  "RLPEncode.encodeList" -> "RLPEncode.flatten" [ color = "green" ];
+  "RLPEncode.encodeList" -> "RLPEncode.concat" [ color = "green" ];
+  "RLPEncode.encodeList" -> "RLPEncode.encodeLength" [ color = "green" ];
+  "RLPEncode.encodeString" -> "RLPEncode.encodeBytes" [ color = "green" ];
+  "RLPEncode.encodeAddress" -> "RLPEncode.encodeBytes" [ color = "green" ];
+  "RLPEncode.encodeUint" -> "RLPEncode.encodeBytes" [ color = "green" ];
+  "RLPEncode.encodeUint" -> "RLPEncode.toBinary" [ color = "green" ];
+  "RLPEncode.encodeInt" -> "RLPEncode.encodeUint" [ color = "green" ];
+  "RLPEncode.flatten" -> "RLPEncode.memcpy" [ color = "green" ];
+  "Governable.__Governable_init_unchained" -> "Initializable.address" [ color = "green" ];
+  "Governable.renounceGovernorship" -> "Initializable.address" [ color = "green" ];
+  "Governable.renounceGovernorship" -> "Initializable.address" [ color = "green" ];
+  "Governable.transferGovernorship" -> "Governable._transferGovernorship" [ color = "green" ];
+  "Governable._transferGovernorship" -> "Initializable.address" [ color = "green" ];
+  "ConfigurableBase._setConfig" -> "ConfigurableBase._setConfig" [ color = "green" ];
+  "ConfigurableBase._setConfig" -> "ConfigurableBase._setConfig" [ color = "green" ];
+  "Configurable.setConfig" -> "ConfigurableBase._setConfig" [ color = "green" ];
+  "Configurable.setConfigI" -> "ConfigurableBase._setConfig" [ color = "green" ];
+  "Configurable.setConfigA" -> "ConfigurableBase._setConfig" [ color = "green" ];
+  "StakingRewards.__StakingRewards_init" -> "ReentrancyGuardUpgradeSafe.__ReentrancyGuard_init_unchained" [ color = "green" ];
+  "StakingRewards.__StakingRewards_init" -> "StakingRewards.__StakingRewards_init_unchained" [ color = "green" ];
+  "StakingRewards.lastTimeRewardApplicable" -> "Math.min" [ color = "orange" ];
+  "StakingRewards.rewardPerToken" -> "rewardPerTokenStored.add" [ color = "orange" ];
+  "StakingRewards.rewardPerToken" -> "StakingRewards.lastTimeRewardApplicable" [ color = "green" ];
+  "StakingRewards.earned" -> "StakingRewards.rewardPerToken" [ color = "green" ];
+  "StakingRewards.getRewardForDuration" -> "rewardRate.mul" [ color = "orange" ];
+  "StakingRewards.stakeWithPermit" -> "_totalSupply.add" [ color = "orange" ];
+  "StakingRewards.stakeWithPermit" -> "Initializable.address" [ color = "green" ];
+  "StakingRewards.stakeWithPermit" -> "Initializable.address" [ color = "green" ];
+  "StakingRewards.stakeWithPermit" -> "IERC20.safeTransferFrom" [ color = "orange" ];
+  "StakingRewards.stakeWithPermit" -> "Initializable.address" [ color = "green" ];
+  "StakingRewards.stake" -> "_totalSupply.add" [ color = "orange" ];
+  "StakingRewards.stake" -> "IERC20.safeTransferFrom" [ color = "orange" ];
+  "StakingRewards.stake" -> "Initializable.address" [ color = "green" ];
+  "StakingRewards.withdraw" -> "_totalSupply.sub" [ color = "orange" ];
+  "StakingRewards.withdraw" -> "IERC20.safeTransfer" [ color = "orange" ];
+  "StakingRewards.getReward" -> "IERC20.safeTransfer" [ color = "orange" ];
+  "StakingRewards.exit" -> "StakingRewards.withdraw" [ color = "green" ];
+  "StakingRewards.exit" -> "StakingRewards.getReward" [ color = "green" ];
+  "StakingRewards.notifyRewardAmount" -> "reward.div" [ color = "orange" ];
+  "StakingRewards.notifyRewardAmount" -> "periodFinish.sub" [ color = "orange" ];
+  "StakingRewards.notifyRewardAmount" -> "remaining.mul" [ color = "orange" ];
+  "StakingRewards.notifyRewardAmount" -> "reward.add" [ color = "orange" ];
+  "StakingRewards.notifyRewardAmount" -> "IERC20.balanceOf" [ color = "orange" ];
+  "StakingRewards.notifyRewardAmount" -> "Initializable.address" [ color = "green" ];
+  "StakingRewards.notifyRewardAmount" -> "balance.div" [ color = "orange" ];
+  "StakingRewards.notifyRewardAmount" -> "Initializable.address" [ color = "green" ];
+  "StakingRewards.updateReward" -> "StakingRewards.rewardPerToken" [ color = "green" ];
+  "StakingRewards.updateReward" -> "StakingRewards.lastTimeRewardApplicable" [ color = "green" ];
+  "StakingRewards.updateReward" -> "Initializable.address" [ color = "green" ];
+  "StakingRewards.updateReward" -> "StakingRewards.earned" [ color = "green" ];
+  "MappingBase.updateAutoQuota" -> "MappingBase.authQuotaOf" [ color = "green" ];
+  "MappingBase.authQuotaOf" -> "MappingBase.cap" [ color = "green" ];
+  "MappingBase.authQuotaOf" -> "quotaCap.mul" [ color = "orange" ];
+  "MappingBase.authQuotaOf" -> "now.sub" [ color = "orange" ];
+  "MappingBase.authQuotaOf" -> "Math.max" [ color = "orange" ];
+  "MappingBase.authQuotaOf" -> "Math.min" [ color = "orange" ];
+  "MappingBase.authQuotaOf" -> "quota.add" [ color = "orange" ];
+  "MappingBase.increaseAuthQuotas" -> "MappingBase.increaseAuthQuota" [ color = "green" ];
+  "MappingBase.decreaseAuthQuotas" -> "MappingBase.decreaseAuthQuota" [ color = "green" ];
+  "MappingBase.decreaseAuthQuota" -> "MappingBase.authQuotaOf" [ color = "green" ];
+  "MappingBase.decreaseAuthQuota" -> "MappingBase._decreaseAuthQuota" [ color = "green" ];
+  "MappingBase.send" -> "MappingBase.sendFrom" [ color = "green" ];
+  "MappingBase.send" -> "MappingBase._msgSender" [ color = "green" ];
+  "MappingBase.sendFrom" -> "MappingBase._chargeFee" [ color = "green" ];
+  "MappingBase.sendFrom" -> "MappingBase._sendFrom" [ color = "green" ];
+  "MappingBase.receive" -> "MappingBase._chargeFee" [ color = "green" ];
+  "MappingBase.receive" -> "Initializable.address" [ color = "green" ];
+  "MappingBase.receive" -> "MappingBase._decreaseAuthQuota" [ color = "green" ];
+  "MappingBase.receive" -> "MappingBase._receive" [ color = "green" ];
+  "MappingBase._chargeFee" -> "Math.min" [ color = "orange" ];
+  "MappingBase._chargeFee" -> "Initializable.address" [ color = "green" ];
+  "MappingBase._chargeFee" -> "Initializable.address" [ color = "green" ];
+  "MappingBase._chargeFee" -> "Initializable.address" [ color = "green" ];
+  "MappingBase._chargeFee" -> "feeTo.transfer" [ color = "orange" ];
+  "MappingBase._chargeFee" -> "MappingBase._msgSender" [ color = "green" ];
+  "TokenMapped.__TokenMapped_init" -> "ContextUpgradeSafe.__Context_init_unchained" [ color = "green" ];
+  "TokenMapped.__TokenMapped_init" -> "TokenMapped.__TokenMapped_init_unchained" [ color = "green" ];
+  "TokenMapped.__TokenMapped_init_unchained" -> "TokenMapped._chainId" [ color = "green" ];
+  "TokenMapped.__TokenMapped_init_unchained" -> "Initializable.address" [ color = "green" ];
+  "TokenMapped.__TokenMapped_init_unchained" -> "TokenMapped._chainId" [ color = "green" ];
+  "TokenMapped.__TokenMapped_init_unchained" -> "Initializable.address" [ color = "green" ];
+  "TokenMapped.totalMapped" -> "Initializable.address" [ color = "green" ];
+  "MappingBase._sendFrom" -> "Initializable.address" [ color = "green" ];
+  "Permit.permit" -> "Permit.DOMAIN_SEPARATOR" [ color = "green" ];
+  "Permit.permit" -> "Permit.address" [ color = "green" ];
+  "Permit.permit" -> "Permit._approve" [ color = "green" ];
+  "MappableToken.__MappableToken_init" -> "ContextUpgradeSafe.__Context_init_unchained" [ color = "green" ];
+  "MappableToken.__MappableToken_init" -> "ERC20UpgradeSafe.__ERC20_init_unchained" [ color = "green" ];
+  "MappableToken.__MappableToken_init" -> "MappableToken._setupDecimals" [ color = "green" ];
+  "MappableToken.__MappableToken_init" -> "ERC20UpgradeSafe._mint" [ color = "green" ];
+  "MappableToken.__MappableToken_init" -> "MappableToken.__MappableToken_init_unchained" [ color = "green" ];
+  "MappableToken.__MappableToken_init_unchained" -> "MappableToken._chainId" [ color = "green" ];
+  "MappableToken.__MappableToken_init_unchained" -> "Initializable.address" [ color = "green" ];
+  "MappableToken.__MappableToken_init_unchained" -> "MappableToken.name" [ color = "green" ];
+  "MappableToken.__MappableToken_init_unchained" -> "MappableToken._chainId" [ color = "green" ];
+  "MappableToken.__MappableToken_init_unchained" -> "Initializable.address" [ color = "green" ];
+  "Permit.DOMAIN_SEPARATOR" -> "MappingBase.DOMAIN_SEPARATOR" [ color = "orange" ];
+  "MappingBase.cap" -> "MappableToken.totalSupply" [ color = "green" ];
+  "MappableToken.totalMapped" -> "IERC20.balanceOf" [ color = "green" ];
+  "MappableToken.totalMapped" -> "Initializable.address" [ color = "green" ];
+  "ERC20UpgradeSafe._approve" -> "ERC20UpgradeSafe._approve" [ color = "orange" ];
+  "MappingBase._sendFrom" -> "ERC20UpgradeSafe.transferFrom" [ color = "green" ];
+  "MappingBase._sendFrom" -> "Initializable.address" [ color = "green" ];
+  "MappingBase._receive" -> "ERC20UpgradeSafe._transfer" [ color = "green" ];
+  "MappingBase._receive" -> "Initializable.address" [ color = "green" ];
+  "MappingToken.__MappingToken_init" -> "ContextUpgradeSafe.__Context_init_unchained" [ color = "green" ];
+  "MappingToken.__MappingToken_init" -> "ERC20UpgradeSafe.__ERC20_init_unchained" [ color = "green" ];
+  "MappingToken.__MappingToken_init" -> "MappingToken._setupDecimals" [ color = "green" ];
+  "MappingToken.__MappingToken_init" -> "ERC20CappedUpgradeSafe.__ERC20Capped_init_unchained" [ color = "green" ];
+  "MappingToken.__MappingToken_init" -> "MappingToken.__MappingToken_init_unchained" [ color = "green" ];
+  "MappingToken.__MappingToken_init_unchained" -> "Initializable.address" [ color = "green" ];
+  "MappingToken.__MappingToken_init_unchained" -> "Initializable.address" [ color = "green" ];
+  "MappingToken.__MappingToken_init_unchained" -> "MappingToken.name" [ color = "green" ];
+  "MappingToken.__MappingToken_init_unchained" -> "MappingToken._chainId" [ color = "green" ];
+  "MappingToken.__MappingToken_init_unchained" -> "Initializable.address" [ color = "green" ];
+  "MappingBase.DOMAIN_SEPARATOR" -> "MappingBase.DOMAIN_SEPARATOR" [ color = "orange" ];
+  "MappingBase.cap" -> "ERC20CappedUpgradeSafe.cap" [ color = "orange" ];
+  "ERC20UpgradeSafe._approve" -> "ERC20UpgradeSafe._approve" [ color = "orange" ];
+  "MappingBase._sendFrom" -> "ERC20UpgradeSafe._burn" [ color = "green" ];
+  "MappingBase._sendFrom" -> "MappingBase._msgSender" [ color = "green" ];
+  "MappingBase._sendFrom" -> "IERC20.allowance" [ color = "green" ];
+  "MappingBase._sendFrom" -> "MappingBase._msgSender" [ color = "green" ];
+  "MappingBase._sendFrom" -> "ERC20UpgradeSafe._approve" [ color = "green" ];
+  "MappingBase._sendFrom" -> "MappingBase._msgSender" [ color = "green" ];
+  "MappingBase._sendFrom" -> "IERC20.allowance" [ color = "green" ];
+  "MappingBase._sendFrom" -> "MappingBase._msgSender" [ color = "green" ];
+  "MappingBase._receive" -> "ERC20UpgradeSafe._mint" [ color = "green" ];
+  "MappingTokenProxy.<Constructor>" -> "ProductProxy._setFactory" [ color = "green" ];
+  "MappingTokenProxy.<Constructor>" -> "MappingTokenProxy._setName" [ color = "green" ];
+  "MappingTokenProxy.<Constructor>" -> "Proxy._implementation" [ color = "green" ];
+  "Factory.__MappingTokenFactory_init" -> "Governable.__Governable_init_unchained" [ color = "green" ];
+  "Factory.__MappingTokenFactory_init" -> "Factory.__MappingTokenFactory_init_unchained" [ color = "green" ];
+  "Factory.__MappingTokenFactory_init_unchained" -> "Factory._chainId" [ color = "green" ];
+  "Factory.__MappingTokenFactory_init_unchained" -> "Initializable.address" [ color = "green" ];
+  "Factory.__MappingTokenFactory_init_unchained" -> "Factory.upgradeProductImplementationsTo_" [ color = "green" ];
+  "Factory.__MappingTokenFactory_init_unchained" -> "Factory.type" [ color = "green" ];
+  "Factory.setAutoQuota" -> "Initializable.address" [ color = "green" ];
+  "Factory.onlyAuthorty" -> "Factory._msgSender" [ color = "green" ];
+  "Factory._initAuthQuotas" -> "cap.mul" [ color = "orange" ];
+  "Factory._initAuthQuotas" -> "Factory._increaseAuthQuotas" [ color = "green" ];
+  "Factory._increaseAuthQuotas" -> "Factory._msgSender" [ color = "green" ];
+  "Factory.increaseAuthQuotas_" -> "Factory._increaseAuthQuotas" [ color = "green" ];
+  "Factory.increaseAuthQuotas" -> "Factory._increaseAuthQuotas" [ color = "green" ];
+  "Factory.increaseAuthQuota" -> "Factory._msgSender" [ color = "green" ];
+  "Factory.decreaseAuthQuotas_" -> "Factory.decreaseAuthQuotas" [ color = "green" ];
+  "Factory.decreaseAuthQuotas" -> "Factory._msgSender" [ color = "green" ];
+  "Factory.decreaseAuthQuota" -> "Factory._msgSender" [ color = "green" ];
+  "Factory.increaseAuthCounts_" -> "Factory.increaseAuthCounts" [ color = "green" ];
+  "Factory.increaseAuthCounts" -> "Factory.increaseAuthCount" [ color = "green" ];
+  "Factory.increaseAuthCount" -> "Factory._msgSender" [ color = "green" ];
+  "Factory.decreaseAuthCounts_" -> "Factory.decreaseAuthCounts" [ color = "green" ];
+  "Factory.decreaseAuthCounts" -> "Factory.decreaseAuthCount" [ color = "green" ];
+  "Factory.decreaseAuthCount" -> "Factory._decreaseAuthCount" [ color = "green" ];
+  "Factory._decreaseAuthCount" -> "Factory._msgSender" [ color = "green" ];
+  "Factory.mainChainIdTokens" -> "Initializable.address" [ color = "green" ];
+  "Factory.chainIdMappingTokenMappeds" -> "Factory.mainChainIdTokens" [ color = "green" ];
+  "Factory.chainIdMappingTokenMappeds" -> "Initializable.address" [ color = "green" ];
+  "Factory.chainIdMappingTokenMappeds" -> "Factory.supportChainCount" [ color = "green" ];
+  "Factory.chainIdMappingTokenMappeds" -> "Initializable.address" [ color = "green" ];
+  "Factory.chainIdMappingTokenMappeds" -> "Factory.supportChainCount" [ color = "green" ];
+  "Factory.chainIdMappingTokenMappeds" -> "Initializable.address" [ color = "green" ];
+  "Factory.isSupportChainId" -> "Factory.supportChainCount" [ color = "green" ];
+  "Factory.registerSupportChainId_" -> "Factory._chainId" [ color = "green" ];
+  "Factory.registerSupportChainId_" -> "Factory._chainId" [ color = "green" ];
+  "Factory.registerSupportChainId_" -> "Factory.isSupportChainId" [ color = "green" ];
+  "Factory._registerMapping" -> "Factory._chainId" [ color = "green" ];
+  "Factory._registerMapping" -> "Factory._chainId" [ color = "green" ];
+  "Factory._registerMapping" -> "Factory.isSupportChainId" [ color = "green" ];
+  "Factory._registerMapping" -> "Factory.isSupportChainId" [ color = "green" ];
+  "Factory._registerMapping" -> "Factory.calcMapping" [ color = "green" ];
+  "Factory._registerMapping" -> "Factory._msgSender" [ color = "green" ];
+  "Factory.registerMapping_" -> "Factory._registerMapping" [ color = "green" ];
+  "Factory.registerMapping" -> "Factory._chargeFee" [ color = "green" ];
+  "Factory.registerMapping" -> "Factory.calcContract" [ color = "green" ];
+  "Factory.registerMapping" -> "Factory._msgSender" [ color = "green" ];
+  "Factory.registerMapping" -> "Factory.getConfig" [ color = "green" ];
+  "Factory.registerMapping" -> "Initializable.address" [ color = "green" ];
+  "Factory.registerMapping" -> "Factory._decreaseAuthCount" [ color = "green" ];
+  "Factory.registerMapping" -> "Factory._registerMapping" [ color = "green" ];
+  "Factory.certifiedTokens" -> "Initializable.address" [ color = "green" ];
+  "Factory.allCertifiedTokens" -> "Factory.certifiedTokens" [ color = "green" ];
+  "Factory.registerCertified_" -> "Factory._chainId" [ color = "green" ];
+  "Factory.registerCertified_" -> "Factory._chainId" [ color = "green" ];
+  "Factory.registerCertified_" -> "Factory.isSupportChainId" [ color = "green" ];
+  "Factory.registerCertified_" -> "Factory._chainId" [ color = "green" ];
+  "Factory.calcContract" -> "RLPEncode.encodeAddress" [ color = "orange" ];
+  "Factory.calcContract" -> "RLPEncode.encodeUint" [ color = "orange" ];
+  "Factory.calcContract" -> "Initializable.address" [ color = "green" ];
+  "Factory.calcContract" -> "RLPEncode.encodeList" [ color = "orange" ];
+  "Factory.calcMapping" -> "Initializable.address" [ color = "green" ];
+  "Factory.calcMapping" -> "Initializable.address" [ color = "green" ];
+  "Factory.calcMapping" -> "Factory.type" [ color = "green" ];
+  "Factory.createTokenMapped" -> "Factory._msgSender" [ color = "green" ];
+  "Factory.createTokenMapped" -> "Factory._chargeFee" [ color = "green" ];
+  "Factory.createTokenMapped" -> "Factory.calcContract" [ color = "green" ];
+  "Factory.createTokenMapped" -> "Factory._msgSender" [ color = "green" ];
+  "Factory.createTokenMapped" -> "Initializable.address" [ color = "green" ];
+  "Factory.createTokenMapped" -> "Factory._chainId" [ color = "green" ];
+  "Factory.createTokenMapped" -> "Factory.type" [ color = "green" ];
+  "Factory.createTokenMapped" -> "Factory.payable" [ color = "green" ];
+  "Factory.createTokenMapped" -> "Initializable.address" [ color = "green" ];
+  "Factory.createTokenMapped" -> "Initializable.address" [ color = "green" ];
+  "Factory.createTokenMapped" -> "Factory._initAuthQuotas" [ color = "green" ];
+  "Factory.createTokenMapped" -> "Factory._msgSender" [ color = "green" ];
+  "Factory.createMappableToken" -> "Factory._msgSender" [ color = "green" ];
+  "Factory.createMappableToken" -> "Factory._chargeFee" [ color = "green" ];
+  "Factory.createMappableToken" -> "Factory._msgSender" [ color = "green" ];
+  "Factory.createMappableToken" -> "Initializable.address" [ color = "green" ];
+  "Factory.createMappableToken" -> "Factory._chainId" [ color = "green" ];
+  "Factory.createMappableToken" -> "Factory._msgSender" [ color = "green" ];
+  "Factory.createMappableToken" -> "Factory.type" [ color = "green" ];
+  "Factory.createMappableToken" -> "Factory.payable" [ color = "green" ];
+  "Factory.createMappableToken" -> "Initializable.address" [ color = "green" ];
+  "Factory.createMappableToken" -> "Initializable.address" [ color = "green" ];
+  "Factory.createMappableToken" -> "Factory._msgSender" [ color = "green" ];
+  "Factory.createMappableToken" -> "Factory._msgSender" [ color = "green" ];
+  "Factory.createMappableToken" -> "Factory._initAuthQuotas" [ color = "green" ];
+  "Factory.createMappableToken" -> "Factory._msgSender" [ color = "green" ];
+  "Factory._createMappingToken" -> "Initializable.address" [ color = "green" ];
+  "Factory._createMappingToken" -> "Initializable.address" [ color = "green" ];
+  "Factory._createMappingToken" -> "Factory.type" [ color = "green" ];
+  "Factory._createMappingToken" -> "Factory.payable" [ color = "green" ];
+  "Factory._createMappingToken" -> "Initializable.address" [ color = "green" ];
+  "Factory._createMappingToken" -> "Initializable.address" [ color = "green" ];
+  "Factory._createMappingToken" -> "Factory._initAuthQuotas" [ color = "green" ];
+  "Factory.createMappingToken_" -> "Factory._createMappingToken" [ color = "green" ];
+  "Factory.createMappingToken" -> "Factory._chargeFee" [ color = "green" ];
+  "Factory.createMappingToken" -> "Initializable.address" [ color = "green" ];
+  "Factory.createMappingToken" -> "Factory.calcContract" [ color = "green" ];
+  "Factory.createMappingToken" -> "Factory._msgSender" [ color = "green" ];
+  "Factory.createMappingToken" -> "Factory._msgSender" [ color = "green" ];
+  "Factory.createMappingToken" -> "Initializable.address" [ color = "green" ];
+  "Factory.createMappingToken" -> "Factory._decreaseAuthCount" [ color = "green" ];
+  "Factory.createMappingToken" -> "Factory._msgSender" [ color = "green" ];
+  "Factory.createMappingToken" -> "Factory._createMappingToken" [ color = "green" ];
+  "Factory.createMappingToken" -> "Factory._msgSender" [ color = "green" ];
+  "Factory._chargeFee" -> "Math.min" [ color = "orange" ];
+  "Factory._chargeFee" -> "Initializable.address" [ color = "green" ];
+  "Factory._chargeFee" -> "Initializable.address" [ color = "green" ];
+  "Factory._chargeFee" -> "Initializable.address" [ color = "green" ];
+  "Factory._chargeFee" -> "Initializable.address" [ color = "green" ];
+  "Factory._chargeFee" -> "feeTo.transfer" [ color = "orange" ];
+  "Factory._chargeFee" -> "Factory._msgSender" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

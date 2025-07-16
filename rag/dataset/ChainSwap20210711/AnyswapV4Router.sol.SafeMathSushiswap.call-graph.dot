@@ -1,0 +1,16 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_110_SafeMathSushiswap {
+label = "SafeMathSushiswap"
+"110_mul" [label="mul"]
+"110_sub" [label="sub"]
+"110_add" [label="add"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"110_mul" -> "require(bool,string)"
+"110_add" -> "require(bool,string)"
+"110_sub" -> "require(bool,string)"
+}
+}
