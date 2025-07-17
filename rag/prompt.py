@@ -87,10 +87,10 @@ def get_prompt3(parameter: str, constraint: str, code: list) -> str:
 {{
   "parameter": "...", // 给定的参数
   "constraint": "...", // 给定的约束条件
-  "results"：[ //三种可能的结果
+  "results":[ //三种可能的结果
   {{
   	"result": true | false, //表明该代码中是否覆盖当前约束条件
-  	"validation": ["...", "..."], //如果 result 为 true，列出与约束条件相关的所有代码，否则返回一个空数组。
+  	"validation": "...", //如果 result 为 true，列出与约束条件相关的所有代码，否则返回一个空数组。
   	"reason": "..." // 如果 result 为 true，解释怎么覆盖的当前约束条件，否则则返回无。
   }},
   {{
@@ -174,7 +174,7 @@ def get_verify_prompt1(prompt1_output: list, code: list) -> str:
 {{
 "parameter": "...", // 代码中最可能对应该属性的参数名
 "attribute": "...", // 输入的跨链属性 
-"score":"..."， // 分配的置信度分数
+"score":"...", // 分配的置信度分数
 "reason": "..." // 简要说明给定该置信度分数的原因
 }}, ... 
 ]
@@ -245,7 +245,7 @@ def get_verify_prompt3(parameter: str, constraint: str, validations:list, code:l
 {{
 "parameter":"...", //给定的参数
 "constraint":"...", //给定的约束条件
-"validations": [], //对应的约束条件相关代码集合
+"validations": "...", //对应的约束条件相关代码
 "code":"..." //原始跨链合约代码
 }}
 
