@@ -112,7 +112,9 @@ def get_prompt3(parameter: str, constraint: str, code: list) -> str:
 
 def get_prompt4(parameter: str, validation: list, code: list, context=None) -> str:
     return f"""
-你将扮演一个专业的智能合约符号执行引擎。你的任务是根据提供的 Solidity 代码与目标验证语句，结合上下文（context），定位并解析参数parameter相关validation中的条件判断，在 code 中查找可能绕过该验证的分支或数据流路径，验证是否存在能够规避 validation 的输入或调用序列，并提供三种可能的结果，请严格遵循以下定义的输入格式和输出格式：
+你将扮演一个专业的智能合约符号执行引擎。你的任务是根据提供的 Solidity 代码与目标验证语句，结合上下文（context），定位并解析参数parameter相关validation中的条件判断，在 code 中查找可能绕过该验证的分支或数据流路径，验证是否存在可构造的输入或调用序列来规避该验证：包括但不限于传入能“欺骗”验证却不合法的值、构造边界或异常输入、利用配置、状态或外部依赖改变验证条件、构造特殊调用顺序等方法。
+
+仅聚焦验证条件本身，不需考虑后续业务逻辑。并提供三种可能的结果，请严格遵循以下定义的输入格式和输出格式：
 
 输入格式：
 你将接收一个 JSON 对象作为输入，其结构如下：
