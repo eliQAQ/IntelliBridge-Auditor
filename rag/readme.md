@@ -5,7 +5,9 @@
 --file-directory LIFI20240716 --event-name AssetSwapped --position s
 
 
---file-directory ChainSwap20210711 --event-name DecreaseAuthQuota --position t
+--file-directory ChainSwap20210711 --event-name DecreaseAuthQuota --position 
 
+1.txt文件中为所有用过的指令
 
-事件应该没错吧，现在结果在output对应事件的all_output.json中，目前这两个只留了一个json文件且跳过了提取函数流。
+因为dataset  dataset_data  output文件太多了，所以打成了压缩包dataset_dat.zip,可以删掉之前的那三个文件直接解压到当前目录就行
+
