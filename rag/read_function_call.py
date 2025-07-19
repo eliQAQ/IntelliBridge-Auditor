@@ -76,6 +76,8 @@ def traverse_files(directory):
                         versions = [line.split()[0].replace('(*)', '').replace('*', '').strip() for line in output.splitlines()]
                         #print(solc_version)
                         if solc_version not in versions:
+                            if solc_version < "0.4.5":
+                                solc_version = "0.4.5"
                             result = subprocess.run(["solc-select", "install", solc_version], capture_output=True, text=True, check=True)
                             #print(result.stdout)
                         result = subprocess.run(["solc-select", "use", solc_version], capture_output=True, text=True, check=True)
@@ -436,7 +438,7 @@ def patrition_public_chain(called_graph, func_name):
 
 def is_interface_in_file(sol_path, name):
     pattern = re.compile(rf'interface\s+{re.escape(name)}\b')
-    with open(sol_path, "r") as f:
+    with open(sol_path, "r", encoding='utf-8') as f:
         content = f.read()
     return bool(pattern.search(content))
 
@@ -457,7 +459,7 @@ def find_implementing_contracts(interface_name, directory):
 
 
 def extract_function_code(sol_path, contract_name, func_name):
-    with open(sol_path, "r") as f:
+    with open(sol_path, "r", encoding='utf-8') as f:
         text = f.read()
     # 先定位 contract 块范围
     # 简化匹配：contract ... { ... }
