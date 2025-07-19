@@ -433,7 +433,7 @@ class SolidityContextExtractor:
                 for interface in self.contracts[contract_name]['inherits']:
                     if interface in self.contracts and self.contracts[interface]["type"] == ContractType.INTERFACE:
                         self.contracts[interface]['implement'].append([
-                            "",
+                            self.solidity_file['filepath'],
                             contract_name
                         ])
                         continue
@@ -443,7 +443,7 @@ class SolidityContextExtractor:
                             if self.imported_contracts[imported_path]["import_all"]:
                                 if interface in self.all_data["solidity_file"][imported_path]["contracts"] and\
                                     self.all_data["solidity_file"][imported_path]["contracts"][interface]["type"] == ContractType.INTERFACE:
-                                    self.contracts[contract_name]['implement'].append([
+                                    self.all_data["solidity_file"][imported_path]["contracts"][interface]['implement'].append([
                                         self.solidity_file['filepath'],
                                         contract_name
                                     ])
@@ -475,134 +475,146 @@ class SolidityContextExtractor:
             self._parse_contract_content(source_code)
         # 最后处理函数内调用的其他函数
         elif self.current_file:
-            for key in self.func_to_call:
-                for call in self.func_to_call[key]:
-                    contract = call.split(".")[0]
-                    function = call.split(".")[1]
-                    if contract in self.contracts:
-                        if self.contracts[contract]["type"] != ContractType.INTERFACE:
-                            if function in self.contracts[contract]['functions']:
-                                self.solidity_file["external_functions"][call] = \
-                                self.contracts[contract]['functions'][function][0]["md5"]
-                                continue
-                            elif function in self.contracts[contract]['modifiers']:
-                                self.solidity_file["external_functions"][call] = \
-                                self.contracts[contract]['modifiers'][function]["md5"]
-                                continue
-                        else:
-                            if function in self.contracts[contract]['functions']:
-                                t_f = None
-                                for implement in self.contracts[contract]["implement"]:
-                                    if not implement[0] and function in self.contracts[implement[1]]['functions']:
-                                        t_f = self.contracts[implement[1]]['functions'][function][0]["md5"]
-                                        break
-                                    if not t_f and function in self.all_data["solidity_file"][implement[0]]["contracts"][implement[1]]['functions']:
-                                        t_f = self.all_data["solidity_file"][implement[0]]["contracts"][implement[1]]['functions'][function][0]["md5"]
-                                if t_f:
-                                    self.solidity_file["external_functions"][call] = t_f
-                                    continue
-                                else:
+            if self.func_to_call:
+                for key in self.func_to_call:
+                    for call in self.func_to_call[key]:
+                        contract = call.split(".")[0]
+                        function = call.split(".")[1]
+                        if contract in self.contracts:
+                            if self.contracts[contract]["type"] != ContractType.INTERFACE:
+                                if function in self.contracts[contract]['functions']:
                                     self.solidity_file["external_functions"][call] = \
                                     self.contracts[contract]['functions'][function][0]["md5"]
                                     continue
-                            elif function in self.contracts[contract]['modifiers']:
-                                self.solidity_file["external_functions"][call] = \
-                                self.contracts[contract]['modifiers'][function]["md5"]
-                                continue
+                                elif function in self.contracts[contract]['modifiers']:
+                                    self.solidity_file["external_functions"][call] = \
+                                    self.contracts[contract]['modifiers'][function]["md5"]
+                                    continue
+                            else:
+                                if function in self.contracts[contract]['functions']:
+                                    t_f = None
+                                    for implement in self.contracts[contract]["implement"]:
+                                        if implement[0] == self.solidity_file['filepath']:
+                                            if function in self.contracts[implement[1]]['functions']:
+                                                t_f = self.contracts[implement[1]]['functions'][function][0]["md5"]
+                                                break
+                                        elif not t_f and function in self.all_data["solidity_file"][implement[0]]["contracts"][implement[1]]['functions']:
+                                            t_f = self.all_data["solidity_file"][implement[0]]["contracts"][implement[1]]['functions'][function][0]["md5"]
+                                    if t_f:
+                                        self.solidity_file["external_functions"][call] = t_f
+                                        continue
+                                    else:
+                                        self.solidity_file["external_functions"][call] = \
+                                        self.contracts[contract]['functions'][function][0]["md5"]
+                                        continue
+                                elif function in self.contracts[contract]['modifiers']:
+                                    self.solidity_file["external_functions"][call] = \
+                                    self.contracts[contract]['modifiers'][function]["md5"]
+                                    continue
 
-                    # 遍历import进来的合约进行查找
-                    flag = False
-                    for imported_path in self.imported_contracts:
-                        if self.imported_contracts[imported_path]["in_database"]:
-                            if self.imported_contracts[imported_path]["import_all"]:
-                                for cont_name in self.all_data["solidity_file"][imported_path]["contracts"]:
-                                    if function in \
-                                            self.all_data["solidity_file"][imported_path]["contracts"][cont_name][
-                                                'functions']:
-                                        if self.all_data["solidity_file"][imported_path]["contracts"][cont_name]["type"] != ContractType.INTERFACE:
+                        # 遍历import进来的合约进行查找
+                        flag = False
+                        for imported_path in self.imported_contracts:
+                            if imported_path == "C:\\Users\\wy\\Desktop\\rag\\dataset\\Synapse20211106\\0x88E7af57270F70BCF32CD61fff0Ff635775C8f7c\\SwapUtils.sol":
+                                pass
+                            if self.imported_contracts[imported_path]["in_database"]:
+                                if self.imported_contracts[imported_path]["import_all"]:
+                                    for cont_name in self.all_data["solidity_file"][imported_path]["contracts"]:
+                                        if function in \
+                                                self.all_data["solidity_file"][imported_path]["contracts"][cont_name][
+                                                    'functions']:
+                                            if self.all_data["solidity_file"][imported_path]["contracts"][cont_name]["type"] != ContractType.INTERFACE:
+                                                self.solidity_file["external_functions"][call] = \
+                                                self.all_data["solidity_file"][imported_path]["contracts"][cont_name][
+                                                    'functions'][function][0]["md5"]
+                                                flag = True
+                                            else:
+                                                t_f = None
+                                                for implement in self.all_data["solidity_file"][imported_path]["contracts"][cont_name]["implement"]:
+                                                    if implement[0] == self.solidity_file['filepath']:
+                                                        if function in self.contracts[implement[1]]['functions']:
+                                                            t_f = self.contracts[implement[1]]['functions'][function][0]["md5"]
+                                                            break
+                                                    elif function in \
+                                                            self.all_data["solidity_file"][implement[0]]["contracts"][
+                                                                implement[1]]['functions']:
+                                                        t_f = self.all_data["solidity_file"][implement[0]]["contracts"][
+                                                                implement[1]]['functions'][function][0]["md5"]
+                                                        break
+                                                if t_f:
+                                                    self.solidity_file["external_functions"][call] = t_f
+                                                else:
+                                                    self.solidity_file["external_functions"][call] = \
+                                                        self.all_data["solidity_file"][imported_path]["contracts"][
+                                                            cont_name][
+                                                            'functions'][function][0]["md5"]
+                                                flag = True
+                                            break
+
+                                        elif function in \
+                                                self.all_data["solidity_file"][imported_path]["contracts"][cont_name][
+                                                    'modifiers']:
                                             self.solidity_file["external_functions"][call] = \
                                             self.all_data["solidity_file"][imported_path]["contracts"][cont_name][
-                                                'functions'][function][0]["md5"]
+                                                'modifiers'][function]["md5"]
                                             flag = True
-                                        else:
-                                            t_f = None
-                                            for implement in self.all_data["solidity_file"][imported_path]["contracts"][cont_name]["implement"]:
-                                                if function in \
-                                                        self.all_data["solidity_file"][implement[0] if implement[0] else imported_path]["contracts"][
-                                                            implement[1]]['functions']:
-                                                    t_f = self.all_data["solidity_file"][implement[0] if implement[0] else imported_path]["contracts"][
-                                                            implement[1]]['functions'][function][0]["md5"]
-                                                    break
-                                            if t_f:
-                                                self.solidity_file["external_functions"][call] = t_f
-                                            else:
+                                            break
+                                    if flag:
+                                        break
+
+                                else:
+                                    flag = False
+                                    for name in self.imported_contracts[imported_path]["imported"]:
+                                        if self.imported_contracts[imported_path]["imported"][name][
+                                            "type"] != ContractType.CONTRACT:
+                                            continue
+                                        o_name = self.imported_contracts[imported_path]["imported"][name]["original_name"]
+                                        if function in \
+                                                self.all_data["solidity_file"][imported_path]["contracts"][o_name][
+                                                    'functions']:
+                                            if self.all_data["solidity_file"][imported_path]["contracts"][o_name][
+                                                "type"] != ContractType.INTERFACE:
                                                 self.solidity_file["external_functions"][call] = \
-                                                    self.all_data["solidity_file"][imported_path]["contracts"][
-                                                        cont_name][
+                                                    self.all_data["solidity_file"][imported_path]["contracts"][o_name][
                                                         'functions'][function][0]["md5"]
-                                            flag = True
-                                        break
-
-                                    elif function in \
-                                            self.all_data["solidity_file"][imported_path]["contracts"][cont_name][
-                                                'modifiers']:
-                                        self.solidity_file["external_functions"][call] = \
-                                        self.all_data["solidity_file"][imported_path]["contracts"][cont_name][
-                                            'modifiers'][function]["md5"]
-                                        flag = True
-                                        break
-                                if flag:
-                                    break
-
-                            else:
-                                flag = False
-                                for name in self.imported_contracts[imported_path]["imported"]:
-                                    if self.imported_contracts[imported_path]["imported"][name][
-                                        "type"] != ContractType.CONTRACT:
-                                        continue
-                                    o_name = self.imported_contracts[imported_path]["imported"][name]["original_name"]
-                                    if function in \
-                                            self.all_data["solidity_file"][imported_path]["contracts"][o_name][
-                                                'functions']:
-                                        if self.all_data["solidity_file"][imported_path]["contracts"][o_name][
-                                            "type"] != ContractType.INTERFACE:
+                                                flag = True
+                                            else:
+                                                t_f = None
+                                                for implement in \
+                                                self.all_data["solidity_file"][imported_path]["contracts"][o_name][
+                                                    "implement"]:
+                                                    if implement[0] == self.solidity_file['filepath'] and function in \
+                                                            self.contracts[implement[1]]['functions']:
+                                                        t_f = self.contracts[implement[1]]['functions'][function][0]["md5"]
+                                                        break
+                                                    elif function in \
+                                                            self.all_data["solidity_file"][
+                                                                implement[0]][
+                                                                "contracts"][
+                                                                implement[1]]['functions']:
+                                                        t_f = self.all_data["solidity_file"][
+                                                            implement[0]]["contracts"][
+                                                            implement[1]]['functions'][function][0]["md5"]
+                                                        break
+                                                if t_f:
+                                                    self.solidity_file["external_functions"][call] = t_f
+                                                else:
+                                                    self.solidity_file["external_functions"][call] = \
+                                                        self.all_data["solidity_file"][imported_path]["contracts"][
+                                                            o_name][
+                                                            'functions'][function][0]["md5"]
+                                                flag = True
+                                            break
+                                        elif function in \
+                                                self.all_data["solidity_file"][imported_path]["contracts"][o_name][
+                                                    'modifiers']:
                                             self.solidity_file["external_functions"][call] = \
                                                 self.all_data["solidity_file"][imported_path]["contracts"][o_name][
-                                                    'functions'][function][0]["md5"]
+                                                    'modifiers'][function]["md5"]
                                             flag = True
-                                        else:
-                                            t_f = None
-                                            for implement in \
-                                            self.all_data["solidity_file"][imported_path]["contracts"][o_name][
-                                                "implement"]:
-                                                if function in \
-                                                        self.all_data["solidity_file"][
-                                                            implement[0] if implement[0] else imported_path][
-                                                            "contracts"][
-                                                            implement[1]]['functions']:
-                                                    t_f = self.all_data["solidity_file"][
-                                                        implement[0] if implement[0] else imported_path]["contracts"][
-                                                        implement[1]]['functions'][function][0]["md5"]
-                                                    break
-                                            if t_f:
-                                                self.solidity_file["external_functions"][call] = t_f
-                                            else:
-                                                self.solidity_file["external_functions"][call] = \
-                                                    self.all_data["solidity_file"][imported_path]["contracts"][
-                                                        o_name][
-                                                        'functions'][function][0]["md5"]
-                                            flag = True
+                                            break
+                                    if flag:
                                         break
-                                    elif function in \
-                                            self.all_data["solidity_file"][imported_path]["contracts"][o_name][
-                                                'modifiers']:
-                                        self.solidity_file["external_functions"][call] = \
-                                            self.all_data["solidity_file"][imported_path]["contracts"][o_name][
-                                                'modifiers'][function]["md5"]
-                                        flag = True
-                                        break
-                                if flag:
-                                    break
 
             self._generate_state_variable_to_call()
 
@@ -676,7 +688,7 @@ class SolidityContextExtractor:
                 # 获取dataset_path后面的一个层级
                 package_path = os.path.join(self.dataset_path,
                                             self.solidity_file["filepath"][len(self.dataset_path) + 1:].split("\\")[0])
-                contract_path: str = os.path.normpath(os.path.join(self.solidity_file["filepath"], contract_path))
+                contract_path: str = os.path.normpath(os.path.join(os.path.dirname(self.solidity_file["filepath"]), contract_path))
                 if not os.path.exists(contract_path):
                     if os.path.isdir(package_path):
                         # 只考虑合约名
@@ -1444,7 +1456,7 @@ class SolidityContextExtractor:
                         state_variables[state_variable])
 
         # 函数能够使用的外部函数
-        if self.current_contract and self.current_function:
+        if self.current_contract and self.current_function and self.func_to_call:
             if f'{self.current_contract}.{self.current_function}' in self.func_to_call:
                 self.contracts[self.current_contract]['functions'][self.current_function][index]['external_calls'] = \
                 self.func_to_call[f'{self.current_contract}.{self.current_function}']
@@ -1585,7 +1597,7 @@ class SolidityContextExtractor:
                         state_variables[state_variable])
 
         # 函数能够使用的外部函数
-        if self.current_contract and self.current_function:
+        if self.current_contract and self.current_function and self.func_to_call:
             if f'{self.current_contract}.{self.current_function}' in self.func_to_call:
                 self.contracts[self.current_contract]['modifiers'][self.current_function]['external_calls'] = \
                     self.func_to_call[f'{self.current_contract}.{self.current_function}']
@@ -1791,7 +1803,8 @@ class SolidityContextExtractor:
             )
             return result.stdout
         except subprocess.CalledProcessError as e:
-            print(f"Surya graph 命令执行失败: {e.stderr}")
+            # print(f"Surya graph 命令执行失败: {e.stderr}")
+            print(f"Surya graph 命令执行失败: {file_path}")
             return None
         except FileNotFoundError:
             print("未找到 surya 命令，请确保已全局安装 surya (npm install -g surya)")
@@ -2073,15 +2086,18 @@ if __name__ == "__main__":
     position = args.position
     directory_name = "output/" + file_directory + "_" + event_name
     handle_s_t = time.time()
+    print("handle call chain")
     if not os.path.exists(directory_name):
         handle(file_directory, event_name)
     print(f"handle_s_t: {time.time() - start}")
 
     extractor = SolidityContextExtractor()
+    print("handle external_call and state_variables")
     extractor.parse_dataset(file_directory)
     result = {}
     all_output = {}
     gjld_model = "deepseek-ai/DeepSeek-V3"
+    # gjld_model = "moonshotai/Kimi-K2-Instruct"
     # 遍历目录里面的json文件
     for file_name in os.listdir(directory_name):
         if file_name.endswith(".json") and not file_name.startswith("all_output"):
@@ -2151,6 +2167,8 @@ if __name__ == "__main__":
 
                 for output in outputs1:
                     for item in output:
+                        if not item:
+                            continue
                         if item["attribute"] not in attribute_to_parameter:
                             attribute_to_parameter[item["attribute"]] = {}
                         attribute_to_parameter[item["attribute"]][item["parameter"]] = {
@@ -2173,9 +2191,13 @@ if __name__ == "__main__":
 
                 for v_output in v_outputs1:
                     for item in v_output:
+                        if not item or not item["attribute"]:
+                            continue
                         if item["attribute"] not in attribute_to_parameter:
                             attribute_to_parameter[item["attribute"]] = {}
-                        attribute_to_parameter[item["attribute"]][item["parameter"]]["score"] = item["score"]
+                        if item["parameter"] not in attribute_to_parameter[item["attribute"]]:
+                            continue
+                        attribute_to_parameter[item["attribute"]][item["parameter"]]["score"] = item["score"] if "reason" in item else ""
                         attribute_to_parameter[item["attribute"]][item["parameter"]]["s_reason"] = item["reason"] if "reason" in item else ""
                         if item["parameter"] not in parameter_to_attribute:
                             parameter_to_attribute[item["parameter"]] = {}
@@ -2190,7 +2212,7 @@ if __name__ == "__main__":
                 all_output[relation_ship]["step1"]["formatted_outputs1"] = parameter_to_attribute
                 all_output[relation_ship]["step1-time"] = time.time() - s1_start_time
 
-                with open(f"{directory_name}/all_output.json", 'w') as file:
+                with open(f"{directory_name}/all_output.json", 'w', encoding='utf-8') as file:
                     json.dump(all_output, file, indent=4, cls=SetEncoder, ensure_ascii=False)
 
                 # step2
@@ -2260,11 +2282,17 @@ if __name__ == "__main__":
                 for attr in all_output[relation_ship]["step2"]:
                     if attr not in all_output[relation_ship]["step3"]:
                         all_output[relation_ship]["step3"][attr] = {}
+                    if attr not in all_output[relation_ship]["final_result"]:
+                        all_output[relation_ship]["final_result"][attr] = {}
                     for parameter in all_output[relation_ship]["step2"][attr]:
                         if attr in constraints:
                             if parameter not in all_output[relation_ship]["step3"][attr]:
                                 all_output[relation_ship]["step3"][attr][parameter] = {}
+                            if parameter not in all_output[relation_ship]["final_result"][attr]:
+                                all_output[relation_ship]["final_result"][attr][parameter] = {}
                             for constraint in constraints[attr]:
+                                if constraint not in all_output[relation_ship]["final_result"][attr][parameter]:
+                                    all_output[relation_ship]["final_result"][attr][parameter][constraint] = []
                                 prompt3 = get_prompt3(parameter, constraint, all_output[relation_ship]["step2"][attr][parameter]["merge_dataflows"])
                                 print(f"step3-{attr}-{parameter}-{constraint}")
                                 outputs3, native_completion_tokens, native_prompt_tokens, messages = gpt(prompt3, model=gjld_model)
@@ -2276,7 +2304,16 @@ if __name__ == "__main__":
 
                                 # step3-verify
                                 # 取original中result为true的validation
-                                validations = list(filter(lambda x: "result" in x and x["result"], outputs3[0]["results"]))
+                                validations = list(filter(lambda x: x and "result" in x and x["result"], outputs3[0]["results"]))
+                                if len(validations) == 0:
+                                    all_output[relation_ship]["final_result"][attr][parameter][constraint].append({
+                                        "parameter": parameter,
+                                        "constraint": constraint,
+                                        "validation": "",
+                                        "reason": "在step3中未找到约束相关代码，不执行后续步骤",
+                                    })
+                                    all_output[relation_ship]["step3"][attr][parameter][constraint]["verify_filtered"] = []
+                                    continue
                                 validations = [r["validation"] for r in validations]
                                 v_prompt3 = get_verify_prompt3(parameter, constraint, validations, codes)
                                 print(f"step3-v-{attr}-{parameter}-{constraint}")
@@ -2284,7 +2321,7 @@ if __name__ == "__main__":
                                 s3_call_api_times += 1
                                 v_outputs3 = [json.loads(o) if isinstance(o, str) else o for o in v_outputs3]
                                 # 取得分第一的results
-                                all_output[relation_ship]["step3"][attr][parameter][constraint]["verify_filtered"] = sorted(list(filter(lambda x: "score" in x,v_outputs3[0])), key=lambda x: str(x["score"]), reverse=True)[:1]
+                                all_output[relation_ship]["step3"][attr][parameter][constraint]["verify_filtered"] = sorted(list(filter(lambda x: x and "score" in x,v_outputs3[0])), key=lambda x: str(x["score"]), reverse=True)[:1]
                 all_output[relation_ship]["step3-time"] = time.time() - s3_start_time
                 all_output[relation_ship]["step3-call_api_times"] = s3_call_api_times
 
@@ -2312,7 +2349,7 @@ if __name__ == "__main__":
                                 if constraint not in all_output[relation_ship]["step4"][attr][parameter]:
                                     all_output[relation_ship]["step4"][attr][parameter][constraint] = []
 
-                                results = list(filter(lambda x: "result" in x and x["result"], outputs4[0]))
+                                results = list(filter(lambda x: x and "result" in x and x["result"], outputs4[0]))
                                 # step4-verify
                                 for r1 in results:
                                     if r1["result"]:
@@ -2323,12 +2360,6 @@ if __name__ == "__main__":
                                         v_outputs4 = [json.loads(o) if isinstance(o, str) else o for o in v_outputs4]
                                         r1["score"] = v_outputs4[0]["score"]
                                         r1["reason"] = v_outputs4[0]["reason"]
-                                        if attr not in all_output[relation_ship]["final_result"]:
-                                            all_output[relation_ship]["final_result"][attr] = {}
-                                        if parameter not in all_output[relation_ship]["final_result"][attr]:
-                                            all_output[relation_ship]["final_result"][attr][parameter] = {}
-                                        if constraint not in all_output[relation_ship]["final_result"][attr][parameter]:
-                                            all_output[relation_ship]["final_result"][attr][parameter][constraint] = []
                                         all_output[relation_ship]["final_result"][attr][parameter][constraint].append({
                                             "validation": r['validation'],
                                             "poc": r1['poc'],
