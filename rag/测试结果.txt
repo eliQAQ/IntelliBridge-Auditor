@@ -1,0 +1,74 @@
+--file-directory LIFI20240716 --event-name AssetSwapped --position s
+可以认为识别到了。step3 中没有检测到_swapData.callTo（"Check whether the externalCallAddress is authorized to use."）和
+_swapData.callData（"Validate that externalCallFunction is in the allowed function signature list"）的约束，可以认为识别到了
+
+--file-directory ChainSwap20210711 --event-name DecreaseAuthQuota --position t
+没有检查出来。检查认为signatures的检查通过，但是通过keccak256只能保证完整性，不能保证正确性，该漏洞中由于对于map的检查问题和通过时间戳计算许可量导致不存在的key（signatures）能够获取巨量的许可，可以随意签名。
+
+--file-directory LIFI20220320 --event-name AssetSwapped --position s
+同第一个
+
+--file-directory MeterPassport20220206 --event-name Deposit --position s
+算是检查出来了。在tokenAddress中指出了没有验证resourceID与tokenAddress的映射关系是否合法，攻击者可以预先设置一个恶意的resourceID到tokenAddress的映射，这确实是事件发生的根本原因。
+
+--file-directory Multichain20220118 --event-name LogAnySwapOut --position s
+可以认为识别出来了，因为step3中没有发现token的约束（"Check whether the tokenAddress is authorized to use."）代码，而事件发生的原因根本上就是因为对于token没有检查就强制转换为AnyswapV1ERC20
+
+--file-directory Nerve20211115 --event-name TokenSwap --position s #RemoveLiquidityOne 由于是两种交换计算代币价值差异导致的,事件并不相同,也不在调用链年,而且和跨链相关度不大,所以搞不了啥
+这个漏洞是代币交换计算流动性不一致导致的套利，如同注释所说，两个步骤没有交叉的内容，仅仅对于一个步骤的检查是检查不了的，可以查看结果。
+
+--file-directory Nomad20220801 --event-name Process --position t
+不确定，感觉可以认为检查出来。这个漏洞是因为初始化给confirmAt[0]设置成1导致所有的检查都能通过，step4指出：通过操纵block.timestamp（例如在测试环境或可操纵时间的链上），使得即使confirmAt[_root]有值且_time != 0，也能满足block.timestamp >= _time的条件。
+虽然实际上是初始化函数导致的抽象事件，但是殊途同归，最终都是使confirmAt[_root]有值且 != 0，可以认为沾到了。
+
+--file-directory PolyNetwork20210810 --event-name VerifyHeaderAndExecuteTxEvent --position t
+检查出来了。step3明确指出整个流程中完全没有对toContract的授权校验，根本上也正是对于toContract的外部调用导致的事件。
+
+--file-directory QBridge20220128 --event-name Deposit --position s
+不确定，因为step3中没有发现对于任何一个参数的检查，step4完全没有运行，这个漏洞和MeterPassport20220206类似，可否认为没有对resourceID的正确检查算是检查到了...
+
+
+--file-directory Rubic20221225 --event-name RequestSent --position s #事件在修饰器里,无法找到调用链,手动放在了函数内
+算是检查到了。step3中没有发现对于_data的任何检查，而漏洞发生的原因是AddressUpgradeable.functionCallWithValue(_params.router, _data, _amountIn);对于_data的调用。
+
+
+--file-directory SocketGateway20240117 --event-name SocketSwapTokens --position s
+检查到了。step3中没有发现对于amount大于0的检查，漏洞发生是因为amount等于0可以绕过转账前后余额检查然后执行的任意调用（通过swapExtraData，不过检测没注意到这个参数）
+
+--file-directory Synapse20211106 --event-name TokenSwap --position s #RemoveLiquidityOne 与Nerve20211115完全相同
+同Nerve20211115
+
+--file-directory thorchain20210723 --event-name VaultTransfer --position s
+没有检查到。漏洞发生的原因是asgard.call{value:msg.value}("");中asgard可被攻击者操控，通过自己的fallback函数伪造了跨链事件激活退款服务，也有链下的问题，根本是asgard没有检测
+他注意到asgard是recipientAddress，但是约束只有是否为0地址，确实没有零地址的检查，但是也不是0地址导致的。
+
+
+--file-directory XBridge20240424 --event-name TokenListed --position s #TokenWithdrawn 两步漏洞,不过主要是listToken谁都能调用且只要提交满足_baseToken==_correspondingToken条件的参数，就能将自己设为该 token 的所有者
+这个漏洞是因为listToken函数松散的合约所有者的设置条件（意外设置为public函数，任何用户只要提交满足_baseToken==_correspondingToken条件的参数，就能将自己设为该 token 的所有者）
+随后再通过调用withdrawTokens函数将代币转移到自己的地址。
+对这两个函数都进行了测试，但是全部在step3找不到任何约束，我是觉得没有检查到，listToken函数和内容和我们的事件参数不太沾，根本原因还是listToke函数的问题。
+
+--file-directory Allbridge20230402 --event-name Withdraw --position s
+流动性价格计算问题，发现不了。
+
+总结：
+可以认为发现了：
+LIFI20240716
+LIFI20220320
+MeterPassport20220206
+Multichain20220118
+Nomad20220801
+PolyNetwork20210810
+Rubic20221225
+SocketGateway20240117
+
+不确定：
+QBridge20220128
+
+没有：
+ChainSwap20210711
+Nerve20211115
+Synapse20211106
+thorchain20210723
+XBridge20240424
+Allbridge20230402

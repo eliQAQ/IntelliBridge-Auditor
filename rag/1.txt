@@ -1,2 +1,16 @@
 --file-directory LIFI20240716 --event-name AssetSwapped --position s
 --file-directory ChainSwap20210711 --event-name DecreaseAuthQuota --position t
+--file-directory LIFI20220320 --event-name AssetSwapped --position s
+--file-directory MeterPassport20220206 --event-name Deposit --position s
+--file-directory Multichain20220118 --event-name LogAnySwapOut --position s
+--file-directory Nerve20211115 --event-name TokenSwap --position s #RemoveLiquidityOne 由于是两种交换计算代币价值差异导致的,事件并不相同,也不在调用链年,而且和跨链相关度不大,所以搞不了啥
+--file-directory Nomad20220801 --event-name Process --position t
+--file-directory PolyNetwork20210810 --event-name VerifyHeaderAndExecuteTxEvent --position t
+--file-directory QBridge20220128 --event-name Deposit --position s
+--file-directory Rubic20221225 --event-name RequestSent --position s #事件在修饰器里,无法找到调用链,手动放在了函数内
+--file-directory SocketGateway20240117 --event-name SocketSwapTokens --position s
+--file-directory Synapse20211106 --event-name TokenSwap --position s #RemoveLiquidityOne 与Nerve20211115完全相同
+--file-directory thorchain20210723 --event-name VaultTransfer --position s
+--file-directory XBridge20240424 --event-name TokenListed --position s #TokenWithdrawn 两步漏洞,不过主要是listToken谁都能调用且只要提交满足_baseToken==_correspondingToken条件的参数，就能将自己设为该 token 的所有者
+--file-directory XBridge20240424 --event-name TokenWithdrawn --position s #TokenWithdrawn 两步漏洞,不过主要是listToken谁都能调用且只要提交满足_baseToken==_correspondingToken条件的参数，就能将自己设为该 token 的所有者
+--file-directory Allbridge20230402 --event-name Withdraw --position s
