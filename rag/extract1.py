@@ -2096,8 +2096,10 @@ if __name__ == "__main__":
     extractor.parse_dataset(file_directory)
     result = {}
     all_output = {}
-    gjld_model = "deepseek-ai/DeepSeek-V3"
-    # gjld_model = "moonshotai/Kimi-K2-Instruct"
+    model = "openai/gpt-4o"
+    # model = "moonshotai/Kimi-K2-Instruct"
+    platform = "openai"
+    # platform = "gjld"
     # 遍历目录里面的json文件
     for file_name in os.listdir(directory_name):
         if file_name.endswith(".json") and not file_name.startswith("all_output"):
@@ -2152,7 +2154,7 @@ if __name__ == "__main__":
                     prompt1 = get_prompt1(attributes_t, codes)
                     constraints = constraints_t
                 print(f"step1")
-                outputs1, native_completion_tokens, native_prompt_tokens, messages = gpt(prompt1, model=gjld_model)
+                outputs1, native_completion_tokens, native_prompt_tokens, messages = gpt(prompt1, model=model, platform=platform)
                 outputs1 = [json.loads(o) for o in outputs1]
 
                 all_output[relation_ship]["step1"] = {
@@ -2164,6 +2166,10 @@ if __name__ == "__main__":
 
                 attribute_to_parameter = {}
                 parameter_to_attribute = {}
+
+                for i in range(len(outputs1)):
+                    if isinstance(outputs1[i],dict):
+                        outputs1[i] = outputs1[i][list(outputs1[i].keys())[0]]
 
                 for output in outputs1:
                     for item in output:
@@ -2184,10 +2190,14 @@ if __name__ == "__main__":
                 v_prompt1 = get_verify_prompt1([i for arr in outputs1 for i in arr], codes)
                 print(f"step1-v")
                 s1_start_time = time.time()
-                v_outputs1, native_completion_tokens, native_prompt_tokens, messages = gpt(v_prompt1, model=gjld_model)
+                v_outputs1, native_completion_tokens, native_prompt_tokens, messages = gpt(v_prompt1, model=model, platform=platform)
                 v_outputs1 = [json.loads(o) if isinstance(o, str) else o for o in v_outputs1]
                 all_output[relation_ship]["step1"]["v_outputs1"] = v_outputs1
                 all_output[relation_ship]["step1"]["v_prompt1"] = v_prompt1
+
+                for i in range(len(v_outputs1)):
+                    if isinstance(v_outputs1[i],dict):
+                        v_outputs1[i] = v_outputs1[i][list(v_outputs1[i].keys())[0]]
 
                 for v_output in v_outputs1:
                     for item in v_output:
@@ -2230,13 +2240,13 @@ if __name__ == "__main__":
                             prompt2 = get_prompt2(parameter, codes)
                             for i in range(3):
                                 print(f"step2-{attr}-{parameter}-{i+1}")
-                                outputs2, native_completion_tokens, native_prompt_tokens, messages = gpt(prompt2, model=gjld_model)
+                                outputs2, native_completion_tokens, native_prompt_tokens, messages = gpt(prompt2, model=model, platform=platform)
                                 s2_call_api_times += 1
                                 outputs2 = [json.loads(o) if isinstance(o, str) else o for o in outputs2]
 
                                 # step2-verify
                                 v_prompt2 = get_verify_prompt2(parameter, outputs2[0]["dataflow"], codes)
-                                v_outputs2, native_completion_tokens, native_prompt_tokens, messages = gpt(v_prompt2, model=gjld_model)
+                                v_outputs2, native_completion_tokens, native_prompt_tokens, messages = gpt(v_prompt2, model=model, platform=platform)
                                 s2_call_api_times += 1
                                 v_outputs2 = [json.loads(o) if isinstance(o, str) else o for o in v_outputs2]
 
@@ -2264,9 +2274,15 @@ if __name__ == "__main__":
                             merge_prompt = get_merge_dataflow_prompt(parameter, [
                                 dataflow["dataflow"] for dataflow in all_output[relation_ship]["step2"][attr][parameter]["dataflows"]
                             ])
-                            merge_outputs, native_completion_tokens, native_prompt_tokens, messages = gpt(merge_prompt, model=gjld_model)
+                            merge_outputs, native_completion_tokens, native_prompt_tokens, messages = gpt(merge_prompt, model=model, platform=platform)
                             s2_call_api_times += 1
-                            merge_outputs = [json.loads(o) if isinstance(o, str) else o for o in merge_outputs]
+
+                            try:
+                                merge_outputs = [json.loads(o) if isinstance(o, str) else o for o in merge_outputs]
+                            except json.decoder.JSONDecodeError as e:
+                                print(merge_outputs)
+                                print(e.with_traceback())
+
                             all_output[relation_ship]["step2"][attr][parameter]["merge_dataflows"] = merge_outputs[0]["dataflows"]
                 all_output[relation_ship]["step2-time"] = time.time() - s2_start_time
                 all_output[relation_ship]["step2-call_api_times"] = s2_call_api_times
@@ -2295,7 +2311,7 @@ if __name__ == "__main__":
                                     all_output[relation_ship]["final_result"][attr][parameter][constraint] = []
                                 prompt3 = get_prompt3(parameter, constraint, all_output[relation_ship]["step2"][attr][parameter]["merge_dataflows"])
                                 print(f"step3-{attr}-{parameter}-{constraint}")
-                                outputs3, native_completion_tokens, native_prompt_tokens, messages = gpt(prompt3, model=gjld_model)
+                                outputs3, native_completion_tokens, native_prompt_tokens, messages = gpt(prompt3, model=model, platform=platform)
                                 s3_call_api_times += 1
                                 outputs3 = [json.loads(o) if isinstance(o, str) else o for o in outputs3]
                                 if constraint not in all_output[relation_ship]["step3"][attr][parameter]:
@@ -2317,9 +2333,11 @@ if __name__ == "__main__":
                                 validations = [r["validation"] for r in validations]
                                 v_prompt3 = get_verify_prompt3(parameter, constraint, validations, codes)
                                 print(f"step3-v-{attr}-{parameter}-{constraint}")
-                                v_outputs3, native_completion_tokens, native_prompt_tokens, messages = gpt(v_prompt3, model=gjld_model)
+                                v_outputs3, native_completion_tokens, native_prompt_tokens, messages = gpt(v_prompt3, model=model, platform=platform)
                                 s3_call_api_times += 1
                                 v_outputs3 = [json.loads(o) if isinstance(o, str) else o for o in v_outputs3]
+                                if isinstance(v_outputs3[0], dict):
+                                    v_outputs3[0] = v_outputs3[0][list(v_outputs3[0].keys())[0]]
                                 # 取得分第一的results
                                 all_output[relation_ship]["step3"][attr][parameter][constraint]["verify_filtered"] = sorted(list(filter(lambda x: x and "score" in x,v_outputs3[0])), key=lambda x: str(x["score"]), reverse=True)[:1]
                 all_output[relation_ship]["step3-time"] = time.time() - s3_start_time
@@ -2342,9 +2360,11 @@ if __name__ == "__main__":
                             for r in all_output[relation_ship]["step3"][attr][parameter][constraint]["verify_filtered"]:
                                 prompt4 = get_prompt4(parameter, r["validation"], codes, code_prompt)
                                 print(f"step4-{attr}-{parameter}-{constraint}")
-                                outputs4, native_completion_tokens, native_prompt_tokens, messages = gpt(prompt4, model=gjld_model)
+                                outputs4, native_completion_tokens, native_prompt_tokens, messages = gpt(prompt4, model=model, platform=platform)
                                 s4_call_api_times += 1
                                 outputs4 = [json.loads(o) if isinstance(o, str) else o for o in outputs4]
+                                if isinstance(outputs4[0], dict):
+                                    outputs4[0] = outputs4[0][list(outputs4[0].keys())[0]]
 
                                 if constraint not in all_output[relation_ship]["step4"][attr][parameter]:
                                     all_output[relation_ship]["step4"][attr][parameter][constraint] = []
@@ -2355,7 +2375,7 @@ if __name__ == "__main__":
                                     if r1["result"]:
                                         print(f"step4-v-{attr}-{parameter}-{constraint}-{r['validation']}-{r1['poc']}")
                                         v_prompt4 = get_verify_prompt4(code_prompt, parameter, r["validation"], r1["poc"], codes)
-                                        v_outputs4, native_completion_tokens, native_prompt_tokens, messages = gpt(v_prompt4, model=gjld_model)
+                                        v_outputs4, native_completion_tokens, native_prompt_tokens, messages = gpt(v_prompt4, model=model, platform=platform)
                                         s4_call_api_times += 1
                                         v_outputs4 = [json.loads(o) if isinstance(o, str) else o for o in v_outputs4]
                                         r1["score"] = v_outputs4[0]["score"]
