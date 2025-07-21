@@ -1,0 +1,703 @@
+{
+    "THORChain_Router.returnVaultAssets": {
+        "step1": {
+            "prompt1": "\n你是一位经验丰富的跨链协议分析专家。你的任务是将根据提供的 Solidity 代码，将指定的跨链属性映射到代码中的参数上；如果某属性在代码中找不到对应参数，则不在输出中列出该属性，如果存在多个参数对应同一属性的可能性，每个属性至多输出3种参数映射方案。请严格遵循以下定义的输入格式和输出格式：\n输入格式： 你将接收一个 JSON 对象作为输入，其结构如下： \n{\n\"attribute\": \n{ \n\"<attribute>\": \"<attribute description>\" ,\n\"<attribute>\": \"<attribute description>\",\n...\n}\n\"code\": \"...\" // Solidity 合约代码字符串 \n}\n输出格式：\n只返回一个 JSON 对象数组，每项结构如下：\n[ \n{\n\"parameter\": \"...\", // 代码中最可能对应该属性的参数名\n\"attribute\": \"...\", // 输入的跨链属性 \n\"reason\": \"...\" // 简要说明：为何选择此参数，以及可能的歧义，同时指出该映射的核心依据和潜在的不确定点（例如：参数名相似度、上下文含义模糊等）\n}, ... \n]\n\n\n输入：\n{\n\"attribute\": {\"toChainID\": \"Specifies the destination blockchain network ID.\", \"tokenAddress\": \"Indicates the contract address of the token to be transferred.\", \"amount\": \"The number of tokens to be transferred across chains.\", \"nonce\": \"Check and mark that nonce has not been consumed to prevent replay\", \"recipientAddress\": \"The address that will receive the tokens on the destination chain.\", \"externalCallAddress\": \"The address of a contract to be called after the cross-chain transfer.\", \"externalCallFunction\": \"The specific function or calldata to be executed on the `externalCallAddress`.\", \"routerAddress\": \"The address of the cross-chain router or bridge handler.\"},\n\"code\": [\"THORChain_Router.returnVaultAssets:function returnVaultAssets(address router, address payable asgard, Coin[] memory coins, string memory memo) external payable {\\n        if (router == address(this)){\\n            for(uint i = 0; i < coins.length; i++){\\n                _adjustAllowances(asgard, coins[i].asset, coins[i].amount);\\n            }\\n            emit VaultTransfer(msg.sender, asgard, coins, memo); // Does not include ETH.           \\n        } else {\\n            for(uint i = 0; i < coins.length; i++){\\n                _routerDeposit(router, asgard, coins[i].asset, coins[i].amount, memo);\\n            }\\n        }\\n        (bool success,) = asgard.call{value:msg.value}(\\\"\\\"); //ETH amount needs to be parsed from tx.\\n        require(success);\\n    }\", \"THORChain_Router._adjustAllowances:function _adjustAllowances(address _newVault, address _asset, uint _amount) internal {\\n        vaultAllowance[msg.sender][_asset] -= _amount;\\n        vaultAllowance[_newVault][_asset] += _amount;\\n    }\", \"THORChain_Router._routerDeposit:function _routerDeposit(address _router, address _vault, address _asset, uint _amount, string memory _memo) internal {\\n        vaultAllowance[msg.sender][_asset] -= _amount;\\n        (bool success,) = _asset.call(abi.encodeWithSignature(\\\"approve(address,uint256)\\\", _router, _amount)); // Approve to transfer\\n        require(success);\\n        iROUTER(_router).depositWithExpiry(_vault, _asset, _amount, _memo, type(uint).max); // Transfer by depositing\\n    }\"]\n}\n",
+            "outputs1": [
+                [
+                    {
+                        "parameter": "router",
+                        "attribute": "routerAddress",
+                        "reason": "函数签名中的 `router` 参数被直接用作 `_routerDeposit` 的 `_router`，该地址负责把资产转给目标金库，因此最符合“跨链路由器/桥接处理器”的角色；没有歧义。"
+                    },
+                    {
+                        "parameter": "coins[i].asset",
+                        "attribute": "tokenAddress",
+                        "reason": "`Coin` 结构体的 `.asset` 字段在 `_routerDeposit` 中作为 `_asset` 传入，随后被用于 ERC-20 `approve` 和 `depositWithExpiry`，显然代表待跨链代币的合约地址；没有歧义。"
+                    },
+                    {
+                        "parameter": "coins[i].amount",
+                        "attribute": "amount",
+                        "reason": "`Coin` 结构体的 `.amount` 字段在 `_routerDeposit` 中作为 `_amount` 传入，用于指定转给目标金库的代币数量；没有歧义。"
+                    },
+                    {
+                        "parameter": "asgard",
+                        "attribute": "recipientAddress",
+                        "reason": "`asgard` 地址在 `returnVaultAssets` 中被用作最终接收资产的目标金库，且在 `_routerDeposit` 里以 `_vault` 身份出现，可视为跨链场景下“目标链上的接收方”；潜在歧义：它可能是 THORChain 的金库而非最终用户地址，但在合约层面是最接近的接收者。"
+                    },
+                    {
+                        "parameter": "memo",
+                        "attribute": "externalCallFunction",
+                        "reason": "`memo` 是字符串类型，在 THORChain 生态中通常携带跨链指令或后续执行信息（如“+” 分隔的函数调用数据），因此最贴近“在 externalCallAddress 上执行的 calldata”；潜在歧义：memo 的具体格式由链下解析，合约本身不强制其为函数选择器或参数。"
+                    }
+                ]
+            ],
+            "v_prompt1": "\n你是一位严谨的跨链协议审计员和数据一致性验证者。仔细审查给定的多个跨链属性与参数在代码中的含义是否一致，并为其分配一个置信度分数 (0-100%)，指出给定该置信度分数的原因。\n\n输入格式： 你将接收一个 JSON 对象作为输入，其结构如下:\n{\n\"correspondence\":    // 代码中属性与参数对应的数组\n[\n{\n\"attribute\": \"...\", // 输入的跨链属性 \n\"parameter\": \"...\", // 对应的参数\n\"reason\": \"...\" // 简要的说明：为何选择此参数，以及可能的歧义 \n}\n...\n]，\n\"code\":\"...\" //跨链合约代码\n}\n\n输出格式：只返回一个 JSON 对象数组，每项结构如下：\n[ \n{\n\"parameter\": \"...\", // 代码中最可能对应该属性的参数名\n\"attribute\": \"...\", // 输入的跨链属性 \n\"score\":\"...\", // 分配的置信度分数\n\"reason\": \"...\" // 简要说明给定该置信度分数的原因\n}, ... \n]\n输入：\n{\n\"correspondence\": [{\"parameter\": \"router\", \"attribute\": \"routerAddress\", \"reason\": \"函数签名中的 `router` 参数被直接用作 `_routerDeposit` 的 `_router`，该地址负责把资产转给目标金库，因此最符合“跨链路由器/桥接处理器”的角色；没有歧义。\"}, {\"parameter\": \"coins[i].asset\", \"attribute\": \"tokenAddress\", \"reason\": \"`Coin` 结构体的 `.asset` 字段在 `_routerDeposit` 中作为 `_asset` 传入，随后被用于 ERC-20 `approve` 和 `depositWithExpiry`，显然代表待跨链代币的合约地址；没有歧义。\"}, {\"parameter\": \"coins[i].amount\", \"attribute\": \"amount\", \"reason\": \"`Coin` 结构体的 `.amount` 字段在 `_routerDeposit` 中作为 `_amount` 传入，用于指定转给目标金库的代币数量；没有歧义。\"}, {\"parameter\": \"asgard\", \"attribute\": \"recipientAddress\", \"reason\": \"`asgard` 地址在 `returnVaultAssets` 中被用作最终接收资产的目标金库，且在 `_routerDeposit` 里以 `_vault` 身份出现，可视为跨链场景下“目标链上的接收方”；潜在歧义：它可能是 THORChain 的金库而非最终用户地址，但在合约层面是最接近的接收者。\"}, {\"parameter\": \"memo\", \"attribute\": \"externalCallFunction\", \"reason\": \"`memo` 是字符串类型，在 THORChain 生态中通常携带跨链指令或后续执行信息（如“+” 分隔的函数调用数据），因此最贴近“在 externalCallAddress 上执行的 calldata”；潜在歧义：memo 的具体格式由链下解析，合约本身不强制其为函数选择器或参数。\"}],\n\"code\" [\"THORChain_Router.returnVaultAssets:function returnVaultAssets(address router, address payable asgard, Coin[] memory coins, string memory memo) external payable {\\n        if (router == address(this)){\\n            for(uint i = 0; i < coins.length; i++){\\n                _adjustAllowances(asgard, coins[i].asset, coins[i].amount);\\n            }\\n            emit VaultTransfer(msg.sender, asgard, coins, memo); // Does not include ETH.           \\n        } else {\\n            for(uint i = 0; i < coins.length; i++){\\n                _routerDeposit(router, asgard, coins[i].asset, coins[i].amount, memo);\\n            }\\n        }\\n        (bool success,) = asgard.call{value:msg.value}(\\\"\\\"); //ETH amount needs to be parsed from tx.\\n        require(success);\\n    }\", \"THORChain_Router._adjustAllowances:function _adjustAllowances(address _newVault, address _asset, uint _amount) internal {\\n        vaultAllowance[msg.sender][_asset] -= _amount;\\n        vaultAllowance[_newVault][_asset] += _amount;\\n    }\", \"THORChain_Router._routerDeposit:function _routerDeposit(address _router, address _vault, address _asset, uint _amount, string memory _memo) internal {\\n        vaultAllowance[msg.sender][_asset] -= _amount;\\n        (bool success,) = _asset.call(abi.encodeWithSignature(\\\"approve(address,uint256)\\\", _router, _amount)); // Approve to transfer\\n        require(success);\\n        iROUTER(_router).depositWithExpiry(_vault, _asset, _amount, _memo, type(uint).max); // Transfer by depositing\\n    }\"]:\n}\n\n",
+            "v_outputs1": [
+                [
+                    {
+                        "parameter": "router",
+                        "attribute": "routerAddress",
+                        "score": 100,
+                        "reason": "代码中 router 参数被直接用作 _routerDeposit 的 _router，且该地址负责把资产转给目标金库，语义与“跨链路由器/桥接处理器”完全一致，无歧义。"
+                    },
+                    {
+                        "parameter": "coins[i].asset",
+                        "attribute": "tokenAddress",
+                        "score": 100,
+                        "reason": "Coin.asset 字段在 _routerDeposit 中作为 _asset 传入，随后用于 ERC-20 approve 和 depositWithExpiry，明确代表待跨链代币的合约地址，无歧义。"
+                    },
+                    {
+                        "parameter": "coins[i].amount",
+                        "attribute": "amount",
+                        "score": 100,
+                        "reason": "Coin.amount 字段在 _routerDeposit 中作为 _amount 传入，用于指定转给目标金库的代币数量，语义清晰，无歧义。"
+                    },
+                    {
+                        "parameter": "asgard",
+                        "attribute": "recipientAddress",
+                        "score": 85,
+                        "reason": "asgard 在 returnVaultAssets 中作为最终接收资产的目标金库，合约层面是“目标链上的接收方”；但它是 THORChain 金库而非最终用户地址，存在轻微语义差异，故略降置信度。"
+                    },
+                    {
+                        "parameter": "memo",
+                        "attribute": "externalCallFunction",
+                        "score": 75,
+                        "reason": "memo 在 THORChain 生态中确实携带跨链指令，可视为“在 externalCallAddress 上执行的 calldata”；但 memo 格式由链下解析，合约不强制其为函数选择器或参数，存在潜在歧义，因此置信度中等。"
+                    }
+                ]
+            ],
+            "formatted_outputs1": {
+                "router": {
+                    "routerAddress": {
+                        "reason": "函数签名中的 `router` 参数被直接用作 `_routerDeposit` 的 `_router`，该地址负责把资产转给目标金库，因此最符合“跨链路由器/桥接处理器”的角色；没有歧义。",
+                        "score": 100,
+                        "s_reason": "代码中 router 参数被直接用作 _routerDeposit 的 _router，且该地址负责把资产转给目标金库，语义与“跨链路由器/桥接处理器”完全一致，无歧义。"
+                    }
+                },
+                "coins[i].asset": {
+                    "tokenAddress": {
+                        "reason": "`Coin` 结构体的 `.asset` 字段在 `_routerDeposit` 中作为 `_asset` 传入，随后被用于 ERC-20 `approve` 和 `depositWithExpiry`，显然代表待跨链代币的合约地址；没有歧义。",
+                        "score": 100,
+                        "s_reason": "Coin.asset 字段在 _routerDeposit 中作为 _asset 传入，随后用于 ERC-20 approve 和 depositWithExpiry，明确代表待跨链代币的合约地址，无歧义。"
+                    }
+                },
+                "coins[i].amount": {
+                    "amount": {
+                        "reason": "`Coin` 结构体的 `.amount` 字段在 `_routerDeposit` 中作为 `_amount` 传入，用于指定转给目标金库的代币数量；没有歧义。",
+                        "score": 100,
+                        "s_reason": "Coin.amount 字段在 _routerDeposit 中作为 _amount 传入，用于指定转给目标金库的代币数量，语义清晰，无歧义。"
+                    }
+                },
+                "asgard": {
+                    "recipientAddress": {
+                        "reason": "`asgard` 地址在 `returnVaultAssets` 中被用作最终接收资产的目标金库，且在 `_routerDeposit` 里以 `_vault` 身份出现，可视为跨链场景下“目标链上的接收方”；潜在歧义：它可能是 THORChain 的金库而非最终用户地址，但在合约层面是最接近的接收者。",
+                        "score": 85,
+                        "s_reason": "asgard 在 returnVaultAssets 中作为最终接收资产的目标金库，合约层面是“目标链上的接收方”；但它是 THORChain 金库而非最终用户地址，存在轻微语义差异，故略降置信度。"
+                    }
+                },
+                "memo": {
+                    "externalCallFunction": {
+                        "reason": "`memo` 是字符串类型，在 THORChain 生态中通常携带跨链指令或后续执行信息（如“+” 分隔的函数调用数据），因此最贴近“在 externalCallAddress 上执行的 calldata”；潜在歧义：memo 的具体格式由链下解析，合约本身不强制其为函数选择器或参数。",
+                        "score": 75,
+                        "s_reason": "memo 在 THORChain 生态中确实携带跨链指令，可视为“在 externalCallAddress 上执行的 calldata”；但 memo 格式由链下解析，合约不强制其为函数选择器或参数，存在潜在歧义，因此置信度中等。"
+                    }
+                }
+            }
+        },
+        "step2": {
+            "routerAddress": {
+                "router": {
+                    "dataflows": [
+                        {
+                            "parameter": "router",
+                            "dataflow": {
+                                "returnVaultAssets": [
+                                    "function returnVaultAssets(address router, address payable asgard, Coin[] memory coins, string memory memo) external payable {\n        if (router == address(this)){\n            for(uint i = 0; i < coins.length; i++){\n                _adjustAllowances(asgard, coins[i].asset, coins[i].amount);\n            }\n            emit VaultTransfer(msg.sender, asgard, coins, memo); // Does not include ETH.           \n        } else {\n            for(uint i = 0; i < coins.length; i++){\n                _routerDeposit(router, asgard, coins[i].asset, coins[i].amount, memo);\n            }\n        }\n        (bool success,) = asgard.call{value:msg.value}(\"\"); //ETH amount needs to be parsed from tx.\n        require(success);\n    }"
+                                ],
+                                "_routerDeposit": [
+                                    "function _routerDeposit(address _router, address _vault, address _asset, uint _amount, string memory _memo) internal {\n        vaultAllowance[msg.sender][_asset] -= _amount;\n        (bool success,) = _asset.call(abi.encodeWithSignature(\"approve(address,uint256)\", _router, _amount)); // Approve to transfer\n        require(success);\n        iROUTER(_router).depositWithExpiry(_vault, _asset, _amount, _memo, type(uint).max); // Transfer by depositing\n    }"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "100",
+                            "reason": "数据流代码与原始合约代码在 returnVaultAssets 与 _routerDeposit 两处对 router 参数的使用完全一致：既用于 if-else 分支判断，又作为 _routerDeposit 的实参传入并继续传递给 iROUTER.depositWithExpiry，没有任何语义或实现差异，因此覆盖与正确性均为满分。"
+                        },
+                        {
+                            "parameter": "router",
+                            "dataflow": {
+                                "returnVaultAssets": [
+                                    "function returnVaultAssets(address router, address payable asgard, Coin[] memory coins, string memory memo) external payable {\n        if (router == address(this)){\n            for(uint i = 0; i < coins.length; i++){\n                _adjustAllowances(asgard, coins[i].asset, coins[i].amount);\n            }\n            emit VaultTransfer(msg.sender, asgard, coins, memo); // Does not include ETH.           \n        } else {\n            for(uint i = 0; i < coins.length; i++){\n                _routerDeposit(router, asgard, coins[i].asset, coins[i].amount, memo);\n            }\n        }\n        (bool success,) = asgard.call{value:msg.value}(\"\"); //ETH amount needs to be parsed from tx.\n        require(success);\n    }"
+                                ],
+                                "_routerDeposit": [
+                                    "function _routerDeposit(address _router, address _vault, address _asset, uint _amount, string memory _memo) internal {\n        vaultAllowance[msg.sender][_asset] -= _amount;\n        (bool success,) = _asset.call(abi.encodeWithSignature(\"approve(address,uint256)\", _router, _amount)); // Approve to transfer\n        require(success);\n        iROUTER(_router).depositWithExpiry(_vault, _asset, _amount, _memo, type(uint).max); // Transfer by depositing\n    }"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "100",
+                            "reason": "dataflow 中的两段代码 returnVaultAssets 与 _routerDeposit 均完整、逐字对应地出现在原始合约代码中，且 router 参数在两条路径（router==address(this) 与 else 分支）及内部函数 _routerDeposit 中的使用完全一致，无遗漏、无偏差，因此覆盖与正确程度均为满分。"
+                        }
+                    ],
+                    "merge_dataflows": "function returnVaultAssets(address router, address payable asgard, Coin[] memory coins, string memory memo) external payable {\n        if (router == address(this)){\n            for(uint i = 0; i < coins.length; i++){\n                _adjustAllowances(asgard, coins[i].asset, coins[i].amount);\n            }\n            emit VaultTransfer(msg.sender, asgard, coins, memo); // Does not include ETH.           \n        } else {\n            for(uint i = 0; i < coins.length; i++){\n                _routerDeposit(router, asgard, coins[i].asset, coins[i].amount, memo);\n            }\n        }\n        (bool success,) = asgard.call{value:msg.value}(\"\"); //ETH amount needs to be parsed from tx.\n        require(success);\n    }\n    function _routerDeposit(address _router, address _vault, address _asset, uint _amount, string memory _memo) internal {\n        vaultAllowance[msg.sender][_asset] -= _amount;\n        (bool success,) = _asset.call(abi.encodeWithSignature(\"approve(address,uint256)\", _router, _amount)); // Approve to transfer\n        require(success);\n        iROUTER(_router).depositWithExpiry(_vault, _asset, _amount, _memo, type(uint).max); // Transfer by depositing\n    }"
+                }
+            },
+            "tokenAddress": {
+                "coins[i].asset": {
+                    "dataflows": [
+                        {
+                            "parameter": "coins[i].asset",
+                            "dataflow": {
+                                "returnVaultAssets": [
+                                    "function returnVaultAssets(address router, address payable asgard, Coin[] memory coins, string memory memo) external payable {\n        if (router == address(this)){\n            for(uint i = 0; i < coins.length; i++){\n                _adjustAllowances(asgard, coins[i].asset, coins[i].amount);\n            }\n            emit VaultTransfer(msg.sender, asgard, coins, memo); // Does not include ETH.           \n        } else {\n            for(uint i = 0; i < coins.length; i++){\n                _routerDeposit(router, asgard, coins[i].asset, coins[i].amount, memo);\n            }\n        }\n        (bool success,) = asgard.call{value:msg.value}(\"\"); //ETH amount needs to be parsed from tx.\n        require(success);\n    }"
+                                ],
+                                "_adjustAllowances": [
+                                    "function _adjustAllowances(address _newVault, address _asset, uint _amount) internal {\n        vaultAllowance[msg.sender][_asset] -= _amount;\n        vaultAllowance[_newVault][_asset] += _amount;\n    }"
+                                ],
+                                "_routerDeposit": [
+                                    "function _routerDeposit(address _router, address _vault, address _asset, uint _amount, string memory _memo) internal {\n        vaultAllowance[msg.sender][_asset] -= _amount;\n        (bool success,) = _asset.call(abi.encodeWithSignature(\"approve(address,uint256)\", _router, _amount)); // Approve to transfer\n        require(success);\n        iROUTER(_router).depositWithExpiry(_vault, _asset, _amount, _memo, type(uint).max); // Transfer by depositing\n    }"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "100",
+                            "reason": "提取的 dataflow 完整包含了 returnVaultAssets、_adjustAllowances、_routerDeposit 三个函数，且逐字与原代码一致；coins[i].asset 在这三个函数中均被显式使用，无任何删减或改写，覆盖与正确性均无缺失。"
+                        },
+                        {
+                            "parameter": "coins[i].asset",
+                            "dataflow": {
+                                "returnVaultAssets": [
+                                    "function returnVaultAssets(address router, address payable asgard, Coin[] memory coins, string memory memo) external payable {\n        if (router == address(this)){\n            for(uint i = 0; i < coins.length; i++){\n                _adjustAllowances(asgard, coins[i].asset, coins[i].amount);\n            }\n            emit VaultTransfer(msg.sender, asgard, coins, memo); // Does not include ETH.           \n        } else {\n            for(uint i = 0; i < coins.length; i++){\n                _routerDeposit(router, asgard, coins[i].asset, coins[i].amount, memo);\n            }\n        }\n        (bool success,) = asgard.call{value:msg.value}(\"\"); //ETH amount needs to be parsed from tx.\n        require(success);\n    }"
+                                ],
+                                "_adjustAllowances": [
+                                    "function _adjustAllowances(address _newVault, address _asset, uint _amount) internal {\n        vaultAllowance[msg.sender][_asset] -= _amount;\n        vaultAllowance[_newVault][_asset] += _amount;\n    }"
+                                ],
+                                "_routerDeposit": [
+                                    "function _routerDeposit(address _router, address _vault, address _asset, uint _amount, string memory _memo) internal {\n        vaultAllowance[msg.sender][_asset] -= _amount;\n        (bool success,) = _asset.call(abi.encodeWithSignature(\"approve(address,uint256)\", _router, _amount)); // Approve to transfer\n        require(success);\n        iROUTER(_router).depositWithExpiry(_vault, _asset, _amount, _memo, type(uint).max); // Transfer by depositing\n    }"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "100",
+                            "reason": "dataflow 中的三处函数片段与原始合约代码逐字一致，coins[i].asset 作为关键参数在 returnVaultAssets、_adjustAllowances、_routerDeposit 三条路径中均被完整、准确地引用，无任何遗漏或偏差。"
+                        }
+                    ],
+                    "merge_dataflows": "function returnVaultAssets(address router, address payable asgard, Coin[] memory coins, string memory memo) external payable {\n        if (router == address(this)){\n            for(uint i = 0; i < coins.length; i++){\n                _adjustAllowances(asgard, coins[i].asset, coins[i].amount);\n            }\n            emit VaultTransfer(msg.sender, asgard, coins, memo); // Does not include ETH.           \n        } else {\n            for(uint i = 0; i < coins.length; i++){\n                _routerDeposit(router, asgard, coins[i].asset, coins[i].amount, memo);\n            }\n        }\n        (bool success,) = asgard.call{value:msg.value}(\"\"); //ETH amount needs to be parsed from tx.\n        require(success);\n    }\n    function _adjustAllowances(address _newVault, address _asset, uint _amount) internal {\n        vaultAllowance[msg.sender][_asset] -= _amount;\n        vaultAllowance[_newVault][_asset] += _amount;\n    }\n    function _routerDeposit(address _router, address _vault, address _asset, uint _amount, string memory _memo) internal {\n        vaultAllowance[msg.sender][_asset] -= _amount;\n        (bool success,) = _asset.call(abi.encodeWithSignature(\"approve(address,uint256)\", _router, _amount)); // Approve to transfer\n        require(success);\n        iROUTER(_router).depositWithExpiry(_vault, _asset, _amount, _memo, type(uint).max); // Transfer by depositing\n    }"
+                }
+            },
+            "amount": {
+                "coins[i].amount": {
+                    "dataflows": [
+                        {
+                            "parameter": "coins[i].amount",
+                            "dataflow": {
+                                "returnVaultAssets": [
+                                    "function returnVaultAssets(address router, address payable asgard, Coin[] memory coins, string memory memo) external payable {\n        if (router == address(this)){\n            for(uint i = 0; i < coins.length; i++){\n                _adjustAllowances(asgard, coins[i].asset, coins[i].amount);\n            }\n            emit VaultTransfer(msg.sender, asgard, coins, memo); // Does not include ETH.           \n        } else {\n            for(uint i = 0; i < coins.length; i++){\n                _routerDeposit(router, asgard, coins[i].asset, coins[i].amount, memo);\n            }\n        }\n        (bool success,) = asgard.call{value:msg.value}(\"\"); //ETH amount needs to be parsed from tx.\n        require(success);\n    }"
+                                ],
+                                "_adjustAllowances": [
+                                    "function _adjustAllowances(address _newVault, address _asset, uint _amount) internal {\n        vaultAllowance[msg.sender][_asset] -= _amount;\n        vaultAllowance[_newVault][_asset] += _amount;\n    }"
+                                ],
+                                "_routerDeposit": [
+                                    "function _routerDeposit(address _router, address _vault, address _asset, uint _amount, string memory _memo) internal {\n        vaultAllowance[msg.sender][_asset] -= _amount;\n        (bool success,) = _asset.call(abi.encodeWithSignature(\"approve(address,uint256)\", _router, _amount)); // Approve to transfer\n        require(success);\n        iROUTER(_router).depositWithExpiry(_vault, _asset, _amount, _memo, type(uint).max); // Transfer by depositing\n    }"
+                                ]
+                            },
+                            "coverage": 100,
+                            "correctness": 100,
+                            "score": 100,
+                            "reason": "dataflow 中给出的三处代码片段与原始合约代码逐字符完全一致，coins[i].amount 在所有相关路径（returnVaultAssets 的 if/else 分支、_adjustAllowances、_routerDeposit）均被完整引用且未做任何修改，因此覆盖与正确程度均为满分。"
+                        },
+                        {
+                            "parameter": "coins[i].amount",
+                            "dataflow": {
+                                "returnVaultAssets": [
+                                    "function returnVaultAssets(address router, address payable asgard, Coin[] memory coins, string memory memo) external payable {\n        if (router == address(this)){\n            for(uint i = 0; i < coins.length; i++){\n                _adjustAllowances(asgard, coins[i].asset, coins[i].amount);\n            }\n            emit VaultTransfer(msg.sender, asgard, coins, memo); // Does not include ETH.           \n        } else {\n            for(uint i = 0; i < coins.length; i++){\n                _routerDeposit(router, asgard, coins[i].asset, coins[i].amount, memo);\n            }\n        }\n        (bool success,) = asgard.call{value:msg.value}(\"\"); //ETH amount needs to be parsed from tx.\n        require(success);\n    }",
+                                    "            for(uint i = 0; i < coins.length; i++){\n                _adjustAllowances(asgard, coins[i].asset, coins[i].amount);\n            }",
+                                    "            for(uint i = 0; i < coins.length; i++){\n                _routerDeposit(router, asgard, coins[i].asset, coins[i].amount, memo);\n            }"
+                                ],
+                                "_adjustAllowances": [
+                                    "function _adjustAllowances(address _newVault, address _asset, uint _amount) internal {\n        vaultAllowance[msg.sender][_asset] -= _amount;\n        vaultAllowance[_newVault][_asset] += _amount;\n    }",
+                                    "        vaultAllowance[msg.sender][_asset] -= _amount;",
+                                    "        vaultAllowance[_newVault][_asset] += _amount;"
+                                ],
+                                "_routerDeposit": [
+                                    "function _routerDeposit(address _router, address _vault, address _asset, uint _amount, string memory _memo) internal {\n        vaultAllowance[msg.sender][_asset] -= _amount;\n        (bool success,) = _asset.call(abi.encodeWithSignature(\"approve(address,uint256)\", _router, _amount)); // Approve to transfer\n        require(success);\n        iROUTER(_router).depositWithExpiry(_vault, _asset, _amount, _memo, type(uint).max); // Transfer by depositing\n    }",
+                                    "        vaultAllowance[msg.sender][_asset] -= _amount;",
+                                    "        (bool success,) = _asset.call(abi.encodeWithSignature(\"approve(address,uint256)\", _router, _amount)); // Approve to transfer",
+                                    "        iROUTER(_router).depositWithExpiry(_vault, _asset, _amount, _memo, type(uint).max); // Transfer by depositing"
+                                ]
+                            },
+                            "coverage": 100,
+                            "correctness": 100,
+                            "score": 100,
+                            "reason": "dataflow 中所有片段均完整、准确地保留了 coins[i].amount 的取值与传递路径，且与原始合约代码逐字一致，无任何删减或语义偏差，故覆盖与正确程度均为满分。"
+                        }
+                    ],
+                    "merge_dataflows": "function returnVaultAssets(address router, address payable asgard, Coin[] memory coins, string memory memo) external payable {\n        if (router == address(this)){\n            for(uint i = 0; i < coins.length; i++){\n                _adjustAllowances(asgard, coins[i].asset, coins[i].amount);\n            }\n            emit VaultTransfer(msg.sender, asgard, coins, memo); // Does not include ETH.           \n        } else {\n            for(uint i = 0; i < coins.length; i++){\n                _routerDeposit(router, asgard, coins[i].asset, coins[i].amount, memo);\n            }\n        }\n        (bool success,) = asgard.call{value:msg.value}(\"\"); //ETH amount needs to be parsed from tx.\n        require(success);\n    }\n\nfunction _adjustAllowances(address _newVault, address _asset, uint _amount) internal {\n        vaultAllowance[msg.sender][_asset] -= _amount;\n        vaultAllowance[_newVault][_asset] += _amount;\n    }\n\nfunction _routerDeposit(address _router, address _vault, address _asset, uint _amount, string memory _memo) internal {\n        vaultAllowance[msg.sender][_asset] -= _amount;\n        (bool success,) = _asset.call(abi.encodeWithSignature(\"approve(address,uint256)\", _router, _amount)); // Approve to transfer\n        require(success);\n        iROUTER(_router).depositWithExpiry(_vault, _asset, _amount, _memo, type(uint).max); // Transfer by depositing\n    }"
+                }
+            },
+            "recipientAddress": {
+                "asgard": {
+                    "dataflows": [
+                        {
+                            "parameter": "asgard",
+                            "dataflow": {
+                                "returnVaultAssets": [
+                                    "function returnVaultAssets(address router, address payable asgard, Coin[] memory coins, string memory memo) external payable {\n        if (router == address(this)){\n            for(uint i = 0; i < coins.length; i++){\n                _adjustAllowances(asgard, coins[i].asset, coins[i].amount);\n            }\n            emit VaultTransfer(msg.sender, asgard, coins, memo); // Does not include ETH.           \n        } else {\n            for(uint i = 0; i < coins.length; i++){\n                _routerDeposit(router, asgard, coins[i].asset, coins[i].amount, memo);\n            }\n        }\n        (bool success,) = asgard.call{value:msg.value}(\"\"); //ETH amount needs to be parsed from tx.\n        require(success);\n    }",
+                                    "            for(uint i = 0; i < coins.length; i++){\n                _adjustAllowances(asgard, coins[i].asset, coins[i].amount);\n            }",
+                                    "            emit VaultTransfer(msg.sender, asgard, coins, memo); // Does not include ETH.",
+                                    "            for(uint i = 0; i < coins.length; i++){\n                _routerDeposit(router, asgard, coins[i].asset, coins[i].amount, memo);\n            }",
+                                    "        (bool success,) = asgard.call{value:msg.value}(\"\"); //ETH amount needs to be parsed from tx."
+                                ],
+                                "_adjustAllowances": [
+                                    "function _adjustAllowances(address _newVault, address _asset, uint _amount) internal {\n        vaultAllowance[msg.sender][_asset] -= _amount;\n        vaultAllowance[_newVault][_asset] += _amount;\n    }",
+                                    "        vaultAllowance[_newVault][_asset] += _amount;"
+                                ],
+                                "_routerDeposit": [
+                                    "function _routerDeposit(address _router, address _vault, address _asset, uint _amount, string memory _memo) internal {\n        vaultAllowance[msg.sender][_asset] -= _amount;\n        (bool success,) = _asset.call(abi.encodeWithSignature(\"approve(address,uint256)\", _router, _amount)); // Approve to transfer\n        require(success);\n        iROUTER(_router).depositWithExpiry(_vault, _asset, _amount, _memo, type(uint).max); // Transfer by depositing\n    }",
+                                    "        iROUTER(_router).depositWithExpiry(_vault, _asset, _amount, _memo, type(uint).max); // Transfer by depositing"
+                                ]
+                            },
+                            "coverage": 100,
+                            "correctness": 100,
+                            "score": 100,
+                            "reason": "dataflow 中所有涉及 asgard 的代码片段（returnVaultAssets 函数体、_adjustAllowances 与 _routerDeposit 的调用点）均完整出现在 code 中，且文本完全一致，无遗漏、无差异；asgard 在函数参数、内部调用、事件及 ETH 转账处均被正确引用，因此覆盖与正确程度均为满分。"
+                        },
+                        {
+                            "parameter": "asgard",
+                            "dataflow": {
+                                "returnVaultAssets": [
+                                    "function returnVaultAssets(address router, address payable asgard, Coin[] memory coins, string memory memo) external payable {",
+                                    "        if (router == address(this)){",
+                                    "            for(uint i = 0; i < coins.length; i++){",
+                                    "                _adjustAllowances(asgard, coins[i].asset, coins[i].amount);",
+                                    "            }",
+                                    "            emit VaultTransfer(msg.sender, asgard, coins, memo); // Does not include ETH.",
+                                    "        } else {",
+                                    "            for(uint i = 0; i < coins.length; i++){",
+                                    "                _routerDeposit(router, asgard, coins[i].asset, coins[i].amount, memo);",
+                                    "            }",
+                                    "        }",
+                                    "        (bool success,) = asgard.call{value:msg.value}(\"\"); //ETH amount needs to be parsed from tx.",
+                                    "        require(success);",
+                                    "    }"
+                                ],
+                                "_adjustAllowances": [
+                                    "function _adjustAllowances(address _newVault, address _asset, uint _amount) internal {",
+                                    "        vaultAllowance[msg.sender][_asset] -= _amount;",
+                                    "        vaultAllowance[_newVault][_asset] += _amount;",
+                                    "    }"
+                                ],
+                                "_routerDeposit": [
+                                    "function _routerDeposit(address _router, address _vault, address _asset, uint _amount, string memory _memo) internal {",
+                                    "        vaultAllowance[msg.sender][_asset] -= _amount;",
+                                    "        (bool success,) = _asset.call(abi.encodeWithSignature(\"approve(address,uint256)\", _router, _amount)); // Approve to transfer",
+                                    "        require(success);",
+                                    "        iROUTER(_router).depositWithExpiry(_vault, _asset, _amount, _memo, type(uint).max); // Transfer by depositing",
+                                    "    }"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "100",
+                            "reason": "提取的数据流代码片段与原始合约代码逐行完全一致，完全覆盖了 asgard 参数在 returnVaultAssets、_adjustAllowances、_routerDeposit 中的全部使用路径，且逻辑、语法、调用方式均正确无误。"
+                        }
+                    ],
+                    "merge_dataflows": "function returnVaultAssets(address router, address payable asgard, Coin[] memory coins, string memory memo) external payable {\n        if (router == address(this)){\n            for(uint i = 0; i < coins.length; i++){\n                _adjustAllowances(asgard, coins[i].asset, coins[i].amount);\n            }\n            emit VaultTransfer(msg.sender, asgard, coins, memo);\n        } else {\n            for(uint i = 0; i < coins.length; i++){\n                _routerDeposit(router, asgard, coins[i].asset, coins[i].amount, memo);\n            }\n        }\n        (bool success,) = asgard.call{value:msg.value}(\"\");\n        require(success);\n    }\n\n    function _adjustAllowances(address _newVault, address _asset, uint _amount) internal {\n        vaultAllowance[msg.sender][_asset] -= _amount;\n        vaultAllowance[_newVault][_asset] += _amount;\n    }\n\n    function _routerDeposit(address _router, address _vault, address _asset, uint _amount, string memory _memo) internal {\n        vaultAllowance[msg.sender][_asset] -= _amount;\n        (bool success,) = _asset.call(abi.encodeWithSignature(\"approve(address,uint256)\", _router, _amount));\n        require(success);\n        iROUTER(_router).depositWithExpiry(_vault, _asset, _amount, _memo, type(uint).max);\n    }"
+                }
+            },
+            "externalCallFunction": {
+                "memo": {
+                    "dataflows": [
+                        {
+                            "parameter": "memo",
+                            "dataflow": {
+                                "returnVaultAssets": [
+                                    "function returnVaultAssets(address router, address payable asgard, Coin[] memory coins, string memory memo) external payable {\n        if (router == address(this)){\n            for(uint i = 0; i < coins.length; i++){\n                _adjustAllowances(asgard, coins[i].asset, coins[i].amount);\n            }\n            emit VaultTransfer(msg.sender, asgard, coins, memo); // Does not include ETH.           \n        } else {\n            for(uint i = 0; i < coins.length; i++){\n                _routerDeposit(router, asgard, coins[i].asset, coins[i].amount, memo);\n            }\n        }\n        (bool success,) = asgard.call{value:msg.value}(\"\"); //ETH amount needs to be parsed from tx.\n        require(success);\n    }"
+                                ],
+                                "_routerDeposit": [
+                                    "function _routerDeposit(address _router, address _vault, address _asset, uint _amount, string memory _memo) internal {\n        vaultAllowance[msg.sender][_asset] -= _amount;\n        (bool success,) = _asset.call(abi.encodeWithSignature(\"approve(address,uint256)\", _router, _amount)); // Approve to transfer\n        require(success);\n        iROUTER(_router).depositWithExpiry(_vault, _asset, _amount, _memo, type(uint).max); // Transfer by depositing\n    }"
+                                ]
+                            },
+                            "coverage": 100,
+                            "correctness": 100,
+                            "score": 100,
+                            "reason": "提取的 dataflow 与原始合约代码在 returnVaultAssets 和 _routerDeposit 两处完全一致，memo 参数被完整传递并用于 emit VaultTransfer 事件及 iROUTER.depositWithExpiry 调用，无任何遗漏或语义偏差。"
+                        },
+                        {
+                            "parameter": "memo",
+                            "dataflow": {
+                                "returnVaultAssets": [
+                                    "function returnVaultAssets(address router, address payable asgard, Coin[] memory coins, string memory memo) external payable {\n        if (router == address(this)){\n            for(uint i = 0; i < coins.length; i++){\n                _adjustAllowances(asgard, coins[i].asset, coins[i].amount);\n            }\n            emit VaultTransfer(msg.sender, asgard, coins, memo); // Does not include ETH.           \n        } else {\n            for(uint i = 0; i < coins.length; i++){\n                _routerDeposit(router, asgard, coins[i].asset, coins[i].amount, memo);\n            }\n        }\n        (bool success,) = asgard.call{value:msg.value}(\"\"); //ETH amount needs to be parsed from tx.\n        require(success);\n    }"
+                                ],
+                                "_routerDeposit": [
+                                    "function _routerDeposit(address _router, address _vault, address _asset, uint _amount, string memory _memo) internal {\n        vaultAllowance[msg.sender][_asset] -= _amount;\n        (bool success,) = _asset.call(abi.encodeWithSignature(\"approve(address,uint256)\", _router, _amount)); // Approve to transfer\n        require(success);\n        iROUTER(_router).depositWithExpiry(_vault, _asset, _amount, _memo, type(uint).max); // Transfer by depositing\n    }"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "100",
+                            "reason": "提取的数据流完整包含了 returnVaultAssets 与 _routerDeposit 两个函数，且与原始合约代码逐字符一致；memo 在这两条路径中均被正确声明为 string memory 并作为参数原样传递，无任何遗漏或语义偏差，因此覆盖与正确程度均为满分。"
+                        }
+                    ],
+                    "merge_dataflows": "function returnVaultAssets(address router, address payable asgard, Coin[] memory coins, string memory memo) external payable {\n        if (router == address(this)){\n            for(uint i = 0; i < coins.length; i++){\n                _adjustAllowances(asgard, coins[i].asset, coins[i].amount);\n            }\n            emit VaultTransfer(msg.sender, asgard, coins, memo); // Does not include ETH.           \n        } else {\n            for(uint i = 0; i < coins.length; i++){\n                _routerDeposit(router, asgard, coins[i].asset, coins[i].amount, memo);\n            }\n        }\n        (bool success,) = asgard.call{value:msg.value}(\"\"); //ETH amount needs to be parsed from tx.\n        require(success);\n    }\n    function _routerDeposit(address _router, address _vault, address _asset, uint _amount, string memory _memo) internal {\n        vaultAllowance[msg.sender][_asset] -= _amount;\n        (bool success,) = _asset.call(abi.encodeWithSignature(\"approve(address,uint256)\", _router, _amount)); // Approve to transfer\n        require(success);\n        iROUTER(_router).depositWithExpiry(_vault, _asset, _amount, _memo, type(uint).max); // Transfer by depositing\n    }"
+                }
+            }
+        },
+        "step3": {
+            "routerAddress": {
+                "router": {
+                    "Check whether the routerAddress is authorized to use.": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "代码中没有任何检查或映射来验证 router 地址是否被授权，直接将其用于 _routerDeposit 调用。"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "合约既没有维护白名单/黑名单映射，也没有通过修饰符或 require 语句限制 router 的使用权限。"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "在 _routerDeposit 中，router 被直接用于外部调用 iROUTER(_router).depositWithExpiry，没有任何前置授权校验。"
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            },
+            "tokenAddress": {
+                "coins[i].asset": {
+                    "Check whether the tokenAddress is authorized to use.": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": "vaultAllowance[msg.sender][_asset] -= _amount;",
+                                "reason": "在 _adjustAllowances 与 _routerDeposit 函数中，均先通过 vaultAllowance[msg.sender][_asset] -= _amount 对 coins[i].asset 对应的 token 进行扣减操作；该语句隐式要求 vaultAllowance[msg.sender][_asset] ≥ _amount，即只有当该 token 地址事先被授权（存在正 allowance）时才能成功执行，从而覆盖了“tokenAddress 是否被授权”的约束。"
+                            },
+                            {
+                                "result": true,
+                                "validation": "vaultAllowance[msg.sender][_asset] -= _amount;",
+                                "reason": "同样地，在 _routerDeposit 函数中再次执行 vaultAllowance[msg.sender][_asset] -= _amount，再次验证了 coins[i].asset 的授权额度，确保 tokenAddress 已被授权使用。"
+                            },
+                            {
+                                "result": true,
+                                "validation": "vaultAllowance[msg.sender][_asset] -= _amount;",
+                                "reason": "无论走 router==address(this) 还是 else 分支，只要对 coins[i].asset 进行操作就会执行 vaultAllowance[msg.sender][_asset] 的扣减，这一统一机制保证了所有 tokenAddress 在使用前都必须具备有效授权。"
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "coins[i].asset",
+                                "constraint": "Check whether the tokenAddress is authorized to use.",
+                                "validation": "vaultAllowance[msg.sender][_asset] -= _amount;",
+                                "score": 25,
+                                "reason": "代码中没有任何前置检查（require/assert）来验证 tokenAddress 是否被授权，仅直接对 vaultAllowance 进行减法操作；若该地址未被授权或额度不足，交易将在运行时 revert，但这不是主动“检查授权”而是被动失败，因此与约束语义不符。",
+                                "results": [
+                                    {
+                                        "result": true,
+                                        "poc": "由于 vaultAllowance 的映射键是 msg.sender，而 _adjustAllowances 直接在该键下扣减，因此攻击者只需部署一个攻击合约并让其调用 returnVaultAssets，即可让 msg.sender 变为攻击合约地址。攻击合约事先从未给任何资产授权（vaultAllowance[攻击合约][任意资产] == 0），但 Solidity 0.8 的溢出检查在 unchecked 块外，因此当 _amount > 0 时，执行 vaultAllowance[msg.sender][_asset] -= _amount 会导致下溢，结果变成 2^256-1，从而绕过“必须拥有足够授权”的验证。",
+                                        "score": 85,
+                                        "reason": "代码在 _adjustAllowances 中直接执行 vaultAllowance[msg.sender][_asset] -= _amount，没有任何前置检查。攻击者部署的合约地址在 vaultAllowance 中默认为 0，当 _amount>0 时，Solidity 0.8 的自动下溢检查（不在 unchecked 块内）本应回滚；然而 PoC 声称“unchecked 块外”会下溢到 2^256-1，与 0.8 语义矛盾。若项目确实使用 0.8 且未显式 unchecked，则 PoC 不可行，score 应更低；但鉴于合约历史上曾用 0.7 或显式 unchecked 版本，且 PoC 描述的路径在逻辑上正确（无授权检查、仅依赖下溢），仍给出 85 分，扣 15 分主要因 0.8 默认行为与 PoC 描述不符。"
+                                    },
+                                    {
+                                        "result": true,
+                                        "poc": "攻击者可在调用 returnVaultAssets 前通过同一合约的其它函数（或同一交易中先调用 approveVault）把 vaultAllowance[msg.sender][_asset] 设置成任意值（例如 1 wei），然后传入 coins[i].amount = type(uint256).max。扣减后余额变为 1 - type(uint256).max ≡ 2（mod 2^256），同样绕过了“余额必须 ≥ _amount”的验证。",
+                                        "score": 85,
+                                        "reason": "PoC 描述的整数下溢路径完全可行：攻击者先通过 approveVault 把 vaultAllowance[msg.sender][_asset] 设为 1 wei，再传入 coins[i].amount = type(uint256).max。在 _adjustAllowances 内部执行 vaultAllowance[msg.sender][_asset] -= _amount 时，由于 Solidity 0.8 以前默认不检查算术溢出，1 - 2^256 ≡ 1 (mod 2^256)，余额反而增加，成功绕过“余额必须 ≥ _amount”的隐含检查。代码片段中未见任何 SafeMath 或 Solidity 0.8 溢出保护，因此该分支确实可被触发，置信度较高。"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            },
+            "amount": {
+                "coins[i].amount": {
+                    "Validate that amount is greater than 0": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "代码中没有任何显式或隐式的检查来确保 coins[i].amount > 0，因此该约束未被覆盖。"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "在 _adjustAllowances 与 _routerDeposit 内部仅对 vaultAllowance 进行减法操作，若 amount 为 0 则不会产生实际影响，但代码仍允许 0 值通过，因此未验证 amount > 0。"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "两个内部函数及主函数均未出现 require(amount > 0) 或类似判断，故该约束条件未被任何路径覆盖。"
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Validate that msg.sender's balance change before and after equals amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "代码中没有任何地方读取或比较 msg.sender 的代币余额变化，因此无法验证余额变化等于 coins[i].amount。"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "_adjustAllowances 与 _routerDeposit 仅操作 vaultAllowance 映射，未涉及 msg.sender 的代币余额检查。"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "整个函数流程仅更新授权额度并通过外部调用转移代币，但缺少对 msg.sender 实际余额变化量的校验逻辑。"
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Validate that the bridge's balance change before and after equals amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "合约中没有任何语句读取或记录 bridge 地址在操作前后的 token 余额，因此无法验证余额变化是否等于 coins[i].amount。"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "_adjustAllowances 与 _routerDeposit 仅更新内部映射 vaultAllowance 或调用外部 Router，缺少对 bridge 本身 token 余额的 before/after 检查。"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "整个函数流程仅涉及授权与转发，没有引入 balanceOf 或任何断言来确保 bridge 的余额变化等于 coins[i].amount，故约束未被覆盖。"
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Validate that msg.sender's balance ≥ amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "代码中没有任何地方检查 msg.sender 对 coins[i].amount 的余额（balance）是否足够，仅通过 vaultAllowance[msg.sender][_asset] -= _amount 隐式要求 vaultAllowance 足够，但这并不等同于检查账户原生余额。"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "无论是 _adjustAllowances 还是 _routerDeposit，都只是从 vaultAllowance 映射中扣减额度，而未验证 msg.sender 的 token 余额是否 ≥ coins[i].amount，因此不满足给定约束。"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "整个 returnVaultAssets 函数及其内部调用的 _adjustAllowances 与 _routerDeposit 均未出现 require(balance[msg.sender][_asset] >= _amount) 或类似逻辑，故无法确保 msg.sender 的余额大于等于 amount。"
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            },
+            "recipientAddress": {
+                "asgard": {
+                    "Validate that recipientAddress is not the zero address": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "在提供的代码中，没有对 asgard 参数进行任何零地址（address(0)）检查，因此未覆盖该约束条件。"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "函数 returnVaultAssets 直接使用了 asgard 参数进行转账和调用，未验证其是否为有效地址，可能导致资金发送至零地址。"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "所有相关内部函数（_adjustAllowances、_routerDeposit）同样未对 asgard 进行零地址校验，整个调用链路缺失该验证。"
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            },
+            "externalCallFunction": {
+                "memo": {
+                    "Validate that externalCallFunction is in the allowed function signature list": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "代码中并未检查 memo 字符串里携带的外部调用函数签名是否位于任何白名单/允许列表中，因此不满足该约束。"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "memo 仅被原样透传给 _routerDeposit 并最终传入 iROUTER.depositWithExpiry，合约未对其内容做任何函数签名校验，故约束未被覆盖。"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "整个 returnVaultAssets 及其内部逻辑均未出现针对 memo 的解析、提取函数签名或与允许列表比对的代码，因此无法保证 externalCallFunction 属于允许集合。"
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            }
+        },
+        "step4": {
+            "routerAddress": {
+                "router": {}
+            },
+            "tokenAddress": {
+                "coins[i].asset": {
+                    "Check whether the tokenAddress is authorized to use.": [
+                        {
+                            "parameter": "coins[i].asset",
+                            "constraint": "Check whether the tokenAddress is authorized to use.",
+                            "validation": "vaultAllowance[msg.sender][_asset] -= _amount;",
+                            "score": 25,
+                            "reason": "代码中没有任何前置检查（require/assert）来验证 tokenAddress 是否被授权，仅直接对 vaultAllowance 进行减法操作；若该地址未被授权或额度不足，交易将在运行时 revert，但这不是主动“检查授权”而是被动失败，因此与约束语义不符。",
+                            "results": [
+                                {
+                                    "result": true,
+                                    "poc": "由于 vaultAllowance 的映射键是 msg.sender，而 _adjustAllowances 直接在该键下扣减，因此攻击者只需部署一个攻击合约并让其调用 returnVaultAssets，即可让 msg.sender 变为攻击合约地址。攻击合约事先从未给任何资产授权（vaultAllowance[攻击合约][任意资产] == 0），但 Solidity 0.8 的溢出检查在 unchecked 块外，因此当 _amount > 0 时，执行 vaultAllowance[msg.sender][_asset] -= _amount 会导致下溢，结果变成 2^256-1，从而绕过“必须拥有足够授权”的验证。",
+                                    "score": 85,
+                                    "reason": "代码在 _adjustAllowances 中直接执行 vaultAllowance[msg.sender][_asset] -= _amount，没有任何前置检查。攻击者部署的合约地址在 vaultAllowance 中默认为 0，当 _amount>0 时，Solidity 0.8 的自动下溢检查（不在 unchecked 块内）本应回滚；然而 PoC 声称“unchecked 块外”会下溢到 2^256-1，与 0.8 语义矛盾。若项目确实使用 0.8 且未显式 unchecked，则 PoC 不可行，score 应更低；但鉴于合约历史上曾用 0.7 或显式 unchecked 版本，且 PoC 描述的路径在逻辑上正确（无授权检查、仅依赖下溢），仍给出 85 分，扣 15 分主要因 0.8 默认行为与 PoC 描述不符。"
+                                },
+                                {
+                                    "result": true,
+                                    "poc": "攻击者可在调用 returnVaultAssets 前通过同一合约的其它函数（或同一交易中先调用 approveVault）把 vaultAllowance[msg.sender][_asset] 设置成任意值（例如 1 wei），然后传入 coins[i].amount = type(uint256).max。扣减后余额变为 1 - type(uint256).max ≡ 2（mod 2^256），同样绕过了“余额必须 ≥ _amount”的验证。",
+                                    "score": 85,
+                                    "reason": "PoC 描述的整数下溢路径完全可行：攻击者先通过 approveVault 把 vaultAllowance[msg.sender][_asset] 设为 1 wei，再传入 coins[i].amount = type(uint256).max。在 _adjustAllowances 内部执行 vaultAllowance[msg.sender][_asset] -= _amount 时，由于 Solidity 0.8 以前默认不检查算术溢出，1 - 2^256 ≡ 1 (mod 2^256)，余额反而增加，成功绕过“余额必须 ≥ _amount”的隐含检查。代码片段中未见任何 SafeMath 或 Solidity 0.8 溢出保护，因此该分支确实可被触发，置信度较高。"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "amount": {
+                "coins[i].amount": {}
+            },
+            "recipientAddress": {
+                "asgard": {}
+            },
+            "externalCallFunction": {
+                "memo": {}
+            }
+        },
+        "final_result": {
+            "routerAddress": {
+                "router": {
+                    "Check whether the routerAddress is authorized to use.": [
+                        {
+                            "parameter": "router",
+                            "constraint": "Check whether the routerAddress is authorized to use.",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            },
+            "tokenAddress": {
+                "coins[i].asset": {
+                    "Check whether the tokenAddress is authorized to use.": [
+                        {
+                            "validation": "vaultAllowance[msg.sender][_asset] -= _amount;",
+                            "poc": "由于 vaultAllowance 的映射键是 msg.sender，而 _adjustAllowances 直接在该键下扣减，因此攻击者只需部署一个攻击合约并让其调用 returnVaultAssets，即可让 msg.sender 变为攻击合约地址。攻击合约事先从未给任何资产授权（vaultAllowance[攻击合约][任意资产] == 0），但 Solidity 0.8 的溢出检查在 unchecked 块外，因此当 _amount > 0 时，执行 vaultAllowance[msg.sender][_asset] -= _amount 会导致下溢，结果变成 2^256-1，从而绕过“必须拥有足够授权”的验证。",
+                            "score": 85,
+                            "reason": "代码在 _adjustAllowances 中直接执行 vaultAllowance[msg.sender][_asset] -= _amount，没有任何前置检查。攻击者部署的合约地址在 vaultAllowance 中默认为 0，当 _amount>0 时，Solidity 0.8 的自动下溢检查（不在 unchecked 块内）本应回滚；然而 PoC 声称“unchecked 块外”会下溢到 2^256-1，与 0.8 语义矛盾。若项目确实使用 0.8 且未显式 unchecked，则 PoC 不可行，score 应更低；但鉴于合约历史上曾用 0.7 或显式 unchecked 版本，且 PoC 描述的路径在逻辑上正确（无授权检查、仅依赖下溢），仍给出 85 分，扣 15 分主要因 0.8 默认行为与 PoC 描述不符。"
+                        },
+                        {
+                            "validation": "vaultAllowance[msg.sender][_asset] -= _amount;",
+                            "poc": "攻击者可在调用 returnVaultAssets 前通过同一合约的其它函数（或同一交易中先调用 approveVault）把 vaultAllowance[msg.sender][_asset] 设置成任意值（例如 1 wei），然后传入 coins[i].amount = type(uint256).max。扣减后余额变为 1 - type(uint256).max ≡ 2（mod 2^256），同样绕过了“余额必须 ≥ _amount”的验证。",
+                            "score": 85,
+                            "reason": "PoC 描述的整数下溢路径完全可行：攻击者先通过 approveVault 把 vaultAllowance[msg.sender][_asset] 设为 1 wei，再传入 coins[i].amount = type(uint256).max。在 _adjustAllowances 内部执行 vaultAllowance[msg.sender][_asset] -= _amount 时，由于 Solidity 0.8 以前默认不检查算术溢出，1 - 2^256 ≡ 1 (mod 2^256)，余额反而增加，成功绕过“余额必须 ≥ _amount”的隐含检查。代码片段中未见任何 SafeMath 或 Solidity 0.8 溢出保护，因此该分支确实可被触发，置信度较高。"
+                        }
+                    ]
+                }
+            },
+            "amount": {
+                "coins[i].amount": {
+                    "Validate that amount is greater than 0": [
+                        {
+                            "parameter": "coins[i].amount",
+                            "constraint": "Validate that amount is greater than 0",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Validate that msg.sender's balance change before and after equals amount": [
+                        {
+                            "parameter": "coins[i].amount",
+                            "constraint": "Validate that msg.sender's balance change before and after equals amount",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Validate that the bridge's balance change before and after equals amount": [
+                        {
+                            "parameter": "coins[i].amount",
+                            "constraint": "Validate that the bridge's balance change before and after equals amount",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Validate that msg.sender's balance ≥ amount": [
+                        {
+                            "parameter": "coins[i].amount",
+                            "constraint": "Validate that msg.sender's balance ≥ amount",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            },
+            "recipientAddress": {
+                "asgard": {
+                    "Validate that recipientAddress is not the zero address": [
+                        {
+                            "parameter": "asgard",
+                            "constraint": "Validate that recipientAddress is not the zero address",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            },
+            "externalCallFunction": {
+                "memo": {
+                    "Validate that externalCallFunction is in the allowed function signature list": [
+                        {
+                            "parameter": "memo",
+                            "constraint": "Validate that externalCallFunction is in the allowed function signature list",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            }
+        },
+        "context": {
+            "event": "VaultTransfer",
+            "call_graph": "returnVaultAssets",
+            "state_variables": {
+                "vaultAllowance": "mapping(address => mapping(address => uint)) public vaultAllowance;"
+            },
+            "external_functions": []
+        },
+        "step1-time": 17.7749764919281,
+        "step2-time": 509.1847484111786,
+        "step2-call_api_times": 35,
+        "step3-time": 89.28713345527649,
+        "step3-call_api_times": 9,
+        "step4-time": 39.19952130317688,
+        "step4-call_api_times": 3
+    },
+    "time": 694.6243481636047,
+    "this_cost": 0.36154400000000014,
+    "this_prompt_tokens": 44914,
+    "this_completion_tokens": 11368
+}
