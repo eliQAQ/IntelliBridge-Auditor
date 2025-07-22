@@ -13,6 +13,7 @@ Output format:
 Strictly return your analysis results in the following JSON format. Do not add any explanatory text outside the JSON structure.
 If vulnerabilities are found, return a JSON array containing the details of each vulnerability.
 If no vulnerabilities are found in the code, return an empty "result" array.
+Only output the JSON object, without any additional content.
 {{
   "result": [
     {{

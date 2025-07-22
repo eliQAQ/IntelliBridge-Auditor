@@ -15,7 +15,7 @@ Input format: You will receive a JSON object as input, structured as follows:
 "code": "..." // Solidity contract code string
 }}
 Output format:
-Return a JSON array, each item structured as follows:
+Return a JSON array, each item structured as follows, only produce output in the required format, without any additional content:
 [ 
 {{
 "parameter": "...", // The parameter name in the code most likely corresponding to the attribute
@@ -83,7 +83,7 @@ You will receive a JSON object as input, structured as follows:
 }}
 
 Output format:
-Return a JSON object with the following structure, containing three possible results:
+Return a JSON object with the following structure, containing three possible results, only produce output in the required format, without any additional content:
 {{
   "parameter": "...", // The given parameter
   "constraint": "...", // The given constraint
@@ -126,7 +126,7 @@ You will receive a JSON object as input, structured as follows:
 }}
 
 Output format:
-Return a JSON object with the following structure, containing three possible results:
+Return a JSON object with the following structure, containing three possible results, only produce output in the required format, without any additional content:
 [
 {{
   "result": true | false, // Whether the validation statement can be bypassed
@@ -169,7 +169,7 @@ Input format: You will receive a JSON object as input, structured as follows:
 "code":"..." // Cross-chain contract code
 }}
 
-Output format: Return a JSON array, each item structured as follows:
+Output format: Return a JSON array, each item structured as follows, only produce output in the required format, without any additional content:
 [ 
 {{
 "parameter": "...", // The parameter name in the code most likely corresponding to the attribute
@@ -197,7 +197,7 @@ Input format: You will receive a JSON object as input, structured as follows:
 "code":"..." // Cross-chain contract code
 }}
 
-Output format: Return a JSON object with the following structure:
+Output format: Return a JSON object with the following structure, only produce output in the required format, without any additional content:
 {{
 "parameter": "...", // Parameter name
 "coverage": "...", // Coverage score
@@ -225,6 +225,7 @@ Input format:
 }}
 
 Output format:
+Return a JSON object with the following structure, only produce output in the required format, without any additional content:
 {{
 "parameter":"...", // Given parameter
 "dataflows": "..."// Merged code
@@ -249,7 +250,7 @@ Input format: You will receive a JSON object as input, structured as follows:
 "code":"..." // Original cross-chain contract code
 }}
 
-Output format: Return a JSON array, each item structured as follows:
+Output format: Return a JSON array, each item structured as follows, only produce output in the required format, without any additional content:
 [ 
 {{
 "parameter": "...", // Parameter name
@@ -280,7 +281,7 @@ Input format: You will receive a JSON object as input, structured as follows:
 "poc": "...", // Explanation of how the validation statement can be bypassed
 "code": "..." // Provided related code
 }}
-Output format: Return a JSON object with the following structure:
+Output format: Return a JSON object with the following structure, only produce output in the required format, without any additional content:
 {{ 
 "score": "...", // Confidence score
 "reason": "..." // Brief explanation for the given confidence score

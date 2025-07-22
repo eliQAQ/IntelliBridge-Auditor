@@ -15,7 +15,7 @@ def get_prompt1(attribute: dict, code: list) -> str:
 "code": "..." // Solidity 合约代码字符串 
 }}
 输出格式：
-返回一个 JSON 对象数组，每项结构如下：
+返回一个 JSON 对象数组，每项结构如下, 只输出指定格式，不输出任何其他内容：
 [ 
 {{
 "parameter": "...", // 代码中最可能对应该属性的参数名
