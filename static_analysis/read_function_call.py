@@ -232,6 +232,7 @@ def  get_function_call_graph(directory, function_name):
                                 contract_prefix_y = clusters[id_y.group(1)]
                                 final_x = file_prefix + "." + contract_prefix_x + "."  + x
                                 final_y = file_prefix + "." + contract_prefix_y + "."  + y
+                                #print(final_x, final_y)
                         else:
                             # x = re.sub(r'[^.]+\.', '', edge[0])
                             # y = re.sub(r'[^.]+\.', '', edge[1])
@@ -243,10 +244,15 @@ def  get_function_call_graph(directory, function_name):
                             file_prefix_x, contract_prefix_x, func_prefix_x = final_x.split(".")
                             file_prefix_y, contract_prefix_y, func_prefix_y = final_y.split(".")
                             sol_file = f"{file_prefix_x}.sol"
+                            
+                            #print(file_prefix_x, contract_prefix_x, file_prefix_y, contract_prefix_y)
                             if is_interface_in_file(sol_file, contract_prefix_x):
                                 file_prefix_x, contract_prefix_x = find_implementing_contracts(contract_prefix_x, directory)[0]
                                 file_prefix_x = file_prefix_x[:-4]
                             sol_file = f"{file_prefix_y}.sol"
+
+                            
+
                             if is_interface_in_file(sol_file, contract_prefix_y):
                                 file_prefix_y, contract_prefix_y = find_implementing_contracts(contract_prefix_y, directory)[0]
                                 file_prefix_y = file_prefix_y[:-4]
@@ -256,7 +262,6 @@ def  get_function_call_graph(directory, function_name):
                         final_x = contract_prefix_x + "." + func_prefix_x
                         final_y = contract_prefix_y + "." + func_prefix_y
                             #print(x, y)
-                        #print(final_x, final_y)
                         # if file_name == "AnyswapV4Router.sol.dot":
                         #     print(G.edges())
                         # if y == "burnERC20":
