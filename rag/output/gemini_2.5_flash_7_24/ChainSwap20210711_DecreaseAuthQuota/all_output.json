@@ -1,0 +1,174 @@
+{
+    "MappingBase.receive->MappingBase._decreaseAuthQuota": {
+        "step1": {
+            "prompt1": "\nYou are an experienced cross-chain protocol analysis expert. Your task is to map the specified cross-chain attributes to parameters in the provided Solidity code. If an attribute cannot be found in the code, do not list it in the output. If there are multiple possible parameter mappings for the same attribute, output up to 3 mapping schemes for each attribute. Please strictly follow the input and output formats defined below:\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"attribute\": \n{ \n\"<attribute>\": \"<attribute description>\" ,\n\"<attribute>\": \"<attribute description>\",\n...\n}\n\"code\": \"...\" // Solidity contract code string\n}\nOutput format:\nReturn a JSON array, each item structured as follows, only produce output in the required format, without any additional content:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // The input cross-chain attribute\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}, ... \n]\nIn the reason, please point out both the core basis for the mapping and potential uncertainties (e.g., parameter name similarity, ambiguous contextual meaning, etc.).\n\nInput:\n{\n\"attribute\": {\"sourceChainID\": \"Indicates the originating blockchain network from which the cross-chain transaction is initiated.\", \"toChainID\": \"Indicates the target blockchain network where the transaction is intended to be completed.\", \"amount\": \"The quantity of tokens or assets to be transferred across chains.\", \"nonce\": \"A unique number associated with the transaction to ensure its uniqueness and order.\", \"proof/signature\": \"A cryptographic artifact used to confirm the authenticity of the transaction data from the source chain.\", \"externalCallAddress\": \"The address of a contract to be called after the cross-chain transfer.\", \"externalCallFunction\": \"The specific function or calldata to be executed on the `externalCallAddress`.\"},\n\"code\": [\"MappingBase.receive:function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\\n        _chargeFee();\\n        require(received[fromChainId][to][nonce] == 0, 'withdrawn already');\\n        uint N = signatures.length;\\n        require(N >= Factory(factory).getConfig(_minSignatures_), 'too few signatures');\\n        for(uint i=0; i<N; i++) {\\n            for(uint j=0; j<i; j++)\\n                require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');\\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\\n            bytes32 digest = keccak256(abi.encodePacked(\\\"\\\\x19\\\\x01\\\", _DOMAIN_SEPARATOR, structHash));\\n            address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);\\n            require(signatory != address(0), \\\"invalid signature\\\");\\n            require(signatory == signatures[i].signatory, \\\"unauthorized\\\");\\n            _decreaseAuthQuota(signatures[i].signatory, volume);\\n            emit Authorize(fromChainId, to, nonce, volume, signatory);\\n        }\\n        received[fromChainId][to][nonce] = volume;\\n        _receive(to, volume);\\n        emit Receive(fromChainId, to, nonce, volume);\\n    }\", \"MappingBase._decreaseAuthQuota:function _decreaseAuthQuota(address signatory, uint decrement) virtual internal updateAutoQuota(signatory) returns (uint quota) {\\n        quota = _authQuotas[signatory].sub(decrement);\\n        _authQuotas[signatory] = quota;\\n        emit DecreaseAuthQuota(signatory, decrement, quota);\\n    }\", \"MappingBase._chargeFee:function _chargeFee() virtual internal {\\n        require(msg.value >= Math.min(Factory(factory).getConfig(_fee_), 0.1 ether), 'fee is too low');\\n        address payable feeTo = address(Factory(factory).getConfig(_feeTo_));\\n        if(feeTo == address(0))\\n            feeTo = address(uint160(factory));\\n        feeTo.transfer(msg.value);\\n        emit ChargeFee(_msgSender(), feeTo, msg.value);\\n    }\", \"MappingBase._receive:function _receive(address to, uint256 volume) virtual internal;\\n    \\n    function _chargeFee() virtual internal {\\n        require(msg.value >= Math.min(Factory(factory).getConfig(_fee_), 0.1 ether), 'fee is too low');\\n        address payable feeTo = address(Factory(factory).getConfig(_feeTo_));\\n        if(feeTo == address(0))\\n            feeTo = address(uint160(factory));\\n        feeTo.transfer(msg.value);\\n        emit ChargeFee(_msgSender(), feeTo, msg.value);\\n    }\", \"Math.min:function min(uint256 a, uint256 b) internal pure returns (uint256) {\\n        return a < b ? a : b;\\n    }\", \"ERC20UpgradeSafe._transfer:function _transfer(address sender, address recipient, uint256 amount) internal virtual {\\n        require(sender != address(0), \\\"ERC20: transfer from the zero address\\\");\\n        require(recipient != address(0), \\\"ERC20: transfer to the zero address\\\");\\n\\n        _beforeTokenTransfer(sender, recipient, amount);\\n\\n        _balances[sender] = _balances[sender].sub(amount, \\\"ERC20: transfer amount exceeds balance\\\");\\n        _balances[recipient] = _balances[recipient].add(amount);\\n        emit Transfer(sender, recipient, amount);\\n    }\", \"ERC20UpgradeSafe._mint:function _mint(address account, uint256 amount) internal virtual {\\n        require(account != address(0), \\\"ERC20: mint to the zero address\\\");\\n\\n        _beforeTokenTransfer(address(0), account, amount);\\n\\n        _totalSupply = _totalSupply.add(amount);\\n        _balances[account] = _balances[account].add(amount);\\n        emit Transfer(address(0), account, amount);\\n    }\", \"ERC20UpgradeSafe._beforeTokenTransfer:function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual { }\", \"ERC20UpgradeSafe._beforeTokenTransfer:function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual { }\"]\n}\n",
+            "outputs1": [
+                [
+                    {
+                        "parameter": "fromChainId",
+                        "attribute": "sourceChainID",
+                        "reason": "The parameter 'fromChainId' in the 'receive' function directly corresponds to the source chain ID as it's used to identify the origin of the transaction and is part of the 'received' mapping key. The name clearly indicates its purpose."
+                    },
+                    {
+                        "parameter": "to",
+                        "attribute": "toChainID",
+                        "reason": "The parameter 'to' in the 'receive' function, while an 'address', is likely intended to represent the recipient on the target chain. In the context of cross-chain operations where fungible assets are typically transferred, the 'to' address is functionally equivalent to identifying the target chain for asset receipt. While it doesn't explicitly refer to a 'chain ID', it serves the purpose of directing the asset to its destination on the target network. There is an ambiguity in whether 'to' means an address on the target chain or implicitly represents the target chain itself. Given the function signature 'receive(uint256 fromChainId, address to, ...)', 'to' is the destination address, which implies the target chain."
+                    },
+                    {
+                        "parameter": "volume",
+                        "attribute": "amount",
+                        "reason": "The parameter 'volume' in the 'receive' function is used to track the quantity of assets received ('received[fromChainId][to][nonce] = volume;') and is passed to '_decreaseAuthQuota(signatures[i].signatory, volume);' and '_receive(to, volume);'. This strongly indicates it represents the 'amount' of tokens or assets. The term 'volume' is a common synonym for 'amount' in financial contexts."
+                    },
+                    {
+                        "parameter": "decrement",
+                        "attribute": "amount",
+                        "reason": "The parameter 'decrement' in the '_decreaseAuthQuota' function represents a quantity being subtracted from an authorization quota, which implicitly refers to an 'amount' of something (likely tokens or authorization units). This is a less direct mapping than 'volume' but still represents a quantity or amount."
+                    },
+                    {
+                        "parameter": "amount",
+                        "attribute": "amount",
+                        "reason": "The parameter 'amount' in the '_transfer' and '_mint' functions of ERC20UpgradeSafe directly represents the quantity of tokens being transferred or minted. This is a very direct and unambiguous mapping."
+                    },
+                    {
+                        "parameter": "nonce",
+                        "attribute": "nonce",
+                        "reason": "The parameter 'nonce' in the 'receive' function is explicitly used in the 'require(received[fromChainId][to][nonce] == 0, 'withdrawn already');' check and in the hashing of the struct ('keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));'). This confirms its role as a unique transaction identifier to prevent replays, matching the 'nonce' attribute definition."
+                    },
+                    {
+                        "parameter": "signatures",
+                        "attribute": "proof/signature",
+                        "reason": "The parameter 'signatures' in the 'receive' function is an array of 'Signature' structs. The function iterates through these signatures, performs 'ecrecover' to verify them against a digest, and then checks the 'signatory' address. This clearly indicates 'signatures' are cryptographic proofs used for authenticating the transaction."
+                    }
+                ]
+            ],
+            "v_prompt1": "\nYou are a rigorous cross-chain protocol auditor and data consistency verifier. Carefully review whether the meaning of each cross-chain attribute and parameter in the code is consistent, assign a confidence score (0-100%), and state the reason for the given confidence score.\n\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"correspondence\":    // Array of attribute-parameter correspondences in the code\n[\n{\n\"attribute\": \"...\", // Input cross-chain attribute\n\"parameter\": \"...\", // Corresponding parameter\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}\n...\n],\n\"code\":\"...\" // Cross-chain contract code\n}\n\nOutput format: Return a JSON array, each item structured as follows, only produce output in the required format, without any additional content:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // Input cross-chain attribute\n\"score\":\"...\", // Assigned confidence score\n\"reason\": \"...\" // Brief explanation for the given confidence score\n}, ... \n]\nInput:\n{\n\"correspondence\": [{\"parameter\": \"fromChainId\", \"attribute\": \"sourceChainID\", \"reason\": \"The parameter 'fromChainId' in the 'receive' function directly corresponds to the source chain ID as it's used to identify the origin of the transaction and is part of the 'received' mapping key. The name clearly indicates its purpose.\"}, {\"parameter\": \"to\", \"attribute\": \"toChainID\", \"reason\": \"The parameter 'to' in the 'receive' function, while an 'address', is likely intended to represent the recipient on the target chain. In the context of cross-chain operations where fungible assets are typically transferred, the 'to' address is functionally equivalent to identifying the target chain for asset receipt. While it doesn't explicitly refer to a 'chain ID', it serves the purpose of directing the asset to its destination on the target network. There is an ambiguity in whether 'to' means an address on the target chain or implicitly represents the target chain itself. Given the function signature 'receive(uint256 fromChainId, address to, ...)', 'to' is the destination address, which implies the target chain.\"}, {\"parameter\": \"volume\", \"attribute\": \"amount\", \"reason\": \"The parameter 'volume' in the 'receive' function is used to track the quantity of assets received ('received[fromChainId][to][nonce] = volume;') and is passed to '_decreaseAuthQuota(signatures[i].signatory, volume);' and '_receive(to, volume);'. This strongly indicates it represents the 'amount' of tokens or assets. The term 'volume' is a common synonym for 'amount' in financial contexts.\"}, {\"parameter\": \"decrement\", \"attribute\": \"amount\", \"reason\": \"The parameter 'decrement' in the '_decreaseAuthQuota' function represents a quantity being subtracted from an authorization quota, which implicitly refers to an 'amount' of something (likely tokens or authorization units). This is a less direct mapping than 'volume' but still represents a quantity or amount.\"}, {\"parameter\": \"amount\", \"attribute\": \"amount\", \"reason\": \"The parameter 'amount' in the '_transfer' and '_mint' functions of ERC20UpgradeSafe directly represents the quantity of tokens being transferred or minted. This is a very direct and unambiguous mapping.\"}, {\"parameter\": \"nonce\", \"attribute\": \"nonce\", \"reason\": \"The parameter 'nonce' in the 'receive' function is explicitly used in the 'require(received[fromChainId][to][nonce] == 0, 'withdrawn already');' check and in the hashing of the struct ('keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));'). This confirms its role as a unique transaction identifier to prevent replays, matching the 'nonce' attribute definition.\"}, {\"parameter\": \"signatures\", \"attribute\": \"proof/signature\", \"reason\": \"The parameter 'signatures' in the 'receive' function is an array of 'Signature' structs. The function iterates through these signatures, performs 'ecrecover' to verify them against a digest, and then checks the 'signatory' address. This clearly indicates 'signatures' are cryptographic proofs used for authenticating the transaction.\"}],\n\"code\": [\"MappingBase.receive:function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\\n        _chargeFee();\\n        require(received[fromChainId][to][nonce] == 0, 'withdrawn already');\\n        uint N = signatures.length;\\n        require(N >= Factory(factory).getConfig(_minSignatures_), 'too few signatures');\\n        for(uint i=0; i<N; i++) {\\n            for(uint j=0; j<i; j++)\\n                require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');\\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\\n            bytes32 digest = keccak256(abi.encodePacked(\\\"\\\\x19\\\\x01\\\", _DOMAIN_SEPARATOR, structHash));\\n            address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);\\n            require(signatory != address(0), \\\"invalid signature\\\");\\n            require(signatory == signatures[i].signatory, \\\"unauthorized\\\");\\n            _decreaseAuthQuota(signatures[i].signatory, volume);\\n            emit Authorize(fromChainId, to, nonce, volume, signatory);\\n        }\\n        received[fromChainId][to][nonce] = volume;\\n        _receive(to, volume);\\n        emit Receive(fromChainId, to, nonce, volume);\\n    }\", \"MappingBase._decreaseAuthQuota:function _decreaseAuthQuota(address signatory, uint decrement) virtual internal updateAutoQuota(signatory) returns (uint quota) {\\n        quota = _authQuotas[signatory].sub(decrement);\\n        _authQuotas[signatory] = quota;\\n        emit DecreaseAuthQuota(signatory, decrement, quota);\\n    }\", \"MappingBase._chargeFee:function _chargeFee() virtual internal {\\n        require(msg.value >= Math.min(Factory(factory).getConfig(_fee_), 0.1 ether), 'fee is too low');\\n        address payable feeTo = address(Factory(factory).getConfig(_feeTo_));\\n        if(feeTo == address(0))\\n            feeTo = address(uint160(factory));\\n        feeTo.transfer(msg.value);\\n        emit ChargeFee(_msgSender(), feeTo, msg.value);\\n    }\", \"MappingBase._receive:function _receive(address to, uint256 volume) virtual internal;\\n    \\n    function _chargeFee() virtual internal {\\n        require(msg.value >= Math.min(Factory(factory).getConfig(_fee_), 0.1 ether), 'fee is too low');\\n        address payable feeTo = address(Factory(factory).getConfig(_feeTo_));\\n        if(feeTo == address(0))\\n            feeTo = address(uint160(factory));\\n        feeTo.transfer(msg.value);\\n        emit ChargeFee(_msgSender(), feeTo, msg.value);\\n    }\", \"Math.min:function min(uint256 a, uint256 b) internal pure returns (uint256) {\\n        return a < b ? a : b;\\n    }\", \"ERC20UpgradeSafe._transfer:function _transfer(address sender, address recipient, uint256 amount) internal virtual {\\n        require(sender != address(0), \\\"ERC20: transfer from the zero address\\\");\\n        require(recipient != address(0), \\\"ERC20: transfer to the zero address\\\");\\n\\n        _beforeTokenTransfer(sender, recipient, amount);\\n\\n        _balances[sender] = _balances[sender].sub(amount, \\\"ERC20: transfer amount exceeds balance\\\");\\n        _balances[recipient] = _balances[recipient].add(amount);\\n        emit Transfer(sender, recipient, amount);\\n    }\", \"ERC20UpgradeSafe._mint:function _mint(address account, uint256 amount) internal virtual {\\n        require(account != address(0), \\\"ERC20: mint to the zero address\\\");\\n\\n        _beforeTokenTransfer(address(0), account, amount);\\n\\n        _totalSupply = _totalSupply.add(amount);\\n        _balances[account] = _balances[account].add(amount);\\n        emit Transfer(address(0), account, amount);\\n    }\", \"ERC20UpgradeSafe._beforeTokenTransfer:function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual { }\", \"ERC20UpgradeSafe._beforeTokenTransfer:function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual { }\"]:\n}\n\n",
+            "v_outputs1": [
+                [
+                    {
+                        "parameter": "fromChainId",
+                        "attribute": "sourceChainID",
+                        "score": "100",
+                        "reason": "The parameter 'fromChainId' is explicitly named and used to identify the origin chain in the 'received' mapping key and the 'RECEIVE_TYPEHASH'. Its purpose is unambiguous."
+                    },
+                    {
+                        "parameter": "to",
+                        "attribute": "toChainID",
+                        "score": "60",
+                        "reason": "The parameter 'to' is an 'address' representing the recipient on the target chain. While it implies the target chain, it is not a 'Chain ID'. The logic flow uses 'to' as an address to receive the funds, not to directly identify the target chain's ID. There's a functional equivalence in asset direction, but not a direct 'chain ID' representation. The ambiguity arises because the system could be designed to infer the target chain from the 'to' address context, or it could inherently operate on a pre-defined target chain once the transaction reaches this contract. In this specific context, 'to' is the destination address on *this* chain where the 'receive' function is called, which by extension typically implies this chain is the 'toChainID'. However, it's not a general 'toChainID' that refers to *any* chain."
+                    },
+                    {
+                        "parameter": "volume",
+                        "attribute": "amount",
+                        "score": "95",
+                        "reason": "The parameter 'volume' in the 'receive' function is consistently used for quantity tracking ('received[fromChainId][to][nonce] = volume;'), quota management ('_decreaseAuthQuota(..., volume);'), and the final reception ('_receive(to, volume);'). These uses strongly align with the concept of 'amount'. The term 'volume' is a widely accepted synonym for 'amount' in financial and transfer contexts, leaving very little ambiguity, though 'amount' would have been more direct."
+                    },
+                    {
+                        "parameter": "decrement",
+                        "attribute": "amount",
+                        "score": "80",
+                        "reason": "The parameter 'decrement' in '_decreaseAuthQuota' represents a quantity to be subtracted from a quota. While it clearly signifies an 'amount', its narrow context (a decrease) makes it slightly less general than a parameter simply named 'amount'. However, given that it's an amount being deducted, the mapping is sufficiently strong. The confidence is not 100% because 'decrement' is a verb describing an action, whereas 'amount' describes a quantity, even if the 'decrement' value is indeed a quantity."
+                    },
+                    {
+                        "parameter": "amount",
+                        "attribute": "amount",
+                        "score": "100",
+                        "reason": "The parameter 'amount' in '_transfer' and '_mint' functions perfectly matches the 'amount' attribute. Its usage directly corresponds to the quantity of tokens being handled, with no ambiguity. This is a direct and explicit naming convention."
+                    },
+                    {
+                        "parameter": "nonce",
+                        "attribute": "nonce",
+                        "score": "100",
+                        "reason": "The parameter 'nonce' is explicitly used for replay protection ('require(received[fromChainId][to][nonce] == 0, ...);') and as a unique identifier in hashing ('keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));'). This directly aligns with the definition and purpose of a 'nonce' in preventing transaction replays and ensuring uniqueness."
+                    },
+                    {
+                        "parameter": "signatures",
+                        "attribute": "proof/signature",
+                        "score": "100",
+                        "reason": "The parameter 'signatures' is an array of 'Signature' structs, which are iterated over and verified using 'ecrecover' to authenticate the transaction. This is the fundamental purpose of digital 'signatures' as cryptographic 'proofs'. The naming and usage are perfectly aligned."
+                    }
+                ]
+            ],
+            "formatted_outputs1": {
+                "fromChainId": {
+                    "sourceChainID": {
+                        "reason": "The parameter 'fromChainId' in the 'receive' function directly corresponds to the source chain ID as it's used to identify the origin of the transaction and is part of the 'received' mapping key. The name clearly indicates its purpose.",
+                        "score": "100",
+                        "s_reason": "The parameter 'fromChainId' is explicitly named and used to identify the origin chain in the 'received' mapping key and the 'RECEIVE_TYPEHASH'. Its purpose is unambiguous."
+                    }
+                },
+                "to": {
+                    "toChainID": {
+                        "reason": "The parameter 'to' in the 'receive' function, while an 'address', is likely intended to represent the recipient on the target chain. In the context of cross-chain operations where fungible assets are typically transferred, the 'to' address is functionally equivalent to identifying the target chain for asset receipt. While it doesn't explicitly refer to a 'chain ID', it serves the purpose of directing the asset to its destination on the target network. There is an ambiguity in whether 'to' means an address on the target chain or implicitly represents the target chain itself. Given the function signature 'receive(uint256 fromChainId, address to, ...)', 'to' is the destination address, which implies the target chain.",
+                        "score": "60",
+                        "s_reason": "The parameter 'to' is an 'address' representing the recipient on the target chain. While it implies the target chain, it is not a 'Chain ID'. The logic flow uses 'to' as an address to receive the funds, not to directly identify the target chain's ID. There's a functional equivalence in asset direction, but not a direct 'chain ID' representation. The ambiguity arises because the system could be designed to infer the target chain from the 'to' address context, or it could inherently operate on a pre-defined target chain once the transaction reaches this contract. In this specific context, 'to' is the destination address on *this* chain where the 'receive' function is called, which by extension typically implies this chain is the 'toChainID'. However, it's not a general 'toChainID' that refers to *any* chain."
+                    }
+                },
+                "volume": {
+                    "amount": {
+                        "reason": "The parameter 'volume' in the 'receive' function is used to track the quantity of assets received ('received[fromChainId][to][nonce] = volume;') and is passed to '_decreaseAuthQuota(signatures[i].signatory, volume);' and '_receive(to, volume);'. This strongly indicates it represents the 'amount' of tokens or assets. The term 'volume' is a common synonym for 'amount' in financial contexts.",
+                        "score": "95",
+                        "s_reason": "The parameter 'volume' in the 'receive' function is consistently used for quantity tracking ('received[fromChainId][to][nonce] = volume;'), quota management ('_decreaseAuthQuota(..., volume);'), and the final reception ('_receive(to, volume);'). These uses strongly align with the concept of 'amount'. The term 'volume' is a widely accepted synonym for 'amount' in financial and transfer contexts, leaving very little ambiguity, though 'amount' would have been more direct."
+                    }
+                },
+                "decrement": {
+                    "amount": {
+                        "reason": "The parameter 'decrement' in the '_decreaseAuthQuota' function represents a quantity being subtracted from an authorization quota, which implicitly refers to an 'amount' of something (likely tokens or authorization units). This is a less direct mapping than 'volume' but still represents a quantity or amount.",
+                        "score": "80",
+                        "s_reason": "The parameter 'decrement' in '_decreaseAuthQuota' represents a quantity to be subtracted from a quota. While it clearly signifies an 'amount', its narrow context (a decrease) makes it slightly less general than a parameter simply named 'amount'. However, given that it's an amount being deducted, the mapping is sufficiently strong. The confidence is not 100% because 'decrement' is a verb describing an action, whereas 'amount' describes a quantity, even if the 'decrement' value is indeed a quantity."
+                    }
+                },
+                "amount": {
+                    "amount": {
+                        "reason": "The parameter 'amount' in the '_transfer' and '_mint' functions of ERC20UpgradeSafe directly represents the quantity of tokens being transferred or minted. This is a very direct and unambiguous mapping.",
+                        "score": "100",
+                        "s_reason": "The parameter 'amount' in '_transfer' and '_mint' functions perfectly matches the 'amount' attribute. Its usage directly corresponds to the quantity of tokens being handled, with no ambiguity. This is a direct and explicit naming convention."
+                    }
+                },
+                "nonce": {
+                    "nonce": {
+                        "reason": "The parameter 'nonce' in the 'receive' function is explicitly used in the 'require(received[fromChainId][to][nonce] == 0, 'withdrawn already');' check and in the hashing of the struct ('keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));'). This confirms its role as a unique transaction identifier to prevent replays, matching the 'nonce' attribute definition.",
+                        "score": "100",
+                        "s_reason": "The parameter 'nonce' is explicitly used for replay protection ('require(received[fromChainId][to][nonce] == 0, ...);') and as a unique identifier in hashing ('keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));'). This directly aligns with the definition and purpose of a 'nonce' in preventing transaction replays and ensuring uniqueness."
+                    }
+                },
+                "signatures": {
+                    "proof/signature": {
+                        "reason": "The parameter 'signatures' in the 'receive' function is an array of 'Signature' structs. The function iterates through these signatures, performs 'ecrecover' to verify them against a digest, and then checks the 'signatory' address. This clearly indicates 'signatures' are cryptographic proofs used for authenticating the transaction.",
+                        "score": "100",
+                        "s_reason": "The parameter 'signatures' is an array of 'Signature' structs, which are iterated over and verified using 'ecrecover' to authenticate the transaction. This is the fundamental purpose of digital 'signatures' as cryptographic 'proofs'. The naming and usage are perfectly aligned."
+                    }
+                }
+            }
+        },
+        "step2": {},
+        "step3": {},
+        "step4": {},
+        "final_result": {},
+        "context": {
+            "event": "DecreaseAuthQuota",
+            "call_graph": "receive->_decreaseAuthQuota",
+            "state_variables": {
+                "_minSignatures_": "bytes32 internal constant _minSignatures_ = 'minSignatures';",
+                "RECEIVE_TYPEHASH": "bytes32 public constant RECEIVE_TYPEHASH = keccak256(\"Receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, address signatory)\");",
+                "_DOMAIN_SEPARATOR": "bytes32 internal _DOMAIN_SEPARATOR;",
+                "factory": "address public factory;",
+                "received": "mapping (uint => mapping (address => mapping (uint => uint))) public received;",
+                "_authQuotas": "mapping (address => uint) internal _authQuotas;",
+                "_fee_": "bytes32 internal constant _fee_ = 'fee';",
+                "_feeTo_": "bytes32 internal constant _feeTo_ = 'feeTo';",
+                "lasttimeUpdateQuotaOf": "mapping (address => uint) public lasttimeUpdateQuotaOf;",
+                "_autoQuotaRatio_": "bytes32 internal constant _autoQuotaRatio_ = 'autoQuotaRatio';",
+                "_autoQuotaPeriod_": "bytes32 internal constant _autoQuotaPeriod_ = 'autoQuotaPeriod';",
+                "autoQuotaRatio": "uint public autoQuotaRatio;",
+                "autoQuotaPeriod": "uint public autoQuotaPeriod;",
+                "_balances": "mapping (address => uint256) private _balances;",
+                "_totalSupply": "uint256 private _totalSupply;"
+            },
+            "external_functions": [
+                "modifier updateAutoQuota(address signatory) virtual{ uint quota = authQuotaOf(signatory); if(_authQuotas[signatory] != quota){ _authQuotas[signatory] = quota; lasttimeUpdateQuotaOf[signatory] = now;} _;}",
+                "function authQuotaOf(address signatory) virtual public view returns (uint quota){ quota = _authQuotas[signatory]; uint ratio = autoQuotaRatio != 0 ? autoQuotaRatio : Factory(factory).getConfig(_autoQuotaRatio_); uint period = autoQuotaPeriod != 0 ? autoQuotaPeriod : Factory(factory).getConfig(_autoQuotaPeriod_); if(ratio == 0 || period == 0 || period == uint(-1)) return quota; uint quotaCap = cap().mul(ratio).div(1e18); uint delta = quotaCap.mul(now.sub(lasttimeUpdateQuotaOf[signatory])).div(period); return Math.max(quota, Math.min(quotaCap, quota.add(delta)));}"
+            ]
+        },
+        "step1-time": 7.38942813873291
+    }
+}

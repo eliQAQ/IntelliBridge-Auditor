@@ -11,7 +11,7 @@ this_cost = 0
 this_completion_tokens = 0
 this_prompt_tokens = 0
 # openai
-OPENAI_API = ""
+OPENAI_API = "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"
 client = OpenAI(
   base_url="https://openrouter.ai/api/v1",
   api_key=OPENAI_API,

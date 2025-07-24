@@ -2076,7 +2076,7 @@ if __name__ == "__main__":
 
     coms = [
         ["ChainSwap20210711", "DecreaseAuthQuota", "t"],
-        ["HyperBridge20231214", "Initialized", "s"],
+        ["HyperBridge20231214", "ERC20BridgeFinalized", "s"],
         ["LIFI20220320", "AssetSwapped", "s"],
         ["LIFI20240716", "AssetSwapped", "s"],
         ["MeterPassport20220206", "Deposit", "s"],
@@ -2085,13 +2085,12 @@ if __name__ == "__main__":
         ["Nomad20220801", "Process", "t"],
         ["PolyNetwork20210810", "VerifyHeaderAndExecuteTxEvent", "t"],
         ["QBridge20220128", "Deposit", "s"],
-        # ["Qubit20220101", "Deposit", "s"],
+        ["Qubit20220101", "Deposit", "s"],
         ["Ronin20240806", "Withdrew", "s"],
         ["Rubic20221225", "RequestSent", "s"],
         ["SocketGateway20240117", "SocketSwapTokens", "s"],
         ["thorchain20210716", "Deposit", "s"],
         ["thorchain20210723", "VaultTransfer", "s"],
-        ["XBridge20240424", "TokenListed", "s"],
         ["XBridge20240424", "TokenWithdrawn", "s"]
     ]
     for com in coms:
@@ -2104,7 +2103,7 @@ if __name__ == "__main__":
             event_name = com[1]
             position = com[2]
             print(f"start process {com}")
-            directory_name = "output/openai_4o_7_24/" + file_directory + "_" + event_name
+            directory_name = "output/gemini_2.5_flash_7_24/" + file_directory + "_" + event_name
             handle_s_t = time.time()
             print("handle call chain")
             if not os.path.exists(directory_name):
@@ -2241,7 +2240,7 @@ if __name__ == "__main__":
                         # 每个attribute取score第一的parameter
                         for attr in attribute_to_parameter:
                             # 去除没有score的项
-                            attribute_to_parameter[attr] = dict(filter(lambda x: "score" in x[1] and ((x[1]["score"][0] >= "8" or x[1]["score"].startswith("100")) if isinstance(x[1]["score"],str) else x[1]["score"] >= 80), attribute_to_parameter[attr].items()))
+                            attribute_to_parameter[attr] = dict(filter(lambda x: "score" in x[1] and ((x[1]["score"][0] >= "7" or x[1]["score"].startswith("100")) if isinstance(x[1]["score"],str) else x[1]["score"] >= 70), attribute_to_parameter[attr].items()))
                             attribute_to_parameter[attr] = dict(sorted(attribute_to_parameter[attr].items(), key=lambda x:x[1]["score"], reverse=True)[:1])
                         all_output[relation_ship]["step1"]["formatted_outputs1"] = parameter_to_attribute
                         all_output[relation_ship]["step1-time"] = time.time() - s1_start_time
@@ -2297,7 +2296,7 @@ if __name__ == "__main__":
 
                                     merged_dataflows = []
                                     for dataflow in all_output[relation_ship]["step2"][attr][parameter]["dataflows"]:
-                                        if (dataflow["score"] >= "8" or dataflow["score"].startswith("100")) if isinstance(dataflow["score"], str) else dataflow["score"] >= 80:
+                                        if (dataflow["score"] >= "7" or dataflow["score"].startswith("100")) if isinstance(dataflow["score"], str) else dataflow["score"] >= 70:
                                             merged_dataflows.append(dataflow["dataflow"])
                                     # step2-merge
                                     merge_prompt = get_merge_dataflow_prompt(parameter, merged_dataflows)
@@ -2385,7 +2384,7 @@ if __name__ == "__main__":
                                     all_output[relation_ship]["step4"][attr][parameter] = {}
                                 for constraint in all_output[relation_ship]["step3"][attr][parameter]:
                                     for r in all_output[relation_ship]["step3"][attr][parameter][constraint]["verify_filtered"]:
-                                        if not ((r["score"][0] >= "8" or r["score"].startswith("100")) if isinstance(r["score"], str) else r["score"] >= 80):
+                                        if not ((r["score"][0] >= "7" or r["score"].startswith("100")) if isinstance(r["score"], str) else r["score"] >= 70):
                                             continue
                                         prompt4 = get_prompt4(parameter, r["validation"], codes, code_prompt)
                                         print(f"step4-{attr}-{parameter}-{constraint}")
