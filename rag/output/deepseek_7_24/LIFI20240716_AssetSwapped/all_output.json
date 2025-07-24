@@ -1,0 +1,771 @@
+{
+    "GasZipFacet.depositToGasZipERC20->LibSwap.swap": {
+        "step1": {
+            "prompt1": "\nYou are an experienced cross-chain protocol analysis expert. Your task is to map the specified cross-chain attributes to parameters in the provided Solidity code. If an attribute cannot be found in the code, do not list it in the output. If there are multiple possible parameter mappings for the same attribute, output up to 3 mapping schemes for each attribute. Please strictly follow the input and output formats defined below:\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"attribute\": \n{ \n\"<attribute>\": \"<attribute description>\" ,\n\"<attribute>\": \"<attribute description>\",\n...\n}\n\"code\": \"...\" // Solidity contract code string\n}\n\n\nOutput format:\nReturn a JSON array, each item structured must as follows:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // The input cross-chain attribute\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}, ... \n]\nIn the reason, please point out both the core basis for the mapping and potential uncertainties (e.g., parameter name similarity, ambiguous contextual meaning, etc.).\n\nInput:\n{\n\"attribute\": {\"toChainID\": \"Specifies the destination blockchain network ID.\", \"tokenAddress\": \"Indicates the contract address of the token to be transferred.\", \"amount\": \"The number of tokens to be transferred across chains.\", \"nonce\": \"Check and mark that nonce has not been consumed to prevent replay\", \"recipientAddress\": \"The address that will receive the tokens on the destination chain.\", \"externalCallAddress\": \"The address of a contract to be called after the cross-chain transfer.\", \"externalCallFunction\": \"The specific function or calldata to be executed on the `externalCallAddress`.\", \"routerAddress\": \"The address of the cross-chain router or bridge handler.\"},\n\"code\": [\"GasZipFacet.depositToGasZipERC20:function depositToGasZipERC20(\\n        LibSwap.SwapData calldata _swapData,\\n        uint256 _destinationChains,\\n        address _recipient\\n    ) public {\\n        // get the current native balance\\n        uint256 currentNativeBalance = address(this).balance;\\n\\n        // execute the swapData that swaps the ERC20 token into native\\n        LibSwap.swap(0, _swapData);\\n\\n        // calculate the swap output amount using the initial native balance\\n        uint256 swapOutputAmount = address(this).balance -\\n            currentNativeBalance;\\n\\n        // call the gas zip router and deposit tokens\\n        gasZipRouter.deposit{ value: swapOutputAmount }(\\n            _destinationChains,\\n            _recipient\\n        );\\n    }\", \"LibSwap.swap:function swap(bytes32 transactionId, SwapData calldata _swap) internal {\\n        if (!LibAsset.isContract(_swap.callTo)) revert InvalidContract();\\n        uint256 fromAmount = _swap.fromAmount;\\n        if (fromAmount == 0) revert NoSwapFromZeroBalance();\\n        uint256 nativeValue = LibAsset.isNativeAsset(_swap.sendingAssetId)\\n            ? _swap.fromAmount\\n            : 0;\\n        uint256 initialSendingAssetBalance = LibAsset.getOwnBalance(\\n            _swap.sendingAssetId\\n        );\\n        uint256 initialReceivingAssetBalance = LibAsset.getOwnBalance(\\n            _swap.receivingAssetId\\n        );\\n\\n        if (nativeValue == 0) {\\n            LibAsset.maxApproveERC20(\\n                IERC20(_swap.sendingAssetId),\\n                _swap.approveTo,\\n                _swap.fromAmount\\n            );\\n        }\\n\\n        if (initialSendingAssetBalance < _swap.fromAmount) {\\n            revert InsufficientBalance(\\n                _swap.fromAmount,\\n                initialSendingAssetBalance\\n            );\\n        }\\n\\n        // solhint-disable-next-line avoid-low-level-calls\\n        (bool success, bytes memory res) = _swap.callTo.call{\\n            value: nativeValue\\n        }(_swap.callData);\\n        if (!success) {\\n            LibUtil.revertWith(res);\\n        }\\n\\n        uint256 newBalance = LibAsset.getOwnBalance(_swap.receivingAssetId);\\n\\n        emit AssetSwapped(\\n            transactionId,\\n            _swap.callTo,\\n            _swap.sendingAssetId,\\n            _swap.receivingAssetId,\\n            _swap.fromAmount,\\n            newBalance > initialReceivingAssetBalance\\n                ? newBalance - initialReceivingAssetBalance\\n                : newBalance,\\n            block.timestamp\\n        );\\n    }\", \"LibAsset.isContract:function isContract(address _contractAddr) internal view returns (bool) {\\n        uint256 size;\\n        // solhint-disable-next-line no-inline-assembly\\n        assembly {\\n            size := extcodesize(_contractAddr)\\n        }\\n        return size > 0;\\n    }\", \"LibAsset.isNativeAsset:function isNativeAsset(address assetId) internal pure returns (bool) {\\n        return assetId == NATIVE_ASSETID;\\n    }\", \"LibAsset.getOwnBalance:function getOwnBalance(address assetId) internal view returns (uint256) {\\n        return\\n            isNativeAsset(assetId)\\n                ? address(this).balance\\n                : IERC20(assetId).balanceOf(address(this));\\n    }\", \"LibAsset.maxApproveERC20:function maxApproveERC20(\\n        IERC20 assetId,\\n        address spender,\\n        uint256 amount\\n    ) internal {\\n        if (isNativeAsset(address(assetId))) {\\n            return;\\n        }\\n        if (spender == NULL_ADDRESS) {\\n            revert NullAddrIsNotAValidSpender();\\n        }\\n\\n        if (assetId.allowance(address(this), spender) < amount) {\\n            SafeERC20.safeApprove(IERC20(assetId), spender, 0);\\n            SafeERC20.safeApprove(IERC20(assetId), spender, MAX_UINT);\\n        }\\n    }\", \"LibUtil.revertWith:function revertWith(bytes memory data) internal pure {\\n        assembly {\\n            let dataSize := mload(data) // Load the size of the data\\n            let dataPtr := add(data, 0x20) // Advance data pointer to the next word\\n            revert(dataPtr, dataSize) // Revert with the given data\\n        }\\n    }\", \"SafeERC20.safeApprove:function safeApprove(IERC20 token, address spender, uint256 value) internal {\\n        // safeApprove should only be called when setting an initial allowance,\\n        // or when resetting it to zero. To increase and decrease it, use\\n        // 'safeIncreaseAllowance' and 'safeDecreaseAllowance'\\n        require(\\n            (value == 0) || (token.allowance(address(this), spender) == 0),\\n            \\\"SafeERC20: approve from non-zero to non-zero allowance\\\"\\n        );\\n        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));\\n    }\", \"SafeERC20._callOptionalReturn:function _callOptionalReturn(IERC20 token, bytes memory data) private {\\n        // We need to perform a low level call here, to bypass Solidity's return data size checking mechanism, since\\n        // we're implementing it ourselves. We use {Address-functionCall} to perform this call, which verifies that\\n        // the target address contains contract code and also asserts for success in the low-level call.\\n\\n        bytes memory returndata = address(token).functionCall(data, \\\"SafeERC20: low-level call failed\\\");\\n        require(returndata.length == 0 || abi.decode(returndata, (bool)), \\\"SafeERC20: ERC20 operation did not succeed\\\");\\n    }\", \"Address.functionCall:function functionCall(address target, bytes memory data) internal returns (bytes memory) {\\n        return functionCallWithValue(target, data, 0, \\\"Address: low-level call failed\\\");\\n    }\", \"Address.functionCallWithValue:function functionCallWithValue(address target, bytes memory data, uint256 value) internal returns (bytes memory) {\\n        return functionCallWithValue(target, data, value, \\\"Address: low-level call with value failed\\\");\\n    }\", \"Address.verifyCallResultFromTarget:function verifyCallResultFromTarget(\\n        address target,\\n        bool success,\\n        bytes memory returndata,\\n        string memory errorMessage\\n    ) internal view returns (bytes memory) {\\n        if (success) {\\n            if (returndata.length == 0) {\\n                // only check isContract if the call was successful and the return data is empty\\n                // otherwise we already know that it was a contract\\n                require(isContract(target), \\\"Address: call to non-contract\\\");\\n            }\\n            return returndata;\\n        } else {\\n            _revert(returndata, errorMessage);\\n        }\\n    }\", \"Address.isContract:function isContract(address account) internal view returns (bool) {\\n        // This method relies on extcodesize/address.code.length, which returns 0\\n        // for contracts in construction, since the code is only stored at the end\\n        // of the constructor execution.\\n\\n        return account.code.length > 0;\\n    }\", \"Address._revert:function _revert(bytes memory returndata, string memory errorMessage) private pure {\\n        // Look for revert reason and bubble it up if present\\n        if (returndata.length > 0) {\\n            // The easiest way to bubble the revert reason is using memory via assembly\\n            /// @solidity memory-safe-assembly\\n            assembly {\\n                let returndata_size := mload(returndata)\\n                revert(add(32, returndata), returndata_size)\\n            }\\n        } else {\\n            revert(errorMessage);\\n        }\\n    }\"]\n}\n",
+            "outputs1": [
+                [
+                    {
+                        "parameter": "_destinationChains",
+                        "attribute": "toChainID",
+                        "reason": "The parameter name '_destinationChains' semantically matches 'toChainID' as both specify the destination chain. However, '_destinationChains' might represent a bitmask of multiple chains rather than a single chain ID, creating potential ambiguity."
+                    },
+                    {
+                        "parameter": "_swap.sendingAssetId",
+                        "attribute": "tokenAddress",
+                        "reason": "The parameter '_swap.sendingAssetId' holds the address of the token to be swapped/transferred, matching 'tokenAddress'. Contextually this is correct, though it's specifically for the sending asset rather than a generic token address."
+                    },
+                    {
+                        "parameter": "_swap.fromAmount",
+                        "attribute": "amount",
+                        "reason": "'_swap.fromAmount' directly represents the quantity of tokens to be transferred, aligning with 'amount'. No ambiguity exists here as the naming and usage are clear."
+                    },
+                    {
+                        "parameter": "_recipient",
+                        "attribute": "recipientAddress",
+                        "reason": "'_recipient' is explicitly the receiving address on the destination chain, perfectly matching 'recipientAddress'. This is unambiguous in both naming and usage context."
+                    },
+                    {
+                        "parameter": "_swap.callTo",
+                        "attribute": "externalCallAddress",
+                        "reason": "'_swap.callTo' specifies a contract address to be called during swapping, which loosely aligns with 'externalCallAddress'. However, this is part of swap execution rather than a post-transfer call, introducing contextual ambiguity."
+                    },
+                    {
+                        "parameter": "_swap.callData",
+                        "attribute": "externalCallFunction",
+                        "reason": "'_swap.callData' contains the function calldata for '_swap.callTo', partially matching 'externalCallFunction'. The ambiguity arises because this is swap-related calldata rather than a post-transfer execution."
+                    }
+                ]
+            ],
+            "v_prompt1": "\nYou are a rigorous cross-chain protocol auditor and data consistency verifier. Carefully review whether the meaning of each cross-chain attribute and parameter in the code is consistent, assign a confidence score (0-100%), and state the reason for the given confidence score.\n\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"correspondence\":    // Array of attribute-parameter correspondences in the code\n[\n{\n\"attribute\": \"...\", // Input cross-chain attribute\n\"parameter\": \"...\", // Corresponding parameter\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}\n...\n],\n\"code\":\"...\" // Cross-chain contract code\n}\n\nOutput format: Return a JSON array, each item structured as follows:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // Input cross-chain attribute\n\"score\":\"...\", // Assigned confidence score\n\"reason\": \"...\" // Brief explanation for the given confidence score\n}, ... \n]\nInput:\n{\n\"correspondence\": [{\"parameter\": \"_destinationChains\", \"attribute\": \"toChainID\", \"reason\": \"The parameter name '_destinationChains' semantically matches 'toChainID' as both specify the destination chain. However, '_destinationChains' might represent a bitmask of multiple chains rather than a single chain ID, creating potential ambiguity.\"}, {\"parameter\": \"_swap.sendingAssetId\", \"attribute\": \"tokenAddress\", \"reason\": \"The parameter '_swap.sendingAssetId' holds the address of the token to be swapped/transferred, matching 'tokenAddress'. Contextually this is correct, though it's specifically for the sending asset rather than a generic token address.\"}, {\"parameter\": \"_swap.fromAmount\", \"attribute\": \"amount\", \"reason\": \"'_swap.fromAmount' directly represents the quantity of tokens to be transferred, aligning with 'amount'. No ambiguity exists here as the naming and usage are clear.\"}, {\"parameter\": \"_recipient\", \"attribute\": \"recipientAddress\", \"reason\": \"'_recipient' is explicitly the receiving address on the destination chain, perfectly matching 'recipientAddress'. This is unambiguous in both naming and usage context.\"}, {\"parameter\": \"_swap.callTo\", \"attribute\": \"externalCallAddress\", \"reason\": \"'_swap.callTo' specifies a contract address to be called during swapping, which loosely aligns with 'externalCallAddress'. However, this is part of swap execution rather than a post-transfer call, introducing contextual ambiguity.\"}, {\"parameter\": \"_swap.callData\", \"attribute\": \"externalCallFunction\", \"reason\": \"'_swap.callData' contains the function calldata for '_swap.callTo', partially matching 'externalCallFunction'. The ambiguity arises because this is swap-related calldata rather than a post-transfer execution.\"}],\n\"code\": [\"GasZipFacet.depositToGasZipERC20:function depositToGasZipERC20(\\n        LibSwap.SwapData calldata _swapData,\\n        uint256 _destinationChains,\\n        address _recipient\\n    ) public {\\n        // get the current native balance\\n        uint256 currentNativeBalance = address(this).balance;\\n\\n        // execute the swapData that swaps the ERC20 token into native\\n        LibSwap.swap(0, _swapData);\\n\\n        // calculate the swap output amount using the initial native balance\\n        uint256 swapOutputAmount = address(this).balance -\\n            currentNativeBalance;\\n\\n        // call the gas zip router and deposit tokens\\n        gasZipRouter.deposit{ value: swapOutputAmount }(\\n            _destinationChains,\\n            _recipient\\n        );\\n    }\", \"LibSwap.swap:function swap(bytes32 transactionId, SwapData calldata _swap) internal {\\n        if (!LibAsset.isContract(_swap.callTo)) revert InvalidContract();\\n        uint256 fromAmount = _swap.fromAmount;\\n        if (fromAmount == 0) revert NoSwapFromZeroBalance();\\n        uint256 nativeValue = LibAsset.isNativeAsset(_swap.sendingAssetId)\\n            ? _swap.fromAmount\\n            : 0;\\n        uint256 initialSendingAssetBalance = LibAsset.getOwnBalance(\\n            _swap.sendingAssetId\\n        );\\n        uint256 initialReceivingAssetBalance = LibAsset.getOwnBalance(\\n            _swap.receivingAssetId\\n        );\\n\\n        if (nativeValue == 0) {\\n            LibAsset.maxApproveERC20(\\n                IERC20(_swap.sendingAssetId),\\n                _swap.approveTo,\\n                _swap.fromAmount\\n            );\\n        }\\n\\n        if (initialSendingAssetBalance < _swap.fromAmount) {\\n            revert InsufficientBalance(\\n                _swap.fromAmount,\\n                initialSendingAssetBalance\\n            );\\n        }\\n\\n        // solhint-disable-next-line avoid-low-level-calls\\n        (bool success, bytes memory res) = _swap.callTo.call{\\n            value: nativeValue\\n        }(_swap.callData);\\n        if (!success) {\\n            LibUtil.revertWith(res);\\n        }\\n\\n        uint256 newBalance = LibAsset.getOwnBalance(_swap.receivingAssetId);\\n\\n        emit AssetSwapped(\\n            transactionId,\\n            _swap.callTo,\\n            _swap.sendingAssetId,\\n            _swap.receivingAssetId,\\n            _swap.fromAmount,\\n            newBalance > initialReceivingAssetBalance\\n                ? newBalance - initialReceivingAssetBalance\\n                : newBalance,\\n            block.timestamp\\n        );\\n    }\", \"LibAsset.isContract:function isContract(address _contractAddr) internal view returns (bool) {\\n        uint256 size;\\n        // solhint-disable-next-line no-inline-assembly\\n        assembly {\\n            size := extcodesize(_contractAddr)\\n        }\\n        return size > 0;\\n    }\", \"LibAsset.isNativeAsset:function isNativeAsset(address assetId) internal pure returns (bool) {\\n        return assetId == NATIVE_ASSETID;\\n    }\", \"LibAsset.getOwnBalance:function getOwnBalance(address assetId) internal view returns (uint256) {\\n        return\\n            isNativeAsset(assetId)\\n                ? address(this).balance\\n                : IERC20(assetId).balanceOf(address(this));\\n    }\", \"LibAsset.maxApproveERC20:function maxApproveERC20(\\n        IERC20 assetId,\\n        address spender,\\n        uint256 amount\\n    ) internal {\\n        if (isNativeAsset(address(assetId))) {\\n            return;\\n        }\\n        if (spender == NULL_ADDRESS) {\\n            revert NullAddrIsNotAValidSpender();\\n        }\\n\\n        if (assetId.allowance(address(this), spender) < amount) {\\n            SafeERC20.safeApprove(IERC20(assetId), spender, 0);\\n            SafeERC20.safeApprove(IERC20(assetId), spender, MAX_UINT);\\n        }\\n    }\", \"LibUtil.revertWith:function revertWith(bytes memory data) internal pure {\\n        assembly {\\n            let dataSize := mload(data) // Load the size of the data\\n            let dataPtr := add(data, 0x20) // Advance data pointer to the next word\\n            revert(dataPtr, dataSize) // Revert with the given data\\n        }\\n    }\", \"SafeERC20.safeApprove:function safeApprove(IERC20 token, address spender, uint256 value) internal {\\n        // safeApprove should only be called when setting an initial allowance,\\n        // or when resetting it to zero. To increase and decrease it, use\\n        // 'safeIncreaseAllowance' and 'safeDecreaseAllowance'\\n        require(\\n            (value == 0) || (token.allowance(address(this), spender) == 0),\\n            \\\"SafeERC20: approve from non-zero to non-zero allowance\\\"\\n        );\\n        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));\\n    }\", \"SafeERC20._callOptionalReturn:function _callOptionalReturn(IERC20 token, bytes memory data) private {\\n        // We need to perform a low level call here, to bypass Solidity's return data size checking mechanism, since\\n        // we're implementing it ourselves. We use {Address-functionCall} to perform this call, which verifies that\\n        // the target address contains contract code and also asserts for success in the low-level call.\\n\\n        bytes memory returndata = address(token).functionCall(data, \\\"SafeERC20: low-level call failed\\\");\\n        require(returndata.length == 0 || abi.decode(returndata, (bool)), \\\"SafeERC20: ERC20 operation did not succeed\\\");\\n    }\", \"Address.functionCall:function functionCall(address target, bytes memory data) internal returns (bytes memory) {\\n        return functionCallWithValue(target, data, 0, \\\"Address: low-level call failed\\\");\\n    }\", \"Address.functionCallWithValue:function functionCallWithValue(address target, bytes memory data, uint256 value) internal returns (bytes memory) {\\n        return functionCallWithValue(target, data, value, \\\"Address: low-level call with value failed\\\");\\n    }\", \"Address.verifyCallResultFromTarget:function verifyCallResultFromTarget(\\n        address target,\\n        bool success,\\n        bytes memory returndata,\\n        string memory errorMessage\\n    ) internal view returns (bytes memory) {\\n        if (success) {\\n            if (returndata.length == 0) {\\n                // only check isContract if the call was successful and the return data is empty\\n                // otherwise we already know that it was a contract\\n                require(isContract(target), \\\"Address: call to non-contract\\\");\\n            }\\n            return returndata;\\n        } else {\\n            _revert(returndata, errorMessage);\\n        }\\n    }\", \"Address.isContract:function isContract(address account) internal view returns (bool) {\\n        // This method relies on extcodesize/address.code.length, which returns 0\\n        // for contracts in construction, since the code is only stored at the end\\n        // of the constructor execution.\\n\\n        return account.code.length > 0;\\n    }\", \"Address._revert:function _revert(bytes memory returndata, string memory errorMessage) private pure {\\n        // Look for revert reason and bubble it up if present\\n        if (returndata.length > 0) {\\n            // The easiest way to bubble the revert reason is using memory via assembly\\n            /// @solidity memory-safe-assembly\\n            assembly {\\n                let returndata_size := mload(returndata)\\n                revert(add(32, returndata), returndata_size)\\n            }\\n        } else {\\n            revert(errorMessage);\\n        }\\n    }\"]:\n}\n\n",
+            "v_outputs1": [
+                [
+                    {
+                        "parameter": "_destinationChains",
+                        "attribute": "toChainID",
+                        "score": "85%",
+                        "reason": "The parameter '_destinationChains' semantically matches 'toChainID' as both specify the destination chain. However, there is some ambiguity because '_destinationChains' might represent a bitmask of multiple chains rather than a single chain ID."
+                    },
+                    {
+                        "parameter": "_swap.sendingAssetId",
+                        "attribute": "tokenAddress",
+                        "score": "90%",
+                        "reason": "'_swap.sendingAssetId' holds the address of the token to be swapped/transferred, matching 'tokenAddress'. The context is correct, though it's specifically for the sending asset rather than a generic token address."
+                    },
+                    {
+                        "parameter": "_swap.fromAmount",
+                        "attribute": "amount",
+                        "score": "100%",
+                        "reason": "'_swap.fromAmount' directly represents the quantity of tokens to be transferred, aligning perfectly with 'amount'. There is no ambiguity in naming or usage."
+                    },
+                    {
+                        "parameter": "_recipient",
+                        "attribute": "recipientAddress",
+                        "score": "100%",
+                        "reason": "'_recipient' is explicitly the receiving address on the destination chain, perfectly matching 'recipientAddress'. This is unambiguous in both naming and usage context."
+                    },
+                    {
+                        "parameter": "_swap.callTo",
+                        "attribute": "externalCallAddress",
+                        "score": "70%",
+                        "reason": "'_swap.callTo' specifies a contract address to be called during swapping, which loosely aligns with 'externalCallAddress'. However, this is part of swap execution rather than a post-transfer call, introducing contextual ambiguity."
+                    },
+                    {
+                        "parameter": "_swap.callData",
+                        "attribute": "externalCallFunction",
+                        "score": "65%",
+                        "reason": "'_swap.callData' contains the function calldata for '_swap.callTo', partially matching 'externalCallFunction'. The ambiguity arises because this is swap-related calldata rather than a post-transfer execution."
+                    }
+                ]
+            ],
+            "formatted_outputs1": {
+                "_destinationChains": {
+                    "toChainID": {
+                        "reason": "The parameter name '_destinationChains' semantically matches 'toChainID' as both specify the destination chain. However, '_destinationChains' might represent a bitmask of multiple chains rather than a single chain ID, creating potential ambiguity.",
+                        "score": "85%",
+                        "s_reason": "The parameter '_destinationChains' semantically matches 'toChainID' as both specify the destination chain. However, there is some ambiguity because '_destinationChains' might represent a bitmask of multiple chains rather than a single chain ID."
+                    }
+                },
+                "_swap.sendingAssetId": {
+                    "tokenAddress": {
+                        "reason": "The parameter '_swap.sendingAssetId' holds the address of the token to be swapped/transferred, matching 'tokenAddress'. Contextually this is correct, though it's specifically for the sending asset rather than a generic token address.",
+                        "score": "90%",
+                        "s_reason": "'_swap.sendingAssetId' holds the address of the token to be swapped/transferred, matching 'tokenAddress'. The context is correct, though it's specifically for the sending asset rather than a generic token address."
+                    }
+                },
+                "_swap.fromAmount": {
+                    "amount": {
+                        "reason": "'_swap.fromAmount' directly represents the quantity of tokens to be transferred, aligning with 'amount'. No ambiguity exists here as the naming and usage are clear.",
+                        "score": "100%",
+                        "s_reason": "'_swap.fromAmount' directly represents the quantity of tokens to be transferred, aligning perfectly with 'amount'. There is no ambiguity in naming or usage."
+                    }
+                },
+                "_recipient": {
+                    "recipientAddress": {
+                        "reason": "'_recipient' is explicitly the receiving address on the destination chain, perfectly matching 'recipientAddress'. This is unambiguous in both naming and usage context.",
+                        "score": "100%",
+                        "s_reason": "'_recipient' is explicitly the receiving address on the destination chain, perfectly matching 'recipientAddress'. This is unambiguous in both naming and usage context."
+                    }
+                },
+                "_swap.callTo": {
+                    "externalCallAddress": {
+                        "reason": "'_swap.callTo' specifies a contract address to be called during swapping, which loosely aligns with 'externalCallAddress'. However, this is part of swap execution rather than a post-transfer call, introducing contextual ambiguity.",
+                        "score": "70%",
+                        "s_reason": "'_swap.callTo' specifies a contract address to be called during swapping, which loosely aligns with 'externalCallAddress'. However, this is part of swap execution rather than a post-transfer call, introducing contextual ambiguity."
+                    }
+                },
+                "_swap.callData": {
+                    "externalCallFunction": {
+                        "reason": "'_swap.callData' contains the function calldata for '_swap.callTo', partially matching 'externalCallFunction'. The ambiguity arises because this is swap-related calldata rather than a post-transfer execution.",
+                        "score": "65%",
+                        "s_reason": "'_swap.callData' contains the function calldata for '_swap.callTo', partially matching 'externalCallFunction'. The ambiguity arises because this is swap-related calldata rather than a post-transfer execution."
+                    }
+                }
+            }
+        },
+        "step2": {
+            "toChainID": {
+                "_destinationChains": {
+                    "dataflows": [
+                        {
+                            "parameter": "_destinationChains",
+                            "dataflow": {
+                                "depositToGasZipERC20": [
+                                    "function depositToGasZipERC20(\n        LibSwap.SwapData calldata _swapData,\n        uint256 _destinationChains,\n        address _recipient\n    ) public {\n        // get the current native balance\n        uint256 currentNativeBalance = address(this).balance;\n\n        // execute the swapData that swaps the ERC20 token into native\n        LibSwap.swap(0, _swapData);\n\n        // calculate the swap output amount using the initial native balance\n        uint256 swapOutputAmount = address(this).balance -\n            currentNativeBalance;\n\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: swapOutputAmount }(\n            _destinationChains,\n            _recipient\n        );\n    }",
+                                    "gasZipRouter.deposit{ value: swapOutputAmount }(\n            _destinationChains,\n            _recipient\n        );"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "100",
+                            "reason": "The parameter '_destinationChains' is fully covered in the data flow, being passed directly from the function parameter to the 'gasZipRouter.deposit' call without any intermediate transformations or conditions. The correctness is verified as it maintains its intended use throughout the code path, ensuring accurate chain destination specification for the deposit operation."
+                        },
+                        {
+                            "parameter": "_destinationChains",
+                            "dataflow": {
+                                "depositToGasZipERC20": [
+                                    "function depositToGasZipERC20(\n        LibSwap.SwapData calldata _swapData,\n        uint256 _destinationChains,\n        address _recipient\n    ) public {\n        // get the current native balance\n        uint256 currentNativeBalance = address(this).balance;\n\n        // execute the swapData that swaps the ERC20 token into native\n        LibSwap.swap(0, _swapData);\n\n        // calculate the swap output amount using the initial native balance\n        uint256 swapOutputAmount = address(this).balance -\n            currentNativeBalance;\n\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: swapOutputAmount }(\n            _destinationChains,\n            _recipient\n        );\n    }",
+                                    "gasZipRouter.deposit{ value: swapOutputAmount }(\n            _destinationChains,\n            _recipient\n        );"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "100",
+                            "reason": "The parameter '_destinationChains' is fully covered in the data flow, being passed from the 'depositToGasZipERC20' function to the 'gasZipRouter.deposit' function without any modification. The correctness is verified as the parameter is correctly used in its intended context within the cross-chain protocol, ensuring proper functionality for specifying destination chains."
+                        }
+                    ],
+                    "merge_dataflows": "function depositToGasZipERC20(\n        LibSwap.SwapData calldata _swapData,\n        uint256 _destinationChains,\n        address _recipient\n    ) public {\n        // get the current native balance\n        uint256 currentNativeBalance = address(this).balance;\n\n        // execute the swapData that swaps the ERC20 token into native\n        LibSwap.swap(0, _swapData);\n\n        // calculate the swap output amount using the initial native balance\n        uint256 swapOutputAmount = address(this).balance -\n            currentNativeBalance;\n\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: swapOutputAmount }(\n            _destinationChains,\n            _recipient\n        );\n    }\ngasZipRouter.deposit{ value: swapOutputAmount }(\n            _destinationChains,\n            _recipient\n        );"
+                }
+            },
+            "tokenAddress": {
+                "_swap.sendingAssetId": {
+                    "dataflows": [
+                        {
+                            "parameter": "_swap.sendingAssetId",
+                            "dataflow": {
+                                "LibSwap.swap": [
+                                    "function swap(bytes32 transactionId, SwapData calldata _swap) internal {\n        if (!LibAsset.isContract(_swap.callTo)) revert InvalidContract();\n        uint256 fromAmount = _swap.fromAmount;\n        if (fromAmount == 0) revert NoSwapFromZeroBalance();\n        uint256 nativeValue = LibAsset.isNativeAsset(_swap.sendingAssetId)\n            ? _swap.fromAmount\n            : 0;\n        uint256 initialSendingAssetBalance = LibAsset.getOwnBalance(\n            _swap.sendingAssetId\n        );\n        uint256 initialReceivingAssetBalance = LibAsset.getOwnBalance(\n            _swap.receivingAssetId\n        );\n\n        if (nativeValue == 0) {\n            LibAsset.maxApproveERC20(\n                IERC20(_swap.sendingAssetId),\n                _swap.approveTo,\n                _swap.fromAmount\n            );\n        }\n\n        if (initialSendingAssetBalance < _swap.fromAmount) {\n            revert InsufficientBalance(\n                _swap.fromAmount,\n                initialSendingAssetBalance\n            );\n        }\n\n        // solhint-disable-next-line avoid-low-level-calls\n        (bool success, bytes memory res) = _swap.callTo.call{\n            value: nativeValue\n        }(_swap.callData);\n        if (!success) {\n            LibUtil.revertWith(res);\n        }\n\n        uint256 newBalance = LibAsset.getOwnBalance(_swap.receivingAssetId);\n\n        emit AssetSwapped(\n            transactionId,\n            _swap.callTo,\n            _swap.sendingAssetId,\n            _swap.receivingAssetId,\n            _swap.fromAmount,\n            newBalance > initialReceivingAssetBalance\n                ? newBalance - initialReceivingAssetBalance\n                : newBalance,\n            block.timestamp\n        );\n    }"
+                                ],
+                                "LibAsset.isNativeAsset": [
+                                    "function isNativeAsset(address assetId) internal pure returns (bool) {\n        return assetId == NATIVE_ASSETID;\n    }"
+                                ],
+                                "LibAsset.getOwnBalance": [
+                                    "function getOwnBalance(address assetId) internal view returns (uint256) {\n        return\n            isNativeAsset(assetId)\n                ? address(this).balance\n                : IERC20(assetId).balanceOf(address(this));\n    }"
+                                ],
+                                "LibAsset.maxApproveERC20": [
+                                    "function maxApproveERC20(\n        IERC20 assetId,\nn        address spender,\nn        uint256 amount\n    ) internal {\nn       if (isNativeAsset(address(assetId))) {\nn           return;\nn       }\nn       if (spender == NULL_ADDRESS) {\nn           revert NullAddrIsNotAValidSpender();\nn       }\nn       if (assetId.allowance(address(this), spender) < amount) {\nn           SafeERC20.safeApprove(IERC20(assetId), spender, 0);\nn           SafeERC20.safeApprove(IERC20(assetId), spender, MAX_UINT);\nn       }\nn   }"
+                                ],
+                                "SafeERC20.safeApprove": [
+                                    "function safeApprove(IERC20 token, address spender, uint256 value) internal {\nn       require(\nn           (value == 0) || (token.allowance(address(this), spender) == 0),\nn           \"SafeERC20: approve from non-zero to non-zero allowance\"\nn       );\nn       _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));\nn   }"
+                                ]
+                            },
+                            "coverage": "95",
+                            "correctness": "100",
+                            "score": "98",
+                            "reason": "The parameter '_swap.sendingAssetId' is thoroughly covered in the data flow, being used in multiple critical functions such as 'isNativeAsset', 'getOwnBalance', and 'maxApproveERC20'. The correctness is impeccable as it adheres to the expected behavior in all contexts, including native asset checks, balance queries, and ERC20 approvals. The slight deduction in coverage accounts for potential edge cases not explicitly tested in the provided code."
+                        },
+                        {
+                            "parameter": "_swap.sendingAssetId",
+                            "dataflow": {
+                                "depositToGasZipERC20": [
+                                    "function depositToGasZipERC20(\n        LibSwap.SwapData calldata _swapData,\n        uint256 _destinationChains,\n        address _recipient\n    ) public {\n        // get the current native balance\n        uint256 currentNativeBalance = address(this).balance;\n\n        // execute the swapData that swaps the ERC20 token into native\n        LibSwap.swap(0, _swapData);\n\n        // calculate the swap output amount using the initial native balance\n        uint256 swapOutputAmount = address(this).balance -\n            currentNativeBalance;\n\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: swapOutputAmount }(\n            _destinationChains,\n            _recipient\n        );\n    }"
+                                ],
+                                "swap": [
+                                    "function swap(bytes32 transactionId, SwapData calldata _swap) internal {\n        if (!LibAsset.isContract(_swap.callTo)) revert InvalidContract();\n        uint256 fromAmount = _swap.fromAmount;\n        if (fromAmount == 0) revert NoSwapFromZeroBalance();\n        uint256 nativeValue = LibAsset.isNativeAsset(_swap.sendingAssetId)\n            ? _swap.fromAmount\n            : 0;\n        uint256 initialSendingAssetBalance = LibAsset.getOwnBalance(\n            _swap.sendingAssetId\n        );\n        uint256 initialReceivingAssetBalance = LibAsset.getOwnBalance(\n            _swap.receivingAssetId\n        );\n\n        if (nativeValue == 0) {\n            LibAsset.maxApproveERC20(\n                IERC20(_swap.sendingAssetId),\n                _swap.approveTo,\n                _swap.fromAmount\n            );\n        }\n\n        if (initialSendingAssetBalance < _swap.fromAmount) {\n            revert InsufficientBalance(\n                _swap.fromAmount,\n                initialSendingAssetBalance\n            );\n        }\n\n        // solhint-disable-next-line avoid-low-level-calls\n        (bool success, bytes memory res) = _swap.callTo.call{\n            value: nativeValue\n        }(_swap.callData);\n        if (!success) {\n            LibUtil.revertWith(res);\n        }\n\n        uint256 newBalance = LibAsset.getOwnBalance(_swap.receivingAssetId);\n\n        emit AssetSwapped(\n            transactionId,\n            _swap.callTo,\n            _swap.sendingAssetId,\n            _swap.receivingAssetId,\nn             _swap.fromAmount,\nn             newBalance > initialReceivingAssetBalance\n                ? newBalance - initialReceivingAssetBalance\n                : newBalance,\nn             block.timestamp\n         );\nn     }"
+                                ],
+                                "isNativeAsset": [
+                                    "function isNativeAsset(address assetId) internal pure returns (bool) {\nn         return assetId == NATIVE_ASSETID;\nn     }"
+                                ],
+                                "getOwnBalance": [
+                                    "function getOwnBalance(address assetId) internal view returns (uint256) {\nn         return\n             isNativeAsset(assetId)\nn                 ? address(this).balance\n                 : IERC20(assetId).balanceOf(address(this));\nn     }"
+                                ],
+                                "maxApproveERC20": [
+                                    "function maxApproveERC20(\nn         IERC20 assetId,\nn         address spender,\nn         uint256 amount\n     ) internal {\nn         if (isNativeAsset(address(assetId))) {\nn             return;\nn         }\nn         if (spender == NULL_ADDRESS) {\nn             revert NullAddrIsNotAValidSpender();\nn         }\nn \nn         if (assetId.allowance(address(this), spender) < amount) {\nn             SafeERC20.safeApprove(IERC20(assetId), spender, 0);\nn             SafeERC20.safeApprove(IERC20(assetId), spender, MAX_UINT);\nn         }\nn     }"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "95",
+                            "score": "92",
+                            "reason": "The parameter '_swap.sendingAssetId' is well-covered in the data flow, being used in multiple critical functions such as 'isNativeAsset', 'getOwnBalance', and 'maxApproveERC20'. The correctness is high as it properly handles both native and ERC20 assets, with appropriate checks and balances. The minor deduction in coverage is due to the lack of explicit handling in some edge cases, but overall, the implementation is robust and correct."
+                        }
+                    ],
+                    "merge_dataflows": "function swap(bytes32 transactionId, SwapData calldata _swap) internal {\n        if (!LibAsset.isContract(_swap.callTo)) revert InvalidContract();\n        uint256 fromAmount = _swap.fromAmount;\n        if (fromAmount == 0) revert NoSwapFromZeroBalance();\n        uint256 nativeValue = LibAsset.isNativeAsset(_swap.sendingAssetId)\n            ? _swap.fromAmount\n            : 0;\n        uint256 initialSendingAssetBalance = LibAsset.getOwnBalance(\n            _swap.sendingAssetId\n        );\n        uint256 initialReceivingAssetBalance = LibAsset.getOwnBalance(\n            _swap.receivingAssetId\n        );\n\n        if (nativeValue == 0) {\n            LibAsset.maxApproveERC20(\n                IERC20(_swap.sendingAssetId),\n                _swap.approveTo,\n                _swap.fromAmount\n            );\n        }\n\n        if (initialSendingAssetBalance < _swap.fromAmount) {\n            revert InsufficientBalance(\n                _swap.fromAmount,\n                initialSendingAssetBalance\n            );\n        }\n\n        // solhint-disable-next-line avoid-low-level-calls\n        (bool success, bytes memory res) = _swap.callTo.call{\n            value: nativeValue\n        }(_swap.callData);\n        if (!success) {\n            LibUtil.revertWith(res);\n        }\n\n        uint256 newBalance = LibAsset.getOwnBalance(_swap.receivingAssetId);\n\n        emit AssetSwapped(\n            transactionId,\n            _swap.callTo,\n            _swap.sendingAssetId,\nn             _swap.receivingAssetId,\nn             _swap.fromAmount,\nn             newBalance > initialReceivingAssetBalance\n                ? newBalance - initialReceivingAssetBalance\n                : newBalance,\nn             block.timestamp\n         );\nn     }\nn     function isNativeAsset(address assetId) internal pure returns (bool) {\nn         return assetId == NATIVE_ASSETID;\nn     }\nn     function getOwnBalance(address assetId) internal view returns (uint256) {\nn         return\n             isNativeAsset(assetId)\nn                 ? address(this).balance\n                 : IERC20(assetId).balanceOf(address(this));\nn     }\nn     function maxApproveERC20(\nn         IERC20 assetId,\nn         address spender,\nn         uint256 amount\n     ) internal {\nn         if (isNativeAsset(address(assetId))) {\nn             return;\nn         }\nn         if (spender == NULL_ADDRESS) {\nn             revert NullAddrIsNotAValidSpender();\nn         }\nn \nn         if (assetId.allowance(address(this), spender) < amount) {\nn             SafeERC20.safeApprove(IERC20(assetId), spender, 0);\nn             SafeERC20.safeApprove(IERC20(assetId), spender, MAX_UINT);\nn         }\nn     }\nn     function safeApprove(IERC20 token, address spender, uint256 value) internal {\nn       require(\nn           (value == 0) || (token.allowance(address(this), spender) == 0),\nn           \"SafeERC20: approve from non-zero to non-zero allowance\"\nn       );\nn       _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));\nn   }"
+                }
+            },
+            "amount": {
+                "_swap.fromAmount": {
+                    "dataflows": [
+                        {
+                            "parameter": "_swap.fromAmount",
+                            "dataflow": {
+                                "LibSwap.swap": [
+                                    "function swap(bytes32 transactionId, SwapData calldata _swap) internal {\n        if (!LibAsset.isContract(_swap.callTo)) revert InvalidContract();\n        uint256 fromAmount = _swap.fromAmount;\n        if (fromAmount == 0) revert NoSwapFromZeroBalance();\n        uint256 nativeValue = LibAsset.isNativeAsset(_swap.sendingAssetId)\n            ? _swap.fromAmount\n            : 0;\n        uint256 initialSendingAssetBalance = LibAsset.getOwnBalance(\n            _swap.sendingAssetId\n        );\n        uint256 initialReceivingAssetBalance = LibAsset.getOwnBalance(\n            _swap.receivingAssetId\n        );\n\n        if (nativeValue == 0) {\n            LibAsset.maxApproveERC20(\n                IERC20(_swap.sendingAssetId),\n                _swap.approveTo,\n                _swap.fromAmount\n            );\n        }\n\n        if (initialSendingAssetBalance < _swap.fromAmount) {\n            revert InsufficientBalance(\n                _swap.fromAmount,\n                initialSendingAssetBalance\n            );\n        }\n\n        // solhint-disable-next-line avoid-low-level-calls\n        (bool success, bytes memory res) = _swap.callTo.call{\n            value: nativeValue\n        }(_swap.callData);\n        if (!success) {\n            LibUtil.revertWith(res);\n        }\n\n        uint256 newBalance = LibAsset.getOwnBalance(_swap.receivingAssetId);\n\n        emit AssetSwapped(\n            transactionId,\n            _swap.callTo,\n            _swap.sendingAssetId,\n            _swap.receivingAssetId,\n            _swap.fromAmount,\n            newBalance > initialReceivingAssetBalance\n                ? newBalance - initialReceivingAssetBalance\n                : newBalance,\n            block.timestamp\n        );\n    }"
+                                ],
+                                "LibAsset.maxApproveERC20": [
+                                    "function maxApproveERC20(\n        IERC20 assetId,\n        address spender,\n        uint256 amount\n    ) internal {\n        if (isNativeAsset(address(assetId))) {\n            return;\n        }\n        if (spender == NULL_ADDRESS) {\\t\t\t\t\t\t\t\t\t\t\t\t\t\\t\\t\\t\\t\\t\\t\\t\\t\\t\\t\\t\\t\\t\\t\\t\\t\\ttttttttttttttttttttttttttttttttttttrevert NullAddrIsNotAValidSpender();\r\r\r\r\r\r\r\r\r\r\r\rrrrrrrrrrrrrrrrrrrrrrrrrrrrrr}\r\r\r\r\r}\r}\r}\r}\r}\r}\r}\r}\r}\r}\r}\r}\r}\r}",
+                                    "if (assetId.allowance(address(this), spender) < amount) {\r                    SafeERC20.safeApprove(IERC20(assetId), spender, 0);\r                    SafeERC20.safeApprove(IERC20(assetId), spender, MAX_UINT);\r                }"
+                                ],
+                                "SafeERC20.safeApprove": [
+                                    "function safeApprove(IERC20 token, address spender, uint256 value) internal {\r                // safeApprove should only be called when setting an initial allowance,\r                // or when resetting it to zero. To increase and decrease it, use\r                // 'safeIncreaseAllowance' and 'safeDecreaseAllowance'\r                require(\r                    (value == 0) || (token.allowance(address(this), spender) == 0),\r                    \"SafeERC20: approve from non-zero to non-zero allowance\"\r                );\r                _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));\r            }"
+                                ],
+                                "SafeERC20._callOptionalReturn": [
+                                    "function _callOptionalReturn(IERC20 token, bytes memory data) private {\r                    // We need to perform a low level call here, to bypass Solidity's return data size checking mechanism, since\r                    // we're implementing it ourselves. We use {Address-functionCall} to perform this call, which verifies that\r                    // the target address contains contract code and also asserts for success in the low-level call.\r                    bytes memory returndata = address(token).functionCall(data, \"SafeERC20: low-level call failed\");\r                    require(returndata.length == 0 || abi.decode(returndata, (bool)), \"SafeERC20: ERC20 operation did not succeed\");\r                }"
+                                ]
+                            },
+                            "coverage": "95",
+                            "correctness": "90",
+                            "score": "92",
+                            "reason": "The data flow of '_swap.fromAmount' is well-covered in the original code, being used in multiple critical operations such as balance checks, approvals, and swap execution. The correctness is high as it's properly validated (non-zero check) and used in all required contexts. Minor deduction for potential edge cases in approval logic that could be more explicitly handled."
+                        },
+                        {
+                            "parameter": "_swap.fromAmount",
+                            "dataflow": {
+                                "LibSwap.swap": [
+                                    "function swap(bytes32 transactionId, SwapData calldata _swap) internal {\n        if (!LibAsset.isContract(_swap.callTo)) revert InvalidContract();\n        uint256 fromAmount = _swap.fromAmount;\n        if (fromAmount == 0) revert NoSwapFromZeroBalance();\n        uint256 nativeValue = LibAsset.isNativeAsset(_swap.sendingAssetId)\n            ? _swap.fromAmount\n            : 0;\n        uint256 initialSendingAssetBalance = LibAsset.getOwnBalance(\n            _swap.sendingAssetId\n        );\n        uint256 initialReceivingAssetBalance = LibAsset.getOwnBalance(\n            _swap.receivingAssetId\n        );\n\n        if (nativeValue == 0) {\n            LibAsset.maxApproveERC20(\n                IERC20(_swap.sendingAssetId),\n                _swap.approveTo,\n                _swap.fromAmount\n            );\n        }\n\n        if (initialSendingAssetBalance < _swap.fromAmount) {\n            revert InsufficientBalance(\n                _swap.fromAmount,\n                initialSendingAssetBalance\n            );\n        }\n\n        // solhint-disable-next-line avoid-low-level-calls\n        (bool success, bytes memory res) = _swap.callTo.call{\n            value: nativeValue\n        }(_swap.callData);\n        if (!success) {\n            LibUtil.revertWith(res);\n        }\n\n        uint256 newBalance = LibAsset.getOwnBalance(_swap.receivingAssetId);\n\n        emit AssetSwapped(\n            transactionId,\n            _swap.callTo,\n            _swap.sendingAssetId,\n            _swap.receivingAssetId,\n            _swap.fromAmount,\n            newBalance > initialReceivingAssetBalance\n                ? newBalance - initialReceivingAssetBalance\n                : newBalance,\n            block.timestamp\n        );\n    }",
+                                    "uint256 fromAmount = _swap.fromAmount;",
+                                    "if (fromAmount == 0) revert NoSwapFromZeroBalance();",
+                                    "uint256 nativeValue = LibAsset.isNativeAsset(_swap.sendingAssetId)\n            ? _swap.fromAmount\n            : 0;",
+                                    "if (nativeValue == 0) {\n            LibAsset.maxApproveERC20(\n                IERC20(_swap.sendingAssetId),\n                _swap.approveTo,\n                _swap.fromAmount\n            );\n        }",
+                                    "if (initialSendingAssetBalance < _swap.fromAmount) {\n            revert InsufficientBalance(\n                _swap.fromAmount,\n                initialSendingAssetBalance\n            );\n        }",
+                                    "(bool success, bytes memory res) = _swap.callTo.call{\n            value: nativeValue\n        }(_swap.callData);",
+                                    "emit AssetSwapped(\"transactionId\", \"_wap.callTo\", \"_wap.sendingAsse\");"
+                                ],
+                                "LibAsset.maxApproveERC20": [
+                                    "function maxApproveERC20(\"IERC20 asset\"d, \"address spender\", \"uint256 amount\") internal {\"if (isNative\"sset(address(asset\"d))) {return;}if (spender == NULL_ADDRESS) {revert NullAddrIsNotAValidSpender();}if (asset\"d.allowance(address(this), spender) < amount) {SafeERC20.safeApprove(IERC20(asset\"d), spender, 0);SafeERC20.safeApprove(IERC20(asset\"d), spender, MAX_UINT);}}"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "95",
+                            "score": "92",
+                            "reason": "The parameter '_swap.fromAmount' is extensively used in the data flow, including validation, balance checks, and approval operations. The coverage is high as it's checked for zero value, used in native value calculation, approval amount, and balance verification. Correctness is also high as all uses are logically sound and properly integrated with the contract's operations. Minor deduction in coverage due to lack of explicit logging of the parameter in some intermediate steps."
+                        }
+                    ],
+                    "merge_dataflows": "function swap(bytes32 transactionId, SwapData calldata _swap) internal {\n        if (!LibAsset.isContract(_swap.callTo)) revert InvalidContract();\n        uint256 fromAmount = _swap.fromAmount;\n        if (fromAmount == 0) revert NoSwapFromZeroBalance();\n        uint256 nativeValue = LibAsset.isNativeAsset(_swap.sendingAssetId)\n            ? _swap.fromAmount\n            : 0;\n        uint256 initialSendingAssetBalance = LibAsset.getOwnBalance(\n            _swap.sendingAssetId\n        );\n        uint256 initialReceivingAssetBalance = LibAsset.getOwnBalance(\n            _swap.receivingAssetId\n        );\n\n        if (nativeValue == 0) {\n            LibAsset.maxApproveERC20(\n                IERC20(_swap.sendingAssetId),\n                _swap.approveTo,\n                _swap.fromAmount\n            );\n        }\n\n        if (initialSendingAssetBalance < _swap.fromAmount) {\n            revert InsufficientBalance(\n                _swap.fromAmount,\n                initialSendingAssetBalance\n            );\n        }\n\n        // solhint-disable-next-line avoid-low-level-calls\n        (bool success, bytes memory res) = _swap.callTo.call{\n            value: nativeValue\n        }(_swap.callData);\n        if (!success) {\n            LibUtil.revertWith(res);\n        }\n\n        uint256 newBalance = LibAsset.getOwnBalance(_swap.receivingAssetId);\n\n        emit AssetSwapped(\n            transactionId,\n            _swap.callTo,\n            _swap.sendingAssetId,\n            _swap.receivingAssetId,\n            _swap.fromAmount,\n            newBalance > initialReceivingAssetBalance\n                ? newBalance - initialReceivingAssetBalance\n                : newBalance,\n            block.timestamp\n        );\r    }\r\r    function maxApproveERC20(IERC20 assetId, address spender, uint256 amount) internal {\r                if (isNativeAsset(address(assetId))) {\r                    return;\r                }\r                if (spender == NULL_ADDRESS) {\r                    revert NullAddrIsNotAValidSpender();\r                }\r                if (assetId.allowance(address(this), spender) < amount) {\r                    SafeERC20.safeApprove(IERC20(assetId), spender, 0);\r                    SafeERC20.safeApprove(IERC20(assetId), spender, MAX_UINT);\r                }\r    }\r\r    function safeApprove(IERC20 token, address spender, uint256 value) internal {\r                require(\r                    (value == 0) || (token.allowance(address(this), spender) == 0),\r                    \"SafeERC20: approve from non-zero to non-zero allowance\"\r                );\r                _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));\r    }\r\r    function _callOptionalReturn(IERC20 token, bytes memory data) private {\r                    bytes memory returndata = address(token).functionCall(data, \"SafeERC20: low-level call failed\");\r                    require(returndata.length == 0 || abi.decode(returndata, (bool)), \"SafeERC20: ERC20 operation did not succeed\");\r    }"
+                }
+            },
+            "recipientAddress": {
+                "_recipient": {
+                    "dataflows": [
+                        {
+                            "parameter": "_recipient",
+                            "dataflow": {
+                                "depositToGasZipERC20": [
+                                    "function depositToGasZipERC20(\n        LibSwap.SwapData calldata _swapData,\n        uint256 _destinationChains,\n        address _recipient\n    ) public {\n        // get the current native balance\n        uint256 currentNativeBalance = address(this).balance;\n\n        // execute the swapData that swaps the ERC20 token into native\n        LibSwap.swap(0, _swapData);\n\n        // calculate the swap output amount using the initial native balance\n        uint256 swapOutputAmount = address(this).balance -\n            currentNativeBalance;\n\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: swapOutputAmount }(\n            _destinationChains,\n            _recipient\n        );\n    }",
+                                    "gasZipRouter.deposit{ value: swapOutputAmount }(\n            _destinationChains,\n            _recipient\n        );"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "100",
+                            "reason": "The parameter '_recipient' is fully covered in the dataflow and correctly passed through the function 'depositToGasZipERC20' to the 'gasZipRouter.deposit' call. There are no modifications or omissions in its usage, ensuring both complete coverage and correctness in the data flow."
+                        },
+                        {
+                            "parameter": "_recipient",
+                            "dataflow": {
+                                "depositToGasZipERC20": [
+                                    "function depositToGasZipERC20(\n        LibSwap.SwapData calldata _swapData,\n        uint256 _destinationChains,\n        address _recipient\n    ) public {\n        // get the current native balance\n        uint256 currentNativeBalance = address(this).balance;\n\n        // execute the swapData that swaps the ERC20 token into native\n        LibSwap.swap(0, _swapData);\n\n        // calculate the swap output amount using the initial native balance\n        uint256 swapOutputAmount = address(this).balance -\n            currentNativeBalance;\n\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: swapOutputAmount }(\n            _destinationChains,\n            _recipient\n        );\n    }",
+                                    "gasZipRouter.deposit{ value: swapOutputAmount }(\n            _destinationChains,\n            _recipient\n        );"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "100",
+                            "reason": "The parameter '_recipient' is fully covered in the dataflow as it is passed directly from the function parameters to the 'gasZipRouter.deposit' call without any intermediate modifications. The correctness is confirmed as the parameter maintains its integrity throughout the execution path, and there are no transformations or validations that could alter its intended use. The confidence score is high because the parameter's usage is straightforward and consistent with its purpose in the protocol."
+                        }
+                    ],
+                    "merge_dataflows": "function depositToGasZipERC20(\n        LibSwap.SwapData calldata _swapData,\n        uint256 _destinationChains,\n        address _recipient\n    ) public {\n        // get the current native balance\n        uint256 currentNativeBalance = address(this).balance;\n\n        // execute the swapData that swaps the ERC20 token into native\n        LibSwap.swap(0, _swapData);\n\n        // calculate the swap output amount using the initial native balance\n        uint256 swapOutputAmount = address(this).balance -\n            currentNativeBalance;\n\n        // call the gas zip router and deposit tokens\n        gasZipRouter.deposit{ value: swapOutputAmount }(\n            _destinationChains,\n            _recipient\n        );\n    }"
+                }
+            }
+        },
+        "step3": {
+            "toChainID": {
+                "_destinationChains": {
+                    "Check whether toChainID is authorized.": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Check that the destination chain ID is not equal to the source chain ID.": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not contain any validation to check if the destination chain ID (_destinationChains) is different from the source chain ID. The parameter is passed directly to the gasZipRouter.deposit function without any checks."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The constraint requires a comparison between _destinationChains and the source chain ID, but there is no such comparison in the provided code. The function simply forwards _destinationChains to an external call without validation."
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            },
+            "tokenAddress": {
+                "_swap.sendingAssetId": {
+                    "Check whether the tokenAddress is authorized to use.": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not explicitly check whether the token address (_swap.sendingAssetId) is authorized to use. It only checks if it's a native asset or performs operations like approval and balance checks, but there's no explicit authorization check for the token address."
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            },
+            "amount": {
+                "_swap.fromAmount": {
+                    "Validate that amount is greater than 0": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": [
+                                    "uint256 fromAmount = _swap.fromAmount;",
+                                    "if (fromAmount == 0) revert NoSwapFromZeroBalance();"
+                                ],
+                                "reason": "The code explicitly checks if _swap.fromAmount is zero and reverts if true, which implies it must be greater than zero to proceed."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": true,
+                                "validation": [
+                                    "uint256 fromAmount = _swap.fromAmount;",
+                                    "if (fromAmount == 0) revert NoSwapFromZeroBalance();",
+                                    "if (initialSendingAssetBalance < _swap.fromAmount) {\n            revert InsufficientBalance(\n                _swap.fromAmount,\n                initialSendingAssetBalance\n            );\n        }"
+                                ],
+                                "reason": "The code not only checks for zero amount but also ensures the balance is sufficient, which indirectly validates the amount must be positive (since balance can't be negative)."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "_swap.fromAmount",
+                                "constraint": "Validate that amount is greater than 0",
+                                "validation": "uint256 fromAmount = _swap.fromAmount; if (fromAmount == 0) revert NoSwapFromZeroBalance();",
+                                "score": 100,
+                                "reason": "The validation correctly checks if the fromAmount is zero and reverts with a specific error if true, accurately implementing the constraint.",
+                                "results": []
+                            }
+                        ]
+                    },
+                    "Validate that msg.sender's balance change before and after equals amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not track the balance of msg.sender before and after the swap to validate the balance change equals _swap.fromAmount. It only tracks the contract's own balance of sending and receiving assets."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The constraint requires validation of msg.sender's balance change, but the code focuses on the contract's asset balances and approval mechanisms without checking the sender's balance."
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Validate that the bridge's balance change before and after equals amount": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": [
+                                    "uint256 initialSendingAssetBalance = LibAsset.getOwnBalance(_swap.sendingAssetId);",
+                                    "uint256 initialReceivingAssetBalance = LibAsset.getOwnBalance(_swap.receivingAssetId);",
+                                    "uint256 newBalance = LibAsset.getOwnBalance(_swap.receivingAssetId);",
+                                    "newBalance > initialReceivingAssetBalance ? newBalance - initialReceivingAssetBalance : newBalance"
+                                ],
+                                "reason": "The code checks the initial balance of the receiving asset before the swap and compares it with the new balance after the swap. The difference between these balances should equal the swap amount, which is validated in the AssetSwapped event emission."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "_swap.fromAmount",
+                                "constraint": "Validate that the bridge's balance change before and after equals amount",
+                                "validation": [
+                                    "uint256 initialSendingAssetBalance = LibAsset.getOwnBalance(_swap.sendingAssetId);",
+                                    "uint256 initialReceivingAssetBalance = LibAsset.getOwnBalance(_swap.receivingAssetId);",
+                                    "uint256 newBalance = LibAsset.getOwnBalance(_swap.receivingAssetId);",
+                                    "newBalance > initialReceivingAssetBalance ? newBalance - initialReceivingAssetBalance : newBalance"
+                                ],
+                                "score": 80,
+                                "reason": "The code correctly captures the initial and new balances of the receiving asset and calculates the difference. However, it does not explicitly verify that the balance change equals `_swap.fromAmount` (the constraint's requirement). The validation only ensures the balance increased but does not enforce equality with `fromAmount`. This could lead to discrepancies if the swap does not transfer exactly `fromAmount`."
+                            }
+                        ]
+                    },
+                    "Validate that msg.sender's balance ≥ amount": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": [
+                                    "uint256 initialSendingAssetBalance = LibAsset.getOwnBalance(_swap.sendingAssetId);",
+                                    "if (initialSendingAssetBalance < _swap.fromAmount) { revert InsufficientBalance(_swap.fromAmount, initialSendingAssetBalance); }"
+                                ],
+                                "reason": "The code checks if the sender's balance (initialSendingAssetBalance) is greater than or equal to the swap amount (_swap.fromAmount) by comparing them and reverting if the balance is insufficient."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "_swap.fromAmount",
+                                "constraint": "Validate that msg.sender's balance ≥ amount",
+                                "validation": "uint256 initialSendingAssetBalance = LibAsset.getOwnBalance(_swap.sendingAssetId);\nif (initialSendingAssetBalance < _swap.fromAmount) { revert InsufficientBalance(_swap.fromAmount, initialSendingAssetBalance); }",
+                                "score": 100,
+                                "reason": "The validation code correctly retrieves the sender's balance using LibAsset.getOwnBalance and compares it with _swap.fromAmount. If the balance is insufficient, it reverts with an appropriate error message. This fully implements the constraint logic.",
+                                "results": []
+                            }
+                        ]
+                    }
+                }
+            },
+            "recipientAddress": {
+                "_recipient": {
+                    "Validate that recipientAddress is not the zero address": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            }
+        },
+        "step4": {
+            "toChainID": {
+                "_destinationChains": {}
+            },
+            "tokenAddress": {
+                "_swap.sendingAssetId": {}
+            },
+            "amount": {
+                "_swap.fromAmount": {
+                    "Validate that amount is greater than 0": [
+                        {
+                            "parameter": "_swap.fromAmount",
+                            "constraint": "Validate that amount is greater than 0",
+                            "validation": "uint256 fromAmount = _swap.fromAmount; if (fromAmount == 0) revert NoSwapFromZeroBalance();",
+                            "score": 100,
+                            "reason": "The validation correctly checks if the fromAmount is zero and reverts with a specific error if true, accurately implementing the constraint.",
+                            "results": []
+                        }
+                    ],
+                    "Validate that msg.sender's balance ≥ amount": [
+                        {
+                            "parameter": "_swap.fromAmount",
+                            "constraint": "Validate that msg.sender's balance ≥ amount",
+                            "validation": "uint256 initialSendingAssetBalance = LibAsset.getOwnBalance(_swap.sendingAssetId);\nif (initialSendingAssetBalance < _swap.fromAmount) { revert InsufficientBalance(_swap.fromAmount, initialSendingAssetBalance); }",
+                            "score": 100,
+                            "reason": "The validation code correctly retrieves the sender's balance using LibAsset.getOwnBalance and compares it with _swap.fromAmount. If the balance is insufficient, it reverts with an appropriate error message. This fully implements the constraint logic.",
+                            "results": []
+                        }
+                    ]
+                }
+            },
+            "recipientAddress": {
+                "_recipient": {}
+            }
+        },
+        "final_result": {
+            "toChainID": {
+                "_destinationChains": {
+                    "Check whether toChainID is authorized.": [
+                        {
+                            "parameter": "_destinationChains",
+                            "constraint": "Check whether toChainID is authorized.",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Check that the destination chain ID is not equal to the source chain ID.": [
+                        {
+                            "parameter": "_destinationChains",
+                            "constraint": "Check that the destination chain ID is not equal to the source chain ID.",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            },
+            "tokenAddress": {
+                "_swap.sendingAssetId": {
+                    "Check whether the tokenAddress is authorized to use.": [
+                        {
+                            "parameter": "_swap.sendingAssetId",
+                            "constraint": "Check whether the tokenAddress is authorized to use.",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            },
+            "amount": {
+                "_swap.fromAmount": {
+                    "Validate that amount is greater than 0": [],
+                    "Validate that msg.sender's balance change before and after equals amount": [
+                        {
+                            "parameter": "_swap.fromAmount",
+                            "constraint": "Validate that msg.sender's balance change before and after equals amount",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Validate that the bridge's balance change before and after equals amount": [],
+                    "Validate that msg.sender's balance ≥ amount": []
+                }
+            },
+            "recipientAddress": {
+                "_recipient": {
+                    "Validate that recipientAddress is not the zero address": [
+                        {
+                            "parameter": "_recipient",
+                            "constraint": "Validate that recipientAddress is not the zero address",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            }
+        },
+        "context": {
+            "event": "AssetSwapped",
+            "call_graph": "depositToGasZipERC20->swap",
+            "state_variables": {
+                "gasZipRouter": "IGasZip public immutable gasZipRouter;",
+                "NATIVE_ASSETID": "address internal constant NATIVE_ASSETID = NULL_ADDRESS;",
+                "NULL_ADDRESS": "address internal constant NULL_ADDRESS = address(0);"
+            },
+            "external_functions": [
+                "function allowance(address owner, address spender) external view returns (uint256);",
+                "function functionCall( address target, bytes memory data, string memory errorMessage ) internal returns (bytes memory){ return functionCallWithValue(target, data, 0, errorMessage);}",
+                "function functionCallWithValue( address target, bytes memory data, uint256 value, string memory errorMessage ) internal returns (bytes memory){ require(address(this).balance >= value, \"Address: insufficient balance for call\"); (bool success, bytes memory returndata) = target.call{ value: value} (data); return verifyCallResultFromTarget(target, success, returndata, errorMessage);}"
+            ]
+        },
+        "step1-time": 54.35461235046387,
+        "step2-time": 1698.9516093730927,
+        "step2-call_api_times": 28,
+        "step3-time": 166.05464696884155,
+        "step3-call_api_times": 11,
+        "step4-time": 11.275304079055786,
+        "step4-call_api_times": 2,
+        "compare_audit": {
+            "result": [
+                {
+                    "vuln": "GasZipFacet.depositToGasZipERC20",
+                    "reason": "The function does not validate the _swapData.callTo address, which could lead to arbitrary contract calls. In cross-chain scenarios, this could be exploited to execute malicious swaps or drain funds."
+                },
+                {
+                    "vuln": "LibSwap.swap",
+                    "reason": "The function does not validate the _swap.approveTo address, which could lead to arbitrary token approvals. In cross-chain scenarios, this could result in unauthorized token transfers to malicious contracts."
+                },
+                {
+                    "vuln": "LibSwap.swap",
+                    "reason": "The function does not verify the success of the token swap operation beyond the low-level call success. This could lead to incorrect swap output calculations, especially dangerous in cross-chain contexts where funds might be irrecoverable."
+                },
+                {
+                    "vuln": "GasZipFacet.depositToGasZipERC20",
+                    "reason": "The function calculates swap output amount based on native balance difference, which is vulnerable to reentrancy attacks if the swap operation involves untrusted contracts. Cross-chain amplifies this risk as recovery is harder."
+                },
+                {
+                    "vuln": "LibAsset.maxApproveERC20",
+                    "reason": "The function grants unlimited approval (MAX_UINT) to spender addresses. In cross-chain scenarios, if a malicious address is approved, it could drain all tokens of that type from the contract."
+                }
+            ]
+        },
+        "compare_attribute_verification": {
+            "result": [
+                {
+                    "toChainID": "Specifies the destination blockchain network ID.",
+                    "findings": [
+                        {
+                            "constraint": "Check whether toChainID is authorized.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No validation logic found for checking if toChainID is authorized."
+                        },
+                        {
+                            "constraint": "Check that the destination chain ID is not equal to the source chain ID.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No validation logic found for checking if destination chain ID is different from source chain ID."
+                        }
+                    ]
+                },
+                {
+                    "tokenAddress": "Indicates the contract address of the token to be transferred.",
+                    "findings": [
+                        {
+                            "constraint": "Check whether the tokenAddress is authorized to use.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No validation logic found for checking if tokenAddress is authorized."
+                        }
+                    ]
+                },
+                {
+                    "nonce": "Check and mark that nonce has not been consumed to prevent replay",
+                    "findings": [
+                        {
+                            "constraint": "Check if the transaction's nonce is equal to the account's current nonce.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No validation logic found for checking nonce."
+                        }
+                    ]
+                },
+                {
+                    "amount": "The number of tokens to be transferred across chains.",
+                    "findings": [
+                        {
+                            "constraint": "Validate that amount is greater than 0",
+                            "validation": "_swap.fromAmount == 0",
+                            "poc": null,
+                            ":revert NoSwapFromZeroBalance()": "Validation exists but could be bypassed if _swap.fromAmount is set to a very small non-zero value that might underflow in calculations."
+                        },
+                        {
+                            ":constraint": "Validate that msg.sender's balance change before and after equals amount",
+                            ":validation": "initialSendingAssetBalance < _swap.fromAmount",
+                            ":poc": "Could be bypassed if the balance check does not account for all possible transfer scenarios or if there are reentrancy issues.",
+                            ":reason": "Partial validation exists but may not cover all edge cases."
+                        },
+                        {
+                            ":constraint": "Validate that the bridge's balance change before and after equals amount",
+                            ":validation": "newBalance > initialReceivingAssetBalance ? newBalance - initialReceivingAssetBalance : newBalance",
+                            ":poc": "Could be bypassed if the receiving asset balance calculation does not accurately reflect the expected amount due to external factors.",
+                            ":reason": "Validation exists but may not account for all scenarios where balance changes could be manipulated."
+                        },
+                        {
+                            ":constraint": "Validate that msg.sender's balance ≥ amount",
+                            ":validation": "initialSendingAssetBalance < _swap.fromAmount",
+                            ":poc": "Could be bypassed if the initial balance check does not consider concurrent transactions affecting the balance.",
+                            ":reason": "Validation exists but may not be fully robust against all attack vectors."
+                        }
+                    ]
+                },
+                {
+                    ":recipientAddress": "The address that will receive the tokens on the destination chain.",
+                    ":findings": [
+                        {
+                            ":constraint": "Validate that recipientAddress is not the zero address",
+                            ":validation:null,": null,
+                            ":null,": null
+                        }
+                    ]
+                },
+                {
+                    ":externalCallAddress:": "The address of a contract to be called after the cross-chain transfer.",
+                    ":findings": [
+                        {
+                            ":constraint:": "Check whether externalCallAddress is authorized use.",
+                            ":validation:": "!LibAsset.isContract(_swap.callTo)",
+                            ":poc:": "Could bypass by passing a malicious contract address as callTo.",
+                            ":reason:": "Only checks if address is contract, not authorization."
+                        }
+                    ]
+                },
+                {
+                    ":externalCallFunction:": "The specific function or calldata executed on `externalCallAddress`.",
+                    ":findings": [
+                        {
+                            ":constraint:": "Validate externalCallFunction in allowed function signature list.",
+                            "_validation_code_here_? If none found set as follows: `null` else describe what you find here e.g., `function signature check via whitelist` etc... If none found set POC/reason accordingly too... If multiple constraints under same attribute repeat this structure per constraint... `} ] } ] }": "Validation exists but could be bypassed by crafting malicious calldata."
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "time": 3080.4584650993347,
+    "this_cost": 0.302774,
+    "this_prompt_tokens": 93603,
+    "this_completion_tokens": 14446
+}

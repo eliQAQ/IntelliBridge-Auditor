@@ -1,0 +1,968 @@
+{
+    "Bridge.deposit": {
+        "step1": {
+            "prompt1": "\nYou are an experienced cross-chain protocol analysis expert. Your task is to map the specified cross-chain attributes to parameters in the provided Solidity code. If an attribute cannot be found in the code, do not list it in the output. If there are multiple possible parameter mappings for the same attribute, output up to 3 mapping schemes for each attribute. Please strictly follow the input and output formats defined below:\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"attribute\": \n{ \n\"<attribute>\": \"<attribute description>\" ,\n\"<attribute>\": \"<attribute description>\",\n...\n}\n\"code\": \"...\" // Solidity contract code string\n}\n\n\nOutput format:\nReturn a JSON array, each item structured must as follows:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // The input cross-chain attribute\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}, ... \n]\nIn the reason, please point out both the core basis for the mapping and potential uncertainties (e.g., parameter name similarity, ambiguous contextual meaning, etc.).\n\nInput:\n{\n\"attribute\": {\"toChainID\": \"Specifies the destination blockchain network ID.\", \"tokenAddress\": \"Indicates the contract address of the token to be transferred.\", \"amount\": \"The number of tokens to be transferred across chains.\", \"nonce\": \"Check and mark that nonce has not been consumed to prevent replay\", \"recipientAddress\": \"The address that will receive the tokens on the destination chain.\", \"externalCallAddress\": \"The address of a contract to be called after the cross-chain transfer.\", \"externalCallFunction\": \"The specific function or calldata to be executed on the `externalCallAddress`.\", \"routerAddress\": \"The address of the cross-chain router or bridge handler.\"},\n\"code\": [\"Bridge.deposit:function deposit(uint8 destinationChainID, bytes32 resourceID, bytes calldata data) external payable whenNotPaused {\\n        uint256 fee = _getFee(destinationChainID);\\n\\n        require(msg.value == fee, \\\"Incorrect fee supplied\\\");\\n\\n        address handler = _resourceIDToHandlerAddress[resourceID];\\n        require(handler != address(0), \\\"resourceID not mapped to handler\\\");\\n\\n        uint64 depositNonce = ++_depositCounts[destinationChainID];\\n        _depositRecords[depositNonce][destinationChainID] = data;\\n\\n        IDepositExecute depositHandler = IDepositExecute(handler);\\n        depositHandler.deposit(resourceID, destinationChainID, depositNonce, msg.sender, data);\\n\\n        emit Deposit(destinationChainID, resourceID, depositNonce);\\n    }\", \"ERC20Handler.deposit:function deposit(\\n        bytes32 resourceID,\\n        uint8   destinationChainID,\\n        uint64  depositNonce,\\n        address depositer,\\n        bytes   calldata data\\n    ) external override onlyBridge {\\n        bytes   memory recipientAddress;\\n        uint256        amount;\\n        uint256        lenRecipientAddress;\\n\\n        assembly {\\n\\n            amount := calldataload(0xC4)\\n\\n            recipientAddress := mload(0x40)\\n            lenRecipientAddress := calldataload(0xE4)\\n            mstore(0x40, add(0x20, add(recipientAddress, lenRecipientAddress)))\\n\\n            calldatacopy(\\n                recipientAddress, // copy to destinationRecipientAddress\\n                0xE4, // copy from calldata @ 0x104\\n                sub(calldatasize(), 0xE) // copy size (calldatasize - 0x104)\\n            )\\n        }\\n\\n        address tokenAddress = _resourceIDToTokenContractAddress[resourceID];\\n        require(_contractWhitelist[tokenAddress], \\\"provided tokenAddress is not whitelisted\\\");\\n        \\n        // ether case, the weth already in handler, do nothing\\n        if (tokenAddress != _wtokenAddress) {\\n            if (_burnList[tokenAddress]) {\\n                burnERC20(tokenAddress, depositer, amount);\\n            } else {\\n                lockERC20(tokenAddress, depositer, address(this), amount);\\n            }\\n        }\\n\\n        _depositRecords[destinationChainID][depositNonce] = DepositRecord(\\n            tokenAddress,\\n            uint8(lenRecipientAddress),\\n            destinationChainID,\\n            resourceID,\\n            recipientAddress,\\n            depositer,\\n            amount\\n        );\\n    }\", \"Bridge._getFee:function _getFee(uint8 destinationChainID) internal view returns (uint256) {\\n        uint256 special = _specialFee[destinationChainID];\\n        if (special != 0) {\\n            return special;\\n        } else {\\n            return _fee;\\n        }\\n    }\", \"ERC20Safe.burnERC20:function burnERC20(address tokenAddress, address owner, uint256 amount) internal {\\n        ERC20Burnable erc20 = ERC20Burnable(tokenAddress);\\n        erc20.burnFrom(owner, amount);\\n    }\", \"ERC20Safe.lockERC20:function lockERC20(address tokenAddress, address owner, address recipient, uint256 amount) internal {\\n        IERC20 erc20 = IERC20(tokenAddress);\\n        _safeTransferFrom(erc20, owner, recipient, amount);\\n    }\", \"ERC20Burnable.burnFrom:function burnFrom(address account, uint256 amount) public virtual {\\n        uint256 decreasedAllowance = allowance(account, _msgSender()).sub(amount, \\\"ERC20: burn amount exceeds allowance\\\");\\n\\n        _approve(account, _msgSender(), decreasedAllowance);\\n        _burn(account, amount);\\n    }\", \"ERC20Safe._safeTransferFrom:function _safeTransferFrom(IERC20 token, address from, address to, uint256 value) private {\\n        _safeCall(token, abi.encodeWithSelector(token.transferFrom.selector, from, to, value));\\n    }\", \"ERC20._approve:function _approve(address owner, address spender, uint256 amount) internal virtual {\\n        require(owner != address(0), \\\"ERC20: approve from the zero address\\\");\\n        require(spender != address(0), \\\"ERC20: approve to the zero address\\\");\\n\\n        _allowances[owner][spender] = amount;\\n        emit Approval(owner, spender, amount);\\n    }\", \"ERC20._burn:function _burn(address account, uint256 amount) internal virtual {\\n        require(account != address(0), \\\"ERC20: burn from the zero address\\\");\\n\\n        _beforeTokenTransfer(account, address(0), amount);\\n\\n        _balances[account] = _balances[account].sub(amount, \\\"ERC20: burn amount exceeds balance\\\");\\n        _totalSupply = _totalSupply.sub(amount);\\n        emit Transfer(account, address(0), amount);\\n    }\", \"SafeMath.sub:function sub(uint256 a, uint256 b) internal pure returns (uint256) {\\n        return _sub(a, b, \\\"SafeMath: subtraction overflow\\\");\\n    }\", \"SafeMath.sub:function sub(uint256 a, uint256 b) internal pure returns (uint256) {\\n        return sub(a, b, \\\"SafeMath: subtraction overflow\\\");\\n    }\", \"ERC20Safe._safeCall:function _safeCall(IERC20 token, bytes memory data) private {        \\n        (bool success, bytes memory returndata) = address(token).call(data);\\n        require(success, \\\"ERC20: call failed\\\");\\n\\n        if (returndata.length > 0) {\\n\\n            require(abi.decode(returndata, (bool)), \\\"ERC20: operation did not succeed\\\");\\n        }\\n    }\", \"ERC20._beforeTokenTransfer:function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual { }\", \"SafeMath._sub:function _sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {\\n        require(b <= a, errorMessage);\\n        uint256 c = a - b;\\n\\n        return c;\\n    }\"]\n}\n",
+            "outputs1": [
+                [
+                    {
+                        "parameter": "destinationChainID",
+                        "attribute": "toChainID",
+                        "reason": "The parameter 'destinationChainID' in both Bridge.deposit and ERC20Handler.deposit functions clearly represents the destination blockchain network ID. The naming and usage context match perfectly with no ambiguity."
+                    },
+                    {
+                        "parameter": "tokenAddress",
+                        "attribute": "tokenAddress",
+                        "reason": "The parameter 'tokenAddress' in ERC20Handler.deposit and related functions directly corresponds to the contract address of the token to be transferred. The mapping is exact with no ambiguity."
+                    },
+                    {
+                        "parameter": "amount",
+                        "attribute": "amount",
+                        "reason": "The parameter 'amount' in ERC20Handler.deposit and related functions (burnERC20, lockERC20) clearly represents the number of tokens to be transferred. The mapping is direct and unambiguous."
+                    },
+                    {
+                        "parameter": "depositNonce",
+                        "attribute": "nonce",
+                        "reason": "The parameter 'depositNonce' in ERC20Handler.deposit is used to mark and check that the nonce has not been consumed, preventing replay attacks. The context matches, though the naming differs slightly."
+                    },
+                    {
+                        "parameter": "_depositCounts[destinationChainID]",
+                        "attribute": "nonce",
+                        "reason": "_depositCounts[destinationChainID] is incremented to generate unique depositNonce values, serving as a nonce mechanism. This is an alternative mapping for 'nonce', though less direct than depositNonce."
+                    },
+                    {
+                        "parameter": "_depositRecords[depositNonce][destinationChainID]",
+                        "attribute": "nonce",
+                        "reason": "_depositRecords uses depositNonce as a key, indirectly relating to nonce functionality. This is a tertiary mapping with more indirect relevance."
+                    },
+                    {
+                        "parameter": "_resourceIDToTokenContractAddress[resourceID]",
+                        "attribute": "tokenAddress",
+                        "reason": "_resourceIDToTokenContractAddress maps resourceID to tokenAddress, providing an alternative way to identify the token contract. This is a secondary mapping with contextual relevance."
+                    },
+                    {
+                        "parameter": "_resourceIDToHandlerAddress[resourceID]",
+                        "attribute": "",
+                        "": "routerAddress",
+                        "reason": "The parameter '_resourceIDToHandlerAddress[resourceID]' could be loosely mapped to 'routerAddress' as it stores the address of a handler (possibly acting as a router/bridge component). However, this is speculative since 'handler' isn't explicitly called 'router' in the code."
+                    },
+                    "recipientAddress",
+                    "recipientAddress",
+                    "reason",
+                    "The variable 'recipientAddress' in ERC20Handler.deposit's assembly block directly stores the destination address for tokens. The mapping is exact with no ambiguity."
+                ]
+            ],
+            "v_prompt1": "\nYou are a rigorous cross-chain protocol auditor and data consistency verifier. Carefully review whether the meaning of each cross-chain attribute and parameter in the code is consistent, assign a confidence score (0-100%), and state the reason for the given confidence score.\n\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"correspondence\":    // Array of attribute-parameter correspondences in the code\n[\n{\n\"attribute\": \"...\", // Input cross-chain attribute\n\"parameter\": \"...\", // Corresponding parameter\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}\n...\n],\n\"code\":\"...\" // Cross-chain contract code\n}\n\nOutput format: Return a JSON array, each item structured as follows:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // Input cross-chain attribute\n\"score\":\"...\", // Assigned confidence score\n\"reason\": \"...\" // Brief explanation for the given confidence score\n}, ... \n]\nInput:\n{\n\"correspondence\": [{\"parameter\": \"destinationChainID\", \"attribute\": \"toChainID\", \"reason\": \"The parameter 'destinationChainID' in both Bridge.deposit and ERC20Handler.deposit functions clearly represents the destination blockchain network ID. The naming and usage context match perfectly with no ambiguity.\"}, {\"parameter\": \"tokenAddress\", \"attribute\": \"tokenAddress\", \"reason\": \"The parameter 'tokenAddress' in ERC20Handler.deposit and related functions directly corresponds to the contract address of the token to be transferred. The mapping is exact with no ambiguity.\"}, {\"parameter\": \"amount\", \"attribute\": \"amount\", \"reason\": \"The parameter 'amount' in ERC20Handler.deposit and related functions (burnERC20, lockERC20) clearly represents the number of tokens to be transferred. The mapping is direct and unambiguous.\"}, {\"parameter\": \"depositNonce\", \"attribute\": \"nonce\", \"reason\": \"The parameter 'depositNonce' in ERC20Handler.deposit is used to mark and check that the nonce has not been consumed, preventing replay attacks. The context matches, though the naming differs slightly.\"}, {\"parameter\": \"_depositCounts[destinationChainID]\", \"attribute\": \"nonce\", \"reason\": \"_depositCounts[destinationChainID] is incremented to generate unique depositNonce values, serving as a nonce mechanism. This is an alternative mapping for 'nonce', though less direct than depositNonce.\"}, {\"parameter\": \"_depositRecords[depositNonce][destinationChainID]\", \"attribute\": \"nonce\", \"reason\": \"_depositRecords uses depositNonce as a key, indirectly relating to nonce functionality. This is a tertiary mapping with more indirect relevance.\"}, {\"parameter\": \"_resourceIDToTokenContractAddress[resourceID]\", \"attribute\": \"tokenAddress\", \"reason\": \"_resourceIDToTokenContractAddress maps resourceID to tokenAddress, providing an alternative way to identify the token contract. This is a secondary mapping with contextual relevance.\"}, {\"parameter\": \"_resourceIDToHandlerAddress[resourceID]\", \"attribute\": \"\", \"\": \"routerAddress\", \"reason\": \"The parameter '_resourceIDToHandlerAddress[resourceID]' could be loosely mapped to 'routerAddress' as it stores the address of a handler (possibly acting as a router/bridge component). However, this is speculative since 'handler' isn't explicitly called 'router' in the code.\"}, \"recipientAddress\", \"recipientAddress\", \"reason\", \"The variable 'recipientAddress' in ERC20Handler.deposit's assembly block directly stores the destination address for tokens. The mapping is exact with no ambiguity.\"],\n\"code\": [\"Bridge.deposit:function deposit(uint8 destinationChainID, bytes32 resourceID, bytes calldata data) external payable whenNotPaused {\\n        uint256 fee = _getFee(destinationChainID);\\n\\n        require(msg.value == fee, \\\"Incorrect fee supplied\\\");\\n\\n        address handler = _resourceIDToHandlerAddress[resourceID];\\n        require(handler != address(0), \\\"resourceID not mapped to handler\\\");\\n\\n        uint64 depositNonce = ++_depositCounts[destinationChainID];\\n        _depositRecords[depositNonce][destinationChainID] = data;\\n\\n        IDepositExecute depositHandler = IDepositExecute(handler);\\n        depositHandler.deposit(resourceID, destinationChainID, depositNonce, msg.sender, data);\\n\\n        emit Deposit(destinationChainID, resourceID, depositNonce);\\n    }\", \"ERC20Handler.deposit:function deposit(\\n        bytes32 resourceID,\\n        uint8   destinationChainID,\\n        uint64  depositNonce,\\n        address depositer,\\n        bytes   calldata data\\n    ) external override onlyBridge {\\n        bytes   memory recipientAddress;\\n        uint256        amount;\\n        uint256        lenRecipientAddress;\\n\\n        assembly {\\n\\n            amount := calldataload(0xC4)\\n\\n            recipientAddress := mload(0x40)\\n            lenRecipientAddress := calldataload(0xE4)\\n            mstore(0x40, add(0x20, add(recipientAddress, lenRecipientAddress)))\\n\\n            calldatacopy(\\n                recipientAddress, // copy to destinationRecipientAddress\\n                0xE4, // copy from calldata @ 0x104\\n                sub(calldatasize(), 0xE) // copy size (calldatasize - 0x104)\\n            )\\n        }\\n\\n        address tokenAddress = _resourceIDToTokenContractAddress[resourceID];\\n        require(_contractWhitelist[tokenAddress], \\\"provided tokenAddress is not whitelisted\\\");\\n        \\n        // ether case, the weth already in handler, do nothing\\n        if (tokenAddress != _wtokenAddress) {\\n            if (_burnList[tokenAddress]) {\\n                burnERC20(tokenAddress, depositer, amount);\\n            } else {\\n                lockERC20(tokenAddress, depositer, address(this), amount);\\n            }\\n        }\\n\\n        _depositRecords[destinationChainID][depositNonce] = DepositRecord(\\n            tokenAddress,\\n            uint8(lenRecipientAddress),\\n            destinationChainID,\\n            resourceID,\\n            recipientAddress,\\n            depositer,\\n            amount\\n        );\\n    }\", \"Bridge._getFee:function _getFee(uint8 destinationChainID) internal view returns (uint256) {\\n        uint256 special = _specialFee[destinationChainID];\\n        if (special != 0) {\\n            return special;\\n        } else {\\n            return _fee;\\n        }\\n    }\", \"ERC20Safe.burnERC20:function burnERC20(address tokenAddress, address owner, uint256 amount) internal {\\n        ERC20Burnable erc20 = ERC20Burnable(tokenAddress);\\n        erc20.burnFrom(owner, amount);\\n    }\", \"ERC20Safe.lockERC20:function lockERC20(address tokenAddress, address owner, address recipient, uint256 amount) internal {\\n        IERC20 erc20 = IERC20(tokenAddress);\\n        _safeTransferFrom(erc20, owner, recipient, amount);\\n    }\", \"ERC20Burnable.burnFrom:function burnFrom(address account, uint256 amount) public virtual {\\n        uint256 decreasedAllowance = allowance(account, _msgSender()).sub(amount, \\\"ERC20: burn amount exceeds allowance\\\");\\n\\n        _approve(account, _msgSender(), decreasedAllowance);\\n        _burn(account, amount);\\n    }\", \"ERC20Safe._safeTransferFrom:function _safeTransferFrom(IERC20 token, address from, address to, uint256 value) private {\\n        _safeCall(token, abi.encodeWithSelector(token.transferFrom.selector, from, to, value));\\n    }\", \"ERC20._approve:function _approve(address owner, address spender, uint256 amount) internal virtual {\\n        require(owner != address(0), \\\"ERC20: approve from the zero address\\\");\\n        require(spender != address(0), \\\"ERC20: approve to the zero address\\\");\\n\\n        _allowances[owner][spender] = amount;\\n        emit Approval(owner, spender, amount);\\n    }\", \"ERC20._burn:function _burn(address account, uint256 amount) internal virtual {\\n        require(account != address(0), \\\"ERC20: burn from the zero address\\\");\\n\\n        _beforeTokenTransfer(account, address(0), amount);\\n\\n        _balances[account] = _balances[account].sub(amount, \\\"ERC20: burn amount exceeds balance\\\");\\n        _totalSupply = _totalSupply.sub(amount);\\n        emit Transfer(account, address(0), amount);\\n    }\", \"SafeMath.sub:function sub(uint256 a, uint256 b) internal pure returns (uint256) {\\n        return _sub(a, b, \\\"SafeMath: subtraction overflow\\\");\\n    }\", \"SafeMath.sub:function sub(uint256 a, uint256 b) internal pure returns (uint256) {\\n        return sub(a, b, \\\"SafeMath: subtraction overflow\\\");\\n    }\", \"ERC20Safe._safeCall:function _safeCall(IERC20 token, bytes memory data) private {        \\n        (bool success, bytes memory returndata) = address(token).call(data);\\n        require(success, \\\"ERC20: call failed\\\");\\n\\n        if (returndata.length > 0) {\\n\\n            require(abi.decode(returndata, (bool)), \\\"ERC20: operation did not succeed\\\");\\n        }\\n    }\", \"ERC20._beforeTokenTransfer:function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual { }\", \"SafeMath._sub:function _sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {\\n        require(b <= a, errorMessage);\\n        uint256 c = a - b;\\n\\n        return c;\\n    }\"]:\n}\n\n",
+            "v_outputs1": [
+                [
+                    {
+                        "parameter": "destinationChainID",
+                        "attribute": "toChainID",
+                        "score": "100%",
+                        "reason": "The parameter 'destinationChainID' explicitly represents the destination blockchain network ID in both Bridge.deposit and ERC20Handler.deposit functions. The naming and context are identical, leaving no ambiguity."
+                    },
+                    {
+                        "parameter": "tokenAddress",
+                        "attribute": "tokenAddress",
+                        "score": "100%",
+                        "reason": "The parameter 'tokenAddress' directly maps to the contract address of the token being transferred in ERC20Handler.deposit and related functions. The correspondence is exact with no room for misinterpretation."
+                    },
+                    {
+                        "parameter": "amount",
+                        "attribute": "amount",
+                        "score": "100%",
+                        "reason": "'amount' in ERC20Handler.deposit, burnERC20, and lockERC20 unambiguously refers to the quantity of tokens to transfer. The mapping is direct and consistent across all contexts."
+                    },
+                    {
+                        "parameter": "depositNonce",
+                        "attribute": "nonce",
+                        "score": "90%",
+                        "reason": "'depositNonce' serves as a unique identifier to prevent replay attacks, aligning with 'nonce' functionality. The slight naming difference ('deposit' prefix) is the only minor ambiguity."
+                    },
+                    {
+                        "parameter": "_depositCounts[destinationChainID]",
+                        "attribute": "nonce",
+                        "score": "70%",
+                        "reason": "_depositCounts generates incrementing nonces per chain but is one step removed from direct nonce usage. Its role is foundational but less explicit than 'depositNonce'."
+                    },
+                    {
+                        "parameter": "_depositRecords[depositNonce][destinationChainID]",
+                        "attribute": "nonce",
+                        "score": "50%",
+                        "reason": "_depositRecords uses depositNonce as a key but primarily stores transaction data. Its relation to 'nonce' is indirect (structural dependency rather than functional)."
+                    },
+                    {
+                        "parameter": "_resourceIDToTokenContractAddress[resourceID]",
+                        "attribute": "tokenAddress",
+                        "score": "80%",
+                        "reason": "This mapping provides tokenAddress via resourceID lookup, offering an alternative identifier. While functionally equivalent, it introduces a layer of indirection."
+                    },
+                    {
+                        "parameter": "_resourceIDToHandlerAddress[resourceID]",
+                        "attribute": "routerAddress",
+                        "score": "60%",
+                        "reason": "The handler address could conceptually act as a router/bridge component, but the code never explicitly labels it as such. The mapping is speculative."
+                    },
+                    {
+                        "parameter": "recipientAddress",
+                        "attribute": "recipientAddress",
+                        "score": "100%",
+                        "reason": "The variable name and usage in ERC20Handler.deposit's assembly block perfectly match the attribute, with zero ambiguity."
+                    }
+                ]
+            ],
+            "formatted_outputs1": {
+                "destinationChainID": {
+                    "toChainID": {
+                        "reason": "The parameter 'destinationChainID' in both Bridge.deposit and ERC20Handler.deposit functions clearly represents the destination blockchain network ID. The naming and usage context match perfectly with no ambiguity.",
+                        "score": "100%",
+                        "s_reason": "The parameter 'destinationChainID' explicitly represents the destination blockchain network ID in both Bridge.deposit and ERC20Handler.deposit functions. The naming and context are identical, leaving no ambiguity."
+                    }
+                },
+                "tokenAddress": {
+                    "tokenAddress": {
+                        "reason": "The parameter 'tokenAddress' in ERC20Handler.deposit and related functions directly corresponds to the contract address of the token to be transferred. The mapping is exact with no ambiguity.",
+                        "score": "100%",
+                        "s_reason": "The parameter 'tokenAddress' directly maps to the contract address of the token being transferred in ERC20Handler.deposit and related functions. The correspondence is exact with no room for misinterpretation."
+                    }
+                },
+                "amount": {
+                    "amount": {
+                        "reason": "The parameter 'amount' in ERC20Handler.deposit and related functions (burnERC20, lockERC20) clearly represents the number of tokens to be transferred. The mapping is direct and unambiguous.",
+                        "score": "100%",
+                        "s_reason": "'amount' in ERC20Handler.deposit, burnERC20, and lockERC20 unambiguously refers to the quantity of tokens to transfer. The mapping is direct and consistent across all contexts."
+                    }
+                },
+                "depositNonce": {
+                    "nonce": {
+                        "reason": "The parameter 'depositNonce' in ERC20Handler.deposit is used to mark and check that the nonce has not been consumed, preventing replay attacks. The context matches, though the naming differs slightly.",
+                        "score": "90%",
+                        "s_reason": "'depositNonce' serves as a unique identifier to prevent replay attacks, aligning with 'nonce' functionality. The slight naming difference ('deposit' prefix) is the only minor ambiguity."
+                    }
+                },
+                "_depositCounts[destinationChainID]": {
+                    "nonce": {
+                        "reason": "_depositCounts[destinationChainID] is incremented to generate unique depositNonce values, serving as a nonce mechanism. This is an alternative mapping for 'nonce', though less direct than depositNonce.",
+                        "score": "70%",
+                        "s_reason": "_depositCounts generates incrementing nonces per chain but is one step removed from direct nonce usage. Its role is foundational but less explicit than 'depositNonce'."
+                    }
+                },
+                "_depositRecords[depositNonce][destinationChainID]": {
+                    "nonce": {
+                        "reason": "_depositRecords uses depositNonce as a key, indirectly relating to nonce functionality. This is a tertiary mapping with more indirect relevance.",
+                        "score": "50%",
+                        "s_reason": "_depositRecords uses depositNonce as a key but primarily stores transaction data. Its relation to 'nonce' is indirect (structural dependency rather than functional)."
+                    }
+                },
+                "_resourceIDToTokenContractAddress[resourceID]": {
+                    "tokenAddress": {
+                        "reason": "_resourceIDToTokenContractAddress maps resourceID to tokenAddress, providing an alternative way to identify the token contract. This is a secondary mapping with contextual relevance.",
+                        "score": "80%",
+                        "s_reason": "This mapping provides tokenAddress via resourceID lookup, offering an alternative identifier. While functionally equivalent, it introduces a layer of indirection."
+                    }
+                },
+                "_resourceIDToHandlerAddress[resourceID]": {
+                    "": {
+                        "reason": "The parameter '_resourceIDToHandlerAddress[resourceID]' could be loosely mapped to 'routerAddress' as it stores the address of a handler (possibly acting as a router/bridge component). However, this is speculative since 'handler' isn't explicitly called 'router' in the code."
+                    }
+                }
+            }
+        },
+        "step2": {
+            "toChainID": {
+                "destinationChainID": {
+                    "dataflows": [
+                        {
+                            "parameter": "destinationChainID",
+                            "dataflow": {
+                                "Bridge.deposit": [
+                                    "function deposit(uint8 destinationChainID, bytes32 resourceID, bytes calldata data) external payable whenNotPaused {",
+                                    "uint256 fee = _getFee(destinationChainID);",
+                                    "require(msg.value == fee, \"Incorrect fee supplied\");",
+                                    "uint64 depositNonce = ++_depositCounts[destinationChainID];",
+                                    "_depositRecords[depositNonce][destinationChainID] = data;",
+                                    "depositHandler.deposit(resourceID, destinationChainID, depositNonce, msg.sender, data);",
+                                    "emit Deposit(destinationChainID, resourceID, depositNonce);"
+                                ],
+                                "Bridge._getFee": [
+                                    "function _getFee(uint8 destinationChainID) internal view returns (uint256) {",
+                                    "uint256 special = _specialFee[destinationChainID];",
+                                    "if (special != 0) {",
+                                    "    return special;",
+                                    "} else {",
+                                    "    return _fee;",
+                                    "}"
+                                ],
+                                "ERC20Handler.deposit": [
+                                    "function deposit(\n        bytes32 resourceID,\n        uint8   destinationChainID,\n        uint64  depositNonce,\n        address depositer,\n        bytes   calldata data\n    ) external override onlyBridge {",
+                                    "_depositRecords[destinationChainID][depositNonce] = DepositRecord(\n            tokenAddress,\n            uint8(lenRecipientAddress),\n            destinationChainID,\n            resourceID,\n            recipientAddress,\n            depositer,\n            amount\n        );"
+                                ]
+                            },
+                            "coverage": "95",
+                            "correctness": "100",
+                            "score": "98",
+                            "reason": "The data flow code for 'destinationChainID' covers nearly all relevant operations in the original code, including fee calculation, deposit handling, and record keeping. The correctness is perfect as all implementations match the original specifications. Minor deduction in coverage for not explicitly showing all possible execution paths (e.g., special fee branch in _getFee)."
+                        },
+                        {
+                            "parameter": "destinationChainID",
+                            "dataflow": {
+                                "Bridge.deposit": [
+                                    "function deposit(uint8 destinationChainID, bytes32 resourceID, bytes calldata data) external payable whenNotPaused {",
+                                    "        uint256 fee = _getFee(destinationChainID);",
+                                    "        uint64 depositNonce = ++_depositCounts[destinationChainID];",
+                                    "        _depositRecords[depositNonce][destinationChainID] = data;",
+                                    "        depositHandler.deposit(resourceID, destinationChainID, depositNonce, msg.sender, data);",
+                                    "        emit Deposit(destinationChainID, resourceID, depositNonce);"
+                                ],
+                                "Bridge._getFee": [
+                                    "function _getFee(uint8 destinationChainID) internal view returns (uint256) {",
+                                    "        uint256 special = _specialFee[destinationChainID];",
+                                    "        if (special != 0) {",
+                                    "            return special;",
+                                    "        } else {",
+                                    "            return _fee;",
+                                    "        }"
+                                ],
+                                "ERC20Handler.deposit": [
+                                    "function deposit(\n        bytes32 resourceID,\n        uint8   destinationChainID,\n        uint64  depositNonce,\n        address depositer,\n        bytes   calldata data\n    ) external override onlyBridge {",
+                                    "        _depositRecords[destinationChainID][depositNonce] = DepositRecord(\n            tokenAddress,\n            uint8(lenRecipientAddress),\n            destinationChainID,\n            resourceID,\n            recipientAddress,\n            depositer,\n            amount\n        );"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "95",
+                            "score": "92",
+                            "reason": "The data flow for 'destinationChainID' is well-covered in the original code, with clear usage in deposit functions, fee calculations, and record keeping. The correctness is high as the parameter is consistently used and validated across different functions. Minor deductions are due to potential edge cases not explicitly handled (e.g., invalid chain IDs)."
+                        }
+                    ],
+                    "merge_dataflows": "function deposit(uint8 destinationChainID, bytes32 resourceID, bytes calldata data) external payable whenNotPaused {\n    uint256 fee = _getFee(destinationChainID);\n    require(msg.value == fee, \"Incorrect fee supplied\");\n    uint64 depositNonce = ++_depositCounts[destinationChainID];\n    _depositRecords[depositNonce][destinationChainID] = data;\n    depositHandler.deposit(resourceID, destinationChainID, depositNonce, msg.sender, data);\n    emit Deposit(destinationChainID, resourceID, depositNonce);\n}\nfunction _getFee(uint8 destinationChainID) internal view returns (uint256) {\n    uint256 special = _specialFee[destinationChainID];\n    if (special != 0) {\n        return special;\n    } else {\n        return _fee;\n    }\n}\nfunction deposit(\n    bytes32 resourceID,\n    uint8   destinationChainID,\n    uint64  depositNonce,\n    address depositer,\n    bytes   calldata data\n) external override onlyBridge {\n    _depositRecords[destinationChainID][depositNonce] = DepositRecord(\n        tokenAddress,\n        uint8(lenRecipientAddress),\n        destinationChainID,\n        resourceID,\n        recipientAddress,\n        depositer,\n        amount\n    );\n}"
+                }
+            },
+            "tokenAddress": {
+                "_resourceIDToTokenContractAddress[resourceID]": {
+                    "dataflows": [
+                        {
+                            "parameter": "_resourceIDToTokenContractAddress[resourceID]",
+                            "dataflow": {
+                                "ERC20Handler.deposit": [
+                                    "address tokenAddress = _resourceIDToTokenContractAddress[resourceID];",
+                                    "require(_contractWhitelist[tokenAddress], \"provided tokenAddress is not whitelisted\");",
+                                    "if (tokenAddress != _wtokenAddress) {\n            if (_burnList[tokenAddress]) {\n                burnERC20(tokenAddress, depositer, amount);\n            } else {\n                lockERC20(tokenAddress, depositer, address(this), amount);\n            }\n        }",
+                                    "_depositRecords[destinationChainID][depositNonce] = DepositRecord(\n            tokenAddress,\n            uint8(lenRecipientAddress),\n            destinationChainID,\n            resourceID,\n            recipientAddress,\n            depositer,\n            amount\n        );"
+                                ],
+                                "ERC20Safe.burnERC20": [
+                                    "function burnERC20(address tokenAddress, address owner, uint256 amount) internal {\n        ERC20Burnable erc20 = ERC20Burnable(tokenAddress);\n        erc20.burnFrom(owner, amount);\n    }"
+                                ],
+                                "ERC20Safe.lockERC20": [
+                                    "function lockERC20(address tokenAddress, address owner, address recipient, uint256 amount) internal {\n        IERC20 erc20 = IERC20(tokenAddress);\n        _safeTransferFrom(erc20, owner, recipient, amount);\n    }"
+                                ],
+                                "ERC20Burnable.burnFrom": [
+                                    "function burnFrom(address account, uint256 amount) public virtual {\n        uint256 decreasedAllowance = allowance(account, _msgSender()).sub(amount, \"ERC20: burn amount exceeds allowance\");\n\n        _approve(account, _msgSender(), decreasedAllowance);\n        _burn(account, amount);\n    }"
+                                ],
+                                "ERC20Safe._safeTransferFrom": [
+                                    "function _safeTransferFrom(IERC20 token, address from, address to, uint256 value) private {\n        _safeCall(token, abi.encodeWithSelector(token.transferFrom.selector, from, to, value));\n    }"
+                                ],
+                                "ERC20._approve": [
+                                    "function _approve(address owner, address spender, uint256 amount) internal virtual {\n        require(owner != address(0), \"ERC20: approve from the zero address\");\n        require(spender != address(0), \"ERC20: approve to the zero address\");\n\n        _allowances[owner][spender] = amount;\n        emit Approval(owner, spender, amount);\n    }"
+                                ],
+                                "ERC20._burn": [
+                                    "function _burn(address account, uint256 amount) internal virtual {\n        require(account != address(0), \"ERC20: burn from the zero address\");\n\n        _beforeTokenTransfer(account, address(0), amount);\n\n        _balances[account] = _balances[account].sub(amount, \"ERC20: burn amount exceeds balance\");\n        _totalSupply = _totalSupply.sub(amount);\n        emit Transfer(account, address(0), amount);\n    }"
+                                ],
+                                "SafeMath.sub": [],
+                                "SafeMath._sub": []
+                            },
+                            "coverage": "95",
+                            "correctness": "100",
+                            "score": "97",
+                            "reason": "The data flow code for the parameter '_resourceIDToTokenContractAddress[resourceID]' is extensively covered in the original code, showing its usage in multiple critical functions such as deposit, burnERC20, and lockERC20. The correctness is confirmed as the parameter is correctly utilized in all instances, including checks for whitelisting and proper handling in both burn and lock scenarios. The minor deduction in coverage accounts for potential edge cases not explicitly shown in the provided code snippets."
+                        },
+                        {
+                            "parameter": "_resourceIDToTokenContractAddress[resourceID]",
+                            "dataflow": {
+                                "ERC20Handler.deposit": [
+                                    "function deposit(\n        bytes32 resourceID,\n        uint8   destinationChainID,\n        uint64  depositNonce,\n        address depositer,\n        bytes   calldata data\n    ) external override onlyBridge {\n        bytes   memory recipientAddress;\n        uint256        amount;\n        uint256        lenRecipientAddress;\n\n        assembly {\n\n            amount := calldataload(0xC4)\n\n            recipientAddress := mload(0x40)\n            lenRecipientAddress := calldataload(0xE4)\n            mstore(0x40, add(0x20, add(recipientAddress, lenRecipientAddress)))\n\n            calldatacopy(\n                recipientAddress, // copy to destinationRecipientAddress\n                0xE4, // copy from calldata @ 0x104\n                sub(calldatasize(), 0xE) // copy size (calldatasize - 0x104)\n            )\n        }\n\n        address tokenAddress = _resourceIDToTokenContractAddress[resourceID];\n        require(_contractWhitelist[tokenAddress], \"provided tokenAddress is not whitelisted\");\n        \n        // ether case, the weth already in handler, do nothing\n        if (tokenAddress != _wtokenAddress) {\n            if (_burnList[tokenAddress]) {\n                burnERC20(tokenAddress, depositer, amount);\n            } else {\n                lockERC20(tokenAddress, depositer, address(this), amount);\n            }\n        }\n\n        _depositRecords[destinationChainID][depositNonce] = DepositRecord(\n            tokenAddress,\n            uint8(lenRecipientAddress),\n            destinationChainID,\n            resourceID,\n            recipientAddress,\n            depositer,\n            amount\n        );\n    }",
+                                    "address tokenAddress = _resourceIDToTokenContractAddress[resourceID];",
+                                    "if (tokenAddress != _wtokenAddress) {\n            if (_burnList[tokenAddress]) {\n                burnERC20(tokenAddress, depositer, amount);\n            } else {\n                lockERC20(tokenAddress, depositer, address(this), amount);\n            }\n        }",
+                                    "_depositRecords[destinationChainID][depositNonce] = DepositRecord(\n            tokenAddress,\n            uint8(lenRecipientAddress),\n            destinationChainID,\nn           resourceID,\nn           recipientAddress,\nn           depositer,\nn           amount\n       );"
+                                ],
+                                "ERC20Safe.burnERC20": [
+                                    "function burnERC20(address tokenAddress, address owner, uint256 amount) internal {\nn       ERC20Burnable erc20 = ERC20Burnable(tokenAddress);\nn       erc20.burnFrom(owner, amount);\nn   }"
+                                ],
+                                "ERC20Safe.lockERC20": [
+                                    "function lockERC20(address tokenAddress, address owner, address recipient, uint256 amount) internal {\nn       IERC20 erc20 = IERC20(tokenAddress);\nn       _safeTransferFrom(erc20, owner, recipient, amount);\nn   }"
+                                ],
+                                "ERC20Burnable.burnFrom": [
+                                    "function burnFrom(address account, uint256 amount) public virtual {\nn       uint256 decreasedAllowance = allowance(account, _msgSender()).sub(amount, \"ERC20: burn amount exceeds allowance\");\nn\n       _approve(account, _msgSender(), decreasedAllowance);\nn       _burn(account, amount);\nn   }"
+                                ],
+                                "ERC20Safe._safeTransferFrom": [
+                                    "function _safeTransferFrom(IERC20 token, address from, address to, uint256 value) private {\nn       _safeCall(token, abi.encodeWithSelector(token.transferFrom.selector, from, to, value));\nn   }"
+                                ],
+                                "ERC20._approve": [
+                                    "function _approve(address owner, address spender, uint256 amount) internal virtual {\nn       require(owner != address(0), \"ERC20: approve from the zero address\");\nn       require(spender != address(0), \"ERC20: approve to the zero address\");\nn\n       _allowances[owner][spender] = amount;\nn       emit Approval(owner, spender, amount);\nn   }"
+                                ],
+                                "ERC20._burn": [
+                                    "function _burn(address account, uint256 amount) internal virtual {\nn       require(account != address(0), \"ERC20: burn from the zero address\");\nn\n       _beforeTokenTransfer(account, address(0), amount);\nn\n       _balances[account] = _balances[account].sub(amount, \"ERC20: burn amount exceeds balance\");\nn       _totalSupply = _totalSupply.sub(amount);\nn       emit Transfer(account, address(0), amount);\nn   }"
+                                ],
+                                "SafeMath.sub": [
+                                    "function sub(uint256 a) internal pure returns (uint256) {\nn       return sub(a);\nn   }",
+                                    "function sub(uint256 a) internal pure returns (uint256) {\nmreturn sub(a,b,"
+                                ]
+                            },
+                            "coverage": "95",
+                            "correctness": "100",
+                            "score": "97",
+                            "reason": "The data flow for the parameter '_resourceIDToTokenContractAddress[resourceID]' is well-covered in the original code, with clear usage in the ERC20Handler.deposit function. The correctness is verified as the parameter is correctly used to fetch the token address, check whitelisting, and perform subsequent operations (burning or locking). The minor deduction in coverage is due to potential edge cases not explicitly shown in the provided code snippets."
+                        }
+                    ],
+                    "merge_dataflows": "address tokenAddress = _resourceIDToTokenContractAddress[resourceID];\nrequire(_contractWhitelist[tokenAddress], \"provided tokenAddress is not whitelisted\");\nif (tokenAddress != _wtokenAddress) {\n    if (_burnList[tokenAddress]) {\n        burnERC20(tokenAddress, depositer, amount);\n    } else {\n        lockERC20(tokenAddress, depositer, address(this), amount);\n    }\n}\n_depositRecords[destinationChainID][depositNonce] = DepositRecord(\n    tokenAddress,\n    uint8(lenRecipientAddress),\n    destinationChainID,\n    resourceID,\n    recipientAddress,\n    depositer,\n    amount\n);\nfunction burnERC20(address tokenAddress, address owner, uint256 amount) internal {\n    ERC20Burnable erc20 = ERC20Burnable(tokenAddress);\n    erc20.burnFrom(owner, amount);\n}\nfunction lockERC20(address tokenAddress, address owner, address recipient, uint256 amount) internal {\n    IERC20 erc20 = IERC20(tokenAddress);\n    _safeTransferFrom(erc20, owner, recipient, amount);\n}\nfunction burnFrom(address account, uint256 amount) public virtual {\n    uint256 decreasedAllowance = allowance(account, _msgSender()).sub(amount, \"ERC20: burn amount exceeds allowance\");\n\n    _approve(account, _msgSender(), decreasedAllowance);\n    _burn(account, amount);\n}\nfunction _safeTransferFrom(IERC20 token, address from, address to, uint256 value) private {\n    _safeCall(token, abi.encodeWithSelector(token.transferFrom.selector, from, to, value));\n}\nfunction _approve(address owner, address spender, uint256 amount) internal virtual {\n    require(owner != address(0), \"ERC20: approve from the zero address\");\n    require(spender != address(0), \"ERC20: approve to the zero address\");\n\n    _allowances[owner][spender] = amount;\n    emit Approval(owner, spender, amount);\n}\nfunction _burn(address account, uint256 amount) internal virtual {\n    require(account != address(0), \"ERC20: burn from the zero address\");\n\n    _beforeTokenTransfer(account, address(0), amount);\nn\n    _balances[account] = _balances[account].sub(amount, \"ERC20: burn amount exceeds balance\");\nn   _totalSupply = _totalSupply.sub(amount);\nn   emit Transfer(account, address(0), amount);\nn}"
+                }
+            },
+            "amount": {
+                "amount": {
+                    "dataflows": [
+                        {
+                            "parameter": "amount",
+                            "dataflow": {
+                                "ERC20Handler.deposit": [
+                                    "function deposit(\n        bytes32 resourceID,\n        uint8   destinationChainID,\n        uint64  depositNonce,\n        address depositer,\n        bytes   calldata data\n    ) external override onlyBridge {\n        bytes   memory recipientAddress;\n        uint256        amount;\n        uint256        lenRecipientAddress;\n\n        assembly {\n\n            amount := calldataload(0xC4)\n\n            recipientAddress := mload(0x40)\n            lenRecipientAddress := calldataload(0xE4)\n            mstore(0x40, add(0x20, add(recipientAddress, lenRecipientAddress)))\n\n            calldatacopy(\n                recipientAddress, // copy to destinationRecipientAddress\n                0xE4, // copy from calldata @ 0x104\n                sub(calldatasize(), 0xE) // copy size (calldatasize - 0x104)\n            )\n        }",
+                                    "if (tokenAddress != _wtokenAddress) {\n            if (_burnList[tokenAddress]) {\n                burnERC20(tokenAddress, depositer, amount);\n            } else {\n                lockERC20(tokenAddress, depositer, address(this), amount);\n            }\n        }",
+                                    "_depositRecords[destinationChainID][depositNonce] = DepositRecord(\n            tokenAddress,\n            uint8(lenRecipientAddress),\n            destinationChainID,\n            resourceID,\n            recipientAddress,\n            depositer,\n            amount\n        );"
+                                ],
+                                "ERC20Safe.burnERC20": [
+                                    "function burnERC20(address tokenAddress, address owner, uint256 amount) internal {\n        ERC20Burnable erc20 = ERC20Burnable(tokenAddress);\n        erc20.burnFrom(owner, amount);\n    }"
+                                ],
+                                "ERC20Safe.lockERC20": [
+                                    "function lockERC20(address tokenAddress, address owner, address recipient, uint256 amount) internal {\n        IERC20 erc20 = IERC20(tokenAddress);\n        _safeTransferFrom(erc20, owner, recipient, amount);\n    }"
+                                ],
+                                "ERC20Burnable.burnFrom": [
+                                    "function burnFrom(address account, uint256 amount) public virtual {\n        uint256 decreasedAllowance = allowance(account, _msgSender()).sub(amount, \"ERC20: burn amount exceeds allowance\");\n\n        _approve(account, _msgSender(), decreasedAllowance);\n        _burn(account, amount);\n    }"
+                                ],
+                                "ERC20Safe._safeTransferFrom": [
+                                    "function _safeTransferFrom(IERC20 token, address from, address to, uint256 value) private {\n        _safeCall(token, abi.encodeWithSelector(token.transferFrom.selector, from, to, value));\n    }"
+                                ],
+                                "ERC20._approve": [
+                                    "function _approve(address owner, address spender, uint256 amount) internal virtual {\n        require(owner != address(0), \"ERC20: approve from the zero address\");\n        require(spender != address(0), \"ERC20: approve to the zero address\");\nn\n        _allowances[owner][spender] = amount;\nnemit Approval(owner, spender, amount);\nn}"
+                                ],
+                                "SafeMath.sub": [
+                                    "function sub(uint256 a, uint256 b) internal pure returns (uint256) {\nnreturn sub(a,b,"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "95",
+                            "score": "92",
+                            "reason": "The data flow for 'amount' is well-covered in the original code, with clear handling in deposit, burnERC20, lockERC20, and transfer operations. The correctness is high as all operations properly validate and use the amount parameter. Minor deduction in coverage due to lack of explicit validation in some transfer paths."
+                        },
+                        {
+                            "parameter": "amount",
+                            "dataflow": {
+                                "ERC20Handler.deposit": [
+                                    "function deposit(\n        bytes32 resourceID,\n        uint8   destinationChainID,\n        uint64  depositNonce,\n        address depositer,\n        bytes   calldata data\n    ) external override onlyBridge {\n        bytes   memory recipientAddress;\n        uint256        amount;\n        uint256        lenRecipientAddress;\n\n        assembly {\n\n            amount := calldataload(0xC4)\n\n            recipientAddress := mload(0x40)\n            lenRecipientAddress := calldataload(0xE4)\n            mstore(0x40, add(0x20, add(recipientAddress, lenRecipientAddress)))\n\n            calldatacopy(\n                recipientAddress, // copy to destinationRecipientAddress\n                0xE4, // copy from calldata @ 0x104\n                sub(calldatasize(), 0xE) // copy size (calldatasize - 0x104)\n            )\n        }",
+                                    "address tokenAddress = _resourceIDToTokenContractAddress[resourceID];\n        require(_contractWhitelist[tokenAddress], \"provided tokenAddress is not whitelisted\");\n        \n        // ether case, the weth already in handler, do nothing\n        if (tokenAddress != _wtokenAddress) {\n            if (_burnList[tokenAddress]) {\n                burnERC20(tokenAddress, depositer, amount);\n            } else {\n                lockERC20(tokenAddress, depositer, address(this), amount);\n            }\n        }",
+                                    "_depositRecords[destinationChainID][depositNonce] = DepositRecord(\n            tokenAddress,\n            uint8(lenRecipientAddress),\n            destinationChainID,\n            resourceID,\n            recipientAddress,\n            depositer,\n            amount\n        );"
+                                ],
+                                "ERC20Safe.burnERC20": [
+                                    "function burnERC20(address tokenAddress, address owner, uint256 amount) internal {\n        ERC20Burnable erc20 = ERC20Burnable(tokenAddress);\n        erc20.burnFrom(owner, amount);\n    }"
+                                ],
+                                "ERC20Safe.lockERC20": [
+                                    "function lockERC20(address tokenAddress, address owner, address recipient, uint256 amount) internal {\n        IERC20 erc20 = IERC20(tokenAddress);\n        _safeTransferFrom(erc20, owner, recipient, amount);\n    }"
+                                ],
+                                "ERC20Burnable.burnFrom": [
+                                    "function burnFrom(address account, uint256 amount) public virtual {\n        uint256 decreasedAllowance = allowance(account, _msgSender()).sub(amount, \"ERC20: burn amount exceeds allowance\");\n\n        _approve(account, _msgSender(), decreasedAllowance);\n        _burn(account, amount);\n    }"
+                                ],
+                                "ERC20Safe._safeTransferFrom": [
+                                    "function _safeTransferFrom(IERC20 token, address from, address to, uint256 value) private {\n        _safeCall(token, abi.encodeWithSelector(token.transferFrom.selector, from, to, value));\nn    }"
+                                ],
+                                "ERC20._approve": [
+                                    "function _approve(address owner, address spender, uint256 amount) internal virtual {\nn       require(owner != address(0), \"ERC20: approve from the zero address\");\nn       require(spender != address(0), \"ERC20: approve to the zero address\");\nn\n       _allowances[owner][spender] = amount;\nn       emit Approval(owner, spender, amount);\nn   }"
+                                ],
+                                "ERC20._burn": [
+                                    "function _burn(address account, uint256 amount) internal virtual {\nn       require(account != address(0), \"ERC20: burn from the zero address\");\nn\n       _beforeTokenTransfer(account, address(0), amount);\nn\n       _balances[account] = _balances[account].sub(amount);\nn       _totalSupply = _totalSupply.sub(amount);\nn       emit Transfer(account.address(), address(null), amount)\nn   }"
+                                ],
+                                "SafeMath.sub": [
+                                    "function sub(uint256 a.uint256 b.string memory errorMessage) internal pure returns (uint256){\nn     require(b <= a.errorMessage): \nuint c=a-b:\nuint c=a-b:\return c:\nuint c=a-b:\return c:\nuint c=a-b:\return c:\nuint c=a-b:\return c:\nuint c=a-b:\return c:\nuint c=a-b:\return c:}"
+                                ]
+                            },
+                            "coverage": "95",
+                            "correctness": "90",
+                            "score": "92",
+                            "reason": "The data flow for the 'amount' parameter is well-covered across multiple functions, including deposit, burnERC20, lockERC20, and _burn. The correctness is high as the parameter is correctly passed and used in each function. Minor deductions are made for potential edge cases not explicitly handled in the SafeMath operations and the lack of explicit validation for the amount parameter in some functions."
+                        }
+                    ],
+                    "merge_dataflows": "function deposit(\n        bytes32 resourceID,\n        uint8   destinationChainID,\n        uint64  depositNonce,\n        address depositer,\n        bytes   calldata data\n    ) external override onlyBridge {\n        bytes   memory recipientAddress;\n        uint256        amount;\n        uint256        lenRecipientAddress;\n\n        assembly {\n\n            amount := calldataload(0xC4)\n\n            recipientAddress := mload(0x40)\n            lenRecipientAddress := calldataload(0xE4)\n            mstore(0x40, add(0x20, add(recipientAddress, lenRecipientAddress)))\n\n            calldatacopy(\n                recipientAddress, // copy to destinationRecipientAddress\n                0xE4, // copy from calldata @ 0x104\n                sub(calldatasize(), 0xE) // copy size (calldatasize - 0x104)\n            )\n        }\naddress tokenAddress = _resourceIDToTokenContractAddress[resourceID];\nrequire(_contractWhitelist[tokenAddress], \"provided tokenAddress is not whitelisted\");\nif (tokenAddress != _wtokenAddress) {\n    if (_burnList[tokenAddress]) {\n        burnERC20(tokenAddress, depositer, amount);\n    } else {\n        lockERC20(tokenAddress, depositer, address(this), amount);\n    }\n}\ndepositRecords[destinationChainID][depositNonce] = DepositRecord(\ntokenAddress,\nuint8(lenRecipientAddress),\ndestinationChainID,\resourceID,\recipientAddress,\ndepositer,\namount\n);function burnERC20(address tokenAddress, address owner, uint256 amount) internal {\nerc20Burnable erc20 = ERC20Burnable(tokenAddress);\nerc20.burnFrom(owner, amount);\n}function lockERC20(address tokenAddress, address owner, address recipient, uint256 amount) internal {\niERC20 erc20 = IERC20(tokenAddress);\nsafeTransferFrom(erc20, owner, recipient, amount);\nn}function burnFrom(address account, uint256 amount) public virtual {\nuint256 decreasedAllowance = allowance(account._msgSender()).sub(amount.\"ERC20: burn amount exceeds allowance\");\nnapprove(account._msgSender(), decreasedAllowance);\nnburn(account.amount);\nn}function safeTransferFrom(IERC20 token.address from.address to.uint256 value) private {\nsafeCall(token.abi.encodeWithSelector(token.transferFrom.selector.from.to.value));\nn}function approve(address owner.address spender.uint256 amount) internal virtual {\nnrequire(owner != address(0).\"ERC20: approve from the zero address\");\nnrequire(spender != address(0).\"ERC20: approve to the zero address\");\nnallowances[owner][spender] = amount;\nnemit Approval(owner.spender.amount);\nn}function burn(address account.uint256 amount) internal virtual {\nnrequire(account != address(0).\"ERC20: burn from the zero address\");\nnbeforeTokenTransfer(account.address(0).amount);\nnbalances[account] = _balances[account].sub(amount);\ntotalSupply = _totalSupply.sub(amount);\nemit Transfer(address account.address null.amount)\nn}function sub(uint256 a.uint256 b.string memory errorMessage) internal pure returns (uint256){\nnrequire(b <= a.errorMessage): \nuint c=a-b:\return c:\nuint c=a-b:\return c:\nuint c=a-b:\return c:\nuint c=a-b:\return c:\nuint c=a-b:\return c:\nuint c=a-b:\return c:}"
+                }
+            },
+            "nonce": {
+                "depositNonce": {
+                    "dataflows": [
+                        {
+                            "parameter": "depositNonce",
+                            "dataflow": {
+                                "Bridge.deposit": [
+                                    "function deposit(uint8 destinationChainID, bytes32 resourceID, bytes calldata data) external payable whenNotPaused {\n        uint256 fee = _getFee(destinationChainID);\n\n        require(msg.value == fee, \"Incorrect fee supplied\");\n\n        address handler = _resourceIDToHandlerAddress[resourceID];\n        require(handler != address(0), \"resourceID not mapped to handler\");\n\n        uint64 depositNonce = ++_depositCounts[destinationChainID];\n        _depositRecords[depositNonce][destinationChainID] = data;\n\n        IDepositExecute depositHandler = IDepositExecute(handler);\n        depositHandler.deposit(resourceID, destinationChainID, depositNonce, msg.sender, data);\n\n        emit Deposit(destinationChainID, resourceID, depositNonce);\n    }",
+                                    "_depositRecords[depositNonce][destinationChainID] = data;",
+                                    "depositHandler.deposit(resourceID, destinationChainID, depositNonce, msg.sender, data);",
+                                    "emit Deposit(destinationChainID, resourceID, depositNonce);"
+                                ],
+                                "ERC20Handler.deposit": [
+                                    "function deposit(\n        bytes32 resourceID,\n        uint8   destinationChainID,\n        uint64  depositNonce,\n        address depositer,\n        bytes   calldata data\n    ) external override onlyBridge {\n        bytes   memory recipientAddress;\n        uint256        amount;\n        uint256        lenRecipientAddress;\n\n        assembly {\n\n            amount := calldataload(0xC4)\n\n            recipientAddress := mload(0x40)\n            lenRecipientAddress := calldataload(0xE4)\n            mstore(0x40, add(0x20, add(recipientAddress, lenRecipientAddress)))\n\n            calldatacopy(\n                recipientAddress, // copy to destinationRecipientAddress\n                0xE4, // copy from calldata @ 0x104\n                sub(calldatasize(), 0xE) // copy size (calldatasize - 0x104)\n            )\n        }\n\n        address tokenAddress = _resourceIDToTokenContractAddress[resourceID];\n        require(_contractWhitelist[tokenAddress], \"provided tokenAddress is not whitelisted\");\n        \n        // ether case, the weth already in handler, do nothing\n        if (tokenAddress != _wtokenAddress) {\n            if (_burnList[tokenAddress]) {\n                burnERC20(tokenAddress, depositer, amount);\n            } else {\n                lockERC20(tokenAddress, depositer, address(this), amount);\n            }\n        }\n\n        _depositRecords[destinationChainID][depositNonce] = DepositRecord(\n            tokenAddress,\n            uint8(lenRecipientAddress),\n            destinationChainID,\n            resourceID,\n            recipientAddress,\n            depositer,\n            amount\n        );\r",
+                                    "_depositRecords[destinationChainID][depositNonce] = DepositRecord(\r",
+                                    "if (_burnList[tokenAddress]) {\r",
+                                    "burnERC20(tokenAddress, depositer, amount);\r",
+                                    "lockERC20(tokenAddress, depositer, address(this), amount);"
+                                ],
+                                "ERC20Safe.burnERC20": [
+                                    "function burnERC20(address tokenAddress, address owner, uint256 amount) internal {\r",
+                                    "ERC20Burnable erc20 = ERC20Burnable(tokenAddress);\r",
+                                    "erc20.burnFrom(owner, amount);"
+                                ],
+                                "ERC20Safe.lockERC20": [
+                                    "function lockERC20(address tokenAddress, address owner, address recipient, uint256 amount) internal {\r",
+                                    "_safeTransferFrom(erc20, owner, recipient, amount);"
+                                ],
+                                "ERC20Burnable.burnFrom": [
+                                    "_approve(account,_msgSender(),decreasedAllowance)",
+                                    "_burn(account,_amount)"
+                                ],
+                                "ERC20._approve": [
+                                    "_allowances[_owner][_spender]=_value"
+                                ],
+                                "ERC20._burn": [
+                                    "_balances[_account]=_balances[_account].sub(_amount)",
+                                    "_totalSupply=_totalSupply.sub(_amount)"
+                                ]
+                            },
+                            "coverage": "95",
+                            "correctness": "100",
+                            "score": "98",
+                            "reason": "The dataflow for 'depositNonce' is thoroughly covered in both Bridge.deposit and ERC20Handler.deposit functions, with all critical operations (incrementing, storage, and event emission) correctly implemented. The correctness score is perfect as the logic follows the intended protocol behavior. The slight deduction in coverage accounts for potential edge cases in nonce handling across chains that aren't explicitly visible in the provided code segments."
+                        },
+                        {
+                            "parameter": "depositNonce",
+                            "dataflow": {
+                                "Bridge.deposit": [
+                                    "function deposit(uint8 destinationChainID, bytes32 resourceID, bytes calldata data) external payable whenNotPaused {\n        uint256 fee = _getFee(destinationChainID);\n\n        require(msg.value == fee, \"Incorrect fee supplied\");\n\n        address handler = _resourceIDToHandlerAddress[resourceID];\n        require(handler != address(0), \"resourceID not mapped to handler\");\n\n        uint64 depositNonce = ++_depositCounts[destinationChainID];\n        _depositRecords[depositNonce][destinationChainID] = data;\n\n        IDepositExecute depositHandler = IDepositExecute(handler);\n        depositHandler.deposit(resourceID, destinationChainID, depositNonce, msg.sender, data);\n\n        emit Deposit(destinationChainID, resourceID, depositNonce);\n    }",
+                                    "_depositRecords[depositNonce][destinationChainID] = data;",
+                                    "depositHandler.deposit(resourceID, destinationChainID, depositNonce, msg.sender, data);",
+                                    "emit Deposit(destinationChainID, resourceID, depositNonce);"
+                                ],
+                                "ERC20Handler.deposit": [
+                                    "function deposit(\n        bytes32 resourceID,\n        uint8   destinationChainID,\n        uint64  depositNonce,\n        address depositer,\n        bytes   calldata data\n    ) external override onlyBridge {\n        bytes   memory recipientAddress;\n        uint256        amount;\n        uint256        lenRecipientAddress;\n\n        assembly {\n\n            amount := calldataload(0xC4)\n\n            recipientAddress := mload(0x40)\n            lenRecipientAddress := calldataload(0xE4)\n            mstore(0x40, add(0x20, add(recipientAddress, lenRecipientAddress)))\n\n            calldatacopy(\n                recipientAddress, // copy to destinationRecipientAddress\n                0xE4, // copy from calldata @ 0x104\n                sub(calldatasize(), 0xE) // copy size (calldatasize - 0x104)\n            )\n        }\n\n        address tokenAddress = _resourceIDToTokenContractAddress[resourceID];\n        require(_contractWhitelist[tokenAddress], \"provided tokenAddress is not whitelisted\");\n        \n        // ether case, the weth already in handler, do nothing\n        if (tokenAddress != _wtokenAddress) {\n            if (_burnList[tokenAddress]) {\n                burnERC20(tokenAddress, depositer, amount);\n            } else {\n                lockERC20(tokenAddress, depositer, address(this), amount);\n            }\n        }\n\n        _depositRecords[destinationChainID][depositNonce] = DepositRecord(\n            tokenAddress,\n            uint8(lenRecipientAddress),\n            destinationChainID,\n            resourceID,\n            recipientAddress,\n            depositer,\nnnnnnnnnnnnnnnnnnnnnnnnnnnnamount\n );\nn }",
+                                    "_depositRecords[destinationChainID][depositNonce] = DepositRecord(\ntokenAddress,\nuint8(lenRecipientAddress),\ndestinationChainID,\resourceI D,\recipient Address , \ndepos iter , \namount );"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "95",
+                            "score": "92",
+                            "reason": "The dataflow for 'depositNonce' is well-covered in both Bridge.deposit and ERC20Handler.deposit functions, showing correct initialization, storage, and usage. Minor deduction in coverage due to lack of explicit validation checks on the nonce value itself. Correctness is high as the nonce is properly incremented, stored, and passed through the system without manipulation."
+                        }
+                    ],
+                    "merge_dataflows": "function deposit(uint8 destinationChainID, bytes32 resourceID, bytes calldata data) external payable whenNotPaused {\n        uint256 fee = _getFee(destinationChainID);\n\n        require(msg.value == fee, \"Incorrect fee supplied\");\n\n        address handler = _resourceIDToHandlerAddress[resourceID];\n        require(handler != address(0), \"resourceID not mapped to handler\");\n\n        uint64 depositNonce = ++_depositCounts[destinationChainID];\n        _depositRecords[depositNonce][destinationChainID] = data;\n\n        IDepositExecute depositHandler = IDepositExecute(handler);\n        depositHandler.deposit(resourceID, destinationChainID, depositNonce, msg.sender, data);\n\n        emit Deposit(destinationChainID, resourceID, depositNonce);\n    }\nfunction deposit(\n        bytes32 resourceID,\n        uint8   destinationChainID,\n        uint64  depositNonce,\n        address depositer,\n        bytes   calldata data\n    ) external override onlyBridge {\n        bytes   memory recipientAddress;\n        uint256        amount;\n        uint256        lenRecipientAddress;\n\n        assembly {\n\n            amount := calldataload(0xC4)\n\n            recipientAddress := mload(0x40)\n            lenRecipientAddress := calldataload(0xE4)\n            mstore(0x40, add(0x20, add(recipientAddress, lenRecipientAddress)))\n\n            calldatacopy(\n                recipientAddress, // copy to destinationRecipientAddress\n                0xE4, // copy from calldata @ 0x104\n                sub(calldatasize(), 0xE) // copy size (calldatasize - 0x104)\n            )\n        }\n\n        address tokenAddress = _resourceIDToTokenContractAddress[resourceID];\n        require(_contractWhitelist[tokenAddress], \"provided tokenAddress is not whitelisted\");\n        \n        // ether case, the weth already in handler, do nothing\n        if (tokenAddress != _wtokenAddress) {\n            if (_burnList[tokenAddress]) {\r                burnERC20(tokenAddress, depositer, amount);\r            } else {\r                lockERC20(tokenAddress, depositer, address(this), amount);\r            }\r}\r_depositRecords[destinationChainID][depositNonce] = DepositRecord(\ntokenAddress,\nuint8(lenRecipientAddress),\ndestinationChainID,\resourceI D,\recipient Address , \ndepos iter , \namount );\rfunction burnERC20(address tokenAddress, address owner, uint256 amount) internal {\rERC20Burnable erc20 = ERC20Burnable(tokenAddress);\rer c20.burnFrom(owner , amount );\rfunction lockERC20(address tokenAddress , address owner , address recipient , uint256 amount ) internal {\r_safeTransferFrom ( erc20 , owner , recipient , amount );\r_approve ( account , _msgSender ( ) , decreasedAllowance ) ; \r_burn ( account , _amount ) ; \r_allowances [ _owner ] [ _spender ] = _value ; \r_balances [ _account ] = _balances [ _account ] . sub ( _amount ) ; \r_totalSupply = _totalSupply . sub ( _amount );"
+                }
+            }
+        },
+        "step3": {
+            "toChainID": {
+                "destinationChainID": {
+                    "Check whether toChainID is authorized.": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Check that the destination chain ID is not equal to the source chain ID.": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            },
+            "tokenAddress": {
+                "_resourceIDToTokenContractAddress[resourceID]": {
+                    "Check whether the tokenAddress is authorized to use.": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": [
+                                    "address tokenAddress = _resourceIDToTokenContractAddress[resourceID];",
+                                    "require(_contractWhitelist[tokenAddress], \"provided tokenAddress is not whitelisted\");"
+                                ],
+                                "reason": "The code explicitly checks if the tokenAddress is whitelisted via the require statement, which ensures the token address is authorized before proceeding with any operations."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": true,
+                                "validation": [
+                                    "_depositRecords[destinationChainID][depositNonce] = DepositRecord(\n    tokenAddress,\n    uint8(lenRecipientAddress),\n    destinationChainID,\n    resourceID,\n    recipientAddress,\n    depositer,\n    amount\n);"
+                                ],
+                                "reason": "The token address is used in creating a deposit record only after passing the whitelist check, implying it's authorized for use in this context."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "_resourceIDToTokenContractAddress[resourceID]",
+                                "constraint": "Check whether the tokenAddress is authorized to use.",
+                                "validation": "address tokenAddress = _resourceIDToTokenContractAddress[resourceID];\nrequire(_contractWhitelist[tokenAddress], \"provided tokenAddress is not whitelisted\");",
+                                "score": "100",
+                                "reason": "The validation code accurately extracts the token address from the resourceID mapping and checks its presence in the whitelist, fully implementing the constraint logic.",
+                                "results": [
+                                    {
+                                        "result": true,
+                                        "poc": "The validation can be bypassed if the `_resourceIDToTokenContractAddress` mapping is not properly initialized for a given `resourceID`. If no token address is mapped to the provided `resourceID`, the `tokenAddress` will be `address(0)`. The whitelist check would then evaluate `_contractWhitelist[address(0)]`, which could return true if the zero address was accidentally whitelisted, allowing the validation to pass with an invalid token address.",
+                                        "score": 90,
+                                        "reason": "The validation can indeed be bypassed if the `_resourceIDToTokenContractAddress` mapping is not properly initialized for a given `resourceID`, leading to `tokenAddress` being `address(0)`. If the zero address is whitelisted in `_contractWhitelist`, the validation will pass incorrectly. This is a significant security issue as it allows deposits to proceed with an invalid token address. The confidence score is high (90) because the scenario described in the PoC is plausible and directly supported by the code logic, though it depends on the zero address being whitelisted, which may not always be the case."
+                                    },
+                                    {
+                                        "result": true,
+                                        "poc": "The validation can be bypassed by manipulating the `_contractWhitelist` mapping. An attacker with admin privileges (or through a compromised admin account) could add any arbitrary address to the whitelist, including addresses that don't correspond to valid token contracts. This would allow deposits to be made with non-token addresses that pass the whitelist check.",
+                                        "score": "90",
+                                        "reason": "The validation can indeed be bypassed if an attacker has admin privileges or gains control of an admin account, as they can manipulate the `_contractWhitelist` mapping to whitelist arbitrary addresses. The provided PoC correctly identifies this vulnerability. The high confidence score reflects the clear path to bypassing the validation through admin privilege abuse or compromise, which is a common and critical issue in smart contract security."
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            },
+            "amount": {
+                "amount": {
+                    "Validate that amount is greater than 0": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Validate that msg.sender's balance change before and after equals amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Validate that the bridge's balance change before and after equals amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Validate that msg.sender's balance ≥ amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            },
+            "nonce": {
+                "depositNonce": {
+                    "Check if the transaction's nonce is equal to the account's current nonce.": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            }
+        },
+        "step4": {
+            "toChainID": {
+                "destinationChainID": {}
+            },
+            "tokenAddress": {
+                "_resourceIDToTokenContractAddress[resourceID]": {
+                    "Check whether the tokenAddress is authorized to use.": [
+                        {
+                            "parameter": "_resourceIDToTokenContractAddress[resourceID]",
+                            "constraint": "Check whether the tokenAddress is authorized to use.",
+                            "validation": "address tokenAddress = _resourceIDToTokenContractAddress[resourceID];\nrequire(_contractWhitelist[tokenAddress], \"provided tokenAddress is not whitelisted\");",
+                            "score": "100",
+                            "reason": "The validation code accurately extracts the token address from the resourceID mapping and checks its presence in the whitelist, fully implementing the constraint logic.",
+                            "results": [
+                                {
+                                    "result": true,
+                                    "poc": "The validation can be bypassed if the `_resourceIDToTokenContractAddress` mapping is not properly initialized for a given `resourceID`. If no token address is mapped to the provided `resourceID`, the `tokenAddress` will be `address(0)`. The whitelist check would then evaluate `_contractWhitelist[address(0)]`, which could return true if the zero address was accidentally whitelisted, allowing the validation to pass with an invalid token address.",
+                                    "score": 90,
+                                    "reason": "The validation can indeed be bypassed if the `_resourceIDToTokenContractAddress` mapping is not properly initialized for a given `resourceID`, leading to `tokenAddress` being `address(0)`. If the zero address is whitelisted in `_contractWhitelist`, the validation will pass incorrectly. This is a significant security issue as it allows deposits to proceed with an invalid token address. The confidence score is high (90) because the scenario described in the PoC is plausible and directly supported by the code logic, though it depends on the zero address being whitelisted, which may not always be the case."
+                                },
+                                {
+                                    "result": true,
+                                    "poc": "The validation can be bypassed by manipulating the `_contractWhitelist` mapping. An attacker with admin privileges (or through a compromised admin account) could add any arbitrary address to the whitelist, including addresses that don't correspond to valid token contracts. This would allow deposits to be made with non-token addresses that pass the whitelist check.",
+                                    "score": "90",
+                                    "reason": "The validation can indeed be bypassed if an attacker has admin privileges or gains control of an admin account, as they can manipulate the `_contractWhitelist` mapping to whitelist arbitrary addresses. The provided PoC correctly identifies this vulnerability. The high confidence score reflects the clear path to bypassing the validation through admin privilege abuse or compromise, which is a common and critical issue in smart contract security."
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "amount": {
+                "amount": {}
+            },
+            "nonce": {
+                "depositNonce": {}
+            }
+        },
+        "final_result": {
+            "toChainID": {
+                "destinationChainID": {
+                    "Check whether toChainID is authorized.": [
+                        {
+                            "parameter": "destinationChainID",
+                            "constraint": "Check whether toChainID is authorized.",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Check that the destination chain ID is not equal to the source chain ID.": [
+                        {
+                            "parameter": "destinationChainID",
+                            "constraint": "Check that the destination chain ID is not equal to the source chain ID.",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            },
+            "tokenAddress": {
+                "_resourceIDToTokenContractAddress[resourceID]": {
+                    "Check whether the tokenAddress is authorized to use.": [
+                        {
+                            "validation": "address tokenAddress = _resourceIDToTokenContractAddress[resourceID];\nrequire(_contractWhitelist[tokenAddress], \"provided tokenAddress is not whitelisted\");",
+                            "poc": "The validation can be bypassed if the `_resourceIDToTokenContractAddress` mapping is not properly initialized for a given `resourceID`. If no token address is mapped to the provided `resourceID`, the `tokenAddress` will be `address(0)`. The whitelist check would then evaluate `_contractWhitelist[address(0)]`, which could return true if the zero address was accidentally whitelisted, allowing the validation to pass with an invalid token address.",
+                            "score": 90,
+                            "reason": "The validation can indeed be bypassed if the `_resourceIDToTokenContractAddress` mapping is not properly initialized for a given `resourceID`, leading to `tokenAddress` being `address(0)`. If the zero address is whitelisted in `_contractWhitelist`, the validation will pass incorrectly. This is a significant security issue as it allows deposits to proceed with an invalid token address. The confidence score is high (90) because the scenario described in the PoC is plausible and directly supported by the code logic, though it depends on the zero address being whitelisted, which may not always be the case."
+                        },
+                        {
+                            "validation": "address tokenAddress = _resourceIDToTokenContractAddress[resourceID];\nrequire(_contractWhitelist[tokenAddress], \"provided tokenAddress is not whitelisted\");",
+                            "poc": "The validation can be bypassed by manipulating the `_contractWhitelist` mapping. An attacker with admin privileges (or through a compromised admin account) could add any arbitrary address to the whitelist, including addresses that don't correspond to valid token contracts. This would allow deposits to be made with non-token addresses that pass the whitelist check.",
+                            "score": "90",
+                            "reason": "The validation can indeed be bypassed if an attacker has admin privileges or gains control of an admin account, as they can manipulate the `_contractWhitelist` mapping to whitelist arbitrary addresses. The provided PoC correctly identifies this vulnerability. The high confidence score reflects the clear path to bypassing the validation through admin privilege abuse or compromise, which is a common and critical issue in smart contract security."
+                        }
+                    ]
+                }
+            },
+            "amount": {
+                "amount": {
+                    "Validate that amount is greater than 0": [
+                        {
+                            "parameter": "amount",
+                            "constraint": "Validate that amount is greater than 0",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Validate that msg.sender's balance change before and after equals amount": [
+                        {
+                            "parameter": "amount",
+                            "constraint": "Validate that msg.sender's balance change before and after equals amount",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Validate that the bridge's balance change before and after equals amount": [
+                        {
+                            "parameter": "amount",
+                            "constraint": "Validate that the bridge's balance change before and after equals amount",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Validate that msg.sender's balance ≥ amount": [
+                        {
+                            "parameter": "amount",
+                            "constraint": "Validate that msg.sender's balance ≥ amount",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            },
+            "nonce": {
+                "depositNonce": {
+                    "Check if the transaction's nonce is equal to the account's current nonce.": [
+                        {
+                            "parameter": "depositNonce",
+                            "constraint": "Check if the transaction's nonce is equal to the account's current nonce.",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            }
+        },
+        "context": {
+            "event": "Deposit",
+            "call_graph": "deposit",
+            "state_variables": {
+                "_depositCounts": "mapping(uint8 => uint64) public _depositCounts;",
+                "_resourceIDToHandlerAddress": "mapping(bytes32 => address) public _resourceIDToHandlerAddress;",
+                "_depositRecords": "mapping (uint8 => mapping(uint64 => DepositRecord)) public _depositRecords;",
+                "_paused": "bool private _paused;",
+                "_fee": "uint256 public _fee;",
+                "_specialFee": "mapping(uint8 => uint256) public _specialFee;",
+                "_wtokenAddress": "address public override _wtokenAddress;",
+                "_resourceIDToTokenContractAddress": "mapping (bytes32 => address) public _resourceIDToTokenContractAddress;",
+                "_contractWhitelist": "mapping (address => bool) public _contractWhitelist;",
+                "_burnList": "mapping (address => bool) public _burnList;",
+                "_bridgeAddress": "address public _bridgeAddress;",
+                "_balances": "mapping (address => uint256) private _balances;",
+                "_totalSupply": "uint256 private _totalSupply;",
+                "_allowances": "mapping (address => mapping (address => uint256)) private _allowances;"
+            },
+            "external_functions": [
+                "modifier whenNotPaused(){ _whenNotPaused(); _;}",
+                "function _whenNotPaused() private view{ require(!_paused, \"Pausable: paused\");}",
+                "function deposit(bytes32 resourceID, uint8 destinationChainID, uint64 depositNonce, address depositer, bytes calldata data) external;",
+                "modifier onlyBridge(){ _onlyBridge(); _;}",
+                "function _onlyBridge() private{ require(msg.sender == _bridgeAddress, \"sender must be bridge contract \");}",
+                "function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256){ require(b <= a, errorMessage); uint256 c = a - b; return c;}"
+            ]
+        },
+        "step1-time": 60.44787287712097,
+        "step2-time": 1400.657940864563,
+        "step2-call_api_times": 28,
+        "step3-time": 102.82863926887512,
+        "step3-call_api_times": 9,
+        "step4-time": 716.4904427528381,
+        "step4-call_api_times": 3,
+        "compare_audit": {
+            "result": [
+                {
+                    "vuln": "Bridge.deposit:function deposit(uint8 destinationChainID, bytes32 resourceID, bytes calldata data) external payable whenNotPaused",
+                    "reason": "The deposit function does not validate the destinationChainID parameter, which could lead to funds being locked if an invalid chain ID is provided. In cross-chain scenarios, this could result in permanent loss of assets."
+                },
+                {
+                    "vuln": "ERC20Handler.deposit:assembly block",
+                    "reason": "The assembly block performs low-level calldata manipulation without proper bounds checking, which could lead to memory corruption or unexpected behavior when malformed data is provided. In cross-chain contexts, this could be exploited by malicious actors on other chains."
+                },
+                {
+                    "vuln": "ERC20Handler.deposit:bytes memory recipientAddress",
+                    "reason": "The recipient address is read from arbitrary calldata without proper validation. This could allow for address spoofing or injection attacks in cross-chain transactions."
+                },
+                {
+                    "vuln": "Bridge._getFee:function _getFee(uint8 destinationChainID)",
+                    "reason": "The fee calculation doesn't include any validation for the destinationChainID parameter. An invalid chain ID could result in incorrect fee calculations or free transactions in cross-chain operations."
+                },
+                {
+                    "vuln": "ERC20Handler.deposit:tokenAddress != _wtokenAddress check",
+                    "reason": "The special case handling for wrapped tokens creates potential inconsistency in cross-chain operations if the wrapped token address isn't properly synchronized across all chains."
+                }
+            ]
+        },
+        "compare_attribute_verification": {
+            "result": [
+                {
+                    "toChainID": "destinationChainID",
+                    "findings": [
+                        {
+                            "constraint": "Check whether toChainID is authorized.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No explicit authorization check for destinationChainID found in the code."
+                        },
+                        {
+                            "constraint": "Check that the destination chain ID is not equal to the source chain ID.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No check comparing destination and source chain IDs found in the code."
+                        }
+                    ]
+                },
+                {
+                    "tokenAddress": "_resourceIDToTokenContractAddress[resourceID]",
+                    "findings": [
+                        {
+                            "constraint": "Check whether the tokenAddress is authorized to use.",
+                            "validation": "_contractWhitelist[tokenAddress]",
+                            "poc": null,
+                            "reason": "The token address is checked against a whitelist, ensuring it's authorized."
+                        }
+                    ]
+                },
+                {
+                    "nonce": "_depositCounts[destinationChainID]",
+                    "findings": [
+                        {
+                            "constraint": "Check if the transaction's nonce is equal to the account's current nonce.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "The nonce is incremented but not checked against any account-specific nonce."
+                        }
+                    ]
+                },
+                {
+                    "amount": "",
+                    "findings": [
+                        {
+                            "constraint": "Validate that amount is greater than 0",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "'amount' is loaded from calldata but not explicitly checked to be greater than 0."
+                        },
+                        {
+                            "constraint": "'Validate that msg.sender's balance change before and after equals amount'",
+                            "'validation'": "null",
+                            "'poc'": "null",
+                            "'reason'": "No explicit balance change validation for msg.sender found in the code."
+                        },
+                        {
+                            "'constraint'": "'Validate that the bridge's balance change before and after equals amount'",
+                            "'validation'": "null",
+                            "'poc'": "null",
+                            "'reason'": "No explicit balance change validation for the bridge found in the code."
+                        },
+                        {
+                            "'constraint'": "'Validate that msg.sender's balance ≥ amount'",
+                            "'validation'": "_balances[account].sub(amount, \"ERC20: burn amount exceeds balance\") (in _burn function)",
+                            "'poc'": "null",
+                            "'reason'": "The _burn function checks if the sender's balance is sufficient, but this isn't directly tied to msg.sender in all cases."
+                        }
+                    ]
+                },
+                {
+                    "recipientAddress": "recipientAddress (loaded from calldata)",
+                    "findings": [
+                        {
+                            "constraint": "Validate that recipientAddress is not the zero address",
+                            "validation": "require(owner != address(0), \"ERC20: approve from the zero address\") (in _approve function)",
+                            "poc": "null",
+                            "reason": "The _approve function checks for zero address, but this isn't directly applied to recipientAddress."
+                        }
+                    ]
+                },
+                {
+                    "externalCallAddress": "",
+                    "findings": [
+                        {
+                            "constraint": "Check whether the externalCallAddress is authorized to use.",
+                            "validation": "null",
+                            "poc": "null",
+                            "reason": "No external call address or authorization check found in the provided code."
+                        }
+                    ]
+                },
+                {
+                    "externalCallFunction": "",
+                    "findings": [
+                        {
+                            "constraint": "Validate that externalCallFunction is in the allowed function signature list",
+                            "validation": "null",
+                            "poc": "null",
+                            "reason": "No external call function or signature validation found in the provided code."
+                        }
+                    ]
+                },
+                {
+                    "routerAddress": "_resourceIDToHandlerAddress[resourceID]",
+                    "findings": [
+                        {
+                            "constraint": "Check whether the routerAddress is authorized to use.",
+                            "validation": "require(handler != address(0), \"resourceID not mapped to handler\")",
+                            "poc": "null",
+                            "reason": "The handler address (router) is checked against being zero, but no additional authorization check exists."
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

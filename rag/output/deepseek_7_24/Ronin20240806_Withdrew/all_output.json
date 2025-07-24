@@ -1,0 +1,1244 @@
+{
+    "MainchainGatewayV3.unlockWithdrawal": {
+        "step1": {
+            "prompt1": "\nYou are an experienced cross-chain protocol analysis expert. Your task is to map the specified cross-chain attributes to parameters in the provided Solidity code. If an attribute cannot be found in the code, do not list it in the output. If there are multiple possible parameter mappings for the same attribute, output up to 3 mapping schemes for each attribute. Please strictly follow the input and output formats defined below:\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"attribute\": \n{ \n\"<attribute>\": \"<attribute description>\" ,\n\"<attribute>\": \"<attribute description>\",\n...\n}\n\"code\": \"...\" // Solidity contract code string\n}\n\n\nOutput format:\nReturn a JSON array, each item structured must as follows:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // The input cross-chain attribute\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}, ... \n]\nIn the reason, please point out both the core basis for the mapping and potential uncertainties (e.g., parameter name similarity, ambiguous contextual meaning, etc.).\n\nInput:\n{\n\"attribute\": {\"toChainID\": \"Specifies the destination blockchain network ID.\", \"tokenAddress\": \"Indicates the contract address of the token to be transferred.\", \"amount\": \"The number of tokens to be transferred across chains.\", \"nonce\": \"Check and mark that nonce has not been consumed to prevent replay\", \"recipientAddress\": \"The address that will receive the tokens on the destination chain.\", \"externalCallAddress\": \"The address of a contract to be called after the cross-chain transfer.\", \"externalCallFunction\": \"The specific function or calldata to be executed on the `externalCallAddress`.\", \"routerAddress\": \"The address of the cross-chain router or bridge handler.\"},\n\"code\": [\"MainchainGatewayV3.unlockWithdrawal:function unlockWithdrawal(Transfer.Receipt calldata receipt) external onlyRole(WITHDRAWAL_UNLOCKER_ROLE) {\\n    bytes32 _receiptHash = receipt.hash();\\n    if (withdrawalHash[receipt.id] != receipt.hash()) {\\n      revert ErrInvalidReceipt();\\n    }\\n    if (!withdrawalLocked[receipt.id]) {\\n      revert ErrQueryForApprovedWithdrawal();\\n    }\\n    delete withdrawalLocked[receipt.id];\\n    emit WithdrawalUnlocked(_receiptHash, receipt);\\n\\n    address token = receipt.mainchain.tokenAddr;\\n    if (receipt.info.erc == TokenStandard.ERC20) {\\n      TokenInfo memory feeInfo = receipt.info;\\n      feeInfo.quantity = _computeFeePercentage(receipt.info.quantity, unlockFeePercentages[token]);\\n      TokenInfo memory withdrawInfo = receipt.info;\\n      withdrawInfo.quantity = receipt.info.quantity - feeInfo.quantity;\\n\\n      feeInfo.handleAssetOut(payable(msg.sender), token, wrappedNativeToken);\\n      withdrawInfo.handleAssetOut(payable(receipt.mainchain.addr), token, wrappedNativeToken);\\n    } else {\\n      receipt.info.handleAssetOut(payable(receipt.mainchain.addr), token, wrappedNativeToken);\\n    }\\n\\n    emit Withdrew(_receiptHash, receipt);\\n  }\"]\n}\n",
+            "outputs1": [
+                [
+                    {
+                        "parameter": "receipt.mainchain.tokenAddr",
+                        "attribute": "tokenAddress",
+                        "reason": "The parameter 'receipt.mainchain.tokenAddr' likely corresponds to the token address as it is used to identify the token contract in the asset handling logic. However, it is nested within a 'mainchain' struct, which may imply it's specifically for the source chain rather than destination."
+                    },
+                    {
+                        "parameter": "receipt.info.quantity",
+                        "attribute": "amount",
+                        "reason": "'receipt.info.quantity' appears to represent the token amount being processed, matching the 'amount' attribute. The context shows it's used for fee calculation and withdrawal, but it's unclear if this is pre-fee or post-fee amount."
+                    },
+                    {
+                        "parameter": "receipt.mainchain.addr",
+                        "attribute": "recipientAddress",
+                        "reason": "'receipt.mainchain.addr' is used as the destination for withdrawn assets, aligning with recipient address functionality. The 'mainchain' prefix suggests it might be chain-specific (source vs. destination ambiguity)."
+                    },
+                    {
+                        "parameter": "receipt.id",
+                        "attribute": "nonce",
+                        "reason": "'receipt.id' could serve as a nonce equivalent since it's used to track withdrawal state (locked/processed) and prevent replay via withdrawalHash mapping. However, this mapping is speculative as it's not explicitly labeled as a nonce."
+                    }
+                ]
+            ],
+            "v_prompt1": "\nYou are a rigorous cross-chain protocol auditor and data consistency verifier. Carefully review whether the meaning of each cross-chain attribute and parameter in the code is consistent, assign a confidence score (0-100%), and state the reason for the given confidence score.\n\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"correspondence\":    // Array of attribute-parameter correspondences in the code\n[\n{\n\"attribute\": \"...\", // Input cross-chain attribute\n\"parameter\": \"...\", // Corresponding parameter\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}\n...\n],\n\"code\":\"...\" // Cross-chain contract code\n}\n\nOutput format: Return a JSON array, each item structured as follows:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // Input cross-chain attribute\n\"score\":\"...\", // Assigned confidence score\n\"reason\": \"...\" // Brief explanation for the given confidence score\n}, ... \n]\nInput:\n{\n\"correspondence\": [{\"parameter\": \"receipt.mainchain.tokenAddr\", \"attribute\": \"tokenAddress\", \"reason\": \"The parameter 'receipt.mainchain.tokenAddr' likely corresponds to the token address as it is used to identify the token contract in the asset handling logic. However, it is nested within a 'mainchain' struct, which may imply it's specifically for the source chain rather than destination.\"}, {\"parameter\": \"receipt.info.quantity\", \"attribute\": \"amount\", \"reason\": \"'receipt.info.quantity' appears to represent the token amount being processed, matching the 'amount' attribute. The context shows it's used for fee calculation and withdrawal, but it's unclear if this is pre-fee or post-fee amount.\"}, {\"parameter\": \"receipt.mainchain.addr\", \"attribute\": \"recipientAddress\", \"reason\": \"'receipt.mainchain.addr' is used as the destination for withdrawn assets, aligning with recipient address functionality. The 'mainchain' prefix suggests it might be chain-specific (source vs. destination ambiguity).\"}, {\"parameter\": \"receipt.id\", \"attribute\": \"nonce\", \"reason\": \"'receipt.id' could serve as a nonce equivalent since it's used to track withdrawal state (locked/processed) and prevent replay via withdrawalHash mapping. However, this mapping is speculative as it's not explicitly labeled as a nonce.\"}],\n\"code\": [\"MainchainGatewayV3.unlockWithdrawal:function unlockWithdrawal(Transfer.Receipt calldata receipt) external onlyRole(WITHDRAWAL_UNLOCKER_ROLE) {\\n    bytes32 _receiptHash = receipt.hash();\\n    if (withdrawalHash[receipt.id] != receipt.hash()) {\\n      revert ErrInvalidReceipt();\\n    }\\n    if (!withdrawalLocked[receipt.id]) {\\n      revert ErrQueryForApprovedWithdrawal();\\n    }\\n    delete withdrawalLocked[receipt.id];\\n    emit WithdrawalUnlocked(_receiptHash, receipt);\\n\\n    address token = receipt.mainchain.tokenAddr;\\n    if (receipt.info.erc == TokenStandard.ERC20) {\\n      TokenInfo memory feeInfo = receipt.info;\\n      feeInfo.quantity = _computeFeePercentage(receipt.info.quantity, unlockFeePercentages[token]);\\n      TokenInfo memory withdrawInfo = receipt.info;\\n      withdrawInfo.quantity = receipt.info.quantity - feeInfo.quantity;\\n\\n      feeInfo.handleAssetOut(payable(msg.sender), token, wrappedNativeToken);\\n      withdrawInfo.handleAssetOut(payable(receipt.mainchain.addr), token, wrappedNativeToken);\\n    } else {\\n      receipt.info.handleAssetOut(payable(receipt.mainchain.addr), token, wrappedNativeToken);\\n    }\\n\\n    emit Withdrew(_receiptHash, receipt);\\n  }\"]:\n}\n\n",
+            "v_outputs1": [
+                [
+                    {
+                        "parameter": "receipt.mainchain.tokenAddr",
+                        "attribute": "tokenAddress",
+                        "score": "85%",
+                        "reason": "The parameter clearly represents a token address in the mainchain context, matching the 'tokenAddress' attribute. The deduction in confidence comes from the chain-specific nesting ('mainchain'), which may not be universally applicable across all chains in the protocol."
+                    },
+                    {
+                        "parameter": "receipt.info.quantity",
+                        "attribute": "amount",
+                        "score": "90%",
+                        "reason": "'receipt.info.quantity' is directly used for fee calculations and withdrawals, strongly aligning with 'amount' semantics. The minor uncertainty stems from lack of explicit documentation on whether this is pre-fee or post-fee amount, though code logic suggests it's pre-fee."
+                    },
+                    {
+                        "parameter": "receipt.mainchain.addr",
+                        "attribute": "recipientAddress",
+                        "score": "80%",
+                        "reason": "While this parameter functions as a recipient address in the withdrawal flow, the 'mainchain' prefix introduces ambiguity about whether it's strictly for source-chain recipients or universally applicable. The score reflects this contextual uncertainty."
+                    },
+                    {
+                        "parameter": "receipt.id",
+                        "attribute": "nonce",
+                        "score": "75%",
+                        "reason": "'receipt.id' exhibits nonce-like behavior (preventing replay via withdrawalHash mapping), but lacks explicit labeling as a nonce. The score accounts for functional alignment despite missing semantic clarity."
+                    }
+                ]
+            ],
+            "formatted_outputs1": {
+                "receipt.mainchain.tokenAddr": {
+                    "tokenAddress": {
+                        "reason": "The parameter 'receipt.mainchain.tokenAddr' likely corresponds to the token address as it is used to identify the token contract in the asset handling logic. However, it is nested within a 'mainchain' struct, which may imply it's specifically for the source chain rather than destination.",
+                        "score": "85%",
+                        "s_reason": "The parameter clearly represents a token address in the mainchain context, matching the 'tokenAddress' attribute. The deduction in confidence comes from the chain-specific nesting ('mainchain'), which may not be universally applicable across all chains in the protocol."
+                    }
+                },
+                "receipt.info.quantity": {
+                    "amount": {
+                        "reason": "'receipt.info.quantity' appears to represent the token amount being processed, matching the 'amount' attribute. The context shows it's used for fee calculation and withdrawal, but it's unclear if this is pre-fee or post-fee amount.",
+                        "score": "90%",
+                        "s_reason": "'receipt.info.quantity' is directly used for fee calculations and withdrawals, strongly aligning with 'amount' semantics. The minor uncertainty stems from lack of explicit documentation on whether this is pre-fee or post-fee amount, though code logic suggests it's pre-fee."
+                    }
+                },
+                "receipt.mainchain.addr": {
+                    "recipientAddress": {
+                        "reason": "'receipt.mainchain.addr' is used as the destination for withdrawn assets, aligning with recipient address functionality. The 'mainchain' prefix suggests it might be chain-specific (source vs. destination ambiguity).",
+                        "score": "80%",
+                        "s_reason": "While this parameter functions as a recipient address in the withdrawal flow, the 'mainchain' prefix introduces ambiguity about whether it's strictly for source-chain recipients or universally applicable. The score reflects this contextual uncertainty."
+                    }
+                },
+                "receipt.id": {
+                    "nonce": {
+                        "reason": "'receipt.id' could serve as a nonce equivalent since it's used to track withdrawal state (locked/processed) and prevent replay via withdrawalHash mapping. However, this mapping is speculative as it's not explicitly labeled as a nonce.",
+                        "score": "75%",
+                        "s_reason": "'receipt.id' exhibits nonce-like behavior (preventing replay via withdrawalHash mapping), but lacks explicit labeling as a nonce. The score accounts for functional alignment despite missing semantic clarity."
+                    }
+                }
+            }
+        },
+        "step2": {
+            "tokenAddress": {
+                "receipt.mainchain.tokenAddr": {
+                    "dataflows": [
+                        {
+                            "parameter": "receipt.mainchain.tokenAddr",
+                            "dataflow": {
+                                "unlockWithdrawal": [
+                                    "function unlockWithdrawal(Transfer.Receipt calldata receipt) external onlyRole(WITHDRAWAL_UNLOCKER_ROLE) {\n    bytes32 _receiptHash = receipt.hash();\n    if (withdrawalHash[receipt.id] != receipt.hash()) {\n      revert ErrInvalidReceipt();\n    }\n    if (!withdrawalLocked[receipt.id]) {\n      revert ErrQueryForApprovedWithdrawal();\n    }\n    delete withdrawalLocked[receipt.id];\n    emit WithdrawalUnlocked(_receiptHash, receipt);\n\n    address token = receipt.mainchain.tokenAddr;",
+                                    "if (receipt.info.erc == TokenStandard.ERC20) {\n      TokenInfo memory feeInfo = receipt.info;\n      feeInfo.quantity = _computeFeePercentage(receipt.info.quantity, unlockFeePercentages[token]);\n      TokenInfo memory withdrawInfo = receipt.info;\n      withdrawInfo.quantity = receipt.info.quantity - feeInfo.quantity;\n\n      feeInfo.handleAssetOut(payable(msg.sender), token, wrappedNativeToken);\n      withdrawInfo.handleAssetOut(payable(receipt.mainchain.addr), token, wrappedNativeToken);\n    } else {\n      receipt.info.handleAssetOut(payable(receipt.mainchain.addr), token, wrappedNativeToken);\n    }",
+                                    "emit Withdrew(_receiptHash, receipt);"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "100",
+                            "reason": "The data flow code for the parameter 'receipt.mainchain.tokenAddr' is fully covered and correctly used in both the original code and the cross-chain contract code. The parameter is consistently accessed and utilized in the same manner across both code segments, ensuring complete coverage and correctness."
+                        },
+                        {
+                            "parameter": "receipt.mainchain.tokenAddr",
+                            "dataflow": {
+                                "unlockWithdrawal": [
+                                    "function unlockWithdrawal(Transfer.Receipt calldata receipt) external onlyRole(WITHDRAWAL_UNLOCKER_ROLE) {",
+                                    "address token = receipt.mainchain.tokenAddr;",
+                                    "if (receipt.info.erc == TokenStandard.ERC20) {",
+                                    "TokenInfo memory feeInfo = receipt.info;",
+                                    "feeInfo.quantity = _computeFeePercentage(receipt.info.quantity, unlockFeePercentages[token]);",
+                                    "TokenInfo memory withdrawInfo = receipt.info;",
+                                    "withdrawInfo.quantity = receipt.info.quantity - feeInfo.quantity;",
+                                    "feeInfo.handleAssetOut(payable(msg.sender), token, wrappedNativeToken);",
+                                    "withdrawInfo.handleAssetOut(payable(receipt.mainchain.addr), token, wrappedNativeToken);",
+                                    "} else {",
+                                    "receipt.info.handleAssetOut(payable(receipt.mainchain.addr), token, wrappedNativeToken);",
+                                    "}",
+                                    "emit Withdrew(_receiptHash, receipt);"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "100",
+                            "reason": "The data flow code for the parameter 'receipt.mainchain.tokenAddr' is fully covered in the original code and correctly used in both branches of the conditional statement (ERC20 and non-ERC20 cases). The parameter is properly extracted and utilized for handling asset transfers, ensuring its correctness in the context of the cross-chain protocol."
+                        }
+                    ],
+                    "merge_dataflows": "function unlockWithdrawal(Transfer.Receipt calldata receipt) external onlyRole(WITHDRAWAL_UNLOCKER_ROLE) {\n    bytes32 _receiptHash = receipt.hash();\n    if (withdrawalHash[receipt.id] != receipt.hash()) {\n      revert ErrInvalidReceipt();\n    }\n    if (!withdrawalLocked[receipt.id]) {\n      revert ErrQueryForApprovedWithdrawal();\n    }\n    delete withdrawalLocked[receipt.id];\n    emit WithdrawalUnlocked(_receiptHash, receipt);\n\n    address token = receipt.mainchain.tokenAddr;\n    if (receipt.info.erc == TokenStandard.ERC20) {\n      TokenInfo memory feeInfo = receipt.info;\n      feeInfo.quantity = _computeFeePercentage(receipt.info.quantity, unlockFeePercentages[token]);\n      TokenInfo memory withdrawInfo = receipt.info;\n      withdrawInfo.quantity = receipt.info.quantity - feeInfo.quantity;\n\n      feeInfo.handleAssetOut(payable(msg.sender), token, wrappedNativeToken);\n      withdrawInfo.handleAssetOut(payable(receipt.mainchain.addr), token, wrappedNativeToken);\n    } else {\n      receipt.info.handleAssetOut(payable(receipt.mainchain.addr), token, wrappedNativeToken);\n    }\n    emit Withdrew(_receiptHash, receipt);"
+                }
+            },
+            "amount": {
+                "receipt.info.quantity": {
+                    "dataflows": [
+                        {
+                            "parameter": "receipt.info.quantity",
+                            "dataflow": {
+                                "unlockWithdrawal": [
+                                    "function unlockWithdrawal(Transfer.Receipt calldata receipt) external onlyRole(WITHDRAWAL_UNLOCKER_ROLE) {",
+                                    "    if (receipt.info.erc == TokenStandard.ERC20) {",
+                                    "      TokenInfo memory feeInfo = receipt.info;",
+                                    "      feeInfo.quantity = _computeFeePercentage(receipt.info.quantity, unlockFeePercentages[token]);",
+                                    "      TokenInfo memory withdrawInfo = receipt.info;",
+                                    "      withdrawInfo.quantity = receipt.info.quantity - feeInfo.quantity;",
+                                    "      feeInfo.handleAssetOut(payable(msg.sender), token, wrappedNativeToken);",
+                                    "      withdrawInfo.handleAssetOut(payable(receipt.mainchain.addr), token, wrappedNativeToken);",
+                                    "    } else {",
+                                    "      receipt.info.handleAssetOut(payable(receipt.mainchain.addr), token, wrappedNativeToken);",
+                                    "    }"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "95",
+                            "score": "92",
+                            "reason": "The data flow for 'receipt.info.quantity' is well-covered in both the original code and the cross-chain contract code, with proper handling in fee computation and withdrawal calculations. The correctness is high as the parameter is consistently used in arithmetic operations and passed to asset handling functions without modification errors. Minor deduction in coverage due to lack of explicit validation checks on the quantity value itself."
+                        },
+                        {
+                            "parameter": "receipt.info.quantity",
+                            "dataflow": {
+                                "unlockWithdrawal": [
+                                    "function unlockWithdrawal(Transfer.Receipt calldata receipt) external onlyRole(WITHDRAWAL_UNLOCKER_ROLE) {",
+                                    "TokenInfo memory feeInfo = receipt.info;",
+                                    "feeInfo.quantity = _computeFeePercentage(receipt.info.quantity, unlockFeePercentages[token]);",
+                                    "TokenInfo memory withdrawInfo = receipt.info;",
+                                    "withdrawInfo.quantity = receipt.info.quantity - feeInfo.quantity;",
+                                    "feeInfo.handleAssetOut(payable(msg.sender), token, wrappedNativeToken);",
+                                    "withdrawInfo.handleAssetOut(payable(receipt.mainchain.addr), token, wrappedNativeToken);",
+                                    "receipt.info.handleAssetOut(payable(receipt.mainchain.addr), token, wrappedNativeToken);"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "95",
+                            "score": "92",
+                            "reason": "The dataflow for 'receipt.info.quantity' is well-covered in the original code, appearing in multiple critical operations including fee computation and withdrawal calculation. The correctness is high as the parameter is correctly used in arithmetic operations and passed to subsequent functions without modification errors. The minor deduction in coverage is due to the parameter not being used in the ERC721/ERC1155 branch of the conditional statement."
+                        }
+                    ],
+                    "merge_dataflows": "function unlockWithdrawal(Transfer.Receipt calldata receipt) external onlyRole(WITHDRAWAL_UNLOCKER_ROLE) {\n    if (receipt.info.erc == TokenStandard.ERC20) {\n      TokenInfo memory feeInfo = receipt.info;\n      feeInfo.quantity = _computeFeePercentage(receipt.info.quantity, unlockFeePercentages[token]);\n      TokenInfo memory withdrawInfo = receipt.info;\n      withdrawInfo.quantity = receipt.info.quantity - feeInfo.quantity;\n      feeInfo.handleAssetOut(payable(msg.sender), token, wrappedNativeToken);\n      withdrawInfo.handleAssetOut(payable(receipt.mainchain.addr), token, wrappedNativeToken);\n    } else {\n      receipt.info.handleAssetOut(payable(receipt.mainchain.addr), token, wrappedNativeToken);\n    }\n}"
+                }
+            },
+            "recipientAddress": {
+                "receipt.mainchain.addr": {
+                    "dataflows": [
+                        {
+                            "parameter": "receipt.mainchain.addr",
+                            "dataflow": {
+                                "unlockWithdrawal": [
+                                    "function unlockWithdrawal(Transfer.Receipt calldata receipt) external onlyRole(WITHDRAWAL_UNLOCKER_ROLE) {",
+                                    "    emit WithdrawalUnlocked(_receiptHash, receipt);",
+                                    "    if (receipt.info.erc == TokenStandard.ERC20) {",
+                                    "      TokenInfo memory withdrawInfo = receipt.info;",
+                                    "      withdrawInfo.quantity = receipt.info.quantity - feeInfo.quantity;",
+                                    "      withdrawInfo.handleAssetOut(payable(receipt.mainchain.addr), token, wrappedNativeToken);",
+                                    "    } else {",
+                                    "      receipt.info.handleAssetOut(payable(receipt.mainchain.addr), token, wrappedNativeToken);",
+                                    "    }",
+                                    "    emit Withdrew(_receiptHash, receipt);"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "95",
+                            "score": "92",
+                            "reason": "The data flow code covers the usage of 'receipt.mainchain.addr' in both ERC20 and non-ERC20 cases, showing correct handling in asset transfers. The extracted data flow matches the original code's logic, including fee computation for ERC20 tokens. Minor deduction for not showing the full context of receipt validation checks."
+                        },
+                        {
+                            "parameter": "receipt.mainchain.addr",
+                            "dataflow": {
+                                "unlockWithdrawal": [
+                                    "function unlockWithdrawal(Transfer.Receipt calldata receipt) external onlyRole(WITHDRAWAL_UNLOCKER_ROLE) {",
+                                    "withdrawInfo.handleAssetOut(payable(receipt.mainchain.addr), token, wrappedNativeToken);",
+                                    "receipt.info.handleAssetOut(payable(receipt.mainchain.addr), token, wrappedNativeToken);",
+                                    "emit Withdrew(_receiptHash, receipt);"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "100",
+                            "reason": "The data flow code for 'receipt.mainchain.addr' is fully covered in the original code, appearing in both ERC20 and non-ERC20 branches of the unlockWithdrawal function. The usage is correct in both contexts, properly passing the address to handleAssetOut as a payable parameter. The parameter is consistently used for withdrawal destination across all relevant code paths."
+                        }
+                    ],
+                    "merge_dataflows": "function unlockWithdrawal(Transfer.Receipt calldata receipt) external onlyRole(WITHDRAWAL_UNLOCKER_ROLE) {\n    emit WithdrawalUnlocked(_receiptHash, receipt);\n    if (receipt.info.erc == TokenStandard.ERC20) {\n      TokenInfo memory withdrawInfo = receipt.info;\n      withdrawInfo.quantity = receipt.info.quantity - feeInfo.quantity;\n      withdrawInfo.handleAssetOut(payable(receipt.mainchain.addr), token, wrappedNativeToken);\n    } else {\n      receipt.info.handleAssetOut(payable(receipt.mainchain.addr), token, wrappedNativeToken);\n    }\n    emit Withdrew(_receiptHash, receipt);"
+                }
+            }
+        },
+        "step3": {
+            "tokenAddress": {
+                "receipt.mainchain.tokenAddr": {
+                    "Check whether the tokenAddress is authorized to use.": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            },
+            "amount": {
+                "receipt.info.quantity": {
+                    "Validate that amount is greater than 0": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not explicitly validate that receipt.info.quantity is greater than 0. It performs operations on the quantity but doesn't check its value."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The constraint requires a validation check for receipt.info.quantity > 0, but the provided code only uses the quantity for computations and transfers without any validation."
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Validate that msg.sender's balance change before and after equals amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not explicitly track or validate the balance change of msg.sender before and after the transaction. It handles asset transfers but doesn't verify the balance delta equals the specified amount."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The constraint requires explicit balance validation logic which is not present in the provided code. The function performs transfers but doesn't include checks for msg.sender's balance changes matching the transferred amount."
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Validate that the bridge's balance change before and after equals amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not explicitly track or validate the bridge's balance change before and after the transaction."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The constraint requires balance validation logic which is absent in the provided code snippet."
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Validate that msg.sender's balance ≥ amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not explicitly check msg.sender's balance against the amount (receipt.info.quantity) before processing the transfer."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The constraint requires a balance check, but the provided code only handles the transfer logic without any validation of the sender's balance."
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            },
+            "recipientAddress": {
+                "receipt.mainchain.addr": {
+                    "Validate that recipientAddress is not the zero address": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not explicitly check whether receipt.mainchain.addr is the zero address before using it in handleAssetOut."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "There is no validation logic present in the provided code snippet that would enforce the constraint of preventing zero address as recipient."
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            }
+        },
+        "step4": {
+            "tokenAddress": {
+                "receipt.mainchain.tokenAddr": {}
+            },
+            "amount": {
+                "receipt.info.quantity": {}
+            },
+            "recipientAddress": {
+                "receipt.mainchain.addr": {}
+            }
+        },
+        "final_result": {
+            "tokenAddress": {
+                "receipt.mainchain.tokenAddr": {
+                    "Check whether the tokenAddress is authorized to use.": [
+                        {
+                            "parameter": "receipt.mainchain.tokenAddr",
+                            "constraint": "Check whether the tokenAddress is authorized to use.",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            },
+            "amount": {
+                "receipt.info.quantity": {
+                    "Validate that amount is greater than 0": [
+                        {
+                            "parameter": "receipt.info.quantity",
+                            "constraint": "Validate that amount is greater than 0",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Validate that msg.sender's balance change before and after equals amount": [
+                        {
+                            "parameter": "receipt.info.quantity",
+                            "constraint": "Validate that msg.sender's balance change before and after equals amount",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Validate that the bridge's balance change before and after equals amount": [
+                        {
+                            "parameter": "receipt.info.quantity",
+                            "constraint": "Validate that the bridge's balance change before and after equals amount",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Validate that msg.sender's balance ≥ amount": [
+                        {
+                            "parameter": "receipt.info.quantity",
+                            "constraint": "Validate that msg.sender's balance ≥ amount",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            },
+            "recipientAddress": {
+                "receipt.mainchain.addr": {
+                    "Validate that recipientAddress is not the zero address": [
+                        {
+                            "parameter": "receipt.mainchain.addr",
+                            "constraint": "Validate that recipientAddress is not the zero address",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            }
+        },
+        "context": {
+            "event": "Withdrew",
+            "call_graph": "unlockWithdrawal",
+            "state_variables": {
+                "WITHDRAWAL_UNLOCKER_ROLE": "bytes32 public constant WITHDRAWAL_UNLOCKER_ROLE = keccak256(\"WITHDRAWAL_UNLOCKER_ROLE\");",
+                "wrappedNativeToken": "IWETH public wrappedNativeToken;",
+                "withdrawalHash": "mapping(uint256 => bytes32) public withdrawalHash;",
+                "withdrawalLocked": "mapping(uint256 => bool) public withdrawalLocked;"
+            },
+            "external_functions": []
+        },
+        "step1-time": 32.75206518173218,
+        "step2-time": 351.7436492443085,
+        "step2-call_api_times": 21,
+        "step3-time": 77.00248694419861,
+        "step3-call_api_times": 6,
+        "step4-time": 0.0005161762237548828,
+        "step4-call_api_times": 0,
+        "compare_audit": {
+            "result": [
+                {
+                    "vuln": "if (withdrawalHash[receipt.id] != receipt.hash())",
+                    "reason": "Potential replay attack vulnerability. The receipt.id could be reused on different chains, allowing attackers to replay the same withdrawal on multiple chains if the id generation isn't chain-specific."
+                },
+                {
+                    "vuln": "_computeFeePercentage(receipt.info.quantity, unlockFeePercentages[token])",
+                    "reason": "Lack of input validation for fee percentage could lead to incorrect fee calculations in cross-chain context where fee structures might differ between chains."
+                },
+                {
+                    "vuln": "receipt.info.handleAssetOut(payable(receipt.mainchain.addr), token, wrappedNativeToken)",
+                    "reason": "Direct use of receipt.mainchain.addr without validation could allow cross-chain address spoofing if the address formats differ between chains."
+                },
+                {
+                    "vuln": "delete withdrawalLocked[receipt.id]",
+                    "reason": "State deletion before asset transfer creates a reentrancy risk, which is particularly dangerous in cross-chain scenarios where transaction ordering might be unpredictable."
+                }
+            ]
+        },
+        "compare_attribute_verification": {
+            "result": [
+                {
+                    "toChainID": "Specifies the destination blockchain network ID.",
+                    "findings": [
+                        {
+                            "constraint": "Check whether toChainID is authorized.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No validation logic found for toChainID authorization in the provided code."
+                        },
+                        {
+                            "constraint": "Check that the destination chain ID is not equal to the source chain ID.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No validation logic found for comparing source and destination chain IDs in the provided code."
+                        }
+                    ]
+                },
+                {
+                    "tokenAddress": "Indicates the contract address of the token to be transferred.",
+                    "findings": [
+                        {
+                            "constraint": "Check whether the tokenAddress is authorized to use.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No validation logic found for tokenAddress authorization in the provided code."
+                        }
+                    ]
+                },
+                {
+                    "nonce": "Check and mark that nonce has not been consumed to prevent replay",
+                    "findings": [
+                        {
+                            "constraint": "Check if the transaction's nonce is equal to the account's current nonce.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No validation logic found for nonce checking in the provided code."
+                        }
+                    ]
+                },
+                {
+                    "amount": "The number of tokens to be transferred across chains.",
+                    "findings": [
+                        {
+                            "constraint": "Validate that amount is greater than 0",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "'amount' field is not directly checked in the provided code."
+                        },
+                        {
+                            "_computeFeePercentage(receipt.info.quantity, unlockFeePercentages[token]);\n      TokenInfo memory withdrawInfo = receipt.info;\n      withdrawInfo.quantity = receipt.info.quantity - feeInfo.quantity;": "Validate that msg.sender's balance change before and after equals amount",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "'amount' field is not directly checked in the provided code."
+                        },
+                        {
+                            "_computeFeePercentage(receipt.info.quantity, unlockFeePercentages[token]);\n      TokenInfo memory withdrawInfo = receipt.info;\n      withdrawInfo.quantity = receipt.info.quantity - feeInfo.quantity;": "Validate that msg.sender's balance ≥ amount",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "'amount' field is not directly checked in the provided code."
+                        }
+                    ]
+                },
+                {
+                    "_computeFeePercentage(receipt.info.quantity, unlockFeePercentages[token]);\n      TokenInfo memory withdrawInfo = receipt.info;\n      withdrawInfo.quantity = receipt.info.quantity - feeInfo.quantity;": [
+                        "Check whether the routerAddress is authorized to use."
+                    ]
+                }
+            ]
+        }
+    },
+    "MainchainGatewayV3._submitWithdrawal": {
+        "step1": {
+            "prompt1": "\nYou are an experienced cross-chain protocol analysis expert. Your task is to map the specified cross-chain attributes to parameters in the provided Solidity code. If an attribute cannot be found in the code, do not list it in the output. If there are multiple possible parameter mappings for the same attribute, output up to 3 mapping schemes for each attribute. Please strictly follow the input and output formats defined below:\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"attribute\": \n{ \n\"<attribute>\": \"<attribute description>\" ,\n\"<attribute>\": \"<attribute description>\",\n...\n}\n\"code\": \"...\" // Solidity contract code string\n}\n\n\nOutput format:\nReturn a JSON array, each item structured must as follows:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // The input cross-chain attribute\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}, ... \n]\nIn the reason, please point out both the core basis for the mapping and potential uncertainties (e.g., parameter name similarity, ambiguous contextual meaning, etc.).\n\nInput:\n{\n\"attribute\": {\"toChainID\": \"Specifies the destination blockchain network ID.\", \"tokenAddress\": \"Indicates the contract address of the token to be transferred.\", \"amount\": \"The number of tokens to be transferred across chains.\", \"nonce\": \"Check and mark that nonce has not been consumed to prevent replay\", \"recipientAddress\": \"The address that will receive the tokens on the destination chain.\", \"externalCallAddress\": \"The address of a contract to be called after the cross-chain transfer.\", \"externalCallFunction\": \"The specific function or calldata to be executed on the `externalCallAddress`.\", \"routerAddress\": \"The address of the cross-chain router or bridge handler.\"},\n\"code\": [\"MainchainGatewayV3._submitWithdrawal:function _submitWithdrawal(Transfer.Receipt calldata receipt, Signature[] memory signatures) internal virtual returns (bool locked) {\\n    uint256 id = receipt.id;\\n    uint256 quantity = receipt.info.quantity;\\n    address tokenAddr = receipt.mainchain.tokenAddr;\\n\\n    receipt.info.validate();\\n    if (receipt.kind != Transfer.Kind.Withdrawal) revert ErrInvalidReceiptKind();\\n\\n    if (receipt.mainchain.chainId != block.chainid) {\\n      revert ErrInvalidChainId(msg.sig, receipt.mainchain.chainId, block.chainid);\\n    }\\n\\n    MappedToken memory token = getRoninToken(receipt.mainchain.tokenAddr);\\n\\n    if (!(token.erc == receipt.info.erc && token.tokenAddr == receipt.ronin.tokenAddr && receipt.ronin.chainId == roninChainId)) {\\n      revert ErrInvalidReceipt();\\n    }\\n\\n    if (withdrawalHash[id] != 0) revert ErrQueryForProcessedWithdrawal();\\n\\n    if (!(receipt.info.erc == TokenStandard.ERC721 || !_reachedWithdrawalLimit(tokenAddr, quantity))) {\\n      revert ErrReachedDailyWithdrawalLimit();\\n    }\\n\\n    bytes32 receiptHash = receipt.hash();\\n    bytes32 receiptDigest = Transfer.receiptDigest(_domainSeparator, receiptHash);\\n\\n    uint256 minimumWeight;\\n    (minimumWeight, locked) = _computeMinVoteWeight(receipt.info.erc, tokenAddr, quantity);\\n\\n    {\\n      bool passed;\\n      address signer;\\n      address lastSigner;\\n      Signature memory sig;\\n      uint256 weight;\\n      for (uint256 i; i < signatures.length; i++) {\\n        sig = signatures[i];\\n        signer = ecrecover(receiptDigest, sig.v, sig.r, sig.s);\\n        if (lastSigner >= signer) revert ErrInvalidOrder(msg.sig);\\n\\n        lastSigner = signer;\\n\\n        weight += _getWeight(signer);\\n        if (weight >= minimumWeight) {\\n          passed = true;\\n          break;\\n        }\\n      }\\n\\n      if (!passed) revert ErrQueryForInsufficientVoteWeight();\\n      withdrawalHash[id] = receiptHash;\\n    }\\n\\n    if (locked) {\\n      withdrawalLocked[id] = true;\\n      emit WithdrawalLocked(receiptHash, receipt);\\n      return locked;\\n    }\\n\\n    _recordWithdrawal(tokenAddr, quantity);\\n    receipt.info.handleAssetOut(payable(receipt.mainchain.addr), tokenAddr, wrappedNativeToken);\\n    emit Withdrew(receiptHash, receipt);\\n  }\"]\n}\n",
+            "outputs1": [
+                [
+                    {
+                        "parameter": "receipt.mainchain.chainId",
+                        "attribute": "toChainID",
+                        "reason": "The parameter represents a chain ID and is compared against block.chainid, suggesting it's used for cross-chain destination validation. Ambiguity exists as it's labeled 'mainchain' but used for validation against current chain."
+                    },
+                    {
+                        "parameter": "receipt.mainchain.tokenAddr",
+                        "attribute": "tokenAddress",
+                        "reason": "Directly matches the token contract address description. Clear mapping with no ambiguity as it's used for token operations."
+                    },
+                    {
+                        "parameter": "receipt.info.quantity",
+                        "attribute": "amount",
+                        "reason": "Represents the quantity of tokens being processed, matching the 'amount' attribute. No ambiguity as it's directly used in transfer logic."
+                    },
+                    {
+                        "parameter": "receipt.id",
+                        "attribute": "nonce",
+                        "reason": "The id field is checked against withdrawalHash to prevent replay attacks, functioning similarly to a nonce. However, it's not explicitly named 'nonce', creating potential ambiguity."
+                    },
+                    {
+                        "parameter": "receipt.mainchain.addr",
+                        "attribute": "recipientAddress",
+                        "reason": "This address receives the asset in the mainchain context. Labeled as 'addr' rather than 'recipient', creating minor naming ambiguity."
+                    }
+                ]
+            ],
+            "v_prompt1": "\nYou are a rigorous cross-chain protocol auditor and data consistency verifier. Carefully review whether the meaning of each cross-chain attribute and parameter in the code is consistent, assign a confidence score (0-100%), and state the reason for the given confidence score.\n\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"correspondence\":    // Array of attribute-parameter correspondences in the code\n[\n{\n\"attribute\": \"...\", // Input cross-chain attribute\n\"parameter\": \"...\", // Corresponding parameter\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}\n...\n],\n\"code\":\"...\" // Cross-chain contract code\n}\n\nOutput format: Return a JSON array, each item structured as follows:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // Input cross-chain attribute\n\"score\":\"...\", // Assigned confidence score\n\"reason\": \"...\" // Brief explanation for the given confidence score\n}, ... \n]\nInput:\n{\n\"correspondence\": [{\"parameter\": \"receipt.mainchain.chainId\", \"attribute\": \"toChainID\", \"reason\": \"The parameter represents a chain ID and is compared against block.chainid, suggesting it's used for cross-chain destination validation. Ambiguity exists as it's labeled 'mainchain' but used for validation against current chain.\"}, {\"parameter\": \"receipt.mainchain.tokenAddr\", \"attribute\": \"tokenAddress\", \"reason\": \"Directly matches the token contract address description. Clear mapping with no ambiguity as it's used for token operations.\"}, {\"parameter\": \"receipt.info.quantity\", \"attribute\": \"amount\", \"reason\": \"Represents the quantity of tokens being processed, matching the 'amount' attribute. No ambiguity as it's directly used in transfer logic.\"}, {\"parameter\": \"receipt.id\", \"attribute\": \"nonce\", \"reason\": \"The id field is checked against withdrawalHash to prevent replay attacks, functioning similarly to a nonce. However, it's not explicitly named 'nonce', creating potential ambiguity.\"}, {\"parameter\": \"receipt.mainchain.addr\", \"attribute\": \"recipientAddress\", \"reason\": \"This address receives the asset in the mainchain context. Labeled as 'addr' rather than 'recipient', creating minor naming ambiguity.\"}],\n\"code\": [\"MainchainGatewayV3._submitWithdrawal:function _submitWithdrawal(Transfer.Receipt calldata receipt, Signature[] memory signatures) internal virtual returns (bool locked) {\\n    uint256 id = receipt.id;\\n    uint256 quantity = receipt.info.quantity;\\n    address tokenAddr = receipt.mainchain.tokenAddr;\\n\\n    receipt.info.validate();\\n    if (receipt.kind != Transfer.Kind.Withdrawal) revert ErrInvalidReceiptKind();\\n\\n    if (receipt.mainchain.chainId != block.chainid) {\\n      revert ErrInvalidChainId(msg.sig, receipt.mainchain.chainId, block.chainid);\\n    }\\n\\n    MappedToken memory token = getRoninToken(receipt.mainchain.tokenAddr);\\n\\n    if (!(token.erc == receipt.info.erc && token.tokenAddr == receipt.ronin.tokenAddr && receipt.ronin.chainId == roninChainId)) {\\n      revert ErrInvalidReceipt();\\n    }\\n\\n    if (withdrawalHash[id] != 0) revert ErrQueryForProcessedWithdrawal();\\n\\n    if (!(receipt.info.erc == TokenStandard.ERC721 || !_reachedWithdrawalLimit(tokenAddr, quantity))) {\\n      revert ErrReachedDailyWithdrawalLimit();\\n    }\\n\\n    bytes32 receiptHash = receipt.hash();\\n    bytes32 receiptDigest = Transfer.receiptDigest(_domainSeparator, receiptHash);\\n\\n    uint256 minimumWeight;\\n    (minimumWeight, locked) = _computeMinVoteWeight(receipt.info.erc, tokenAddr, quantity);\\n\\n    {\\n      bool passed;\\n      address signer;\\n      address lastSigner;\\n      Signature memory sig;\\n      uint256 weight;\\n      for (uint256 i; i < signatures.length; i++) {\\n        sig = signatures[i];\\n        signer = ecrecover(receiptDigest, sig.v, sig.r, sig.s);\\n        if (lastSigner >= signer) revert ErrInvalidOrder(msg.sig);\\n\\n        lastSigner = signer;\\n\\n        weight += _getWeight(signer);\\n        if (weight >= minimumWeight) {\\n          passed = true;\\n          break;\\n        }\\n      }\\n\\n      if (!passed) revert ErrQueryForInsufficientVoteWeight();\\n      withdrawalHash[id] = receiptHash;\\n    }\\n\\n    if (locked) {\\n      withdrawalLocked[id] = true;\\n      emit WithdrawalLocked(receiptHash, receipt);\\n      return locked;\\n    }\\n\\n    _recordWithdrawal(tokenAddr, quantity);\\n    receipt.info.handleAssetOut(payable(receipt.mainchain.addr), tokenAddr, wrappedNativeToken);\\n    emit Withdrew(receiptHash, receipt);\\n  }\"]:\n}\n\n",
+            "v_outputs1": [
+                [
+                    {
+                        "parameter": "receipt.mainchain.chainId",
+                        "attribute": "toChainID",
+                        "score": "80%",
+                        "reason": "The parameter is used for cross-chain destination validation by comparing against block.chainid, which aligns with the 'toChainID' attribute. However, the label 'mainchain' introduces ambiguity as it suggests a source chain rather than a destination."
+                    },
+                    {
+                        "parameter": "receipt.mainchain.tokenAddr",
+                        "attribute": "tokenAddress",
+                        "score": "100%",
+                        "reason": "The parameter directly represents the token contract address and is used in token operations, perfectly matching the 'tokenAddress' attribute with no ambiguity."
+                    },
+                    {
+                        "parameter": "receipt.info.quantity",
+                        "attribute": "amount",
+                        "score": "100%",
+                        "reason": "The parameter clearly represents the quantity of tokens being processed and is directly used in transfer logic, making it a perfect match for the 'amount' attribute."
+                    },
+                    {
+                        "parameter": "receipt.id",
+                        "attribute": "nonce",
+                        "score": "70%",
+                        "reason": "The parameter is checked against withdrawalHash to prevent replay attacks, functioning similarly to a nonce. However, it is not explicitly named 'nonce', which introduces some ambiguity."
+                    },
+                    {
+                        "parameter": "receipt.mainchain.addr",
+                        "attribute": "recipientAddress",
+                        "score": "90%",
+                        "reason": "'addr' is used as the destination address for asset transfers in the mainchain context, aligning with the 'recipientAddress' attribute. The minor naming difference ('addr' vs 'recipient') creates slight ambiguity but does not affect functionality."
+                    }
+                ]
+            ],
+            "formatted_outputs1": {
+                "receipt.mainchain.chainId": {
+                    "toChainID": {
+                        "reason": "The parameter represents a chain ID and is compared against block.chainid, suggesting it's used for cross-chain destination validation. Ambiguity exists as it's labeled 'mainchain' but used for validation against current chain.",
+                        "score": "80%",
+                        "s_reason": "The parameter is used for cross-chain destination validation by comparing against block.chainid, which aligns with the 'toChainID' attribute. However, the label 'mainchain' introduces ambiguity as it suggests a source chain rather than a destination."
+                    }
+                },
+                "receipt.mainchain.tokenAddr": {
+                    "tokenAddress": {
+                        "reason": "Directly matches the token contract address description. Clear mapping with no ambiguity as it's used for token operations.",
+                        "score": "100%",
+                        "s_reason": "The parameter directly represents the token contract address and is used in token operations, perfectly matching the 'tokenAddress' attribute with no ambiguity."
+                    }
+                },
+                "receipt.info.quantity": {
+                    "amount": {
+                        "reason": "Represents the quantity of tokens being processed, matching the 'amount' attribute. No ambiguity as it's directly used in transfer logic.",
+                        "score": "100%",
+                        "s_reason": "The parameter clearly represents the quantity of tokens being processed and is directly used in transfer logic, making it a perfect match for the 'amount' attribute."
+                    }
+                },
+                "receipt.id": {
+                    "nonce": {
+                        "reason": "The id field is checked against withdrawalHash to prevent replay attacks, functioning similarly to a nonce. However, it's not explicitly named 'nonce', creating potential ambiguity.",
+                        "score": "70%",
+                        "s_reason": "The parameter is checked against withdrawalHash to prevent replay attacks, functioning similarly to a nonce. However, it is not explicitly named 'nonce', which introduces some ambiguity."
+                    }
+                },
+                "receipt.mainchain.addr": {
+                    "recipientAddress": {
+                        "reason": "This address receives the asset in the mainchain context. Labeled as 'addr' rather than 'recipient', creating minor naming ambiguity.",
+                        "score": "90%",
+                        "s_reason": "'addr' is used as the destination address for asset transfers in the mainchain context, aligning with the 'recipientAddress' attribute. The minor naming difference ('addr' vs 'recipient') creates slight ambiguity but does not affect functionality."
+                    }
+                }
+            }
+        },
+        "step2": {
+            "toChainID": {
+                "receipt.mainchain.chainId": {
+                    "dataflows": [
+                        {
+                            "parameter": "receipt.mainchain.chainId",
+                            "dataflow": {
+                                "_submitWithdrawal": [
+                                    "if (receipt.mainchain.chainId != block.chainid) {\n      revert ErrInvalidChainId(msg.sig, receipt.mainchain.chainId, block.chainid);\n    }",
+                                    "if (!(token.erc == receipt.info.erc && token.tokenAddr == receipt.ronin.tokenAddr && receipt.ronin.chainId == roninChainId)) {\n      revert ErrInvalidReceipt();\n    }",
+                                    "bytes32 receiptHash = receipt.hash();",
+                                    "bytes32 receiptDigest = Transfer.receiptDigest(_domainSeparator, receiptHash);",
+                                    "emit WithdrawalLocked(receiptHash, receipt);",
+                                    "emit Withdrew(receiptHash, receipt);"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "95",
+                            "score": "92",
+                            "reason": "The parameter 'receipt.mainchain.chainId' is well-covered in the data flow, being used in two critical validation checks (chain ID comparison and token mapping validation). The correctness is high as it correctly enforces chain ID matching and participates in receipt validation logic. Minor deduction in coverage for not being used in hash generation or event emissions, though this isn't strictly necessary."
+                        },
+                        {
+                            "parameter": "receipt.mainchain.chainId",
+                            "dataflow": {
+                                "_submitWithdrawal": [
+                                    "if (receipt.mainchain.chainId != block.chainid) {\n      revert ErrInvalidChainId(msg.sig, receipt.mainchain.chainId, block.chainid);\n    }",
+                                    "if (!(token.erc == receipt.info.erc && token.tokenAddr == receipt.ronin.tokenAddr && receipt.ronin.chainId == roninChainId)) {\n      revert ErrInvalidReceipt();\n    }",
+                                    "emit WithdrawalLocked(receiptHash, receipt);",
+                                    "emit Withdrew(receiptHash, receipt);"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "95",
+                            "score": "92",
+                            "reason": "The data flow for 'receipt.mainchain.chainId' is well-covered in the original code, appearing in critical validation checks (chainId comparison and receipt validation). The correctness is high as it's used appropriately for security checks. Minor deduction in coverage due to not being used in all possible validation paths."
+                        }
+                    ],
+                    "merge_dataflows": "if (receipt.mainchain.chainId != block.chainid) {\n      revert ErrInvalidChainId(msg.sig, receipt.mainchain.chainId, block.chainid);\n    }\nif (!(token.erc == receipt.info.erc && token.tokenAddr == receipt.ronin.tokenAddr && receipt.ronin.chainId == roninChainId)) {\n      revert ErrInvalidReceipt();\n    }\nbytes32 receiptHash = receipt.hash();\nbytes32 receiptDigest = Transfer.receiptDigest(_domainSeparator, receiptHash);\nemit WithdrawalLocked(receiptHash, receipt);\nemit Withdrew(receiptHash, receipt);"
+                }
+            },
+            "tokenAddress": {
+                "receipt.mainchain.tokenAddr": {
+                    "dataflows": [
+                        {
+                            "parameter": "receipt.mainchain.tokenAddr",
+                            "dataflow": {
+                                "_submitWithdrawal": [
+                                    "address tokenAddr = receipt.mainchain.tokenAddr;",
+                                    "MappedToken memory token = getRoninToken(receipt.mainchain.tokenAddr);",
+                                    "if (!(token.erc == receipt.info.erc && token.tokenAddr == receipt.ronin.tokenAddr && receipt.ronin.chainId == roninChainId)) {\n      revert ErrInvalidReceipt();\n    }",
+                                    "if (!(receipt.info.erc == TokenStandard.ERC721 || !_reachedWithdrawalLimit(tokenAddr, quantity))) {\n      revert ErrReachedDailyWithdrawalLimit();\n    }",
+                                    "(minimumWeight, locked) = _computeMinVoteWeight(receipt.info.erc, tokenAddr, quantity);",
+                                    "_recordWithdrawal(tokenAddr, quantity);",
+                                    "receipt.info.handleAssetOut(payable(receipt.mainchain.addr), tokenAddr, wrappedNativeToken);",
+                                    "emit Withdrew(receiptHash, receipt);"
+                                ]
+                            },
+                            "coverage": "95",
+                            "correctness": "100",
+                            "score": "98",
+                            "reason": "The data flow code for 'receipt.mainchain.tokenAddr' is comprehensive and correctly utilized in the original code. It is used in multiple critical operations including token mapping retrieval, validation checks, withdrawal limit checks, vote weight computation, withdrawal recording, and asset handling. The coverage is slightly less than perfect because there might be additional edge cases not explicitly covered in the provided code snippet, but all primary uses are correctly handled."
+                        },
+                        {
+                            "parameter": "receipt.mainchain.tokenAddr",
+                            "dataflow": {
+                                "_submitWithdrawal": [
+                                    "address tokenAddr = receipt.mainchain.tokenAddr;",
+                                    "MappedToken memory token = getRoninToken(receipt.mainchain.tokenAddr);",
+                                    "if (!(token.erc == receipt.info.erc && token.tokenAddr == receipt.ronin.tokenAddr && receipt.ronin.chainId == roninChainId)) {\n      revert ErrInvalidReceipt();\n    }",
+                                    "if (!(receipt.info.erc == TokenStandard.ERC721 || !_reachedWithdrawalLimit(tokenAddr, quantity))) {\n      revert ErrReachedDailyWithdrawalLimit();\n    }",
+                                    "(minimumWeight, locked) = _computeMinVoteWeight(receipt.info.erc, tokenAddr, quantity);",
+                                    "_recordWithdrawal(tokenAddr, quantity);",
+                                    "receipt.info.handleAssetOut(payable(receipt.mainchain.addr), tokenAddr, wrappedNativeToken);",
+                                    "emit Withdrew(receiptHash, receipt);"
+                                ]
+                            },
+                            "coverage": "95",
+                            "correctness": "100",
+                            "score": "98",
+                            "reason": "The data flow code for the parameter 'receipt.mainchain.tokenAddr' is highly comprehensive and correctly utilized in all relevant operations within the original code. The parameter is used in multiple critical checks and operations, including token mapping validation, withdrawal limit checks, vote weight computation, and asset handling. The coverage is slightly less than perfect as there might be additional edge cases not explicitly covered in the provided code snippet."
+                        }
+                    ],
+                    "merge_dataflows": "address tokenAddr = receipt.mainchain.tokenAddr;\nMappedToken memory token = getRoninToken(receipt.mainchain.tokenAddr);\nif (!(token.erc == receipt.info.erc && token.tokenAddr == receipt.ronin.tokenAddr && receipt.ronin.chainId == roninChainId)) {\n      revert ErrInvalidReceipt();\n    }\nif (!(receipt.info.erc == TokenStandard.ERC721 || !_reachedWithdrawalLimit(tokenAddr, quantity))) {\n      revert ErrReachedDailyWithdrawalLimit();\n    }\n(minimumWeight, locked) = _computeMinVoteWeight(receipt.info.erc, tokenAddr, quantity);\n_recordWithdrawal(tokenAddr, quantity);\nreceipt.info.handleAssetOut(payable(receipt.mainchain.addr), tokenAddr, wrappedNativeToken);\nemit Withdrew(receiptHash, receipt);"
+                }
+            },
+            "amount": {
+                "receipt.info.quantity": {
+                    "dataflows": [
+                        {
+                            "parameter": "receipt.info.quantity",
+                            "dataflow": {
+                                "_submitWithdrawal": [
+                                    "uint256 quantity = receipt.info.quantity;",
+                                    "if (!(receipt.info.erc == TokenStandard.ERC721 || !_reachedWithdrawalLimit(tokenAddr, quantity))) {\n      revert ErrReachedDailyWithdrawalLimit();\n    }",
+                                    "(minimumWeight, locked) = _computeMinVoteWeight(receipt.info.erc, tokenAddr, quantity);",
+                                    "_recordWithdrawal(tokenAddr, quantity);"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "95",
+                            "score": "92",
+                            "reason": "The data flow for 'receipt.info.quantity' is well-covered in the original code, with multiple usages including validation, computation, and recording. The correctness is high as all usages align with the protocol's logic and requirements. Minor deduction in coverage due to lack of explicit validation for 'quantity' being non-zero or within expected bounds."
+                        },
+                        {
+                            "parameter": "receipt.info.quantity",
+                            "dataflow": {
+                                "_submitWithdrawal": [
+                                    "uint256 quantity = receipt.info.quantity;",
+                                    "if (!(receipt.info.erc == TokenStandard.ERC721 || !_reachedWithdrawalLimit(tokenAddr, quantity))) {\n      revert ErrReachedDailyWithdrawalLimit();\n    }",
+                                    "(minimumWeight, locked) = _computeMinVoteWeight(receipt.info.erc, tokenAddr, quantity);",
+                                    "_recordWithdrawal(tokenAddr, quantity);"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "95",
+                            "score": "92",
+                            "reason": "The data flow code for 'receipt.info.quantity' covers its usage in validation, computation, and recording within the '_submitWithdrawal' function. The parameter is correctly used in all relevant operations including withdrawal limit checks, minimum vote weight computation, and withdrawal recording. Minor deduction in coverage due to lack of explicit validation for quantity being non-zero or within expected bounds."
+                        }
+                    ],
+                    "merge_dataflows": "uint256 quantity = receipt.info.quantity;\nif (!(receipt.info.erc == TokenStandard.ERC721 || !_reachedWithdrawalLimit(tokenAddr, quantity))) {\n      revert ErrReachedDailyWithdrawalLimit();\n    }\n(minimumWeight, locked) = _computeMinVoteWeight(receipt.info.erc, tokenAddr, quantity);\n_recordWithdrawal(tokenAddr, quantity);"
+                }
+            },
+            "recipientAddress": {
+                "receipt.mainchain.addr": {
+                    "dataflows": [
+                        {
+                            "parameter": "receipt.mainchain.addr",
+                            "dataflow": {
+                                "_submitWithdrawal": [
+                                    "function _submitWithdrawal(Transfer.Receipt calldata receipt, Signature[] memory signatures) internal virtual returns (bool locked) {\n    uint256 id = receipt.id;\n    uint256 quantity = receipt.info.quantity;\n    address tokenAddr = receipt.mainchain.tokenAddr;",
+                                    "receipt.info.handleAssetOut(payable(receipt.mainchain.addr), tokenAddr, wrappedNativeToken);",
+                                    "emit Withdrew(receiptHash, receipt);"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "95",
+                            "score": "92",
+                            "reason": "The parameter 'receipt.mainchain.addr' is correctly used in the data flow within the '_submitWithdrawal' function, specifically in the 'handleAssetOut' call where it is passed as the recipient address. The coverage is high as it is utilized in a critical operation, but not all possible validation paths are explicitly shown to use this parameter. Correctness is very high as the usage aligns with the expected behavior of transferring assets to the specified address."
+                        },
+                        {
+                            "parameter": "receipt.mainchain.addr",
+                            "dataflow": {
+                                "_submitWithdrawal": [
+                                    "function _submitWithdrawal(Transfer.Receipt calldata receipt, Signature[] memory signatures) internal virtual returns (bool locked) {\n    uint256 id = receipt.id;\n    uint256 quantity = receipt.info.quantity;\n    address tokenAddr = receipt.mainchain.tokenAddr;",
+                                    "receipt.info.handleAssetOut(payable(receipt.mainchain.addr), tokenAddr, wrappedNativeToken);",
+                                    "emit Withdrew(receiptHash, receipt);"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "95",
+                            "score": "92",
+                            "reason": "The data flow code for 'receipt.mainchain.addr' is well-covered in the original code, appearing in the '_submitWithdrawal' function where it is used to handle asset transfers. The correctness is high as it is properly validated through the receipt's structure and used in a critical operation (handleAssetOut). The slight deduction in coverage accounts for potential untested edge cases in receipt validation."
+                        }
+                    ],
+                    "merge_dataflows": "function _submitWithdrawal(Transfer.Receipt calldata receipt, Signature[] memory signatures) internal virtual returns (bool locked) {\n    uint256 id = receipt.id;\n    uint256 quantity = receipt.info.quantity;\n    address tokenAddr = receipt.mainchain.tokenAddr;\n    receipt.info.handleAssetOut(payable(receipt.mainchain.addr), tokenAddr, wrappedNativeToken);\n    emit Withdrew(receiptHash, receipt);"
+                }
+            }
+        },
+        "step3": {
+            "toChainID": {
+                "receipt.mainchain.chainId": {
+                    "Check whether toChainID is authorized.": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": [
+                                    "if (receipt.mainchain.chainId != block.chainid) {\n      revert ErrInvalidChainId(msg.sig, receipt.mainchain.chainId, block.chainid);\n    }"
+                                ],
+                                "reason": "The code checks if receipt.mainchain.chainId matches the current block's chainId, which implies a form of chain ID authorization check."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Check that the destination chain ID is not equal to the source chain ID.": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": [
+                                    "if (receipt.mainchain.chainId != block.chainid) {\n      revert ErrInvalidChainId(msg.sig, receipt.mainchain.chainId, block.chainid);\n    }"
+                                ],
+                                "reason": "The code explicitly checks that receipt.mainchain.chainId (destination chain ID) is not equal to block.chainid (source chain ID) by reverting if they are equal."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "receipt.mainchain.chainId",
+                                "constraint": "Check that the destination chain ID is not equal to the source chain ID.",
+                                "validation": "if (receipt.mainchain.chainId != block.chainid) {\n      revert ErrInvalidChainId(msg.sig, receipt.mainchain.chainId, block.chainid);\n    }",
+                                "score": "100",
+                                "reason": "The validation code correctly implements the constraint by ensuring the receipt's mainchain chainId is not equal to the current block's chainId (source chain). The revert occurs if they are equal, which aligns perfectly with the constraint's requirement.",
+                                "results": []
+                            }
+                        ]
+                    }
+                }
+            },
+            "tokenAddress": {
+                "receipt.mainchain.tokenAddr": {
+                    "Check whether the tokenAddress is authorized to use.": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": [
+                                    "MappedToken memory token = getRoninToken(receipt.mainchain.tokenAddr);",
+                                    "if (!(token.erc == receipt.info.erc && token.tokenAddr == receipt.ronin.tokenAddr && receipt.ronin.chainId == roninChainId)) {\n      revert ErrInvalidReceipt();\n    }"
+                                ],
+                                "reason": "The code checks if the token address is authorized by fetching the Ronin token details and verifying that the token's ERC standard and address match the receipt details, and that the chain ID is correct."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": true,
+                                "validation": [
+                                    "(minimumWeight, locked) = _computeMinVoteWeight(receipt.info.erc, tokenAddr, quantity);",
+                                    "_recordWithdrawal(tokenAddr, quantity);"
+                                ],
+                                "reason": "The code implicitly checks authorization by using the token address in functions that would fail if the token were not authorized."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "receipt.mainchain.tokenAddr",
+                                "constraint": "Check whether the tokenAddress is authorized to use.",
+                                "validation": "MappedToken memory token = getRoninToken(receipt.mainchain.tokenAddr);\nif (!(token.erc == receipt.info.erc && token.tokenAddr == receipt.ronin.tokenAddr && receipt.ronin.chainId == roninChainId)) {\n  revert ErrInvalidReceipt();\n}",
+                                "score": 90,
+                                "reason": "The validation correctly retrieves the mapped token and checks if the token's ERC standard, token address, and chain ID match the receipt's details. This ensures the token is authorized for use. The only minor concern is whether getRoninToken() itself performs additional validation that isn't visible here.",
+                                "results": []
+                            }
+                        ]
+                    }
+                }
+            },
+            "amount": {
+                "receipt.info.quantity": {
+                    "Validate that amount is greater than 0": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not explicitly check if receipt.info.quantity is greater than 0"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The constraint is not covered in the provided code snippet as there is no validation for quantity > 0"
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Validate that msg.sender's balance change before and after equals amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Validate that the bridge's balance change before and after equals amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Validate that msg.sender's balance ≥ amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            },
+            "recipientAddress": {
+                "receipt.mainchain.addr": {
+                    "Validate that recipientAddress is not the zero address": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "none"
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not explicitly check whether receipt.mainchain.addr is the zero address before using it in the handleAssetOut function call."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "There is no require or assert statement validating that receipt.mainchain.addr != address(0) in the provided code snippet."
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            }
+        },
+        "step4": {
+            "toChainID": {
+                "receipt.mainchain.chainId": {
+                    "Check that the destination chain ID is not equal to the source chain ID.": [
+                        {
+                            "parameter": "receipt.mainchain.chainId",
+                            "constraint": "Check that the destination chain ID is not equal to the source chain ID.",
+                            "validation": "if (receipt.mainchain.chainId != block.chainid) {\n      revert ErrInvalidChainId(msg.sig, receipt.mainchain.chainId, block.chainid);\n    }",
+                            "score": "100",
+                            "reason": "The validation code correctly implements the constraint by ensuring the receipt's mainchain chainId is not equal to the current block's chainId (source chain). The revert occurs if they are equal, which aligns perfectly with the constraint's requirement.",
+                            "results": []
+                        }
+                    ]
+                }
+            },
+            "tokenAddress": {
+                "receipt.mainchain.tokenAddr": {
+                    "Check whether the tokenAddress is authorized to use.": [
+                        {
+                            "parameter": "receipt.mainchain.tokenAddr",
+                            "constraint": "Check whether the tokenAddress is authorized to use.",
+                            "validation": "MappedToken memory token = getRoninToken(receipt.mainchain.tokenAddr);\nif (!(token.erc == receipt.info.erc && token.tokenAddr == receipt.ronin.tokenAddr && receipt.ronin.chainId == roninChainId)) {\n  revert ErrInvalidReceipt();\n}",
+                            "score": 90,
+                            "reason": "The validation correctly retrieves the mapped token and checks if the token's ERC standard, token address, and chain ID match the receipt's details. This ensures the token is authorized for use. The only minor concern is whether getRoninToken() itself performs additional validation that isn't visible here.",
+                            "results": []
+                        }
+                    ]
+                }
+            },
+            "amount": {
+                "receipt.info.quantity": {}
+            },
+            "recipientAddress": {
+                "receipt.mainchain.addr": {}
+            }
+        },
+        "final_result": {
+            "toChainID": {
+                "receipt.mainchain.chainId": {
+                    "Check whether toChainID is authorized.": [],
+                    "Check that the destination chain ID is not equal to the source chain ID.": []
+                }
+            },
+            "tokenAddress": {
+                "receipt.mainchain.tokenAddr": {
+                    "Check whether the tokenAddress is authorized to use.": []
+                }
+            },
+            "amount": {
+                "receipt.info.quantity": {
+                    "Validate that amount is greater than 0": [
+                        {
+                            "parameter": "receipt.info.quantity",
+                            "constraint": "Validate that amount is greater than 0",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Validate that msg.sender's balance change before and after equals amount": [
+                        {
+                            "parameter": "receipt.info.quantity",
+                            "constraint": "Validate that msg.sender's balance change before and after equals amount",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Validate that the bridge's balance change before and after equals amount": [
+                        {
+                            "parameter": "receipt.info.quantity",
+                            "constraint": "Validate that the bridge's balance change before and after equals amount",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Validate that msg.sender's balance ≥ amount": [
+                        {
+                            "parameter": "receipt.info.quantity",
+                            "constraint": "Validate that msg.sender's balance ≥ amount",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            },
+            "recipientAddress": {
+                "receipt.mainchain.addr": {
+                    "Validate that recipientAddress is not the zero address": [
+                        {
+                            "parameter": "receipt.mainchain.addr",
+                            "constraint": "Validate that recipientAddress is not the zero address",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            }
+        },
+        "context": {
+            "event": "Withdrew",
+            "call_graph": "_submitWithdrawal",
+            "state_variables": {
+                "wrappedNativeToken": "IWETH public wrappedNativeToken;",
+                "roninChainId": "uint256 public roninChainId;",
+                "_domainSeparator": "bytes32 internal _domainSeparator;",
+                "withdrawalHash": "mapping(uint256 => bytes32) public withdrawalHash;",
+                "withdrawalLocked": "mapping(uint256 => bool) public withdrawalLocked;"
+            },
+            "external_functions": []
+        },
+        "step1-time": 91.56112241744995,
+        "step2-time": 1330.8862442970276,
+        "step2-call_api_times": 28,
+        "step3-time": 169.7326626777649,
+        "step3-call_api_times": 11,
+        "step4-time": 11.897461175918579,
+        "step4-call_api_times": 2,
+        "compare_audit": {
+            "result": [
+                {
+                    "vuln": "if (lastSigner >= signer) revert ErrInvalidOrder(msg.sig);",
+                    "reason": "This check prevents duplicate signatures but is vulnerable to signature malleability attacks where a signature can be modified without changing its validity. In cross-chain scenarios, this could allow an attacker to bypass signature checks by submitting altered but valid signatures."
+                },
+                {
+                    "vuln": "weight += _getWeight(signer);",
+                    "reason": "The weight accumulation does not prevent the same signer from being counted multiple times if they appear in different signature positions (though ordered). This could lead to vote weight manipulation in cross-chain governance scenarios."
+                },
+                {
+                    "vuln": "withdrawalHash[id] = receiptHash;",
+                    "reason": "The withdrawal is marked as processed before asset transfer is completed. In cross-chain scenarios, if the subsequent transfer fails, the withdrawal could be permanently stuck as it's already marked as processed."
+                },
+                {
+                    "vuln": "_recordWithdrawal(tokenAddr, quantity);\n    receipt.info.handleAssetOut(payable(receipt.mainchain.addr), tokenAddr, wrappedNativeToken);",
+                    "reason": "The withdrawal recording and asset transfer are not atomic. In cross-chain operations, this could lead to inconsistent states if the transfer fails after recording the withdrawal."
+                }
+            ]
+        },
+        "compare_attribute_verification": {
+            "result": [
+                {
+                    "toChainID": "receipt.mainchain.chainId",
+                    "findings": [
+                        {
+                            "constraint": "Check whether toChainID is authorized.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No explicit authorization check for toChainID found in the code."
+                        },
+                        {
+                            "constraint": "Check that the destination chain ID is not equal to the source chain ID.",
+                            "validation": "receipt.mainchain.chainId != block.chainid",
+                            "poc": null,
+                            "reason": "The code correctly checks that the destination chain ID is not equal to the source chain ID."
+                        }
+                    ]
+                },
+                {
+                    "tokenAddress": "receipt.mainchain.tokenAddr",
+                    "findings": [
+                        {
+                            "constraint": "Check whether the tokenAddress is authorized to use.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No explicit authorization check for tokenAddress found in the code."
+                        }
+                    ]
+                },
+                {
+                    "nonce": null,
+                    "findings": [
+                        {
+                            "constraint": "Check if the transaction's nonce is equal to the account's current nonce.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No nonce validation logic found in the code."
+                        }
+                    ]
+                },
+                {
+                    "amount": [
+                        "receipt.info.quantity",
+                        "_reachedWithdrawalLimit(tokenAddr, quantity)"
+                    ],
+                    "findings": [
+                        {
+                            "constraint": "Validate that amount is greater than 0",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "'quantity' is checked against withdrawal limits but not explicitly checked for being greater than 0."
+                        },
+                        {
+                            "\"Validate that msg.sender's balance change before and after equals amount\"": null,
+                            "\"Validate that msg.sender's balance ≥ amount\"": null,
+                            "\"Validate that the bridge's balance change before and after equals amount\"": null,
+                            "constraint\": \"Validate that msg.sender's balance change before and after equals amount\", \"validation\": null, \"poc\": null, \"reason\": \"No balance change validation logic found in the code.\"}, {\"constraint\": \"Validate that the bridge's balance change before and after equals amount\", \"validation\": null, \"poc\": null, \"reason\": \"No bridge balance change validation logic found in the code.\"}, {\"constraint\": \"Validate that msg.sender's balance ≥ amount\", \"validation\": null, \"poc\": null, \"reason\": \"No sender balance check logic found in the code.\"} ] }, { \"recipientAddress\": [\"receipt.mainchain.addr\", ], \"findings\": [ { \"constraint\": \"Validate that recipientAddress is not the zero address\", \"validation\": null, \"poc\": null, \"reason\": \"No zero address check for recipientAddress found in the code.\"} ] }, { \"externalCallAddress\": [null], \"findings\": [ { \"constraint\": \"Check whether the externalCallAddress is authorized to use.\", \"validation\": null, \"poc\": null, \"reason\": \"": {
+                                "externalCallFunction": [
+                                    null
+                                ],
+                                "findings": [
+                                    {
+                                        "constraint": "Validate that externalCallFunction is in the allowed function signature list",
+                                        "validation": null,
+                                        "poc": null,
+                                        "reason": "No external call function validation logic found in the code."
+                                    }
+                                ]
+                            },
+                            "\n\t\t\t{\n\t\t\t\t\"routerAddress\"": [
+                                null
+                            ],
+                            "\n\t\t\t\"findings\"": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                1
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "time": 2421.616569519043,
+    "this_cost": 0.26049599999999995,
+    "this_prompt_tokens": 66480,
+    "this_completion_tokens": 15942
+}

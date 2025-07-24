@@ -271,11 +271,11 @@ class SolidityContextExtractor:
             SolidityContextExtractor.all_data = {
                 'solidity_file': {},
                 'handled_md5': set()
-            } if not os.path.exists(f"dataset_data\\{dataset_name}\\all_data.json") else json.load(open(f"dataset_data\\{dataset_name}\\all_data.json", "r"), object_hook=set_decoder)
+            } if not os.path.exists(f"dataset_data/{dataset_name}/all_data.json") else json.load(open(f"dataset_data/{dataset_name}/all_data.json", "r"), object_hook=set_decoder)
 
             SolidityContextExtractor.index_data = {
 
-            } if not os.path.exists(f"dataset_data\\{dataset_name}\\index_data.json") else json.load(open(f"dataset_data\\{dataset_name}\\index_data.json", "r"),
+            } if not os.path.exists(f"dataset_data/{dataset_name}/index_data.json") else json.load(open(f"dataset_data/{dataset_name}/index_data.json", "r"),
                                                                       object_hook=set_decoder)
 
             for root, dirs, files in os.walk(os.path.join(self.dataset_path,dataset_name)):
@@ -293,11 +293,11 @@ class SolidityContextExtractor:
             json.dump(SolidityContextExtractor.index_data, open("index_data.json", "w"), indent=4, ensure_ascii=False,
                       cls=SetEncoder)
         else:
-            if not os.path.exists(f"dataset_data\\{dataset_name}"):
-                os.mkdir(f"dataset_data\\{dataset_name}")
-            json.dump(SolidityContextExtractor.all_data, open(f"dataset_data\\{dataset_name}\\all_data.json", "w"), indent=4, ensure_ascii=False,
+            if not os.path.exists(f"dataset_data/{dataset_name}"):
+                os.mkdir(f"dataset_data/{dataset_name}")
+            json.dump(SolidityContextExtractor.all_data, open(f"dataset_data/{dataset_name}/all_data.json", "w"), indent=4, ensure_ascii=False,
                       cls=SetEncoder)
-            json.dump(SolidityContextExtractor.index_data, open(f"dataset_data\\{dataset_name}\\index_data.json", "w"), indent=4, ensure_ascii=False,
+            json.dump(SolidityContextExtractor.index_data, open(f"dataset_data/{dataset_name}/index_data.json", "w"), indent=4, ensure_ascii=False,
                       cls=SetEncoder)
 
     def save_result(self, result, file_path):
@@ -2108,6 +2108,7 @@ if __name__ == "__main__":
             handle_s_t = time.time()
             print("handle call chain")
             if not os.path.exists(directory_name):
+                print(directory_name)
                 handle(file_directory, event_name)
             print(f"handle_s_t: {time.time() - start}")
 
@@ -2116,10 +2117,10 @@ if __name__ == "__main__":
             extractor.parse_dataset(file_directory)
             result = {}
             all_output = {}
-            # model = "deepseek/deepseek-chat-v3-0324"
-            model = "deepseek-ai/DeepSeek-V3"
-            # platform = "openai"
-            platform = "gjld"
+            model = "deepseek/deepseek-chat-v3-0324"
+            #model = "deepseek-ai/DeepSeek-V3"
+            platform = "openai"
+            #platform = "gjld"
             # 遍历目录里面的json文件
             for file_name in os.listdir(directory_name):
                 if file_name.endswith(".json") and not file_name.startswith("all_output"):
