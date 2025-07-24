@@ -1,0 +1,147 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterStandardBridge" {
+  graph [ label = "StandardBridge", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "StandardBridge.onlyEOA" [ label = "onlyEOA", color = "yellow" ];
+  "StandardBridge.onlyOtherBridge" [ label = "onlyOtherBridge", color = "yellow" ];
+  "StandardBridge.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "StandardBridge.__StandardBridge_init" [ label = "__StandardBridge_init", color = "white" ];
+  "StandardBridge.<Receive Ether>" [ label = "<Receive Ether>", color = "blue" ];
+  "StandardBridge.MESSENGER" [ label = "MESSENGER", color = "blue" ];
+  "StandardBridge.otherBridge" [ label = "otherBridge", color = "blue" ];
+  "StandardBridge.bridgeETH" [ label = "bridgeETH", color = "green" ];
+  "StandardBridge.bridgeETHTo" [ label = "bridgeETHTo", color = "green" ];
+  "StandardBridge.bridgeERC20" [ label = "bridgeERC20", color = "green" ];
+  "StandardBridge.bridgeERC20To" [ label = "bridgeERC20To", color = "green" ];
+  "StandardBridge.finalizeBridgeETH" [ label = "finalizeBridgeETH", color = "green" ];
+  "StandardBridge.finalizeBridgeERC20" [ label = "finalizeBridgeERC20", color = "green" ];
+  "StandardBridge._initiateBridgeETH" [ label = "_initiateBridgeETH" ];
+  "StandardBridge._initiateBridgeERC20" [ label = "_initiateBridgeERC20" ];
+  "StandardBridge._isOptimismMintableERC20" [ label = "_isOptimismMintableERC20" ];
+  "StandardBridge._isCorrectTokenPair" [ label = "_isCorrectTokenPair" ];
+  "StandardBridge._emitETHBridgeInitiated" [ label = "_emitETHBridgeInitiated" ];
+  "StandardBridge._emitETHBridgeFinalized" [ label = "_emitETHBridgeFinalized" ];
+  "StandardBridge._emitERC20BridgeInitiated" [ label = "_emitERC20BridgeInitiated" ];
+  "StandardBridge._emitERC20BridgeFinalized" [ label = "_emitERC20BridgeFinalized" ];
+  "StandardBridge.address" [ label = "address" ];
+  "StandardBridge.OptimismMintableERC20" [ label = "OptimismMintableERC20" ];
+  "StandardBridge.IERC20" [ label = "IERC20" ];
+  "StandardBridge.type" [ label = "type" ];
+  "StandardBridge.ILegacyMintableERC20" [ label = "ILegacyMintableERC20" ];
+  "StandardBridge.IOptimismMintableERC20" [ label = "IOptimismMintableERC20" ];
+}
+
+subgraph "clusterAddress" {
+  graph [ label = "Address", color = "lightgray" ];
+  "Address.isContract" [ label = "isContract" ];
+}
+
+subgraph "clusterCrossDomainMessenger" {
+  graph [ label = "CrossDomainMessenger", color = "lightgray" ];
+  "CrossDomainMessenger.xDomainMessageSender" [ label = "xDomainMessageSender" ];
+  "CrossDomainMessenger.sendMessage" [ label = "sendMessage" ];
+}
+
+subgraph "clusterSafeCall" {
+  graph [ label = "SafeCall", color = "lightgray" ];
+  "SafeCall.call" [ label = "call" ];
+}
+
+subgraph "clusterERC165Checker" {
+  graph [ label = "ERC165Checker", color = "lightgray" ];
+  "ERC165Checker.supportsInterface" [ label = "supportsInterface" ];
+}
+
+  "StandardBridge.onlyEOA";
+  "Address.isContract";
+  "StandardBridge.onlyOtherBridge";
+  "StandardBridge.address";
+  "CrossDomainMessenger.xDomainMessageSender";
+  "StandardBridge.bridgeETH";
+  "StandardBridge._initiateBridgeETH";
+  "StandardBridge.bridgeETHTo";
+  "StandardBridge.bridgeERC20";
+  "StandardBridge._initiateBridgeERC20";
+  "StandardBridge.bridgeERC20To";
+  "StandardBridge.finalizeBridgeETH";
+  "StandardBridge._emitETHBridgeFinalized";
+  "SafeCall.call";
+  "StandardBridge.finalizeBridgeERC20";
+  "StandardBridge._isOptimismMintableERC20";
+  "StandardBridge._isCorrectTokenPair";
+  "StandardBridge.OptimismMintableERC20";
+  "StandardBridge.IERC20";
+  "StandardBridge._emitERC20BridgeFinalized";
+  "StandardBridge._emitETHBridgeInitiated";
+  "StandardBridge._emitERC20BridgeInitiated";
+  "CrossDomainMessenger.sendMessage";
+  "ERC165Checker.supportsInterface";
+  "StandardBridge.type";
+  "StandardBridge.ILegacyMintableERC20";
+  "StandardBridge.IOptimismMintableERC20";
+  "StandardBridge.onlyEOA" -> "Address.isContract" [ color = "orange" ];
+  "StandardBridge.onlyOtherBridge" -> "StandardBridge.address" [ color = "green" ];
+  "StandardBridge.onlyOtherBridge" -> "CrossDomainMessenger.xDomainMessageSender" [ color = "orange" ];
+  "StandardBridge.onlyOtherBridge" -> "StandardBridge.address" [ color = "green" ];
+  "StandardBridge.bridgeETH" -> "StandardBridge._initiateBridgeETH" [ color = "green" ];
+  "StandardBridge.bridgeETHTo" -> "StandardBridge._initiateBridgeETH" [ color = "green" ];
+  "StandardBridge.bridgeERC20" -> "StandardBridge._initiateBridgeERC20" [ color = "green" ];
+  "StandardBridge.bridgeERC20To" -> "StandardBridge._initiateBridgeERC20" [ color = "green" ];
+  "StandardBridge.finalizeBridgeETH" -> "StandardBridge.address" [ color = "green" ];
+  "StandardBridge.finalizeBridgeETH" -> "StandardBridge.address" [ color = "green" ];
+  "StandardBridge.finalizeBridgeETH" -> "StandardBridge._emitETHBridgeFinalized" [ color = "green" ];
+  "StandardBridge.finalizeBridgeETH" -> "SafeCall.call" [ color = "orange" ];
+  "StandardBridge.finalizeBridgeERC20" -> "StandardBridge._isOptimismMintableERC20" [ color = "green" ];
+  "StandardBridge.finalizeBridgeERC20" -> "StandardBridge._isCorrectTokenPair" [ color = "green" ];
+  "StandardBridge.finalizeBridgeERC20" -> "StandardBridge.OptimismMintableERC20" [ color = "green" ];
+  "StandardBridge.finalizeBridgeERC20" -> "StandardBridge.IERC20" [ color = "green" ];
+  "StandardBridge.finalizeBridgeERC20" -> "StandardBridge._emitERC20BridgeFinalized" [ color = "green" ];
+  "StandardBridge._initiateBridgeETH" -> "StandardBridge._emitETHBridgeInitiated" [ color = "green" ];
+  "StandardBridge._initiateBridgeETH" -> "StandardBridge.address" [ color = "green" ];
+  "StandardBridge._initiateBridgeERC20" -> "StandardBridge._isOptimismMintableERC20" [ color = "green" ];
+  "StandardBridge._initiateBridgeERC20" -> "StandardBridge._isCorrectTokenPair" [ color = "green" ];
+  "StandardBridge._initiateBridgeERC20" -> "StandardBridge.OptimismMintableERC20" [ color = "green" ];
+  "StandardBridge._initiateBridgeERC20" -> "StandardBridge.IERC20" [ color = "green" ];
+  "StandardBridge._initiateBridgeERC20" -> "StandardBridge.address" [ color = "green" ];
+  "StandardBridge._initiateBridgeERC20" -> "StandardBridge._emitERC20BridgeInitiated" [ color = "green" ];
+  "StandardBridge._initiateBridgeERC20" -> "CrossDomainMessenger.sendMessage" [ color = "orange" ];
+  "StandardBridge._initiateBridgeERC20" -> "StandardBridge.address" [ color = "green" ];
+  "StandardBridge._isOptimismMintableERC20" -> "ERC165Checker.supportsInterface" [ color = "orange" ];
+  "StandardBridge._isOptimismMintableERC20" -> "StandardBridge.type" [ color = "green" ];
+  "StandardBridge._isOptimismMintableERC20" -> "ERC165Checker.supportsInterface" [ color = "orange" ];
+  "StandardBridge._isOptimismMintableERC20" -> "StandardBridge.type" [ color = "green" ];
+  "StandardBridge._isCorrectTokenPair" -> "ERC165Checker.supportsInterface" [ color = "orange" ];
+  "StandardBridge._isCorrectTokenPair" -> "StandardBridge.type" [ color = "green" ];
+  "StandardBridge._isCorrectTokenPair" -> "StandardBridge.ILegacyMintableERC20" [ color = "green" ];
+  "StandardBridge._isCorrectTokenPair" -> "StandardBridge.IOptimismMintableERC20" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

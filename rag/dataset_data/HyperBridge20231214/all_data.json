@@ -552,8 +552,8 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "StandardBridge._initiateBridgeETH",
-                                        "StandardBridge.onlyEOA"
+                                        "StandardBridge.onlyEOA",
+                                        "StandardBridge._initiateBridgeETH"
                                     ]
                                 },
                                 "is_payable": true,
@@ -630,8 +630,8 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "StandardBridge.onlyEOA",
-                                        "StandardBridge._initiateBridgeERC20"
+                                        "StandardBridge._initiateBridgeERC20",
+                                        "StandardBridge.onlyEOA"
                                     ]
                                 },
                                 "is_payable": false,
@@ -722,9 +722,9 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
+                                        "StandardBridge.onlyOtherBridge",
                                         "StandardBridge._emitETHBridgeFinalized",
-                                        "SafeCall.call",
-                                        "StandardBridge.onlyOtherBridge"
+                                        "SafeCall.call"
                                     ]
                                 },
                                 "is_payable": true,
@@ -782,12 +782,12 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "StandardBridge.OptimismMintableERC20",
                                         "StandardBridge.IERC20",
-                                        "StandardBridge._isOptimismMintableERC20",
                                         "StandardBridge._isCorrectTokenPair",
-                                        "StandardBridge._emitERC20BridgeFinalized",
-                                        "StandardBridge.onlyOtherBridge"
+                                        "StandardBridge.onlyOtherBridge",
+                                        "StandardBridge._isOptimismMintableERC20",
+                                        "StandardBridge.OptimismMintableERC20",
+                                        "StandardBridge._emitERC20BridgeFinalized"
                                     ]
                                 },
                                 "is_payable": false,
@@ -908,12 +908,12 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "StandardBridge.OptimismMintableERC20",
                                         "CrossDomainMessenger.sendMessage",
+                                        "StandardBridge._isCorrectTokenPair",
                                         "StandardBridge.IERC20",
-                                        "StandardBridge._emitERC20BridgeInitiated",
                                         "StandardBridge._isOptimismMintableERC20",
-                                        "StandardBridge._isCorrectTokenPair"
+                                        "StandardBridge.OptimismMintableERC20",
+                                        "StandardBridge._emitERC20BridgeInitiated"
                                     ]
                                 },
                                 "is_payable": false,
@@ -982,8 +982,8 @@
                                     "values": [
                                         "StandardBridge.IOptimismMintableERC20",
                                         "StandardBridge.type",
-                                        "ERC165Checker.supportsInterface",
-                                        "StandardBridge.ILegacyMintableERC20"
+                                        "StandardBridge.ILegacyMintableERC20",
+                                        "ERC165Checker.supportsInterface"
                                     ]
                                 },
                                 "is_payable": false,
@@ -1981,10 +1981,10 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "L1ChugSplashProxy._getImplementation",
-                                        "L1ChugSplashProxy.proxyCallIfNotOwner",
                                         "L1ChugSplashProxy._getAccountCodeHash",
-                                        "L1ChugSplashProxy._setImplementation"
+                                        "L1ChugSplashProxy._getImplementation",
+                                        "L1ChugSplashProxy._setImplementation",
+                                        "L1ChugSplashProxy.proxyCallIfNotOwner"
                                     ]
                                 },
                                 "is_payable": false,
@@ -2040,8 +2040,8 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "L1ChugSplashProxy.proxyCallIfNotOwner",
-                                        "L1ChugSplashProxy._setOwner"
+                                        "L1ChugSplashProxy._setOwner",
+                                        "L1ChugSplashProxy.proxyCallIfNotOwner"
                                     ]
                                 },
                                 "is_payable": false,
@@ -2067,8 +2067,8 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "L1ChugSplashProxy.proxyCallIfNotOwner",
-                                        "L1ChugSplashProxy._getOwner"
+                                        "L1ChugSplashProxy._getOwner",
+                                        "L1ChugSplashProxy.proxyCallIfNotOwner"
                                     ]
                                 },
                                 "is_payable": false,
@@ -2094,8 +2094,8 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "L1ChugSplashProxy.proxyCallIfNotOwner",
-                                        "L1ChugSplashProxy._getImplementation"
+                                        "L1ChugSplashProxy._getImplementation",
+                                        "L1ChugSplashProxy.proxyCallIfNotOwner"
                                     ]
                                 },
                                 "is_payable": false,
@@ -2264,8 +2264,8 @@
                             "external_calls": {
                                 "__set__": true,
                                 "values": [
-                                    "owner.staticcall",
-                                    "L1ChugSplashProxy._getOwner"
+                                    "L1ChugSplashProxy._getOwner",
+                                    "owner.staticcall"
                                 ]
                             },
                             "md5": "8ebdc64512cb4d077737e6a6e48371b8"
@@ -2943,11 +2943,11 @@
     "handled_md5": {
         "__set__": true,
         "values": [
-            "5506cec554d89cca42663e0f2e7a7528",
             "d740ea4980f1079025279ecc0c09de90",
-            "14bba67fe6dc1650e33353a236b0b9ea",
             "d7a38c42c504f316833031774d3d0eb1",
-            "5484077ab177fa2f227ba02d86913089"
+            "5484077ab177fa2f227ba02d86913089",
+            "5506cec554d89cca42663e0f2e7a7528",
+            "14bba67fe6dc1650e33353a236b0b9ea"
         ]
     }
 }

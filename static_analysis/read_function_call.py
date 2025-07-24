@@ -578,6 +578,7 @@ if __name__ == "__main__":
         called_graph, func_name_called = get_function_called_graph(args.file_directory, func_name)
         called_and_call_graph, func_name_call = get_function_call_graph(args.file_directory, func_name_called)
         call_chain = patrition_public_chain(called_graph, func_name[0])
+
         for key, value in call_chain.items():
             cnt += 1
             code = get_code_from_graph(args.file_directory, called_and_call_graph, value)

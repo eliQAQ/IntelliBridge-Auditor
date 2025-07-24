@@ -1,0 +1,736 @@
+{
+    "MappingBase.receive->MappingBase._decreaseAuthQuota": {
+        "step1": {
+            "prompt1": "\nYou are an experienced cross-chain protocol analysis expert. Your task is to map the specified cross-chain attributes to parameters in the provided Solidity code. If an attribute cannot be found in the code, do not list it in the output. If there are multiple possible parameter mappings for the same attribute, output up to 3 mapping schemes for each attribute. Please strictly follow the input and output formats defined below:\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"attribute\": \n{ \n\"<attribute>\": \"<attribute description>\" ,\n\"<attribute>\": \"<attribute description>\",\n...\n}\n\"code\": \"...\" // Solidity contract code string\n}\nOutput format:\nReturn a JSON array, each item structured as follows, only produce output in the required format, without any additional content:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // The input cross-chain attribute\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}, ... \n]\nIn the reason, please point out both the core basis for the mapping and potential uncertainties (e.g., parameter name similarity, ambiguous contextual meaning, etc.).\n\nInput:\n{\n\"attribute\": {\"sourceChainID\": \"Indicates the originating blockchain network from which the cross-chain transaction is initiated.\", \"toChainID\": \"Indicates the target blockchain network where the transaction is intended to be completed.\", \"amount\": \"The quantity of tokens or assets to be transferred across chains.\", \"nonce\": \"A unique number associated with the transaction to ensure its uniqueness and order.\", \"proof/signature\": \"A cryptographic artifact used to confirm the authenticity of the transaction data from the source chain.\", \"externalCallAddress\": \"The address of a contract to be called after the cross-chain transfer.\", \"externalCallFunction\": \"The specific function or calldata to be executed on the `externalCallAddress`.\"},\n\"code\": [\"MappingBase.receive:function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\\n        _chargeFee();\\n        require(received[fromChainId][to][nonce] == 0, 'withdrawn already');\\n        uint N = signatures.length;\\n        require(N >= Factory(factory).getConfig(_minSignatures_), 'too few signatures');\\n        for(uint i=0; i<N; i++) {\\n            for(uint j=0; j<i; j++)\\n                require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');\\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\\n            bytes32 digest = keccak256(abi.encodePacked(\\\"\\\\x19\\\\x01\\\", _DOMAIN_SEPARATOR, structHash));\\n            address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);\\n            require(signatory != address(0), \\\"invalid signature\\\");\\n            require(signatory == signatures[i].signatory, \\\"unauthorized\\\");\\n            _decreaseAuthQuota(signatures[i].signatory, volume);\\n            emit Authorize(fromChainId, to, nonce, volume, signatory);\\n        }\\n        received[fromChainId][to][nonce] = volume;\\n        _receive(to, volume);\\n        emit Receive(fromChainId, to, nonce, volume);\\n    }\", \"MappingBase._decreaseAuthQuota:function _decreaseAuthQuota(address signatory, uint decrement) virtual internal updateAutoQuota(signatory) returns (uint quota) {\\n        quota = _authQuotas[signatory].sub(decrement);\\n        _authQuotas[signatory] = quota;\\n        emit DecreaseAuthQuota(signatory, decrement, quota);\\n    }\", \"MappingBase._chargeFee:function _chargeFee() virtual internal {\\n        require(msg.value >= Math.min(Factory(factory).getConfig(_fee_), 0.1 ether), 'fee is too low');\\n        address payable feeTo = address(Factory(factory).getConfig(_feeTo_));\\n        if(feeTo == address(0))\\n            feeTo = address(uint160(factory));\\n        feeTo.transfer(msg.value);\\n        emit ChargeFee(_msgSender(), feeTo, msg.value);\\n    }\", \"MappingBase._receive:function _receive(address to, uint256 volume) virtual internal;\\n    \\n    function _chargeFee() virtual internal {\\n        require(msg.value >= Math.min(Factory(factory).getConfig(_fee_), 0.1 ether), 'fee is too low');\\n        address payable feeTo = address(Factory(factory).getConfig(_feeTo_));\\n        if(feeTo == address(0))\\n            feeTo = address(uint160(factory));\\n        feeTo.transfer(msg.value);\\n        emit ChargeFee(_msgSender(), feeTo, msg.value);\\n    }\", \"Math.min:function min(uint256 a, uint256 b) internal pure returns (uint256) {\\n        return a < b ? a : b;\\n    }\", \"ERC20UpgradeSafe._transfer:function _transfer(address sender, address recipient, uint256 amount) internal virtual {\\n        require(sender != address(0), \\\"ERC20: transfer from the zero address\\\");\\n        require(recipient != address(0), \\\"ERC20: transfer to the zero address\\\");\\n\\n        _beforeTokenTransfer(sender, recipient, amount);\\n\\n        _balances[sender] = _balances[sender].sub(amount, \\\"ERC20: transfer amount exceeds balance\\\");\\n        _balances[recipient] = _balances[recipient].add(amount);\\n        emit Transfer(sender, recipient, amount);\\n    }\", \"ERC20UpgradeSafe._mint:function _mint(address account, uint256 amount) internal virtual {\\n        require(account != address(0), \\\"ERC20: mint to the zero address\\\");\\n\\n        _beforeTokenTransfer(address(0), account, amount);\\n\\n        _totalSupply = _totalSupply.add(amount);\\n        _balances[account] = _balances[account].add(amount);\\n        emit Transfer(address(0), account, amount);\\n    }\", \"ERC20UpgradeSafe._beforeTokenTransfer:function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual { }\", \"ERC20UpgradeSafe._beforeTokenTransfer:function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual { }\"]\n}\n",
+            "outputs1": [
+                [
+                    {
+                        "parameter": "fromChainId",
+                        "attribute": "sourceChainID",
+                        "reason": "The parameter `fromChainId` in the `MappingBase.receive` function directly corresponds to the `sourceChainID` due to its name and usage in validating the transaction's origin (e.g., `received[fromChainId][to][nonce]`)."
+                    },
+                    {
+                        "parameter": "to",
+                        "attribute": "toChainID",
+                        "reason": "The description implies 'toChainID' should refer to the target chain ID, but in the `MappingBase.receive` function, 'to' is an `address` parameter, which is likely the target address (recipient) on the current chain, not a chain ID. There is no explicit 'toChainID' parameter in the code. However, in the context of cross-chain bridges, the recipient address often implies the target chain if the bridge handles tokens on different chains via this address."
+                    },
+                    {
+                        "parameter": "volume",
+                        "attribute": "amount",
+                        "reason": "The parameter `volume` in the `MappingBase.receive` function is used to represent the quantity of assets being transferred, as indicated by its addition to `received` mapping and its use in `_decreaseAuthQuota` and `_receive` functions. This strongly maps to the 'amount' attribute."
+                    },
+                    {
+                        "parameter": "amount",
+                        "attribute": "amount",
+                        "reason": "The parameter `amount` in the `ERC20UpgradeSafe._transfer` and `ERC20UpgradeSafe._mint` functions clearly represents the quantity of tokens. This is a direct mapping based on the parameter name and its standard usage in ERC20 token operations."
+                    },
+                    {
+                        "parameter": "nonce",
+                        "attribute": "nonce",
+                        "reason": "The parameter `nonce` in the `MappingBase.receive` function is explicitly used to prevent replay attacks (`received[fromChainId][to][nonce] == 0`), which aligns perfectly with the definition of a nonce for ensuring transaction uniqueness and order."
+                    },
+                    {
+                        "parameter": "signatures",
+                        "attribute": "proof/signature",
+                        "reason": "The parameter `signatures` in the `MappingBase.receive` function, which is an array of `Signature` structs, is used to verify the authenticity of the transaction data through `ecrecover` and signatory checks. This directly corresponds to the 'proof/signature' attribute."
+                    }
+                ]
+            ],
+            "v_prompt1": "\nYou are a rigorous cross-chain protocol auditor and data consistency verifier. Carefully review whether the meaning of each cross-chain attribute and parameter in the code is consistent, assign a confidence score (0-100%), and state the reason for the given confidence score.\n\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"correspondence\":    // Array of attribute-parameter correspondences in the code\n[\n{\n\"attribute\": \"...\", // Input cross-chain attribute\n\"parameter\": \"...\", // Corresponding parameter\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}\n...\n],\n\"code\":\"...\" // Cross-chain contract code\n}\n\nOutput format: Return a JSON array, each item structured as follows, only produce output in the required format, without any additional content:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // Input cross-chain attribute\n\"score\":\"...\", // Assigned confidence score\n\"reason\": \"...\" // Brief explanation for the given confidence score\n}, ... \n]\nInput:\n{\n\"correspondence\": [{\"parameter\": \"fromChainId\", \"attribute\": \"sourceChainID\", \"reason\": \"The parameter `fromChainId` in the `MappingBase.receive` function directly corresponds to the `sourceChainID` due to its name and usage in validating the transaction's origin (e.g., `received[fromChainId][to][nonce]`).\"}, {\"parameter\": \"to\", \"attribute\": \"toChainID\", \"reason\": \"The description implies 'toChainID' should refer to the target chain ID, but in the `MappingBase.receive` function, 'to' is an `address` parameter, which is likely the target address (recipient) on the current chain, not a chain ID. There is no explicit 'toChainID' parameter in the code. However, in the context of cross-chain bridges, the recipient address often implies the target chain if the bridge handles tokens on different chains via this address.\"}, {\"parameter\": \"volume\", \"attribute\": \"amount\", \"reason\": \"The parameter `volume` in the `MappingBase.receive` function is used to represent the quantity of assets being transferred, as indicated by its addition to `received` mapping and its use in `_decreaseAuthQuota` and `_receive` functions. This strongly maps to the 'amount' attribute.\"}, {\"parameter\": \"amount\", \"attribute\": \"amount\", \"reason\": \"The parameter `amount` in the `ERC20UpgradeSafe._transfer` and `ERC20UpgradeSafe._mint` functions clearly represents the quantity of tokens. This is a direct mapping based on the parameter name and its standard usage in ERC20 token operations.\"}, {\"parameter\": \"nonce\", \"attribute\": \"nonce\", \"reason\": \"The parameter `nonce` in the `MappingBase.receive` function is explicitly used to prevent replay attacks (`received[fromChainId][to][nonce] == 0`), which aligns perfectly with the definition of a nonce for ensuring transaction uniqueness and order.\"}, {\"parameter\": \"signatures\", \"attribute\": \"proof/signature\", \"reason\": \"The parameter `signatures` in the `MappingBase.receive` function, which is an array of `Signature` structs, is used to verify the authenticity of the transaction data through `ecrecover` and signatory checks. This directly corresponds to the 'proof/signature' attribute.\"}],\n\"code\": [\"MappingBase.receive:function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\\n        _chargeFee();\\n        require(received[fromChainId][to][nonce] == 0, 'withdrawn already');\\n        uint N = signatures.length;\\n        require(N >= Factory(factory).getConfig(_minSignatures_), 'too few signatures');\\n        for(uint i=0; i<N; i++) {\\n            for(uint j=0; j<i; j++)\\n                require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');\\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\\n            bytes32 digest = keccak256(abi.encodePacked(\\\"\\\\x19\\\\x01\\\", _DOMAIN_SEPARATOR, structHash));\\n            address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);\\n            require(signatory != address(0), \\\"invalid signature\\\");\\n            require(signatory == signatures[i].signatory, \\\"unauthorized\\\");\\n            _decreaseAuthQuota(signatures[i].signatory, volume);\\n            emit Authorize(fromChainId, to, nonce, volume, signatory);\\n        }\\n        received[fromChainId][to][nonce] = volume;\\n        _receive(to, volume);\\n        emit Receive(fromChainId, to, nonce, volume);\\n    }\", \"MappingBase._decreaseAuthQuota:function _decreaseAuthQuota(address signatory, uint decrement) virtual internal updateAutoQuota(signatory) returns (uint quota) {\\n        quota = _authQuotas[signatory].sub(decrement);\\n        _authQuotas[signatory] = quota;\\n        emit DecreaseAuthQuota(signatory, decrement, quota);\\n    }\", \"MappingBase._chargeFee:function _chargeFee() virtual internal {\\n        require(msg.value >= Math.min(Factory(factory).getConfig(_fee_), 0.1 ether), 'fee is too low');\\n        address payable feeTo = address(Factory(factory).getConfig(_feeTo_));\\n        if(feeTo == address(0))\\n            feeTo = address(uint160(factory));\\n        feeTo.transfer(msg.value);\\n        emit ChargeFee(_msgSender(), feeTo, msg.value);\\n    }\", \"MappingBase._receive:function _receive(address to, uint256 volume) virtual internal;\\n    \\n    function _chargeFee() virtual internal {\\n        require(msg.value >= Math.min(Factory(factory).getConfig(_fee_), 0.1 ether), 'fee is too low');\\n        address payable feeTo = address(Factory(factory).getConfig(_feeTo_));\\n        if(feeTo == address(0))\\n            feeTo = address(uint160(factory));\\n        feeTo.transfer(msg.value);\\n        emit ChargeFee(_msgSender(), feeTo, msg.value);\\n    }\", \"Math.min:function min(uint256 a, uint256 b) internal pure returns (uint256) {\\n        return a < b ? a : b;\\n    }\", \"ERC20UpgradeSafe._transfer:function _transfer(address sender, address recipient, uint256 amount) internal virtual {\\n        require(sender != address(0), \\\"ERC20: transfer from the zero address\\\");\\n        require(recipient != address(0), \\\"ERC20: transfer to the zero address\\\");\\n\\n        _beforeTokenTransfer(sender, recipient, amount);\\n\\n        _balances[sender] = _balances[sender].sub(amount, \\\"ERC20: transfer amount exceeds balance\\\");\\n        _balances[recipient] = _balances[recipient].add(amount);\\n        emit Transfer(sender, recipient, amount);\\n    }\", \"ERC20UpgradeSafe._mint:function _mint(address account, uint256 amount) internal virtual {\\n        require(account != address(0), \\\"ERC20: mint to the zero address\\\");\\n\\n        _beforeTokenTransfer(address(0), account, amount);\\n\\n        _totalSupply = _totalSupply.add(amount);\\n        _balances[account] = _balances[account].add(amount);\\n        emit Transfer(address(0), account, amount);\\n    }\", \"ERC20UpgradeSafe._beforeTokenTransfer:function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual { }\", \"ERC20UpgradeSafe._beforeTokenTransfer:function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual { }\"]:\n}\n\n",
+            "v_outputs1": [
+                [
+                    {
+                        "parameter": "fromChainId",
+                        "attribute": "sourceChainID",
+                        "score": "100%",
+                        "reason": "The parameter `fromChainId` is explicitly named as a chain ID (`uint256 fromChainId`) and is used consistently to identify the origin of the transaction in the `received` mapping (`received[fromChainId][to][nonce] == 0`) and in event emissions. This directly and unambiguously corresponds to 'sourceChainID'."
+                    },
+                    {
+                        "parameter": "to",
+                        "attribute": "toChainID",
+                        "score": "10%",
+                        "reason": "The parameter `to` is an `address` type, not a `uint256` or similar type typically used for chain IDs. Its usage in `received[fromChainId][to][nonce]` and as a recipient in `_receive(to, volume)` clearly indicates it refers to a target address or recipient on the current chain, not a 'toChainID'. The prompt's initial description for this correspondence is inaccurate based on the code provided. There is no explicit 'toChainID' parameter in the `receive` function. The only tenuous link could be if `to` indirectly implies a target chain through a token's canonical address, but this is not directly supported by the code snippet's logic for `to`."
+                    },
+                    {
+                        "parameter": "volume",
+                        "attribute": "amount",
+                        "score": "95%",
+                        "reason": "The parameter `volume` is used consistently throughout the `receive` function to represent the quantity being transferred. It's added to the `received` mapping, used in `_decreaseAuthQuota`, and passed to `_receive`. Although not named 'amount', its functional role is unequivocally that of an amount or quantity of assets, making it a very strong match for the 'amount' attribute. The minor difference in naming convention ('volume' vs 'amount') prevents a 100% score, but its behavior matches perfectly."
+                    },
+                    {
+                        "parameter": "amount",
+                        "attribute": "amount",
+                        "score": "100%",
+                        "reason": "The parameter `amount` in `ERC20UpgradeSafe._transfer` and `ERC20UpgradeSafe._mint` is directly named 'amount' and is used in standard ERC20 operations to represent a quantity of tokens being moved or created (e.g., `_balances[sender].sub(amount)`, `_totalSupply.add(amount)`). This is a direct and unambiguous correspondence, matching both name and function."
+                    },
+                    {
+                        "parameter": "nonce",
+                        "attribute": "nonce",
+                        "score": "100%",
+                        "reason": "The parameter `nonce` is explicitly used to prevent replay attacks by checking `received[fromChainId][to][nonce] == 0`. This is the standard and primary function of a nonce, ensuring transaction uniqueness and ordering. The name and usage are perfectly aligned with the 'nonce' attribute."
+                    },
+                    {
+                        "parameter": "signatures",
+                        "attribute": "proof/signature",
+                        "score": "100%",
+                        "reason": "The parameter `signatures` is an array of `Signature` structs and is iterated over to perform `ecrecover` and signatory validation. This process is fundamental to cryptographic proof and authentication, directly serving the purpose of verifying the transaction's authenticity using digital signatures. The name and function are a perfect match for 'proof/signature'."
+                    }
+                ]
+            ],
+            "formatted_outputs1": {
+                "fromChainId": {
+                    "sourceChainID": {
+                        "reason": "The parameter `fromChainId` in the `MappingBase.receive` function directly corresponds to the `sourceChainID` due to its name and usage in validating the transaction's origin (e.g., `received[fromChainId][to][nonce]`).",
+                        "score": "100%",
+                        "s_reason": "The parameter `fromChainId` is explicitly named as a chain ID (`uint256 fromChainId`) and is used consistently to identify the origin of the transaction in the `received` mapping (`received[fromChainId][to][nonce] == 0`) and in event emissions. This directly and unambiguously corresponds to 'sourceChainID'."
+                    }
+                },
+                "to": {
+                    "toChainID": {
+                        "reason": "The description implies 'toChainID' should refer to the target chain ID, but in the `MappingBase.receive` function, 'to' is an `address` parameter, which is likely the target address (recipient) on the current chain, not a chain ID. There is no explicit 'toChainID' parameter in the code. However, in the context of cross-chain bridges, the recipient address often implies the target chain if the bridge handles tokens on different chains via this address.",
+                        "score": "10%",
+                        "s_reason": "The parameter `to` is an `address` type, not a `uint256` or similar type typically used for chain IDs. Its usage in `received[fromChainId][to][nonce]` and as a recipient in `_receive(to, volume)` clearly indicates it refers to a target address or recipient on the current chain, not a 'toChainID'. The prompt's initial description for this correspondence is inaccurate based on the code provided. There is no explicit 'toChainID' parameter in the `receive` function. The only tenuous link could be if `to` indirectly implies a target chain through a token's canonical address, but this is not directly supported by the code snippet's logic for `to`."
+                    }
+                },
+                "volume": {
+                    "amount": {
+                        "reason": "The parameter `volume` in the `MappingBase.receive` function is used to represent the quantity of assets being transferred, as indicated by its addition to `received` mapping and its use in `_decreaseAuthQuota` and `_receive` functions. This strongly maps to the 'amount' attribute.",
+                        "score": "95%",
+                        "s_reason": "The parameter `volume` is used consistently throughout the `receive` function to represent the quantity being transferred. It's added to the `received` mapping, used in `_decreaseAuthQuota`, and passed to `_receive`. Although not named 'amount', its functional role is unequivocally that of an amount or quantity of assets, making it a very strong match for the 'amount' attribute. The minor difference in naming convention ('volume' vs 'amount') prevents a 100% score, but its behavior matches perfectly."
+                    }
+                },
+                "amount": {
+                    "amount": {
+                        "reason": "The parameter `amount` in the `ERC20UpgradeSafe._transfer` and `ERC20UpgradeSafe._mint` functions clearly represents the quantity of tokens. This is a direct mapping based on the parameter name and its standard usage in ERC20 token operations.",
+                        "score": "100%",
+                        "s_reason": "The parameter `amount` in `ERC20UpgradeSafe._transfer` and `ERC20UpgradeSafe._mint` is directly named 'amount' and is used in standard ERC20 operations to represent a quantity of tokens being moved or created (e.g., `_balances[sender].sub(amount)`, `_totalSupply.add(amount)`). This is a direct and unambiguous correspondence, matching both name and function."
+                    }
+                },
+                "nonce": {
+                    "nonce": {
+                        "reason": "The parameter `nonce` in the `MappingBase.receive` function is explicitly used to prevent replay attacks (`received[fromChainId][to][nonce] == 0`), which aligns perfectly with the definition of a nonce for ensuring transaction uniqueness and order.",
+                        "score": "100%",
+                        "s_reason": "The parameter `nonce` is explicitly used to prevent replay attacks by checking `received[fromChainId][to][nonce] == 0`. This is the standard and primary function of a nonce, ensuring transaction uniqueness and ordering. The name and usage are perfectly aligned with the 'nonce' attribute."
+                    }
+                },
+                "signatures": {
+                    "proof/signature": {
+                        "reason": "The parameter `signatures` in the `MappingBase.receive` function, which is an array of `Signature` structs, is used to verify the authenticity of the transaction data through `ecrecover` and signatory checks. This directly corresponds to the 'proof/signature' attribute.",
+                        "score": "100%",
+                        "s_reason": "The parameter `signatures` is an array of `Signature` structs and is iterated over to perform `ecrecover` and signatory validation. This process is fundamental to cryptographic proof and authentication, directly serving the purpose of verifying the transaction's authenticity using digital signatures. The name and function are a perfect match for 'proof/signature'."
+                    }
+                }
+            }
+        },
+        "step2": {
+            "sourceChainID": {
+                "fromChainId": {
+                    "dataflows": [
+                        {
+                            "parameter": "fromChainId",
+                            "dataflow": {
+                                "MappingBase.receive": [
+                                    "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {",
+                                    "        require(received[fromChainId][to][nonce] == 0, 'withdrawn already');",
+                                    "            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));",
+                                    "        emit Authorize(fromChainId, to, nonce, volume, signatory);",
+                                    "        received[fromChainId][to][nonce] = volume;",
+                                    "        emit Receive(fromChainId, to, nonce, volume);",
+                                    "}"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "95",
+                            "reason": "The extracted data flow for `fromChainId` accurately captures all its uses within the `receive` function, including the `require` statement, `keccak256` encoding, and `emit` events. It does not include any irrelevant code snippets. The context provided is sufficient to understand its role."
+                        },
+                        {
+                            "parameter": "fromChainId",
+                            "dataflow": {
+                                "MappingBase.receive": [
+                                    "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {",
+                                    "        require(received[fromChainId][to][nonce] == 0, 'withdrawn already');",
+                                    "            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));",
+                                    "        emit Authorize(fromChainId, to, nonce, volume, signatory);",
+                                    "        received[fromChainId][to][nonce] = volume;",
+                                    "        emit Receive(fromChainId, to, nonce, volume);",
+                                    "    }"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "95",
+                            "reason": "The extracted data flow for `fromChainId` in `MappingBase.receive` correctly captures all instances where the parameter is used: in the `require` statement for `received` mapping, within the `keccak256` hash calculation for `structHash`, and in both `Authorize` and `Receive` events. The original code provided for the dataflow covers all these direct uses, indicating high coverage and correctness. The variable `fromChainId` is directly used without complex transformations or external dependencies that are not included in the dataflow. The only minor point is if there are other functions calling `receive` where `fromChainId` is derived or transformed, but the request focuses on the data flow *within* `MappingBase.receive` itself based on the provided `dataflow` and `code`."
+                        }
+                    ],
+                    "merge_dataflows": "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\n        require(received[fromChainId][to][nonce] == 0, 'withdrawn already');\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\n        emit Authorize(fromChainId, to, nonce, volume, signatory);\n        received[fromChainId][to][nonce] = volume;\n        emit Receive(fromChainId, to, nonce, volume);\n}"
+                }
+            },
+            "amount": {
+                "volume": {
+                    "dataflows": [
+                        {
+                            "parameter": "volume",
+                            "dataflow": {
+                                "MappingBase.receive": [
+                                    "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {",
+                                    "    bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));",
+                                    "    _decreaseAuthQuota(signatures[i].signatory, volume);",
+                                    "    emit Authorize(fromChainId, to, nonce, volume, signatory);",
+                                    "    received[fromChainId][to][nonce] = volume;",
+                                    "    _receive(to, volume);",
+                                    "    emit Receive(fromChainId, to, nonce, volume);",
+                                    "}"
+                                ],
+                                "MappingBase._decreaseAuthQuota": [
+                                    "function _decreaseAuthQuota(address signatory, uint decrement) virtual internal updateAutoQuota(signatory) returns (uint quota) {",
+                                    "    quota = _authQuotas[signatory].sub(decrement);",
+                                    "    _authQuotas[signatory] = quota;",
+                                    "    emit DecreaseAuthQuota(signatory, decrement, quota);",
+                                    "}"
+                                ],
+                                "MappingBase._receive": [
+                                    "function _receive(address to, uint256 volume) virtual internal;"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "95",
+                            "score": "95",
+                            "reason": "The extracted dataflow for 'volume' accurately captures its usage in the 'receive' function, subsequent calls to '_decreaseAuthQuota', and 'received' mapping assignment. It also correctly identifies the abstract '_receive' function where 'volume' is passed. However, it misses the use of 'volume' in the 'emit Authorize' and 'emit Receive' events within the `MappingBase.receive` function, which are part of its data flow. The `_decreaseAuthQuota` function's internal calculation of `quota` using `decrement` (which is `volume`) is correctly captured."
+                        },
+                        {
+                            "parameter": "volume",
+                            "dataflow": {
+                                "MappingBase.receive": [
+                                    "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {",
+                                    "    bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));",
+                                    "    _decreaseAuthQuota(signatures[i].signatory, volume);",
+                                    "    emit Authorize(fromChainId, to, nonce, volume, signatory);",
+                                    "    received[fromChainId][to][nonce] = volume;",
+                                    "    _receive(to, volume);",
+                                    "    emit Receive(fromChainId, to, nonce, volume);",
+                                    "}"
+                                ],
+                                "MappingBase._decreaseAuthQuota": [
+                                    "function _decreaseAuthQuota(address signatory, uint decrement) virtual internal updateAutoQuota(signatory) returns (uint quota) {",
+                                    "    quota = _authQuotas[signatory].sub(decrement);",
+                                    "    _authQuotas[signatory] = quota;",
+                                    "    emit DecreaseAuthQuota(signatory, decrement, quota);",
+                                    "}"
+                                ],
+                                "MappingBase._receive": [
+                                    "function _receive(address to, uint256 volume) virtual internal;"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "95",
+                            "reason": "The data flow for 'volume' is correctly extracted and covers all its uses and modifications within the provided `MappingBase.receive` function and its direct calls (`_decreaseAuthQuota`, `_receive`). The parameter 'volume' is passed as an argument to `_decreaseAuthQuota` and `_receive`, used in `keccak256` for `structHash` calculation, and assigned to `received` mapping. The `_decreaseAuthQuota` function correctly shows its usage (subtraction) as `decrement`. All relevant code paths where 'volume' is directly involved are captured."
+                        }
+                    ],
+                    "merge_dataflows": "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\n    bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\n    _decreaseAuthQuota(signatures[i].signatory, volume);\n    emit Authorize(fromChainId, to, nonce, volume, signatory);\n    received[fromChainId][to][nonce] = volume;\n    _receive(to, volume);\n    emit Receive(fromChainId, to, nonce, volume);\n}\nfunction _decreaseAuthQuota(address signatory, uint decrement) virtual internal updateAutoQuota(signatory) returns (uint quota) {\n    quota = _authQuotas[signatory].sub(decrement);\n    _authQuotas[signatory] = quota;\n    emit DecreaseAuthQuota(signatory, decrement, quota);\n}\nfunction _receive(address to, uint256 volume) virtual internal;"
+                }
+            },
+            "nonce": {
+                "nonce": {
+                    "dataflows": [
+                        {
+                            "parameter": "nonce",
+                            "dataflow": {
+                                "MappingBase.receive": [
+                                    "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {",
+                                    "        require(received[fromChainId][to][nonce] == 0, 'withdrawn already');",
+                                    "            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));",
+                                    "            emit Authorize(fromChainId, to, nonce, volume, signatory);",
+                                    "        received[fromChainId][to][nonce] = volume;",
+                                    "        emit Receive(fromChainId, to, nonce, volume);",
+                                    "    }"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "95",
+                            "reason": "The extracted data flow for `nonce` accurately captures all its uses within the `MappingBase.receive` function, including its use in `require` statements, `keccak256` hashing for `structHash`, and state variable updates (`received`). The `emit` events also correctly include `nonce`. Missing calls like `_chargeFee` are irrelevant for this parameter's data flow. The provided code has some redundancy that might cause an indexing issue but does not affect the data flow for 'nonce' directly."
+                        },
+                        {
+                            "parameter": "nonce",
+                            "dataflow": {
+                                "MappingBase.receive": [
+                                    "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {",
+                                    "        require(received[fromChainId][to][nonce] == 0, 'withdrawn already');",
+                                    "            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));",
+                                    "            emit Authorize(fromChainId, to, nonce, volume, signatory);",
+                                    "        received[fromChainId][to][nonce] = volume;",
+                                    "        emit Receive(fromChainId, to, nonce, volume);",
+                                    "    }"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "95",
+                            "reason": "The extracted data flow for `nonce` accurately captures all its uses within the `MappingBase.receive` function, including its appearance in `require` statements, `keccak256` hashing for `structHash`, and as a key in the `received` mapping for state updates and in `emit` events. The provided data flow is an exact match for the parameter's usage in the original code."
+                        }
+                    ],
+                    "merge_dataflows": "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\n        require(received[fromChainId][to][nonce] == 0, 'withdrawn already');\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\n            emit Authorize(fromChainId, to, nonce, volume, signatory);\n        received[fromChainId][to][nonce] = volume;\n        emit Receive(fromChainId, to, nonce, volume);\n    }"
+                }
+            },
+            "proof/signature": {
+                "signatures": {
+                    "dataflows": [
+                        {
+                            "parameter": "signatures",
+                            "dataflow": {
+                                "MappingBase.receive": [
+                                    "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {",
+                                    "        uint N = signatures.length;",
+                                    "        for(uint i=0; i<N; i++) {",
+                                    "            for(uint j=0; j<i; j++)",
+                                    "                require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');",
+                                    "            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));",
+                                    "            bytes32 digest = keccak256(abi.encodePacked(\"\\x19\\x01\", _DOMAIN_SEPARATOR, structHash));",
+                                    "            address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);",
+                                    "            require(signatory == signatures[i].signatory, \"unauthorized\");",
+                                    "            _decreaseAuthQuota(signatures[i].signatory, volume);",
+                                    "            emit Authorize(fromChainId, to, nonce, volume, signatory);",
+                                    "        }"
+                                ],
+                                "MappingBase._decreaseAuthQuota": [
+                                    "function _decreaseAuthQuota(address signatory, uint decrement) virtual internal updateAutoQuota(signatory) returns (uint quota) {",
+                                    "        quota = _authQuotas[signatory].sub(decrement);",
+                                    "        _authQuotas[signatory] = quota;",
+                                    "        emit DecreaseAuthQuota(signatory, decrement, quota);",
+                                    "    }"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "95",
+                            "score": "92",
+                            "reason": "The extracted data flow for 'signatures' in the `receive` function captures most of its critical uses: iteration, uniqueness check, hash calculation, signature recovery, and quota update. However, it misses the initial 'require(N >= Factory(factory).getConfig(_minSignatures_), 'too few signatures');' which is a crucial check on the length of 'signatures'. The data flow for `_decreaseAuthQuota` is accurate and complete."
+                        },
+                        {
+                            "parameter": "signatures",
+                            "dataflow": {
+                                "MappingBase.receive": [
+                                    "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {",
+                                    "        uint N = signatures.length;",
+                                    "        for(uint i=0; i<N; i++) {",
+                                    "            for(uint j=0; j<i; j++)",
+                                    "                require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');",
+                                    "            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));",
+                                    "            bytes32 digest = keccak256(abi.encodePacked(\"\\x19\\x01\", _DOMAIN_SEPARATOR, structHash));",
+                                    "            address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);",
+                                    "            require(signatory == signatures[i].signatory, \"unauthorized\");",
+                                    "            _decreaseAuthQuota(signatures[i].signatory, volume);",
+                                    "            emit Authorize(fromChainId, to, nonce, volume, signatory);",
+                                    "        }"
+                                ],
+                                "MappingBase._decreaseAuthQuota": [
+                                    "function _decreaseAuthQuota(address signatory, uint decrement) virtual internal updateAutoQuota(signatory) returns (uint quota) {",
+                                    "        quota = _authQuotas[signatory].sub(decrement);",
+                                    "        _authQuotas[signatory] = quota;",
+                                    "        emit DecreaseAuthQuota(signatory, decrement, quota);",
+                                    "    }"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "95",
+                            "score": "92",
+                            "reason": "The extracted data flow for 'signatures' covers most of its usage, including iteration, validation of signatories, signature recovery, and inter-contract calls like '_decreaseAuthQuota'. It accurately captures the core logic where 'signatures' is processed. The only minor omission is the 'invalid signature' check (signatory != address(0)), which is a require statement that uses `signatory` resulting from `signatures`. However, the 'unauthorized' check is included which is more critical. The overall correctness is high as the sequence and purpose of operations on 'signatures' are correctly reflected."
+                        }
+                    ],
+                    "merge_dataflows": "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\n        uint N = signatures.length;\n        for(uint i=0; i<N; i++) {\n            for(uint j=0; j<i; j++)\n                require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\n            bytes32 digest = keccak256(abi.encodePacked(\"\\x19\\x01\", _DOMAIN_SEPARATOR, structHash));\n            address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);\n            require(signatory == signatures[i].signatory, \"unauthorized\");\n            _decreaseAuthQuota(signatures[i].signatory, volume);\n            emit Authorize(fromChainId, to, nonce, volume, signatory);\n        }\n    }\nfunction _decreaseAuthQuota(address signatory, uint decrement) virtual internal updateAutoQuota(signatory) returns (uint quota) {\n        quota = _authQuotas[signatory].sub(decrement);\n        _authQuotas[signatory] = quota;\n        emit DecreaseAuthQuota(signatory, decrement, quota);\n    }"
+                }
+            }
+        },
+        "step3": {
+            "sourceChainID": {
+                "fromChainId": {
+                    "Check that sourceChainID is in the predefined list of supported chain IDs": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\n        require(received[fromChainId][to][nonce] == 0, 'withdrawn already');\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\n        emit Authorize(fromChainId, to, nonce, volume, signatory);\n        received[fromChainId][to][nonce] = volume;\n        emit Receive(fromChainId, to, nonce, volume);\n}",
+                                "reason": "The provided code snippet does not explicitly contain any checks or logic to verify if 'fromChainId' is present in a predefined list of supported chain IDs. The 'require' statement only checks if a specific entry in the 'received' mapping is zero, which is not related to chain ID validation against a list."
+                            },
+                            {
+                                "result": false,
+                                "validation": "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\n        require(received[fromChainId][to][nonce] == 0, 'withdrawn already');\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\n        emit Authorize(fromChainId, to, nonce, volume, signatory);\n        received[fromChainId][to][nonce] = volume;\n        emit Receive(fromChainId, to, nonce, volume);\n}",
+                                "reason": "The function `receive` uses `fromChainId` as a key in a mapping (`received[fromChainId][to][nonce]`). While this uses `fromChainId`, it does not impose any restriction or validation of its value against a predefined list of supported chain IDs. There's no mechanism to filter or reject `fromChainId` values that are not in a whitelist."
+                            },
+                            {
+                                "result": false,
+                                "validation": "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\n        require(received[fromChainId][to][nonce] == 0, 'withdrawn already');\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\n        emit Authorize(fromChainId, to, nonce, volume, signatory);\n        received[fromChainId][to][nonce] = volume;\n        emit Receive(fromChainId, to, nonce, volume);\n}",
+                                "reason": "The code processes 'fromChainId' by hashing it within `structHash` and using it as an index for `received` and in `emit` events. However, none of these operations perform a bounds check or a membership check against a list of allowed chain IDs, which is necessary to fulfill the constraint."
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            },
+            "amount": {
+                "volume": {
+                    "Validate that recipientAddress's balance change before and after equals amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "Analysis of the provided code snippet (`receive` and `_decreaseAuthQuota` functions) does not show any direct handling or manipulation of `recipientAddress` or its balance. The `_receive` function is called with `to` and `volume`, but its implementation is not provided, making it impossible to ascertain if it handles balance changes."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The code focuses on authorization quotas (`_decreaseAuthQuota`) and internal record-keeping (`received` mapping). While `volume` is passed to the `_receive` function, the body of `_receive` is not available, so we cannot verify if it impacts `recipientAddress`'s balance or if the change equals `volume`."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The provided code only includes the function signatures for `_receive` (`function _receive(address to, uint256 volume) virtual internal;`). Without the actual implementation of this function, it's impossible to determine if it validates or performs any balance changes for `recipientAddress` (which maps to the `to` parameter)."
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Validate that the bridge's balance change before and after equals amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The provided code snippet does not include any operations that directly involve the bridge's balance (e.g., `address(this).balance` or `msg.value` being transferred to/from the contract). The `volume` parameter is used in `_decreaseAuthQuota` and `received` mapping, but not in a way that modifies the contract's Ether balance."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "While `receive` is a `payable` function, indicating it can receive Ether, there's no explicit transfer of `msg.value` to the `to` address, nor is there a direct check that `msg.value` equals `volume`. The `volume` parameter itself is an `uint256` and seems to represent an amount, but its accounting with the contract's balance is not shown in this specific code."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The function `_receive(address to, uint256 volume)` is declared as `virtual internal` but its implementation is not provided. Without its implementation, we cannot ascertain if it handles the transfer of `volume` to the `to` address or if it performs any balance checks. Therefore, based solely on the provided code, the constraint cannot be validated."
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            },
+            "nonce": {
+                "nonce": {
+                    "Check and mark that nonce has not been consumed to prevent replay": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": "require(received[fromChainId][to][nonce] == 0, 'withdrawn already');\nreceived[fromChainId][to][nonce] = volume;",
+                                "reason": "The `require` statement checks if `received[fromChainId][to][nonce]` is 0, ensuring the `nonce` has not been previously consumed. After successful execution, `received[fromChainId][to][nonce]` is set to `volume`, marking the `nonce` as consumed and preventing replay."
+                            },
+                            {
+                                "result": true,
+                                "validation": "require(received[fromChainId][to][nonce] == 0, 'withdrawn already');\nreceived[fromChainId][to][nonce] = volume;",
+                                "reason": "The combination of checking `received[fromChainId][to][nonce] == 0` at the beginning of the function and then setting `received[fromChainId][to][nonce] = volume` at the end effectively acts as a replay protection mechanism for the `nonce` parameter. This pattern ensures that a specific (fromChainId, to, nonce) tuple can only be processed once."
+                            },
+                            {
+                                "result": true,
+                                "validation": "require(received[fromChainId][to][nonce] == 0, 'withdrawn already');\nreceived[fromChainId][to][nonce] = volume;",
+                                "reason": "First, the line `require(received[fromChainId][to][nonce] == 0, 'withdrawn already');` directly checks if the specific `nonce` (in conjunction with `fromChainId` and `to`) has been used before. If it has, the transaction reverts. Second, the line `received[fromChainId][to][nonce] = volume;` marks the `nonce` as consumed after a successful operation, preventing future use of the same `nonce`."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "nonce",
+                                "constraint": "Check and mark that nonce has not been consumed to prevent replay",
+                                "validation": "require(received[fromChainId][to][nonce] == 0, 'withdrawn already');\nreceived[fromChainId][to][nonce] = volume;",
+                                "score": "100",
+                                "reason": "The validation code `require(received[fromChainId][to][nonce] == 0, 'withdrawn already');` correctly checks if the nonce has not been consumed (i.e., `received` mapping entry is 0). Immediately after this check, `received[fromChainId][to][nonce] = volume;` marks the nonce as consumed by storing the `volume`. This logic directly implements the 'check and mark' mechanism to prevent replay attacks using the same nonce.",
+                                "results": []
+                            }
+                        ]
+                    }
+                }
+            },
+            "proof/signature": {
+                "signatures": {
+                    "Cryptographic proof that the transaction truly occurred and was finalized on the source chain (e.g., multi-signature, MPC signature, zero-knowledge proof, or Merkle proof)": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\n        uint N = signatures.length;\n        for(uint i=0; i<N; i++) {\n            for(uint j=0; j<i; j++)\n                require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\n            bytes32 digest = keccak256(abi.encodePacked(\"\\x19\\x01\", _DOMAIN_SEPARATOR, structHash));\n            address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);\n            require(signatory == signatures[i].signatory, \"unauthorized\");\n            _decreaseAuthQuota(signatures[i].signatory, volume);\n            emit Authorize(fromChainId, to, nonce, volume, signatory);\n        }\n    }",
+                                "reason": "The 'signatures' parameter is leveraged to verify the authenticity and authorization of the transaction. Specifically, the code iterates through each signature in the 'signatures' array. For each signature, it reconstructs a digest using 'fromChainId', 'to', 'nonce', 'volume', and the signatory's address, and then uses `ecrecover` to extract the signer's address from the provided `v`, `r`, and `s` components of the signature. The recovered signatory is then compared against the expected signatory from the signature structure. This process acts as a cryptographic proof (specifically, an ECDSA multi-signature scheme if N > 1) that the transaction occurred and was authorized by the respective signatories. The requirement `signatory == signatures[i].signatory` ensures that only authorized parties can attest to the transaction. The loop also checks for 'repetitive signatory' to enforce a unique set of signers."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "none"
+                            },
+                            {
+                                "result": true,
+                                "validation": "bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\n            bytes32 digest = keccak256(abi.encodePacked(\"\\x19\\x01\", _DOMAIN_SEPARATOR, structHash));\n            address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);\n            require(signatory == signatures[i].signatory, \"unauthorized\");",
+                                "reason": "The code uses `ecrecover` with the components of each signature (`signatures[i].v`, `signatures[i].r`, `signatures[i].s`) and a message digest. This `ecrecover` function is a core part of the ECDSA cryptographic signature scheme, which provides a strong cryptographic proof of authenticity and integrity. The fact that multiple signatures are processed (`signatures.length`) implies a multi-signature mechanism, directly addressing the 'multi-signature' aspect of the constraint. The digest specifically incorporates critical transaction parameters (`fromChainId`, `to`, `nonce`, `volume`), ensuring that the signature is tied to the specific transaction details."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "signatures",
+                                "constraint": "Cryptographic proof that the transaction truly occurred and was finalized on the source chain (e.g., multi-signature, MPC signature, zero-knowledge proof, or Merkle proof)",
+                                "validation": "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\n        uint N = signatures.length;\n        for(uint i=0; i<N; i++) {\n            for(uint j=0; j<i; j++)\n                require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\n            bytes32 digest = keccak256(abi.encodePacked(\"\\x19\\x01\", _DOMAIN_SEPARATOR, structHash));\n            address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);\n            require(signatory == signatures[i].signatory, \"unauthorized\");\n            _decreaseAuthQuota(signatures[i].signatory, volume);\n            emit Authorize(fromChainId, to, nonce, volume, signatory);\n        }\n    }",
+                                "score": "95",
+                                "reason": "The validation code correctly iterates through multiple signatures, checks for repetitive signatories, reconstructs the message hash, and verifies the `ecrecover` signature against the provided signatory address. This mechanism provides a strong cryptographic proof (multi-signature) for the transaction. The use of `_DOMAIN_SEPARATOR` further enhances security by preventing replay attacks across different domains.",
+                                "results": [
+                                    {
+                                        "result": true,
+                                        "poc": "The 'repetitive signatory' check ensures that all signatures in the array have unique signatory addresses. However, it only checks `signatures[i].signatory != signatures[j].signatory`. It does not check if `signatures[i].signatory` is a valid address or if it's the `address(0)` (zero address). An attacker could craft a `signatures` array where multiple entries have `signatures[i].signatory` set to `address(0)`. While `ecrecover` would return `address(0)` if the signature is invalid for `address(0)`, the subsequent `require(signatory == signatures[i].signatory, \"unauthorized\")` would still pass because both are `address(0)`. This would bypass the 'repetitive signatory' check for `address(0)` if `signatory` refers to `address(0)`. However, there's a subsequent check `require(signatory != address(0), \"invalid signature\")` that would prevent `address(0)` from being a valid signatory. Therefore, this specific bypass is not possible due to that later check effectively preventing `address(0)` from being a valid signatory. However, if the `signatory != address(0)` check was missing or bypassable, then this vulnerability would exist.",
+                                        "score": "95",
+                                        "reason": "The 'repetitive signatory' check effectively ensures unique non-zero signatory addresses within the array. The `require(signatory != address(0), \"invalid signature\")` directly prevents `address(0)` from being a valid signatory, thus mitigating the specific bypass described in the PoC."
+                                    },
+                                    {
+                                        "result": true,
+                                        "poc": "The validation iterates through `signatures` to ensure `signatures[i].signatory != signatures[j].signatory`. This check is only performed for `j < i`. If `signatures` contains multiple entries where `signatures[i].signatory` is the same, but they are not directly adjacent or ordered in a way that `j < i` for the colliding pairs, the inner loop might not catch all repetitions. However, the outer loop structure guarantees that for any `i`, all previous `j` (where `j < i`) are checked. This means `signatures[0]` is checked against nothing, `signatures[1]` against `signatures[0]`, `signatures[2]` against `signatures[0]` and `signatures[1]`, and so on. This effectively checks all unique pairs. Therefore, this specific method of bypassing the 'repetitive signatory' check is not possible.",
+                                        "score": "100",
+                                        "reason": "The provided `poc` correctly identifies that the nested loop `for(uint j=0; j<i; j++) require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');` effectively covers all unique pairs of signatories within the `signatures` array. For any given `signatures[i]`, it is checked against all preceding `signatures[j]` where `j < i`. This guarantees that no two signatures in the array will have the same signatory. Therefore, the 'repetitive signatory' check cannot be bypassed under this logic, making the `poc`'s conclusion accurate."
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "step4": {
+            "sourceChainID": {
+                "fromChainId": {}
+            },
+            "amount": {
+                "volume": {}
+            },
+            "nonce": {
+                "nonce": {
+                    "Check and mark that nonce has not been consumed to prevent replay": [
+                        {
+                            "parameter": "nonce",
+                            "constraint": "Check and mark that nonce has not been consumed to prevent replay",
+                            "validation": "require(received[fromChainId][to][nonce] == 0, 'withdrawn already');\nreceived[fromChainId][to][nonce] = volume;",
+                            "score": "100",
+                            "reason": "The validation code `require(received[fromChainId][to][nonce] == 0, 'withdrawn already');` correctly checks if the nonce has not been consumed (i.e., `received` mapping entry is 0). Immediately after this check, `received[fromChainId][to][nonce] = volume;` marks the nonce as consumed by storing the `volume`. This logic directly implements the 'check and mark' mechanism to prevent replay attacks using the same nonce.",
+                            "results": []
+                        }
+                    ]
+                }
+            },
+            "proof/signature": {
+                "signatures": {
+                    "Cryptographic proof that the transaction truly occurred and was finalized on the source chain (e.g., multi-signature, MPC signature, zero-knowledge proof, or Merkle proof)": [
+                        {
+                            "parameter": "signatures",
+                            "constraint": "Cryptographic proof that the transaction truly occurred and was finalized on the source chain (e.g., multi-signature, MPC signature, zero-knowledge proof, or Merkle proof)",
+                            "validation": "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\n        uint N = signatures.length;\n        for(uint i=0; i<N; i++) {\n            for(uint j=0; j<i; j++)\n                require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\n            bytes32 digest = keccak256(abi.encodePacked(\"\\x19\\x01\", _DOMAIN_SEPARATOR, structHash));\n            address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);\n            require(signatory == signatures[i].signatory, \"unauthorized\");\n            _decreaseAuthQuota(signatures[i].signatory, volume);\n            emit Authorize(fromChainId, to, nonce, volume, signatory);\n        }\n    }",
+                            "score": "95",
+                            "reason": "The validation code correctly iterates through multiple signatures, checks for repetitive signatories, reconstructs the message hash, and verifies the `ecrecover` signature against the provided signatory address. This mechanism provides a strong cryptographic proof (multi-signature) for the transaction. The use of `_DOMAIN_SEPARATOR` further enhances security by preventing replay attacks across different domains.",
+                            "results": [
+                                {
+                                    "result": true,
+                                    "poc": "The 'repetitive signatory' check ensures that all signatures in the array have unique signatory addresses. However, it only checks `signatures[i].signatory != signatures[j].signatory`. It does not check if `signatures[i].signatory` is a valid address or if it's the `address(0)` (zero address). An attacker could craft a `signatures` array where multiple entries have `signatures[i].signatory` set to `address(0)`. While `ecrecover` would return `address(0)` if the signature is invalid for `address(0)`, the subsequent `require(signatory == signatures[i].signatory, \"unauthorized\")` would still pass because both are `address(0)`. This would bypass the 'repetitive signatory' check for `address(0)` if `signatory` refers to `address(0)`. However, there's a subsequent check `require(signatory != address(0), \"invalid signature\")` that would prevent `address(0)` from being a valid signatory. Therefore, this specific bypass is not possible due to that later check effectively preventing `address(0)` from being a valid signatory. However, if the `signatory != address(0)` check was missing or bypassable, then this vulnerability would exist.",
+                                    "score": "95",
+                                    "reason": "The 'repetitive signatory' check effectively ensures unique non-zero signatory addresses within the array. The `require(signatory != address(0), \"invalid signature\")` directly prevents `address(0)` from being a valid signatory, thus mitigating the specific bypass described in the PoC."
+                                },
+                                {
+                                    "result": true,
+                                    "poc": "The validation iterates through `signatures` to ensure `signatures[i].signatory != signatures[j].signatory`. This check is only performed for `j < i`. If `signatures` contains multiple entries where `signatures[i].signatory` is the same, but they are not directly adjacent or ordered in a way that `j < i` for the colliding pairs, the inner loop might not catch all repetitions. However, the outer loop structure guarantees that for any `i`, all previous `j` (where `j < i`) are checked. This means `signatures[0]` is checked against nothing, `signatures[1]` against `signatures[0]`, `signatures[2]` against `signatures[0]` and `signatures[1]`, and so on. This effectively checks all unique pairs. Therefore, this specific method of bypassing the 'repetitive signatory' check is not possible.",
+                                    "score": "100",
+                                    "reason": "The provided `poc` correctly identifies that the nested loop `for(uint j=0; j<i; j++) require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');` effectively covers all unique pairs of signatories within the `signatures` array. For any given `signatures[i]`, it is checked against all preceding `signatures[j]` where `j < i`. This guarantees that no two signatures in the array will have the same signatory. Therefore, the 'repetitive signatory' check cannot be bypassed under this logic, making the `poc`'s conclusion accurate."
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        "final_result": {
+            "sourceChainID": {
+                "fromChainId": {
+                    "Check that sourceChainID is in the predefined list of supported chain IDs": [
+                        {
+                            "parameter": "fromChainId",
+                            "constraint": "Check that sourceChainID is in the predefined list of supported chain IDs",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            },
+            "amount": {
+                "volume": {
+                    "Validate that recipientAddress's balance change before and after equals amount": [
+                        {
+                            "parameter": "volume",
+                            "constraint": "Validate that recipientAddress's balance change before and after equals amount",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Validate that the bridge's balance change before and after equals amount": [
+                        {
+                            "parameter": "volume",
+                            "constraint": "Validate that the bridge's balance change before and after equals amount",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            },
+            "nonce": {
+                "nonce": {
+                    "Check and mark that nonce has not been consumed to prevent replay": []
+                }
+            },
+            "proof/signature": {
+                "signatures": {
+                    "Cryptographic proof that the transaction truly occurred and was finalized on the source chain (e.g., multi-signature, MPC signature, zero-knowledge proof, or Merkle proof)": [
+                        {
+                            "validation": "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\n        uint N = signatures.length;\n        for(uint i=0; i<N; i++) {\n            for(uint j=0; j<i; j++)\n                require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\n            bytes32 digest = keccak256(abi.encodePacked(\"\\x19\\x01\", _DOMAIN_SEPARATOR, structHash));\n            address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);\n            require(signatory == signatures[i].signatory, \"unauthorized\");\n            _decreaseAuthQuota(signatures[i].signatory, volume);\n            emit Authorize(fromChainId, to, nonce, volume, signatory);\n        }\n    }",
+                            "poc": "The 'repetitive signatory' check ensures that all signatures in the array have unique signatory addresses. However, it only checks `signatures[i].signatory != signatures[j].signatory`. It does not check if `signatures[i].signatory` is a valid address or if it's the `address(0)` (zero address). An attacker could craft a `signatures` array where multiple entries have `signatures[i].signatory` set to `address(0)`. While `ecrecover` would return `address(0)` if the signature is invalid for `address(0)`, the subsequent `require(signatory == signatures[i].signatory, \"unauthorized\")` would still pass because both are `address(0)`. This would bypass the 'repetitive signatory' check for `address(0)` if `signatory` refers to `address(0)`. However, there's a subsequent check `require(signatory != address(0), \"invalid signature\")` that would prevent `address(0)` from being a valid signatory. Therefore, this specific bypass is not possible due to that later check effectively preventing `address(0)` from being a valid signatory. However, if the `signatory != address(0)` check was missing or bypassable, then this vulnerability would exist.",
+                            "score": "95",
+                            "reason": "The 'repetitive signatory' check effectively ensures unique non-zero signatory addresses within the array. The `require(signatory != address(0), \"invalid signature\")` directly prevents `address(0)` from being a valid signatory, thus mitigating the specific bypass described in the PoC."
+                        },
+                        {
+                            "validation": "function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable {\n        uint N = signatures.length;\n        for(uint i=0; i<N; i++) {\n            for(uint j=0; j<i; j++)\n                require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');\n            bytes32 structHash = keccak256(abi.encode(RECEIVE_TYPEHASH, fromChainId, to, nonce, volume, signatures[i].signatory));\n            bytes32 digest = keccak256(abi.encodePacked(\"\\x19\\x01\", _DOMAIN_SEPARATOR, structHash));\n            address signatory = ecrecover(digest, signatures[i].v, signatures[i].r, signatures[i].s);\n            require(signatory == signatures[i].signatory, \"unauthorized\");\n            _decreaseAuthQuota(signatures[i].signatory, volume);\n            emit Authorize(fromChainId, to, nonce, volume, signatory);\n        }\n    }",
+                            "poc": "The validation iterates through `signatures` to ensure `signatures[i].signatory != signatures[j].signatory`. This check is only performed for `j < i`. If `signatures` contains multiple entries where `signatures[i].signatory` is the same, but they are not directly adjacent or ordered in a way that `j < i` for the colliding pairs, the inner loop might not catch all repetitions. However, the outer loop structure guarantees that for any `i`, all previous `j` (where `j < i`) are checked. This means `signatures[0]` is checked against nothing, `signatures[1]` against `signatures[0]`, `signatures[2]` against `signatures[0]` and `signatures[1]`, and so on. This effectively checks all unique pairs. Therefore, this specific method of bypassing the 'repetitive signatory' check is not possible.",
+                            "score": "100",
+                            "reason": "The provided `poc` correctly identifies that the nested loop `for(uint j=0; j<i; j++) require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');` effectively covers all unique pairs of signatories within the `signatures` array. For any given `signatures[i]`, it is checked against all preceding `signatures[j]` where `j < i`. This guarantees that no two signatures in the array will have the same signatory. Therefore, the 'repetitive signatory' check cannot be bypassed under this logic, making the `poc`'s conclusion accurate."
+                        }
+                    ]
+                }
+            }
+        },
+        "context": {
+            "event": "DecreaseAuthQuota",
+            "call_graph": "receive->_decreaseAuthQuota",
+            "state_variables": {
+                "_minSignatures_": "bytes32 internal constant _minSignatures_ = 'minSignatures';",
+                "RECEIVE_TYPEHASH": "bytes32 public constant RECEIVE_TYPEHASH = keccak256(\"Receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, address signatory)\");",
+                "_DOMAIN_SEPARATOR": "bytes32 internal _DOMAIN_SEPARATOR;",
+                "factory": "address public factory;",
+                "received": "mapping (uint => mapping (address => mapping (uint => uint))) public received;",
+                "_authQuotas": "mapping (address => uint) internal _authQuotas;",
+                "_fee_": "bytes32 internal constant _fee_ = 'fee';",
+                "_feeTo_": "bytes32 internal constant _feeTo_ = 'feeTo';",
+                "lasttimeUpdateQuotaOf": "mapping (address => uint) public lasttimeUpdateQuotaOf;",
+                "_autoQuotaRatio_": "bytes32 internal constant _autoQuotaRatio_ = 'autoQuotaRatio';",
+                "_autoQuotaPeriod_": "bytes32 internal constant _autoQuotaPeriod_ = 'autoQuotaPeriod';",
+                "autoQuotaRatio": "uint public autoQuotaRatio;",
+                "autoQuotaPeriod": "uint public autoQuotaPeriod;",
+                "_balances": "mapping (address => uint256) private _balances;",
+                "_totalSupply": "uint256 private _totalSupply;"
+            },
+            "external_functions": [
+                "modifier updateAutoQuota(address signatory) virtual{ uint quota = authQuotaOf(signatory); if(_authQuotas[signatory] != quota){ _authQuotas[signatory] = quota; lasttimeUpdateQuotaOf[signatory] = now;} _;}",
+                "function authQuotaOf(address signatory) virtual public view returns (uint quota){ quota = _authQuotas[signatory]; uint ratio = autoQuotaRatio != 0 ? autoQuotaRatio : Factory(factory).getConfig(_autoQuotaRatio_); uint period = autoQuotaPeriod != 0 ? autoQuotaPeriod : Factory(factory).getConfig(_autoQuotaPeriod_); if(ratio == 0 || period == 0 || period == uint(-1)) return quota; uint quotaCap = cap().mul(ratio).div(1e18); uint delta = quotaCap.mul(now.sub(lasttimeUpdateQuotaOf[signatory])).div(period); return Math.max(quota, Math.min(quotaCap, quota.add(delta)));}"
+            ]
+        },
+        "step1-time": 5.980941295623779,
+        "step2-time": 62.47361087799072,
+        "step2-call_api_times": 28,
+        "step3-time": 27.061326503753662,
+        "step3-call_api_times": 7,
+        "step4-time": 11.658053874969482,
+        "step4-call_api_times": 4,
+        "compare_audit": {
+            "result": [
+                {
+                    "vuln": "MappingBase.receive:function receive(uint256 fromChainId, address to, uint256 nonce, uint256 volume, Signature[] memory signatures) virtual external payable",
+                    "reason": "The `signatures` array is iterated over without checking for duplicate `signatures[i].signatory` values before the internal loop: `for(uint j=0; j<i; j++) require(signatures[i].signatory != signatures[j].signatory, 'repetitive signatory');`. This check is in the inner loop, meaning an attacker could provide multiple signatures from the same signatory that are not adjacent in the array. While the inner loop prevents adjacent duplicates, it doesn't prevent non-adjacent duplicates like [A, B, A]. This could allow a single authorized signatory to contribute multiple times towards the `_minSignatures_` threshold, potentially bypassing the intended multi-signature security or exhausting their `_authQuotas` quota multiple times with a single `volume` if not handled correctly by `_decreaseAuthQuota`. In a cross-chain context, this vulnerability could lead to fraudulent cross-chain transfers if an attacker can manipulate the signature array to meet the threshold with fewer actual unique signers than required, resulting in unauthorized asset release on the destination chain."
+                },
+                {
+                    "vuln": "MappingBase._decreaseAuthQuota:function _decreaseAuthQuota(address signatory, uint decrement) virtual internal updateAutoQuota(signatory) returns (uint quota) {\n        quota = _authQuotas[signatory].sub(decrement);\n        _authQuotas[signatory] = quota;\n        emit DecreaseAuthQuota(signatory, decrement, quota);\n    }",
+                    "reason": "The `_decreaseAuthQuota` function uses `_authQuotas[signatory].sub(decrement)` which is a safe arithmetic operation preventing underflow. However, the logic assumes that `decrement` represents a single 'unit' of volume that needs to be deducted. If the `receive` function calls `_decreaseAuthQuota` for *each* signature (as it appears to do: `_decreaseAuthQuota(signatures[i].signatory, volume);`), and multiple signatures belong to the same signatory (due to the previously mentioned `repetitive signatory` check issue), then `volume` might be deducted multiple times from the same signatory's quota for what should be a single transfer. This could unintentionally and prematurely deplete a legitimate signatory's quota without them performing multiple distinct operations. This amplified depletion of quotas could become a denial-of-service vector for legitimate signers in a cross-chain system."
+                }
+            ]
+        },
+        "compare_attribute_verification": {
+            "result": [
+                {
+                    "sourceChainID": "fromChainId",
+                    "findings": [
+                        {
+                            "constraint": "Check that sourceChainID is in the predefined list of supported chain IDs",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "The code does not explicitly check if `fromChainId` (sourceChainID) is part of a predefined list of supported chain IDs. It is used directly."
+                        }
+                    ]
+                },
+                {
+                    "toChainID": "N/A",
+                    "findings": [
+                        {
+                            "constraint": "Verify that the toChainID specified in the transaction matches the current chain’s ID",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "The `receive` function does not contain a parameter `toChainID` that would be compared with `block.chainid`. The `to` parameter is an address, not a chain ID."
+                        }
+                    ]
+                },
+                {
+                    "amount": "volume",
+                    "findings": [
+                        {
+                            "constraint": "Validate that recipientAddress's balance change before and after equals amount",
+                            "validation": "Function `_receive(to, volume)` is called, which is a virtual function. For actual token transfers, _mint or _transfer in ERC20UpgradeSafe are used. In `_mint(account, amount)`, `_balances[account] = _balances[account].add(amount);` updates the recipient's balance. In `_transfer(sender, recipient, amount)`, `_balances[recipient] = _balances[recipient].add(amount);` updates the recipient's balance.",
+                            "poc": null,
+                            "reason": "The `_mint` and `_transfer` functions correctly add the `amount` to the recipient's balance, ensuring the balance change matches the specified `volume`."
+                        },
+                        {
+                            "constraint": "Validate that the bridge's balance change before and after equals amount",
+                            "validation": "The `receive` function is `payable`, suggesting it can receive ETH. The `_receive` function is virtual and its implementation is not fully shown, but in typical bridge designs, this would either mint new tokens or transfer existing tokens from the bridge's balance. The `_mint` function increases `_totalSupply` and `_balances[account]` without directly showing a change in the bridge's balance. The `_transfer` function deducts `amount` from `_balances[sender]` (which could be the bridge contract).",
+                            "poc": null,
+                            "reason": "For tokens, the `_mint` function primarily affects the total supply and the recipient's balance. If the bridge holds tokens and uses `_transfer` to send them, then `_balances[sender].sub(amount)` would correctly reflect the bridge's balance change. The input code snippet does not explicitly show the bridge's balance being reduced for ETH or token transfers, but the `_receive` function is a placeholder for the actual asset handling logic, which in the case of `_mint` for example, creates new tokens rather than reducing a bridge's balance for the received `volume`."
+                        }
+                    ]
+                },
+                {
+                    "nonce": "nonce",
+                    "findings": [
+                        {
+                            "constraint": "Check and mark that nonce has not been consumed to prevent replay",
+                            "validation": "require(received[fromChainId][to][nonce] == 0, 'withdrawn already'); and received[fromChainId][to][nonce] = volume;",
+                            "poc": null,
+                            "reason": "The contract uses a `received` mapping indexed by `fromChainId`, `to`, and `nonce` to track consumed nonces. It correctly checks `received[fromChainId][to][nonce] == 0` at the beginning and sets `received[fromChainId][to][nonce] = volume` after successful processing, preventing replay attacks for the same combination of parameters."
+                        }
+                    ]
+                },
+                {
+                    "proof/signature": "signatures",
+                    "findings": [
+                        {
+                            "constraint": "Cryptographic proof that the transaction truly occurred and was finalized on the source chain (e.g., multi-signature, MPC signature, zero-knowledge proof, or Merkle proof)",
+                            "validation": "The `receive` function validates multiple `signatures` using EIP-712 style signature verification. It checks `N >= Factory(factory).getConfig(_minSignatures_)` for multi-signature threshold. Each signature's `signatory` is recovered using `ecrecover` and compared against the `signatures[i].signatory` field. Repetitive signatories are prevented.",
+                            "poc": "Potential vulnerability if `_minSignatures_` is set too low or if the `_DOMAIN_SEPARATOR` is not unique/securely generated. Also, the `structHash` calculation includes `signatures[i].signatory`, which means the signatory must sign a message including their own address in it, making a replay from a different signatory impossible. However, if the `volume` is not correctly constrained elsewhere and a malicious signatory provides a valid signature for a small `volume` but then changes `volume` to a very large number, this could be an issue (though this would depend on the `_decreaseAuthQuota` function and other controls). The signature verification itself is standard.",
+                            "reason": "The code correctly implements multi-signature verification using EIP-712 for each individual signature. It verifies the authenticity and integrity of the message by recreating the digest and recovering the signer's address. The `_minSignatures_` threshold provides a configurable security level. The logic appears sound for signature validation given correct `_DOMAIN_SEPARATOR` and `_minSignatures_` configuration."
+                        }
+                    ]
+                },
+                {
+                    "externalCallAddress": "N/A",
+                    "findings": [
+                        {
+                            "constraint": "Check whether the externalCallAddress is authorized to use.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "The provided code snippets do not include any parameters or logic related to `externalCallAddress` or `externalCallFunction`. Therefore, there is no validation for these attributes."
+                        }
+                    ]
+                },
+                {
+                    "externalCallFunction": "N/A",
+                    "findings": [
+                        {
+                            "constraint": "Validate that externalCallFunction is in the allowed function signature list",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "The provided code snippets do not include any parameters or logic related to `externalCallAddress` or `externalCallFunction`. Therefore, there is no validation for these attributes."
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "time": 130.93432235717773,
+    "this_cost": 0,
+    "this_prompt_tokens": 63920,
+    "this_completion_tokens": 14755
+}

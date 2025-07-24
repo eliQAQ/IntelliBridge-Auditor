@@ -1,0 +1,596 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterAddressUpgradeable" {
+  graph [ label = "AddressUpgradeable  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "AddressUpgradeable.isContract" [ label = "isContract" ];
+  "AddressUpgradeable.sendValue" [ label = "sendValue", color = "white" ];
+  "AddressUpgradeable.functionCall" [ label = "functionCall" ];
+  "AddressUpgradeable.functionCallWithValue" [ label = "functionCallWithValue" ];
+  "AddressUpgradeable.functionStaticCall" [ label = "functionStaticCall" ];
+  "AddressUpgradeable._verifyCallResult" [ label = "_verifyCallResult" ];
+  "AddressUpgradeable.address" [ label = "address" ];
+}
+
+subgraph "clusterInitializable" {
+  graph [ label = "Initializable", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Initializable.initializer" [ label = "initializer", color = "yellow" ];
+  "Initializable._isConstructor" [ label = "_isConstructor" ];
+  "Initializable.address" [ label = "address" ];
+}
+
+subgraph "clusterEnumerableSetUpgradeable" {
+  graph [ label = "EnumerableSetUpgradeable  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "EnumerableSetUpgradeable._add" [ label = "_add", color = "red" ];
+  "EnumerableSetUpgradeable._remove" [ label = "_remove" ];
+  "EnumerableSetUpgradeable._contains" [ label = "_contains" ];
+  "EnumerableSetUpgradeable._length" [ label = "_length" ];
+  "EnumerableSetUpgradeable._at" [ label = "_at" ];
+  "EnumerableSetUpgradeable.add" [ label = "add", color = "white" ];
+  "EnumerableSetUpgradeable.remove" [ label = "remove", color = "white" ];
+  "EnumerableSetUpgradeable.contains" [ label = "contains", color = "white" ];
+  "EnumerableSetUpgradeable.length" [ label = "length", color = "white" ];
+  "EnumerableSetUpgradeable.at" [ label = "at", color = "white" ];
+  "EnumerableSetUpgradeable.address" [ label = "address" ];
+}
+
+subgraph "clusterContextUpgradeable" {
+  graph [ label = "ContextUpgradeable", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ContextUpgradeable.__Context_init" [ label = "__Context_init", color = "white" ];
+  "ContextUpgradeable.__Context_init_unchained" [ label = "__Context_init_unchained" ];
+  "ContextUpgradeable._msgSender" [ label = "_msgSender", color = "white" ];
+  "ContextUpgradeable._msgData" [ label = "_msgData", color = "white" ];
+}
+
+subgraph "clusterAccessControlUpgradeable" {
+  graph [ label = "AccessControlUpgradeable", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "AccessControlUpgradeable.__AccessControl_init" [ label = "__AccessControl_init", color = "white" ];
+  "AccessControlUpgradeable.__AccessControl_init_unchained" [ label = "__AccessControl_init_unchained" ];
+  "AccessControlUpgradeable.hasRole" [ label = "hasRole" ];
+  "AccessControlUpgradeable.getRoleMemberCount" [ label = "getRoleMemberCount", color = "green" ];
+  "AccessControlUpgradeable.getRoleMember" [ label = "getRoleMember", color = "green" ];
+  "AccessControlUpgradeable.getRoleAdmin" [ label = "getRoleAdmin", color = "green" ];
+  "AccessControlUpgradeable.grantRole" [ label = "grantRole", color = "green" ];
+  "AccessControlUpgradeable.revokeRole" [ label = "revokeRole", color = "green" ];
+  "AccessControlUpgradeable.renounceRole" [ label = "renounceRole", color = "green" ];
+  "AccessControlUpgradeable._setupRole" [ label = "_setupRole", color = "white" ];
+  "AccessControlUpgradeable._setRoleAdmin" [ label = "_setRoleAdmin", color = "white" ];
+  "AccessControlUpgradeable._grantRole" [ label = "_grantRole" ];
+  "AccessControlUpgradeable._revokeRole" [ label = "_revokeRole" ];
+  "AccessControlUpgradeable._msgSender" [ label = "_msgSender" ];
+}
+
+subgraph "clusterIERC777Upgradeable" {
+  graph [ label = "IERC777Upgradeable  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IERC777Upgradeable.name" [ label = "name", color = "blue" ];
+  "IERC777Upgradeable.symbol" [ label = "symbol", color = "blue" ];
+  "IERC777Upgradeable.granularity" [ label = "granularity", color = "blue" ];
+  "IERC777Upgradeable.totalSupply" [ label = "totalSupply", color = "blue" ];
+  "IERC777Upgradeable.balanceOf" [ label = "balanceOf", color = "blue" ];
+  "IERC777Upgradeable.send" [ label = "send", color = "blue" ];
+  "IERC777Upgradeable.burn" [ label = "burn", color = "blue" ];
+  "IERC777Upgradeable.isOperatorFor" [ label = "isOperatorFor", color = "blue" ];
+  "IERC777Upgradeable.authorizeOperator" [ label = "authorizeOperator", color = "blue" ];
+  "IERC777Upgradeable.revokeOperator" [ label = "revokeOperator", color = "blue" ];
+  "IERC777Upgradeable.defaultOperators" [ label = "defaultOperators", color = "blue" ];
+  "IERC777Upgradeable.operatorSend" [ label = "operatorSend", color = "blue" ];
+  "IERC777Upgradeable.operatorBurn" [ label = "operatorBurn", color = "blue" ];
+}
+
+subgraph "clusterIERC777RecipientUpgradeable" {
+  graph [ label = "IERC777RecipientUpgradeable  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IERC777RecipientUpgradeable.tokensReceived" [ label = "tokensReceived", color = "blue" ];
+}
+
+subgraph "clusterIERC777SenderUpgradeable" {
+  graph [ label = "IERC777SenderUpgradeable  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IERC777SenderUpgradeable.tokensToSend" [ label = "tokensToSend", color = "blue" ];
+}
+
+subgraph "clusterIERC20Upgradeable" {
+  graph [ label = "IERC20Upgradeable  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IERC20Upgradeable.totalSupply" [ label = "totalSupply", color = "blue" ];
+  "IERC20Upgradeable.balanceOf" [ label = "balanceOf", color = "blue" ];
+  "IERC20Upgradeable.transfer" [ label = "transfer", color = "blue" ];
+  "IERC20Upgradeable.allowance" [ label = "allowance", color = "blue" ];
+  "IERC20Upgradeable.approve" [ label = "approve", color = "blue" ];
+  "IERC20Upgradeable.transferFrom" [ label = "transferFrom", color = "blue" ];
+}
+
+subgraph "clusterSafeMathUpgradeable" {
+  graph [ label = "SafeMathUpgradeable  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "SafeMathUpgradeable.tryAdd" [ label = "tryAdd", color = "white" ];
+  "SafeMathUpgradeable.trySub" [ label = "trySub", color = "white" ];
+  "SafeMathUpgradeable.tryMul" [ label = "tryMul", color = "white" ];
+  "SafeMathUpgradeable.tryDiv" [ label = "tryDiv", color = "white" ];
+  "SafeMathUpgradeable.tryMod" [ label = "tryMod", color = "white" ];
+  "SafeMathUpgradeable.add" [ label = "add", color = "white" ];
+  "SafeMathUpgradeable.sub" [ label = "sub", color = "white" ];
+  "SafeMathUpgradeable.mul" [ label = "mul", color = "white" ];
+  "SafeMathUpgradeable.div" [ label = "div", color = "white" ];
+  "SafeMathUpgradeable.mod" [ label = "mod", color = "white" ];
+}
+
+subgraph "clusterIERC1820RegistryUpgradeable" {
+  graph [ label = "IERC1820RegistryUpgradeable  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IERC1820RegistryUpgradeable.setManager" [ label = "setManager", color = "blue" ];
+  "IERC1820RegistryUpgradeable.getManager" [ label = "getManager", color = "blue" ];
+  "IERC1820RegistryUpgradeable.setInterfaceImplementer" [ label = "setInterfaceImplementer" ];
+  "IERC1820RegistryUpgradeable.getInterfaceImplementer" [ label = "getInterfaceImplementer" ];
+  "IERC1820RegistryUpgradeable.interfaceHash" [ label = "interfaceHash", color = "blue" ];
+  "IERC1820RegistryUpgradeable.updateERC165Cache" [ label = "updateERC165Cache", color = "blue" ];
+  "IERC1820RegistryUpgradeable.implementsERC165Interface" [ label = "implementsERC165Interface", color = "blue" ];
+  "IERC1820RegistryUpgradeable.implementsERC165InterfaceNoCache" [ label = "implementsERC165InterfaceNoCache", color = "blue" ];
+}
+
+subgraph "clusterERC777Upgradeable" {
+  graph [ label = "ERC777Upgradeable", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ERC777Upgradeable.__ERC777_init" [ label = "__ERC777_init", color = "white" ];
+  "ERC777Upgradeable.__ERC777_init_unchained" [ label = "__ERC777_init_unchained" ];
+  "ERC777Upgradeable.name" [ label = "name", color = "green" ];
+  "ERC777Upgradeable.symbol" [ label = "symbol", color = "green" ];
+  "ERC777Upgradeable.decimals" [ label = "decimals", color = "green" ];
+  "ERC777Upgradeable.granularity" [ label = "granularity", color = "green" ];
+  "ERC777Upgradeable.totalSupply" [ label = "totalSupply", color = "green" ];
+  "ERC777Upgradeable.balanceOf" [ label = "balanceOf", color = "green" ];
+  "ERC777Upgradeable.send" [ label = "send", color = "green" ];
+  "ERC777Upgradeable.transfer" [ label = "transfer", color = "green" ];
+  "ERC777Upgradeable.burn" [ label = "burn", color = "green" ];
+  "ERC777Upgradeable.isOperatorFor" [ label = "isOperatorFor" ];
+  "ERC777Upgradeable.authorizeOperator" [ label = "authorizeOperator", color = "green" ];
+  "ERC777Upgradeable.revokeOperator" [ label = "revokeOperator", color = "green" ];
+  "ERC777Upgradeable.defaultOperators" [ label = "defaultOperators", color = "green" ];
+  "ERC777Upgradeable.operatorSend" [ label = "operatorSend", color = "green" ];
+  "ERC777Upgradeable.operatorBurn" [ label = "operatorBurn", color = "green" ];
+  "ERC777Upgradeable.allowance" [ label = "allowance", color = "green" ];
+  "ERC777Upgradeable.approve" [ label = "approve", color = "green" ];
+  "ERC777Upgradeable.transferFrom" [ label = "transferFrom", color = "green" ];
+  "ERC777Upgradeable._mint" [ label = "_mint", color = "white" ];
+  "ERC777Upgradeable._send" [ label = "_send" ];
+  "ERC777Upgradeable._burn" [ label = "_burn" ];
+  "ERC777Upgradeable._move" [ label = "_move" ];
+  "ERC777Upgradeable._approve" [ label = "_approve" ];
+  "ERC777Upgradeable._callTokensToSend" [ label = "_callTokensToSend" ];
+  "ERC777Upgradeable._callTokensReceived" [ label = "_callTokensReceived" ];
+  "ERC777Upgradeable._beforeTokenTransfer" [ label = "_beforeTokenTransfer" ];
+  "ERC777Upgradeable._msgSender" [ label = "_msgSender" ];
+}
+
+subgraph "clusterECDSAUpgradeable" {
+  graph [ label = "ECDSAUpgradeable  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ECDSAUpgradeable.recover" [ label = "recover" ];
+  "ECDSAUpgradeable.toEthSignedMessageHash" [ label = "toEthSignedMessageHash", color = "white" ];
+  "ECDSAUpgradeable.address" [ label = "address" ];
+}
+
+subgraph "clusterIRelayRecipientUpgradeable" {
+  graph [ label = "IRelayRecipientUpgradeable  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IRelayRecipientUpgradeable.getHubAddr" [ label = "getHubAddr", color = "blue" ];
+  "IRelayRecipientUpgradeable.acceptRelayedCall" [ label = "acceptRelayedCall", color = "blue" ];
+  "IRelayRecipientUpgradeable.preRelayedCall" [ label = "preRelayedCall", color = "blue" ];
+  "IRelayRecipientUpgradeable.postRelayedCall" [ label = "postRelayedCall", color = "blue" ];
+}
+
+subgraph "clusterIRelayHubUpgradeable" {
+  graph [ label = "IRelayHubUpgradeable  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IRelayHubUpgradeable.stake" [ label = "stake", color = "blue" ];
+  "IRelayHubUpgradeable.registerRelay" [ label = "registerRelay", color = "blue" ];
+  "IRelayHubUpgradeable.removeRelayByOwner" [ label = "removeRelayByOwner", color = "blue" ];
+  "IRelayHubUpgradeable.unstake" [ label = "unstake", color = "blue" ];
+  "IRelayHubUpgradeable.getRelay" [ label = "getRelay", color = "blue" ];
+  "IRelayHubUpgradeable.depositFor" [ label = "depositFor", color = "blue" ];
+  "IRelayHubUpgradeable.balanceOf" [ label = "balanceOf", color = "blue" ];
+  "IRelayHubUpgradeable.withdraw" [ label = "withdraw", color = "blue" ];
+  "IRelayHubUpgradeable.canRelay" [ label = "canRelay", color = "blue" ];
+  "IRelayHubUpgradeable.relayCall" [ label = "relayCall", color = "blue" ];
+  "IRelayHubUpgradeable.requiredGas" [ label = "requiredGas", color = "blue" ];
+  "IRelayHubUpgradeable.maxPossibleCharge" [ label = "maxPossibleCharge", color = "blue" ];
+  "IRelayHubUpgradeable.penalizeRepeatedNonce" [ label = "penalizeRepeatedNonce", color = "blue" ];
+  "IRelayHubUpgradeable.penalizeIllegalTransaction" [ label = "penalizeIllegalTransaction", color = "blue" ];
+  "IRelayHubUpgradeable.getNonce" [ label = "getNonce", color = "blue" ];
+}
+
+subgraph "clusterGSNRecipientUpgradeable" {
+  graph [ label = "GSNRecipientUpgradeable", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "GSNRecipientUpgradeable.__GSNRecipient_init" [ label = "__GSNRecipient_init", color = "white" ];
+  "GSNRecipientUpgradeable.__GSNRecipient_init_unchained" [ label = "__GSNRecipient_init_unchained" ];
+  "GSNRecipientUpgradeable.getHubAddr" [ label = "getHubAddr" ];
+  "GSNRecipientUpgradeable._upgradeRelayHub" [ label = "_upgradeRelayHub", color = "white" ];
+  "GSNRecipientUpgradeable.relayHubVersion" [ label = "relayHubVersion", color = "green" ];
+  "GSNRecipientUpgradeable._withdrawDeposits" [ label = "_withdrawDeposits", color = "white" ];
+  "GSNRecipientUpgradeable._msgSender" [ label = "_msgSender", color = "white" ];
+  "GSNRecipientUpgradeable._msgData" [ label = "_msgData", color = "white" ];
+  "GSNRecipientUpgradeable.preRelayedCall" [ label = "preRelayedCall", color = "green" ];
+  "GSNRecipientUpgradeable._preRelayedCall" [ label = "_preRelayedCall" ];
+  "GSNRecipientUpgradeable.postRelayedCall" [ label = "postRelayedCall", color = "green" ];
+  "GSNRecipientUpgradeable._postRelayedCall" [ label = "_postRelayedCall" ];
+  "GSNRecipientUpgradeable._approveRelayedCall" [ label = "_approveRelayedCall" ];
+  "GSNRecipientUpgradeable._rejectRelayedCall" [ label = "_rejectRelayedCall", color = "white" ];
+  "GSNRecipientUpgradeable._computeCharge" [ label = "_computeCharge", color = "white" ];
+  "GSNRecipientUpgradeable._getRelayedCallSender" [ label = "_getRelayedCallSender" ];
+  "GSNRecipientUpgradeable._getRelayedCallData" [ label = "_getRelayedCallData" ];
+}
+
+subgraph "clusterOwnableUpgradeable" {
+  graph [ label = "OwnableUpgradeable", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "OwnableUpgradeable.__Ownable_init" [ label = "__Ownable_init", color = "white" ];
+  "OwnableUpgradeable.__Ownable_init_unchained" [ label = "__Ownable_init_unchained" ];
+  "OwnableUpgradeable.owner" [ label = "owner" ];
+  "OwnableUpgradeable.onlyOwner" [ label = "onlyOwner", color = "yellow" ];
+  "OwnableUpgradeable.renounceOwnership" [ label = "renounceOwnership", color = "green" ];
+  "OwnableUpgradeable.transferOwnership" [ label = "transferOwnership", color = "green" ];
+  "OwnableUpgradeable._msgSender" [ label = "_msgSender" ];
+}
+
+subgraph "clusterERC777GSNUpgreadable" {
+  graph [ label = "ERC777GSNUpgreadable", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ERC777GSNUpgreadable.__ERC777GSNUpgreadable_init" [ label = "__ERC777GSNUpgreadable_init", color = "green" ];
+  "ERC777GSNUpgreadable._msgSender" [ label = "_msgSender", color = "white" ];
+  "ERC777GSNUpgreadable._msgData" [ label = "_msgData", color = "white" ];
+  "ERC777GSNUpgreadable.setTrustedSigner" [ label = "setTrustedSigner", color = "green" ];
+  "ERC777GSNUpgreadable.setFeeTarget" [ label = "setFeeTarget", color = "green" ];
+  "ERC777GSNUpgreadable.setGSNExtraGas" [ label = "setGSNExtraGas", color = "green" ];
+  "ERC777GSNUpgreadable.acceptRelayedCall" [ label = "acceptRelayedCall", color = "green" ];
+  "ERC777GSNUpgreadable._preRelayedCall" [ label = "_preRelayedCall", color = "white" ];
+  "ERC777GSNUpgreadable._postRelayedCall" [ label = "_postRelayedCall", color = "white" ];
+  "ERC777GSNUpgreadable._rejectRelayedCall" [ label = "_rejectRelayedCall" ];
+  "ERC777GSNUpgreadable._computeCharge" [ label = "_computeCharge" ];
+}
+
+subgraph "clusterERC777WithAdminOperatorUpgreadable" {
+  graph [ label = "ERC777WithAdminOperatorUpgreadable", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ERC777WithAdminOperatorUpgreadable.__ERC777WithAdminOperatorUpgreadable_init" [ label = "__ERC777WithAdminOperatorUpgreadable_init", color = "green" ];
+  "ERC777WithAdminOperatorUpgreadable.adminTransfer" [ label = "adminTransfer", color = "green" ];
+  "ERC777WithAdminOperatorUpgreadable.setAdminOperator" [ label = "setAdminOperator", color = "green" ];
+}
+
+subgraph "clusterPToken" {
+  graph [ label = "PToken", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "PToken.initialize" [ label = "initialize", color = "green" ];
+  "PToken.mint" [ label = "mint" ];
+  "PToken.redeem" [ label = "redeem", color = "green" ];
+  "PToken.operatorRedeem" [ label = "operatorRedeem", color = "blue" ];
+  "PToken.grantMinterRole" [ label = "grantMinterRole", color = "blue" ];
+  "PToken.revokeMinterRole" [ label = "revokeMinterRole", color = "blue" ];
+  "PToken.hasMinterRole" [ label = "hasMinterRole", color = "blue" ];
+  "PToken._msgSender" [ label = "_msgSender", color = "white" ];
+  "PToken._msgData" [ label = "_msgData", color = "white" ];
+  "PToken.__ERC777WithAdminOperatorUpgreadable_init" [ label = "__ERC777WithAdminOperatorUpgreadable_init" ];
+}
+
+subgraph "clustertarget" {
+  graph [ label = "target", color = "lightgray" ];
+  "target.staticcall" [ label = "staticcall" ];
+}
+
+subgraph "cluster_totalSupply" {
+  graph [ label = "_totalSupply", color = "lightgray" ];
+  "_totalSupply.add" [ label = "add" ];
+  "_totalSupply.sub" [ label = "sub" ];
+}
+
+subgraph "clusterto" {
+  graph [ label = "to", color = "lightgray" ];
+  "to.isContract" [ label = "isContract" ];
+}
+
+subgraph "cluster_POST_RELAYED_CALL_MAX_GAS" {
+  graph [ label = "_POST_RELAYED_CALL_MAX_GAS", color = "lightgray" ];
+  "_POST_RELAYED_CALL_MAX_GAS.sub" [ label = "sub" ];
+}
+
+subgraph "clusteractualCharge" {
+  graph [ label = "actualCharge", color = "lightgray" ];
+  "actualCharge.sub" [ label = "sub" ];
+}
+
+  "AddressUpgradeable.sendValue";
+  "AddressUpgradeable.address";
+  "AddressUpgradeable.functionCall";
+  "AddressUpgradeable.functionCallWithValue";
+  "AddressUpgradeable.isContract";
+  "AddressUpgradeable._verifyCallResult";
+  "AddressUpgradeable.functionStaticCall";
+  "target.staticcall";
+  "Initializable.initializer";
+  "Initializable._isConstructor";
+  "Initializable.address";
+  "EnumerableSetUpgradeable._add";
+  "EnumerableSetUpgradeable._contains";
+  "EnumerableSetUpgradeable.add";
+  "EnumerableSetUpgradeable.remove";
+  "EnumerableSetUpgradeable._remove";
+  "EnumerableSetUpgradeable.contains";
+  "EnumerableSetUpgradeable.length";
+  "EnumerableSetUpgradeable._length";
+  "EnumerableSetUpgradeable.at";
+  "EnumerableSetUpgradeable._at";
+  "EnumerableSetUpgradeable.address";
+  "ContextUpgradeable.__Context_init";
+  "ContextUpgradeable.__Context_init_unchained";
+  "AccessControlUpgradeable.__AccessControl_init";
+  "AccessControlUpgradeable.__AccessControl_init_unchained";
+  "AccessControlUpgradeable.grantRole";
+  "AccessControlUpgradeable.hasRole";
+  "AccessControlUpgradeable._msgSender";
+  "AccessControlUpgradeable._grantRole";
+  "AccessControlUpgradeable.revokeRole";
+  "AccessControlUpgradeable._revokeRole";
+  "AccessControlUpgradeable.renounceRole";
+  "AccessControlUpgradeable._setupRole";
+  "ERC777Upgradeable.__ERC777_init";
+  "ERC777Upgradeable.__ERC777_init_unchained";
+  "IERC1820RegistryUpgradeable.setInterfaceImplementer";
+  "ERC777Upgradeable.send";
+  "ERC777Upgradeable._send";
+  "ERC777Upgradeable._msgSender";
+  "ERC777Upgradeable.transfer";
+  "ERC777Upgradeable._callTokensToSend";
+  "ERC777Upgradeable._move";
+  "ERC777Upgradeable._callTokensReceived";
+  "ERC777Upgradeable.burn";
+  "ERC777Upgradeable._burn";
+  "ERC777Upgradeable.authorizeOperator";
+  "ERC777Upgradeable.revokeOperator";
+  "ERC777Upgradeable.operatorSend";
+  "ERC777Upgradeable.isOperatorFor";
+  "ERC777Upgradeable.operatorBurn";
+  "ERC777Upgradeable.approve";
+  "ERC777Upgradeable._approve";
+  "ERC777Upgradeable.transferFrom";
+  "ERC777Upgradeable._mint";
+  "ERC777Upgradeable._beforeTokenTransfer";
+  "_totalSupply.add";
+  "_totalSupply.sub";
+  "IERC1820RegistryUpgradeable.getInterfaceImplementer";
+  "to.isContract";
+  "ECDSAUpgradeable.recover";
+  "ECDSAUpgradeable.address";
+  "GSNRecipientUpgradeable.__GSNRecipient_init";
+  "GSNRecipientUpgradeable.__GSNRecipient_init_unchained";
+  "GSNRecipientUpgradeable._upgradeRelayHub";
+  "GSNRecipientUpgradeable._withdrawDeposits";
+  "GSNRecipientUpgradeable.getHubAddr";
+  "GSNRecipientUpgradeable._msgSender";
+  "GSNRecipientUpgradeable._getRelayedCallSender";
+  "GSNRecipientUpgradeable._msgData";
+  "GSNRecipientUpgradeable._getRelayedCallData";
+  "GSNRecipientUpgradeable.preRelayedCall";
+  "GSNRecipientUpgradeable._preRelayedCall";
+  "GSNRecipientUpgradeable.postRelayedCall";
+  "GSNRecipientUpgradeable._postRelayedCall";
+  "GSNRecipientUpgradeable._approveRelayedCall";
+  "OwnableUpgradeable.__Ownable_init";
+  "OwnableUpgradeable.__Ownable_init_unchained";
+  "OwnableUpgradeable._msgSender";
+  "OwnableUpgradeable.onlyOwner";
+  "OwnableUpgradeable.owner";
+  "OwnableUpgradeable.renounceOwnership";
+  "OwnableUpgradeable.transferOwnership";
+  "ERC777GSNUpgreadable.__ERC777GSNUpgreadable_init";
+  "ERC777GSNUpgreadable.setTrustedSigner";
+  "ERC777GSNUpgreadable.setFeeTarget";
+  "ERC777GSNUpgreadable.acceptRelayedCall";
+  "ERC777GSNUpgreadable._rejectRelayedCall";
+  "ERC777GSNUpgreadable._computeCharge";
+  "_POST_RELAYED_CALL_MAX_GAS.sub";
+  "actualCharge.sub";
+  "ERC777WithAdminOperatorUpgreadable.adminTransfer";
+  "ERC777WithAdminOperatorUpgreadable.setAdminOperator";
+  "PToken.initialize";
+  "PToken.__ERC777WithAdminOperatorUpgreadable_init";
+  "PToken.mint";
+  "PToken.redeem";
+  "PToken.operatorRedeem";
+  "PToken.grantMinterRole";
+  "PToken.revokeMinterRole";
+  "PToken.hasMinterRole";
+  "AddressUpgradeable.sendValue" -> "AddressUpgradeable.address" [ color = "green" ];
+  "AddressUpgradeable.functionCall" -> "AddressUpgradeable.functionCall" [ color = "green" ];
+  "AddressUpgradeable.functionCall" -> "AddressUpgradeable.functionCallWithValue" [ color = "green" ];
+  "AddressUpgradeable.functionCallWithValue" -> "AddressUpgradeable.functionCallWithValue" [ color = "green" ];
+  "AddressUpgradeable.functionCallWithValue" -> "AddressUpgradeable.address" [ color = "green" ];
+  "AddressUpgradeable.functionCallWithValue" -> "AddressUpgradeable.isContract" [ color = "green" ];
+  "AddressUpgradeable.functionCallWithValue" -> "AddressUpgradeable._verifyCallResult" [ color = "green" ];
+  "AddressUpgradeable.functionStaticCall" -> "AddressUpgradeable.functionStaticCall" [ color = "green" ];
+  "AddressUpgradeable.functionStaticCall" -> "AddressUpgradeable.isContract" [ color = "green" ];
+  "AddressUpgradeable.functionStaticCall" -> "target.staticcall" [ color = "orange" ];
+  "AddressUpgradeable.functionStaticCall" -> "AddressUpgradeable._verifyCallResult" [ color = "green" ];
+  "Initializable.initializer" -> "Initializable._isConstructor" [ color = "green" ];
+  "Initializable._isConstructor" -> "AddressUpgradeable.isContract" [ color = "orange" ];
+  "Initializable._isConstructor" -> "Initializable.address" [ color = "green" ];
+  "EnumerableSetUpgradeable._add" -> "EnumerableSetUpgradeable._contains" [ color = "green" ];
+  "EnumerableSetUpgradeable.add" -> "EnumerableSetUpgradeable._add" [ color = "green" ];
+  "EnumerableSetUpgradeable.remove" -> "EnumerableSetUpgradeable._remove" [ color = "green" ];
+  "EnumerableSetUpgradeable.contains" -> "EnumerableSetUpgradeable._contains" [ color = "green" ];
+  "EnumerableSetUpgradeable.length" -> "EnumerableSetUpgradeable._length" [ color = "green" ];
+  "EnumerableSetUpgradeable.at" -> "EnumerableSetUpgradeable._at" [ color = "green" ];
+  "EnumerableSetUpgradeable.add" -> "EnumerableSetUpgradeable._add" [ color = "green" ];
+  "EnumerableSetUpgradeable.remove" -> "EnumerableSetUpgradeable._remove" [ color = "green" ];
+  "EnumerableSetUpgradeable.contains" -> "EnumerableSetUpgradeable._contains" [ color = "green" ];
+  "EnumerableSetUpgradeable.length" -> "EnumerableSetUpgradeable._length" [ color = "green" ];
+  "EnumerableSetUpgradeable.at" -> "EnumerableSetUpgradeable.address" [ color = "green" ];
+  "EnumerableSetUpgradeable.at" -> "EnumerableSetUpgradeable._at" [ color = "green" ];
+  "EnumerableSetUpgradeable.add" -> "EnumerableSetUpgradeable._add" [ color = "green" ];
+  "EnumerableSetUpgradeable.remove" -> "EnumerableSetUpgradeable._remove" [ color = "green" ];
+  "EnumerableSetUpgradeable.contains" -> "EnumerableSetUpgradeable._contains" [ color = "green" ];
+  "EnumerableSetUpgradeable.length" -> "EnumerableSetUpgradeable._length" [ color = "green" ];
+  "EnumerableSetUpgradeable.at" -> "EnumerableSetUpgradeable._at" [ color = "green" ];
+  "ContextUpgradeable.__Context_init" -> "ContextUpgradeable.__Context_init_unchained" [ color = "green" ];
+  "AccessControlUpgradeable.__AccessControl_init" -> "ContextUpgradeable.__Context_init_unchained" [ color = "green" ];
+  "AccessControlUpgradeable.__AccessControl_init" -> "AccessControlUpgradeable.__AccessControl_init_unchained" [ color = "green" ];
+  "AccessControlUpgradeable.grantRole" -> "AccessControlUpgradeable.hasRole" [ color = "green" ];
+  "AccessControlUpgradeable.grantRole" -> "AccessControlUpgradeable._msgSender" [ color = "green" ];
+  "AccessControlUpgradeable.grantRole" -> "AccessControlUpgradeable._grantRole" [ color = "green" ];
+  "AccessControlUpgradeable.revokeRole" -> "AccessControlUpgradeable.hasRole" [ color = "green" ];
+  "AccessControlUpgradeable.revokeRole" -> "AccessControlUpgradeable._msgSender" [ color = "green" ];
+  "AccessControlUpgradeable.revokeRole" -> "AccessControlUpgradeable._revokeRole" [ color = "green" ];
+  "AccessControlUpgradeable.renounceRole" -> "AccessControlUpgradeable._msgSender" [ color = "green" ];
+  "AccessControlUpgradeable.renounceRole" -> "AccessControlUpgradeable._revokeRole" [ color = "green" ];
+  "AccessControlUpgradeable._setupRole" -> "AccessControlUpgradeable._grantRole" [ color = "green" ];
+  "AccessControlUpgradeable._grantRole" -> "AccessControlUpgradeable._msgSender" [ color = "green" ];
+  "AccessControlUpgradeable._revokeRole" -> "AccessControlUpgradeable._msgSender" [ color = "green" ];
+  "ERC777Upgradeable.__ERC777_init" -> "ContextUpgradeable.__Context_init_unchained" [ color = "green" ];
+  "ERC777Upgradeable.__ERC777_init" -> "ERC777Upgradeable.__ERC777_init_unchained" [ color = "green" ];
+  "ERC777Upgradeable.__ERC777_init_unchained" -> "IERC1820RegistryUpgradeable.setInterfaceImplementer" [ color = "orange" ];
+  "ERC777Upgradeable.__ERC777_init_unchained" -> "Initializable.address" [ color = "green" ];
+  "ERC777Upgradeable.__ERC777_init_unchained" -> "Initializable.address" [ color = "green" ];
+  "ERC777Upgradeable.__ERC777_init_unchained" -> "IERC1820RegistryUpgradeable.setInterfaceImplementer" [ color = "orange" ];
+  "ERC777Upgradeable.__ERC777_init_unchained" -> "Initializable.address" [ color = "green" ];
+  "ERC777Upgradeable.__ERC777_init_unchained" -> "Initializable.address" [ color = "green" ];
+  "ERC777Upgradeable.send" -> "ERC777Upgradeable._send" [ color = "green" ];
+  "ERC777Upgradeable.send" -> "ERC777Upgradeable._msgSender" [ color = "green" ];
+  "ERC777Upgradeable.transfer" -> "Initializable.address" [ color = "green" ];
+  "ERC777Upgradeable.transfer" -> "ERC777Upgradeable._msgSender" [ color = "green" ];
+  "ERC777Upgradeable.transfer" -> "ERC777Upgradeable._callTokensToSend" [ color = "green" ];
+  "ERC777Upgradeable.transfer" -> "ERC777Upgradeable._move" [ color = "green" ];
+  "ERC777Upgradeable.transfer" -> "ERC777Upgradeable._callTokensReceived" [ color = "green" ];
+  "ERC777Upgradeable.burn" -> "ERC777Upgradeable._burn" [ color = "green" ];
+  "ERC777Upgradeable.burn" -> "ERC777Upgradeable._msgSender" [ color = "green" ];
+  "ERC777Upgradeable.authorizeOperator" -> "ERC777Upgradeable._msgSender" [ color = "green" ];
+  "ERC777Upgradeable.authorizeOperator" -> "ERC777Upgradeable._msgSender" [ color = "green" ];
+  "ERC777Upgradeable.authorizeOperator" -> "ERC777Upgradeable._msgSender" [ color = "green" ];
+  "ERC777Upgradeable.authorizeOperator" -> "ERC777Upgradeable._msgSender" [ color = "green" ];
+  "ERC777Upgradeable.revokeOperator" -> "ERC777Upgradeable._msgSender" [ color = "green" ];
+  "ERC777Upgradeable.revokeOperator" -> "ERC777Upgradeable._msgSender" [ color = "green" ];
+  "ERC777Upgradeable.revokeOperator" -> "ERC777Upgradeable._msgSender" [ color = "green" ];
+  "ERC777Upgradeable.revokeOperator" -> "ERC777Upgradeable._msgSender" [ color = "green" ];
+  "ERC777Upgradeable.operatorSend" -> "ERC777Upgradeable.isOperatorFor" [ color = "green" ];
+  "ERC777Upgradeable.operatorSend" -> "ERC777Upgradeable._msgSender" [ color = "green" ];
+  "ERC777Upgradeable.operatorSend" -> "ERC777Upgradeable._send" [ color = "green" ];
+  "ERC777Upgradeable.operatorBurn" -> "ERC777Upgradeable.isOperatorFor" [ color = "green" ];
+  "ERC777Upgradeable.operatorBurn" -> "ERC777Upgradeable._msgSender" [ color = "green" ];
+  "ERC777Upgradeable.operatorBurn" -> "ERC777Upgradeable._burn" [ color = "green" ];
+  "ERC777Upgradeable.approve" -> "ERC777Upgradeable._msgSender" [ color = "green" ];
+  "ERC777Upgradeable.approve" -> "ERC777Upgradeable._approve" [ color = "green" ];
+  "ERC777Upgradeable.transferFrom" -> "Initializable.address" [ color = "green" ];
+  "ERC777Upgradeable.transferFrom" -> "Initializable.address" [ color = "green" ];
+  "ERC777Upgradeable.transferFrom" -> "ERC777Upgradeable._msgSender" [ color = "green" ];
+  "ERC777Upgradeable.transferFrom" -> "ERC777Upgradeable._callTokensToSend" [ color = "green" ];
+  "ERC777Upgradeable.transferFrom" -> "ERC777Upgradeable._move" [ color = "green" ];
+  "ERC777Upgradeable.transferFrom" -> "ERC777Upgradeable._approve" [ color = "green" ];
+  "ERC777Upgradeable.transferFrom" -> "ERC777Upgradeable._callTokensReceived" [ color = "green" ];
+  "ERC777Upgradeable._mint" -> "Initializable.address" [ color = "green" ];
+  "ERC777Upgradeable._mint" -> "ERC777Upgradeable._msgSender" [ color = "green" ];
+  "ERC777Upgradeable._mint" -> "ERC777Upgradeable._beforeTokenTransfer" [ color = "green" ];
+  "ERC777Upgradeable._mint" -> "Initializable.address" [ color = "green" ];
+  "ERC777Upgradeable._mint" -> "_totalSupply.add" [ color = "orange" ];
+  "ERC777Upgradeable._mint" -> "ERC777Upgradeable._callTokensReceived" [ color = "green" ];
+  "ERC777Upgradeable._mint" -> "Initializable.address" [ color = "green" ];
+  "ERC777Upgradeable._mint" -> "Initializable.address" [ color = "green" ];
+  "ERC777Upgradeable._send" -> "Initializable.address" [ color = "green" ];
+  "ERC777Upgradeable._send" -> "Initializable.address" [ color = "green" ];
+  "ERC777Upgradeable._send" -> "ERC777Upgradeable._msgSender" [ color = "green" ];
+  "ERC777Upgradeable._send" -> "ERC777Upgradeable._callTokensToSend" [ color = "green" ];
+  "ERC777Upgradeable._send" -> "ERC777Upgradeable._move" [ color = "green" ];
+  "ERC777Upgradeable._send" -> "ERC777Upgradeable._callTokensReceived" [ color = "green" ];
+  "ERC777Upgradeable._burn" -> "Initializable.address" [ color = "green" ];
+  "ERC777Upgradeable._burn" -> "ERC777Upgradeable._msgSender" [ color = "green" ];
+  "ERC777Upgradeable._burn" -> "ERC777Upgradeable._callTokensToSend" [ color = "green" ];
+  "ERC777Upgradeable._burn" -> "Initializable.address" [ color = "green" ];
+  "ERC777Upgradeable._burn" -> "ERC777Upgradeable._beforeTokenTransfer" [ color = "green" ];
+  "ERC777Upgradeable._burn" -> "Initializable.address" [ color = "green" ];
+  "ERC777Upgradeable._burn" -> "_totalSupply.sub" [ color = "orange" ];
+  "ERC777Upgradeable._burn" -> "Initializable.address" [ color = "green" ];
+  "ERC777Upgradeable._move" -> "ERC777Upgradeable._beforeTokenTransfer" [ color = "green" ];
+  "ERC777Upgradeable._approve" -> "Initializable.address" [ color = "green" ];
+  "ERC777Upgradeable._approve" -> "Initializable.address" [ color = "green" ];
+  "ERC777Upgradeable._callTokensToSend" -> "IERC1820RegistryUpgradeable.getInterfaceImplementer" [ color = "orange" ];
+  "ERC777Upgradeable._callTokensToSend" -> "Initializable.address" [ color = "green" ];
+  "ERC777Upgradeable._callTokensReceived" -> "IERC1820RegistryUpgradeable.getInterfaceImplementer" [ color = "orange" ];
+  "ERC777Upgradeable._callTokensReceived" -> "Initializable.address" [ color = "green" ];
+  "ERC777Upgradeable._callTokensReceived" -> "to.isContract" [ color = "orange" ];
+  "ECDSAUpgradeable.recover" -> "ECDSAUpgradeable.recover" [ color = "green" ];
+  "ECDSAUpgradeable.recover" -> "ECDSAUpgradeable.address" [ color = "green" ];
+  "GSNRecipientUpgradeable.__GSNRecipient_init" -> "ContextUpgradeable.__Context_init_unchained" [ color = "green" ];
+  "GSNRecipientUpgradeable.__GSNRecipient_init" -> "GSNRecipientUpgradeable.__GSNRecipient_init_unchained" [ color = "green" ];
+  "GSNRecipientUpgradeable._upgradeRelayHub" -> "Initializable.address" [ color = "green" ];
+  "GSNRecipientUpgradeable._withdrawDeposits" -> "GSNRecipientUpgradeable.getHubAddr" [ color = "green" ];
+  "GSNRecipientUpgradeable._msgSender" -> "GSNRecipientUpgradeable.getHubAddr" [ color = "green" ];
+  "GSNRecipientUpgradeable._msgSender" -> "GSNRecipientUpgradeable._getRelayedCallSender" [ color = "green" ];
+  "GSNRecipientUpgradeable._msgData" -> "GSNRecipientUpgradeable.getHubAddr" [ color = "green" ];
+  "GSNRecipientUpgradeable._msgData" -> "GSNRecipientUpgradeable._getRelayedCallData" [ color = "green" ];
+  "GSNRecipientUpgradeable.preRelayedCall" -> "GSNRecipientUpgradeable.getHubAddr" [ color = "green" ];
+  "GSNRecipientUpgradeable.preRelayedCall" -> "GSNRecipientUpgradeable._preRelayedCall" [ color = "green" ];
+  "GSNRecipientUpgradeable.postRelayedCall" -> "GSNRecipientUpgradeable.getHubAddr" [ color = "green" ];
+  "GSNRecipientUpgradeable.postRelayedCall" -> "GSNRecipientUpgradeable._postRelayedCall" [ color = "green" ];
+  "GSNRecipientUpgradeable._approveRelayedCall" -> "GSNRecipientUpgradeable._approveRelayedCall" [ color = "green" ];
+  "OwnableUpgradeable.__Ownable_init" -> "ContextUpgradeable.__Context_init_unchained" [ color = "green" ];
+  "OwnableUpgradeable.__Ownable_init" -> "OwnableUpgradeable.__Ownable_init_unchained" [ color = "green" ];
+  "OwnableUpgradeable.__Ownable_init_unchained" -> "OwnableUpgradeable._msgSender" [ color = "green" ];
+  "OwnableUpgradeable.__Ownable_init_unchained" -> "Initializable.address" [ color = "green" ];
+  "OwnableUpgradeable.onlyOwner" -> "OwnableUpgradeable.owner" [ color = "green" ];
+  "OwnableUpgradeable.onlyOwner" -> "OwnableUpgradeable._msgSender" [ color = "green" ];
+  "OwnableUpgradeable.renounceOwnership" -> "Initializable.address" [ color = "green" ];
+  "OwnableUpgradeable.renounceOwnership" -> "Initializable.address" [ color = "green" ];
+  "OwnableUpgradeable.transferOwnership" -> "Initializable.address" [ color = "green" ];
+  "ERC777GSNUpgreadable.__ERC777GSNUpgreadable_init" -> "GSNRecipientUpgradeable.__GSNRecipient_init" [ color = "green" ];
+  "ERC777GSNUpgreadable.__ERC777GSNUpgreadable_init" -> "OwnableUpgradeable.__Ownable_init" [ color = "green" ];
+  "ERC777GSNUpgreadable.__ERC777GSNUpgreadable_init" -> "Initializable.address" [ color = "green" ];
+  "ERC777GSNUpgreadable.__ERC777GSNUpgreadable_init" -> "Initializable.address" [ color = "green" ];
+  "ERC777Upgradeable._msgSender" -> "GSNRecipientUpgradeable._msgSender" [ color = "orange" ];
+  "GSNRecipientUpgradeable._msgData" -> "GSNRecipientUpgradeable._msgData" [ color = "orange" ];
+  "ERC777GSNUpgreadable.setTrustedSigner" -> "Initializable.address" [ color = "green" ];
+  "ERC777GSNUpgreadable.setFeeTarget" -> "Initializable.address" [ color = "green" ];
+  "ERC777GSNUpgreadable.acceptRelayedCall" -> "GSNRecipientUpgradeable.getHubAddr" [ color = "green" ];
+  "ERC777GSNUpgreadable.acceptRelayedCall" -> "Initializable.address" [ color = "green" ];
+  "ERC777GSNUpgreadable.acceptRelayedCall" -> "GSNRecipientUpgradeable._approveRelayedCall" [ color = "green" ];
+  "ERC777GSNUpgreadable.acceptRelayedCall" -> "ERC777GSNUpgreadable._rejectRelayedCall" [ color = "green" ];
+  "GSNRecipientUpgradeable._postRelayedCall" -> "ERC777GSNUpgreadable._computeCharge" [ color = "green" ];
+  "GSNRecipientUpgradeable._postRelayedCall" -> "_POST_RELAYED_CALL_MAX_GAS.sub" [ color = "orange" ];
+  "GSNRecipientUpgradeable._postRelayedCall" -> "actualCharge.sub" [ color = "orange" ];
+  "GSNRecipientUpgradeable._postRelayedCall" -> "ERC777Upgradeable._send" [ color = "green" ];
+  "ERC777WithAdminOperatorUpgreadable.adminTransfer" -> "ERC777Upgradeable._msgSender" [ color = "green" ];
+  "ERC777WithAdminOperatorUpgreadable.adminTransfer" -> "ERC777Upgradeable._send" [ color = "green" ];
+  "ERC777WithAdminOperatorUpgreadable.setAdminOperator" -> "ERC777Upgradeable._msgSender" [ color = "green" ];
+  "PToken.initialize" -> "AccessControlUpgradeable.__AccessControl_init" [ color = "green" ];
+  "PToken.initialize" -> "ERC777Upgradeable.__ERC777_init" [ color = "green" ];
+  "PToken.initialize" -> "ERC777GSNUpgreadable.__ERC777GSNUpgreadable_init" [ color = "green" ];
+  "PToken.initialize" -> "PToken.__ERC777WithAdminOperatorUpgreadable_init" [ color = "green" ];
+  "PToken.initialize" -> "AccessControlUpgradeable._setupRole" [ color = "green" ];
+  "PToken.mint" -> "PToken.mint" [ color = "green" ];
+  "PToken.mint" -> "Initializable.address" [ color = "green" ];
+  "PToken.mint" -> "AccessControlUpgradeable.hasRole" [ color = "green" ];
+  "PToken.mint" -> "ERC777Upgradeable._msgSender" [ color = "green" ];
+  "PToken.mint" -> "ERC777Upgradeable._mint" [ color = "green" ];
+  "PToken.redeem" -> "ERC777Upgradeable._burn" [ color = "green" ];
+  "PToken.redeem" -> "ERC777Upgradeable._msgSender" [ color = "green" ];
+  "PToken.redeem" -> "ERC777Upgradeable._msgSender" [ color = "green" ];
+  "PToken.operatorRedeem" -> "ERC777Upgradeable.isOperatorFor" [ color = "green" ];
+  "PToken.operatorRedeem" -> "ERC777Upgradeable._msgSender" [ color = "green" ];
+  "PToken.operatorRedeem" -> "ERC777Upgradeable._burn" [ color = "green" ];
+  "PToken.grantMinterRole" -> "AccessControlUpgradeable.grantRole" [ color = "green" ];
+  "PToken.revokeMinterRole" -> "AccessControlUpgradeable.revokeRole" [ color = "green" ];
+  "PToken.hasMinterRole" -> "AccessControlUpgradeable.hasRole" [ color = "green" ];
+  "ERC777Upgradeable._msgSender" -> "GSNRecipientUpgradeable._msgSender" [ color = "orange" ];
+  "GSNRecipientUpgradeable._msgData" -> "GSNRecipientUpgradeable._msgData" [ color = "orange" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

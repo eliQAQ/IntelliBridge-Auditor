@@ -1,0 +1,365 @@
+{
+    "XBridge.listToken": {
+        "step1": {
+            "prompt1": "\nYou are an experienced cross-chain protocol analysis expert. Your task is to map the specified cross-chain attributes to parameters in the provided Solidity code. If an attribute cannot be found in the code, do not list it in the output. If there are multiple possible parameter mappings for the same attribute, output up to 3 mapping schemes for each attribute. Please strictly follow the input and output formats defined below:\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"attribute\": \n{ \n\"<attribute>\": \"<attribute description>\" ,\n\"<attribute>\": \"<attribute description>\",\n...\n}\n\"code\": \"...\" // Solidity contract code string\n}\nOutput format:\nReturn a JSON array, each item structured as follows, only produce output in the required format, without any additional content:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // The input cross-chain attribute\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}, ... \n]\nIn the reason, please point out both the core basis for the mapping and potential uncertainties (e.g., parameter name similarity, ambiguous contextual meaning, etc.).\n\nInput:\n{\n\"attribute\": {\"toChainID\": \"Specifies the destination blockchain network ID.\", \"tokenAddress\": \"Indicates the contract address of the token to be transferred.\", \"amount\": \"The number of tokens to be transferred across chains.\", \"nonce\": \"Check and mark that nonce has not been consumed to prevent replay\", \"recipientAddress\": \"The address that will receive the tokens on the destination chain.\", \"externalCallAddress\": \"The address of a contract to be called after the cross-chain transfer.\", \"externalCallFunction\": \"The specific function or calldata to be executed on the `externalCallAddress`.\", \"routerAddress\": \"The address of the cross-chain router or bridge handler.\"},\n\"code\": [\"XBridge.listToken:function listToken(tokenInfo memory baseToken, tokenInfo memory correspondingToken, bool _isMintable) external payable {\\n        address _baseToken = baseToken.token;\\n        address _correspondingToken = correspondingToken.token;\\n        require(_baseToken != address(0), \\\"INVALID_ADDR\\\");\\n        require(_correspondingToken != address(0), \\\"INVALID_ADDR\\\");\\n        require(tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] == address(0) && tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] == address(0), \\\"THIS_PAIR_ALREADY_LISTED\\\");\\n\\n        isMintableWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = _isMintable;\\n        isMintableWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = _isMintable;\\n        isMintableWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = _isMintable;\\n        isMintableWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = _isMintable;\\n\\n        tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] = _correspondingToken;\\n        tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = _baseToken;\\n        tokenToTokenWithChainId[correspondingToken.chain][baseToken.chain][_baseToken] = _correspondingToken;\\n        tokenToTokenWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken] = _baseToken;\\n\\n\\n        if(_isMintable) {\\n            isWrappedWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = true;\\n            isWrappedWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken] = true;\\n            isWrapped[_correspondingToken] = true;\\n\\n        }\\n\\n        tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = msg.sender;\\n        tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = msg.sender;\\n        tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = msg.sender;\\n        tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = msg.sender;\\n\\n        if(_baseToken == _correspondingToken) _tokenOwner[_baseToken] = msg.sender;\\n        else {\\n            if(_baseToken.code.length > 0) _tokenOwner[_baseToken] = msg.sender;\\n            else _tokenOwner[_correspondingToken] = msg.sender;\\n        }\\n\\n        if(!excludeFeeFromListing[msg.sender]) transferListingFee(listingFeeCollector, msg.sender, msg.value);\\n\\n        emit TokenListed(_baseToken, baseToken.chain, _correspondingToken, correspondingToken.chain, _isMintable, msg.sender);\\n\\n    }\", \"XBridge.transferListingFee:function transferListingFee(address to, address _user,  uint256 _value) private nonReentrant {\\n        require(to != address(0), \\\"CANT_SEND_TO_NULL_ADDRESS\\\");\\n        require(_value >= listingFee, \\\"INCREASE_LISTING_FEE\\\");\\n        (bool success, ) = payable(to).call{value:listingFee}(\\\"\\\");\\n        require(success, \\\"LISTING_FEE_TRANSFER_FAILED\\\");\\n        uint256 remainingEth = _value - listingFee;\\n        if (remainingEth > 0) {\\n            (success,) = payable(_user).call{value: remainingEth}(\\\"\\\");\\n            require(success, \\\"REFUND_REMAINING_ETHER_SENT_FAILED\\\");\\n        }\\n    }\"]\n}\n",
+            "outputs1": [
+                [
+                    {
+                        "parameter": "tokenInfo memory baseToken",
+                        "attribute": "tokenAddress",
+                        "reason": "This parameter is a struct 'tokenInfo' which likely contains 'token' and 'chain' information. The 'baseToken.token' field within this struct would represent the token address on the base chain. It's uncertain whether this specifically refers to the *transfer* token address, as this function is for listing tokens, not an actual transfer."
+                    },
+                    {
+                        "parameter": "tokenInfo memory correspondingToken",
+                        "attribute": "tokenAddress",
+                        "reason": "This parameter is a struct 'tokenInfo' which likely contains 'token' and 'chain' information. The 'correspondingToken.token' field within this struct would represent the token address on the corresponding chain. It's uncertain whether this specifically refers to the *transfer* token address, as this function is for listing tokens, not an actual transfer."
+                    },
+                    {
+                        "parameter": "baseToken.chain",
+                        "attribute": "toChainID",
+                        "reason": "This parameter, found within the `baseToken` struct, represents a chain ID. It is possible it could represent a 'toChainID' if the context of the listing implies a destination chain for a cross-chain pair. However, in the context of `listToken`, it acts as a descriptor of the base token's chain, not necessarily a 'to-chain' for a transfer."
+                    },
+                    {
+                        "parameter": "correspondingToken.chain",
+                        "attribute": "toChainID",
+                        "reason": "This parameter, found within the `correspondingToken` struct, represents a chain ID. It is possible it could represent a 'toChainID' if the context of the listing implies a destination chain for a cross-chain pair. However, in the context of `listToken`, it acts as a descriptor of the corresponding token's chain, not necessarily a 'to-chain' for a transfer, but rather the other side of a cross-chain pair."
+                    }
+                ]
+            ],
+            "v_prompt1": "\nYou are a rigorous cross-chain protocol auditor and data consistency verifier. Carefully review whether the meaning of each cross-chain attribute and parameter in the code is consistent, assign a confidence score (0-100%), and state the reason for the given confidence score.\n\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"correspondence\":    // Array of attribute-parameter correspondences in the code\n[\n{\n\"attribute\": \"...\", // Input cross-chain attribute\n\"parameter\": \"...\", // Corresponding parameter\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}\n...\n],\n\"code\":\"...\" // Cross-chain contract code\n}\n\nOutput format: Return a JSON array, each item structured as follows, only produce output in the required format, without any additional content:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // Input cross-chain attribute\n\"score\":\"...\", // Assigned confidence score\n\"reason\": \"...\" // Brief explanation for the given confidence score\n}, ... \n]\nInput:\n{\n\"correspondence\": [{\"parameter\": \"tokenInfo memory baseToken\", \"attribute\": \"tokenAddress\", \"reason\": \"This parameter is a struct 'tokenInfo' which likely contains 'token' and 'chain' information. The 'baseToken.token' field within this struct would represent the token address on the base chain. It's uncertain whether this specifically refers to the *transfer* token address, as this function is for listing tokens, not an actual transfer.\"}, {\"parameter\": \"tokenInfo memory correspondingToken\", \"attribute\": \"tokenAddress\", \"reason\": \"This parameter is a struct 'tokenInfo' which likely contains 'token' and 'chain' information. The 'correspondingToken.token' field within this struct would represent the token address on the corresponding chain. It's uncertain whether this specifically refers to the *transfer* token address, as this function is for listing tokens, not an actual transfer.\"}, {\"parameter\": \"baseToken.chain\", \"attribute\": \"toChainID\", \"reason\": \"This parameter, found within the `baseToken` struct, represents a chain ID. It is possible it could represent a 'toChainID' if the context of the listing implies a destination chain for a cross-chain pair. However, in the context of `listToken`, it acts as a descriptor of the base token's chain, not necessarily a 'to-chain' for a transfer.\"}, {\"parameter\": \"correspondingToken.chain\", \"attribute\": \"toChainID\", \"reason\": \"This parameter, found within the `correspondingToken` struct, represents a chain ID. It is possible it could represent a 'toChainID' if the context of the listing implies a destination chain for a cross-chain pair. However, in the context of `listToken`, it acts as a descriptor of the corresponding token's chain, not necessarily a 'to-chain' for a transfer, but rather the other side of a cross-chain pair.\"}],\n\"code\": [\"XBridge.listToken:function listToken(tokenInfo memory baseToken, tokenInfo memory correspondingToken, bool _isMintable) external payable {\\n        address _baseToken = baseToken.token;\\n        address _correspondingToken = correspondingToken.token;\\n        require(_baseToken != address(0), \\\"INVALID_ADDR\\\");\\n        require(_correspondingToken != address(0), \\\"INVALID_ADDR\\\");\\n        require(tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] == address(0) && tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] == address(0), \\\"THIS_PAIR_ALREADY_LISTED\\\");\\n\\n        isMintableWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = _isMintable;\\n        isMintableWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = _isMintable;\\n        isMintableWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = _isMintable;\\n        isMintableWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = _isMintable;\\n\\n        tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] = _correspondingToken;\\n        tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = _baseToken;\\n        tokenToTokenWithChainId[correspondingToken.chain][baseToken.chain][_baseToken] = _correspondingToken;\\n        tokenToTokenWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken] = _baseToken;\\n\\n\\n        if(_isMintable) {\\n            isWrappedWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = true;\\n            isWrappedWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken] = true;\\n            isWrapped[_correspondingToken] = true;\\n\\n        }\\n\\n        tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = msg.sender;\\n        tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = msg.sender;\\n        tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = msg.sender;\\n        tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = msg.sender;\\n\\n        if(_baseToken == _correspondingToken) _tokenOwner[_baseToken] = msg.sender;\\n        else {\\n            if(_baseToken.code.length > 0) _tokenOwner[_baseToken] = msg.sender;\\n            else _tokenOwner[_correspondingToken] = msg.sender;\\n        }\\n\\n        if(!excludeFeeFromListing[msg.sender]) transferListingFee(listingFeeCollector, msg.sender, msg.value);\\n\\n        emit TokenListed(_baseToken, baseToken.chain, _correspondingToken, correspondingToken.chain, _isMintable, msg.sender);\\n\\n    }\", \"XBridge.transferListingFee:function transferListingFee(address to, address _user,  uint256 _value) private nonReentrant {\\n        require(to != address(0), \\\"CANT_SEND_TO_NULL_ADDRESS\\\");\\n        require(_value >= listingFee, \\\"INCREASE_LISTING_FEE\\\");\\n        (bool success, ) = payable(to).call{value:listingFee}(\\\"\\\");\\n        require(success, \\\"LISTING_FEE_TRANSFER_FAILED\\\");\\n        uint256 remainingEth = _value - listingFee;\\n        if (remainingEth > 0) {\\n            (success,) = payable(_user).call{value: remainingEth}(\\\"\\\");\\n            require(success, \\\"REFUND_REMAINING_ETHER_SENT_FAILED\\\");\\n        }\\n    }\"]:\n}\n\n",
+            "v_outputs1": [
+                [
+                    {
+                        "parameter": "tokenInfo memory baseToken",
+                        "attribute": "tokenAddress",
+                        "score": "80",
+                        "reason": "The parameter 'baseToken' is a struct that contains 'token' which represents an address. This 'baseToken.token' is clearly used as a token address within the function (e.g., `_baseToken = baseToken.token;`). While the function is for listing and not a transfer, 'tokenAddress' as a general attribute implies the address of a token. The term 'transfer token address' might imply a token specifically *being transferred*, but 'tokenAddress' alone is broad enough to cover a token address registered for cross-chain operations. Thus, 'baseToken.token' is a strong match for 'tokenAddress' in the context of one side of a cross-chain pair."
+                    },
+                    {
+                        "parameter": "tokenInfo memory correspondingToken",
+                        "attribute": "tokenAddress",
+                        "score": "80",
+                        "reason": "Similar to 'baseToken', 'correspondingToken' is a struct with a 'token' field, which is used as a token address (`_correspondingToken = correspondingToken.token;`). This represents the token address on the corresponding chain for the cross-chain listing. The same reasoning applies: it's a token address, even if not directly for a transfer in this function."
+                    },
+                    {
+                        "parameter": "baseToken.chain",
+                        "attribute": "toChainID",
+                        "score": "40",
+                        "reason": "The `baseToken.chain` is indeed a chain ID. However, in the context of the `listToken` function, both `baseToken.chain` and `correspondingToken.chain` are equally important and define the two chains involved in the cross-chain pair being listed. Neither is strictly a 'toChainID' or 'fromChainID' as there isn't an directional 'transfer' being performed directly by this function. It represents one of the two chains in the token pair. Assigning it solely as 'toChainID' without a 'fromChainID' counterpart for the other token in the listing context is ambiguous and reflects a misinterpretation of the function's purpose (listing a pair vs. performing a transfer)."
+                    },
+                    {
+                        "parameter": "correspondingToken.chain",
+                        "attribute": "toChainID",
+                        "score": "40",
+                        "reason": "Similar to `baseToken.chain`, `correspondingToken.chain` represents one of the two chain IDs defining the cross-chain pair. It is not inherently a 'toChainID' more than it is a 'fromChainID' in this `listToken` function, which is about establishing a relationship between tokens on two chains. Its role is establishing one side of a cross-chain pair, not indicating a destination chain for a transfer. The term 'toChainID' itself implies a directional flow (from A to B), which isn't the primary action of `listToken` (which is symmetric)."
+                    }
+                ]
+            ],
+            "formatted_outputs1": {
+                "tokenInfo memory baseToken": {
+                    "tokenAddress": {
+                        "reason": "This parameter is a struct 'tokenInfo' which likely contains 'token' and 'chain' information. The 'baseToken.token' field within this struct would represent the token address on the base chain. It's uncertain whether this specifically refers to the *transfer* token address, as this function is for listing tokens, not an actual transfer.",
+                        "score": "80",
+                        "s_reason": "The parameter 'baseToken' is a struct that contains 'token' which represents an address. This 'baseToken.token' is clearly used as a token address within the function (e.g., `_baseToken = baseToken.token;`). While the function is for listing and not a transfer, 'tokenAddress' as a general attribute implies the address of a token. The term 'transfer token address' might imply a token specifically *being transferred*, but 'tokenAddress' alone is broad enough to cover a token address registered for cross-chain operations. Thus, 'baseToken.token' is a strong match for 'tokenAddress' in the context of one side of a cross-chain pair."
+                    }
+                },
+                "tokenInfo memory correspondingToken": {
+                    "tokenAddress": {
+                        "reason": "This parameter is a struct 'tokenInfo' which likely contains 'token' and 'chain' information. The 'correspondingToken.token' field within this struct would represent the token address on the corresponding chain. It's uncertain whether this specifically refers to the *transfer* token address, as this function is for listing tokens, not an actual transfer.",
+                        "score": "80",
+                        "s_reason": "Similar to 'baseToken', 'correspondingToken' is a struct with a 'token' field, which is used as a token address (`_correspondingToken = correspondingToken.token;`). This represents the token address on the corresponding chain for the cross-chain listing. The same reasoning applies: it's a token address, even if not directly for a transfer in this function."
+                    }
+                },
+                "baseToken.chain": {
+                    "toChainID": {
+                        "reason": "This parameter, found within the `baseToken` struct, represents a chain ID. It is possible it could represent a 'toChainID' if the context of the listing implies a destination chain for a cross-chain pair. However, in the context of `listToken`, it acts as a descriptor of the base token's chain, not necessarily a 'to-chain' for a transfer.",
+                        "score": "40",
+                        "s_reason": "The `baseToken.chain` is indeed a chain ID. However, in the context of the `listToken` function, both `baseToken.chain` and `correspondingToken.chain` are equally important and define the two chains involved in the cross-chain pair being listed. Neither is strictly a 'toChainID' or 'fromChainID' as there isn't an directional 'transfer' being performed directly by this function. It represents one of the two chains in the token pair. Assigning it solely as 'toChainID' without a 'fromChainID' counterpart for the other token in the listing context is ambiguous and reflects a misinterpretation of the function's purpose (listing a pair vs. performing a transfer)."
+                    }
+                },
+                "correspondingToken.chain": {
+                    "toChainID": {
+                        "reason": "This parameter, found within the `correspondingToken` struct, represents a chain ID. It is possible it could represent a 'toChainID' if the context of the listing implies a destination chain for a cross-chain pair. However, in the context of `listToken`, it acts as a descriptor of the corresponding token's chain, not necessarily a 'to-chain' for a transfer, but rather the other side of a cross-chain pair.",
+                        "score": "40",
+                        "s_reason": "Similar to `baseToken.chain`, `correspondingToken.chain` represents one of the two chain IDs defining the cross-chain pair. It is not inherently a 'toChainID' more than it is a 'fromChainID' in this `listToken` function, which is about establishing a relationship between tokens on two chains. Its role is establishing one side of a cross-chain pair, not indicating a destination chain for a transfer. The term 'toChainID' itself implies a directional flow (from A to B), which isn't the primary action of `listToken` (which is symmetric)."
+                    }
+                }
+            }
+        },
+        "step2": {
+            "tokenAddress": {
+                "tokenInfo memory baseToken": {
+                    "dataflows": [
+                        {
+                            "parameter": "tokenInfo memory baseToken",
+                            "dataflow": {
+                                "XBridge.listToken": [
+                                    "function listToken(tokenInfo memory baseToken, tokenInfo memory correspondingToken, bool _isMintable) external payable {",
+                                    "        address _baseToken = baseToken.token;",
+                                    "        require(_baseToken != address(0), \"INVALID_ADDR\");",
+                                    "        require(tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] == address(0) && tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] == address(0), \"THIS_PAIR_ALREADY_LISTED\");",
+                                    "        isMintableWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = _isMintable;",
+                                    "        isMintableWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = _isMintable;",
+                                    "        isMintableWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = _isMintable;",
+                                    "        tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] = _correspondingToken;",
+                                    "        tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = _baseToken;",
+                                    "        tokenToTokenWithChainId[correspondingToken.chain][baseToken.chain][_baseToken] = _correspondingToken;",
+                                    "        if(_isMintable) {",
+                                    "            isWrappedWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = true;",
+                                    "            isWrappedWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken] = true;",
+                                    "        }",
+                                    "        tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = msg.sender;",
+                                    "        tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = msg.sender;",
+                                    "        tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = msg.sender;",
+                                    "        if(_baseToken == _correspondingToken) _tokenOwner[_baseToken] = msg.sender;",
+                                    "        else {",
+                                    "            if(_baseToken.code.length > 0) _tokenOwner[_baseToken] = msg.sender;",
+                                    "            else _tokenOwner[_correspondingToken] = msg.sender;",
+                                    "        }",
+                                    "        emit TokenListed(_baseToken, baseToken.chain, _correspondingToken, correspondingToken.chain, _isMintable, msg.sender);",
+                                    "}"
+                                ]
+                            },
+                            "coverage": "75",
+                            "correctness": "80",
+                            "score": "80",
+                            "reason": "The extracted data flow for `baseToken` covers most of its usages, including direct access to `baseToken.token` for `_baseToken` and various mappings like `tokenToTokenWithChainId`, `isMintableWithChainId`, `isWrappedWithChainId`, and `tokenOwnerWithChainId`. It also includes the `emit TokenListed` event. However, it misses the usage of `baseToken.chain` in the `isMintableWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken]` line in the original code, and the `isMintableWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken]` line. Additionally, the original code contains four `tokenToTokenWithChainId` assignments involving `baseToken.chain`, but the dataflow only lists three. Similarly, four `tokenOwnerWithChainId` assignments but the dataflow lists three. The `require(_baseToken != address(0), \"INVALID_ADDR\")` and `require(tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] == address(0) && tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] == address(0), \"THIS_PAIR_ALREADY_LISTED\")` lines are well-covered. The if-else block for `_tokenOwner` based on `_baseToken.code.length` is also included. The correctness is good for the covered parts, but the missing lines in the extracted dataflow reduce the overall correctness as it's not a complete representation."
+                        },
+                        {
+                            "parameter": "tokenInfo memory baseToken",
+                            "dataflow": {
+                                "XBridge.listToken": [
+                                    "function listToken(tokenInfo memory baseToken, tokenInfo memory correspondingToken, bool _isMintable) external payable {",
+                                    "        address _baseToken = baseToken.token;",
+                                    "        require(tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] == address(0) && tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] == address(0), \"THIS_PAIR_ALREADY_LISTED\");",
+                                    "        isMintableWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = _isMintable;",
+                                    "        isMintableWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = _isMintable;",
+                                    "        tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] = _correspondingToken;",
+                                    "        tokenToTokenWithChainId[correspondingToken.chain][baseToken.chain][_baseToken] = _correspondingToken;",
+                                    "        isWrappedWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = true;",
+                                    "        isWrappedWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken] = true;",
+                                    "        tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = msg.sender;",
+                                    "        tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = msg.sender;",
+                                    "        emit TokenListed(_baseToken, baseToken.chain, _correspondingToken, correspondingToken.chain, _isMintable, msg.sender);"
+                                ]
+                            },
+                            "coverage": "75",
+                            "correctness": "60",
+                            "score": "70",
+                            "reason": "The extracted data flow for `baseToken` covers its usage in `_baseToken` assignment, `require` statements for existing pairs, and assignments to `isMintableWithChainId`, `tokenToTokenWithChainId`, `isWrappedWithChainId`, and `tokenOwnerWithChainId` mappings, as well as the `TokenListed` event. However, it misses the initial `require` checks on `_baseToken` for being non-zero address, some additional assignments to `isMintableWithChainId` and `tokenToTokenWithChainId` using the reverse order of tokens, and the conditional logic for `isWrappedWithChainId` and `_tokenOwner` based on `_baseToken` and `_correspondingToken` comparison. The provided data flow also incorrectly includes `_correspondingToken` in the initial `require` check, which is derived from `correspondingToken` not `baseToken`. The omission of parts of the `isMintableWithChainId` and `tokenToTokenWithChainId` assignments impacts correctness as the provided data flow only captures half of the bidirectional assignments in the actual code. The `isWrappedWithChainId` and `_tokenOwner` logic is also partially or entirely missed. Therefore, while many direct uses are captured, the full scope of `baseToken`'s influence, especially in the symmetric mapping updates and conditional logic, is not fully reflected."
+                        }
+                    ],
+                    "merge_dataflows": "function listToken(tokenInfo memory baseToken, tokenInfo memory correspondingToken, bool _isMintable) external payable {\n        address _baseToken = baseToken.token;\n        require(_baseToken != address(0), \"INVALID_ADDR\");\n        require(tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] == address(0) && tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] == address(0), \"THIS_PAIR_ALREADY_LISTED\");\n        isMintableWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = _isMintable;\n        isMintableWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = _isMintable;\n        isMintableWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = _isMintable;\n        tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] = _correspondingToken;\n        tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = _baseToken;\n        tokenToTokenWithChainId[correspondingToken.chain][baseToken.chain][_baseToken] = _correspondingToken;\n        if(_isMintable) {\n            isWrappedWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = true;\n            isWrappedWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken] = true;\n        }\n        tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = msg.sender;\n        tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = msg.sender;\n        tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = msg.sender;\n        if(_baseToken == _correspondingToken) _tokenOwner[_baseToken] = msg.sender;\n        else {\n            if(_baseToken.code.length > 0) _tokenOwner[_baseToken] = msg.sender;\n            else _tokenOwner[_correspondingToken] = msg.sender;\n        }\n        emit TokenListed(_baseToken, baseToken.chain, _correspondingToken, correspondingToken.chain, _isMintable, msg.sender);\n}"
+                }
+            }
+        },
+        "step3": {
+            "tokenAddress": {
+                "tokenInfo memory baseToken": {
+                    "Check whether the tokenAddress is authorized to use.": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": "tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = msg.sender;",
+                                "reason": "The code explicitly assigns the `msg.sender` to `tokenOwnerWithChainId` for `_baseToken`, indicating that the `msg.sender` (the caller of the function) is authorized to use this token because they are recorded as the owner."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The code does not contain a specific `require` statement or modifier that explicitly checks if `baseToken.token` (or `_baseToken`) is pre-authorized. Authorization here seems to be established by the act of listing the token, not checked beforehand."
+                            },
+                            {
+                                "result": true,
+                                "validation": "if(_baseToken == _correspondingToken) _tokenOwner[_baseToken] = msg.sender;\n        else {\n            if(_baseToken.code.length > 0) _tokenOwner[_baseToken] = msg.sender;\n            else _tokenOwner[_correspondingToken] = msg.sender;\n        }",
+                                "reason": "Beyond the `tokenOwnerWithChainId` mapping, the `_tokenOwner` mapping also records `msg.sender` as the owner of either `_baseToken` or `_correspondingToken` based on certain conditions. This establishes `msg.sender` as an authorized entity for the relevant token."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "tokenInfo memory baseToken",
+                                "constraint": "Check whether the tokenAddress is authorized to use.",
+                                "validation": "tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = msg.sender;",
+                                "score": "0",
+                                "reason": "This line of code assigns msg.sender as the owner, it does not check if the tokenAddress is 'authorized' in any pre-existing sense. It's an assignment, not a validation of authorization."
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "step4": {
+            "tokenAddress": {
+                "tokenInfo memory baseToken": {}
+            }
+        },
+        "final_result": {
+            "tokenAddress": {
+                "tokenInfo memory baseToken": {
+                    "Check whether the tokenAddress is authorized to use.": []
+                }
+            }
+        },
+        "context": {
+            "event": "TokenListed",
+            "call_graph": "listToken",
+            "state_variables": {
+                "listingFeeCollector": "address public listingFeeCollector;",
+                "isWrapped": "mapping(address => bool) public isWrapped;",
+                "excludeFeeFromListing": "mapping(address => bool) public excludeFeeFromListing;",
+                "isWrappedWithChainId": "mapping(uint256 => mapping(uint256 => mapping(address => bool))) public isWrappedWithChainId;",
+                "tokenOwnerWithChainId": "mapping(uint256 => mapping(uint256 => mapping(address => mapping(address => address)))) public tokenOwnerWithChainId;",
+                "tokenToTokenWithChainId": "mapping(uint256 => mapping(uint256 => mapping(address => address))) public tokenToTokenWithChainId;",
+                "isMintableWithChainId": "mapping(uint256 => mapping(uint256 => mapping(address => mapping(address => bool)))) public isMintableWithChainId;",
+                "_tokenOwner": "mapping(address => address) public _tokenOwner;",
+                "listingFee": "uint256 public listingFee;",
+                "_ENTERED": "uint256 private constant _ENTERED = 2;",
+                "_status": "uint256 private _status;",
+                "_NOT_ENTERED": "uint256 private constant _NOT_ENTERED = 1;"
+            },
+            "external_functions": [
+                "modifier nonReentrant(){ _nonReentrantBefore(); _; _nonReentrantAfter();}",
+                "function _nonReentrantBefore() private{ require(_status != _ENTERED, \"ReentrancyGuard: reentrant call\"); _status = _ENTERED;}",
+                "function _nonReentrantAfter() private{ _status = _NOT_ENTERED;}"
+            ]
+        },
+        "step1-time": 7.523535966873169,
+        "step2-time": 24.35509181022644,
+        "step2-call_api_times": 7,
+        "step3-time": 6.037190675735474,
+        "step3-call_api_times": 2,
+        "step4-time": 1.9550323486328125e-05,
+        "step4-call_api_times": 0,
+        "compare_audit": {
+            "result": [
+                {
+                    "vuln": "XBridge.listToken:function listToken(tokenInfo memory baseToken, tokenInfo memory correspondingToken, bool _isMintable) external payable",
+                    "reason": "The `listToken` function allows `msg.sender` to be recorded as the owner of tokens. If `_baseToken` and `_correspondingToken` are the same, `_tokenOwner[_baseToken] = msg.sender` is set. Otherwise, `_tokenOwner[_baseToken] = msg.sender` if `_baseToken` has code deployed, or `_tokenOwner[_correspondingToken] = msg.sender` if `_baseToken` has no code. This logic is problematic because it assigns ownership of a `token` (which could be the `_correspondingToken`) to the `msg.sender` even if they do not legitimately own or control that token. An attacker could register a token they don't own by providing a `_baseToken` that is not a contract, causing `_tokenOwner[_correspondingToken]` to be set. This allows the attacker to gain unauthorized control over certain token configurations or potentially disrupt the bridge's functionality related to that token. In a cross-chain context, this could lead to incorrect routing, false ownership claims, or even asset freezing if the bridge relies on this ownership mapping for critical operations like pausing token transfers or upgrades."
+                },
+                {
+                    "vuln": "XBridge.transferListingFee:function transferListingFee(address to, address _user,  uint256 _value) private nonReentrant",
+                    "reason": "The `transferListingFee` function uses `call{value:listingFee}(\"\")` for transferring ETH. While direct Ether transfers using `call` are generally safe when transferring to externally owned accounts, if `listingFeeCollector` is a contract, and that contract does not explicitly handle ETH received through `call` (e.g., lacks a `receive()` or `fallback()` function, or its `receive()`/`fallback()` function reverts), the transfer will fail. This could lead to a denial of service for the `listToken` function, preventing new tokens from being listed if the listing fee cannot be successfully transferred. In a cross-chain scenario, this could halt the on-boarding of new assets, impacting the bridge's overall liquidity and utility."
+                }
+            ]
+        },
+        "compare_attribute_verification": {
+            "result": [
+                {
+                    "toChainID": "baseToken.chain, correspondingToken.chain",
+                    "findings": [
+                        {
+                            "constraint": "Check whether toChainID is authorized.",
+                            "validation": "No direct authorization check for 'toChainID' itself (baseToken.chain, correspondingToken.chain) within the provided code snippets. The code assumes they are valid and uses them as keys in mappings for `tokenToTokenWithChainId`, `isMintableWithChainId`, `isWrappedWithChainId`, and `tokenOwnerWithChainId`.",
+                            "poc": null,
+                            "reason": "The provided code does not explicitly implement authorization checks for the `toChainID`. It uses the provided chain IDs directly in mappings without validating them against a whitelist or similar mechanism. This might be handled at an earlier stage or rely on the caller's authorization."
+                        },
+                        {
+                            "constraint": "Check that the destination chain ID is not equal to the source chain ID.",
+                            "validation": "Not found. The code does not explicitly check if `baseToken.chain` is different from `correspondingToken.chain`.",
+                            "poc": null,
+                            "reason": "The provided Solidity code does not contain any logic to prevent `baseToken.chain` from being equal to `correspondingToken.chain`. This could potentially lead to issues if the bridge logic assumes different chains for certain operations, though in `listToken` it might not be a direct vulnerability depending on the intended use."
+                        }
+                    ]
+                },
+                {
+                    "tokenAddress": "_baseToken, _correspondingToken",
+                    "findings": [
+                        {
+                            "constraint": "Check whether the tokenAddress is authorized to use.",
+                            "validation": "Authorization is implied by the `tokenOwnerWithChainId` mapping and checking `tokenToTokenWithChainId` for existence. `tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = msg.sender;` implies `msg.sender` owns or authorizes the token listing.",
+                            "poc": null,
+                            "reason": "The listing process itself implicitly authorizes the token addresses by associating them with `msg.sender` as the owner. There isn't a separate, explicit whitelist/blacklist check for the token addresses themselves beyond their non-zero address validation and unique listing check. The assumption here is that if a token is being listed by an authorized `msg.sender`, it is 'authorized to use' within the context of the bridge."
+                        }
+                    ]
+                },
+                {
+                    "amount": "msg.value, _value",
+                    "findings": [
+                        {
+                            "constraint": "Validate that amount is greater than 0",
+                            "validation": "require(_value >= listingFee, \"INCREASE_LISTING_FEE\"); (in transferListingFee) and `if (_baseToken.code.length > 0) _tokenOwner[_baseToken] = msg.sender;` implicitly suggests a non-zero fee or interaction.",
+                            "poc": "(In `transferListingFee` function) `_value` is checked against `listingFee`. If `listingFee` is 0, then `_value >= 0` would pass, allowing a 0 amount.",
+                            "reason": "The direct validation `_value >= listingFee` means `_value` can indeed be 0 if `listingFee` is 0, which is not strictly 'greater than 0'. However, as `listingFee` is typically a positive constant, this constraint is practically met for the fee. For other amounts, such as the `_baseToken.code.length` check, it's about code presence, not value."
+                        },
+                        {
+                            "constraint": "Validate that msg.sender's balance change before and after equals amount",
+                            "validation": "Not found. The `listToken` function sends `msg.value` to the contract. The `transferListingFee` function sends `listingFee` to `to` and `remainingEth` back to `_user` (msg.sender). There's no explicit check that `msg.sender`'s balance *change* equals the amount sent; rather, it verifies the transfers themselves succeed.",
+                            "poc": null,
+                            "reason": "The code doesn't explicitly calculate or verify the `msg.sender`'s balance change. It assumes the `msg.value` sent by the user correctly reflects their intended payment and attempts to transfer parts of it."
+                        },
+                        {
+                            "constraint": "Validate that the bridge's balance change before and after equals amount",
+                            "validation": "Not found. The contract receives `msg.value` and then disburses `listingFee` and `remainingEth`. It doesn't explicitly track the contract's balance change relative to a specific 'amount' for a cross-chain transfer, as this code is about listing fees.",
+                            "poc": null,
+                            "reason": "This code handles listing fees, not cross-chain transfers of 'amount'. The contract's balance is affected by received `msg.value` and sent `listingFee` and `remainingEth`, but there's no direct validation of the 'bridge's balance change' in the context of a 'cross-chain amount'."
+                        },
+                        {
+                            "constraint": "Validate that msg.sender's balance ≥ amount",
+                            "validation": "Implicitly handled by Solidity's `call` function for `value` transfers. If `msg.sender` doesn't have `msg.value` (or `_user` doesn't have `remainingEth`), the transfer would fail and revert due to `require(success, ...)`.",
+                            "poc": null,
+                            "reason": "Solidity's built-in behavior for value transfers (`call{value: ...}`) ensures that the sender has sufficient balance. If they don't, the transaction will revert, captured by the `require(success, ...)` checks during the ether transfers."
+                        }
+                    ]
+                },
+                {
+                    "nonce": "null",
+                    "findings": [
+                        {
+                            "constraint": "Check if the transaction's nonce is equal to the account's current nonce.",
+                            "validation": "Not found.",
+                            "poc": null,
+                            "reason": "The provided code snippets do not include any nonce management or checks to prevent replay attacks for cross-chain transactions. This type of check is typically crucial for cross-chain protocols to ensure each transfer message is processed only once."
+                        }
+                    ]
+                },
+                {
+                    "recipientAddress": "to, _user (in transferListingFee)",
+                    "findings": [
+                        {
+                            "constraint": "Validate that recipientAddress is not the zero address",
+                            "validation": "require(to != address(0), \"CANT_SEND_TO_NULL_ADDRESS\"); (in transferListingFee)",
+                            "poc": null,
+                            "reason": "The `transferListingFee` function explicitly checks that the `to` address (which is a recipient) is not the zero address, preventing funds from being sent to an unrecoverable address. This is a common and necessary security check."
+                        }
+                    ]
+                },
+                {
+                    "externalCallAddress": "null",
+                    "findings": [
+                        {
+                            "constraint": "Check whether the externalCallAddress is authorized to use.",
+                            "validation": "Not found. The provided functions `listToken` and `transferListingFee` do not involve `externalCallAddress`.",
+                            "poc": null,
+                            "reason": "The provided code snippets are for token listing and fee transfer, and do not include functionality related to external calls after a cross-chain transfer. Therefore, there's no logic to authorize an `externalCallAddress`."
+                        }
+                    ]
+                },
+                {
+                    "externalCallFunction": "null",
+                    "findings": [
+                        {
+                            "constraint": "Validate that externalCallFunction is in the allowed function signature list",
+                            "validation": "Not found. The provided functions `listToken` and `transferListingFee` do not involve `externalCallFunction`.",
+                            "poc": null,
+                            "reason": "The provided code snippets do not include functionality related to external calls after a cross-chain transfer, so there's no logic to validate `externalCallFunction` against an allowed list."
+                        }
+                    ]
+                },
+                {
+                    "routerAddress": "null",
+                    "findings": [
+                        {
+                            "constraint": "Check whether the routerAddress is authorized to use.",
+                            "validation": "Not found. The provided functions `listToken` and `transferListingFee` do not involve `routerAddress`.",
+                            "poc": null,
+                            "reason": "The provided code snippets do not include functionality related to cross-chain routing or bridge handlers that would involve `routerAddress`. Therefore, there's no logic to authorize `routerAddress`."
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "time": 63.21311593055725,
+    "this_cost": 0,
+    "this_prompt_tokens": 18596,
+    "this_completion_tokens": 7544
+}

@@ -1,0 +1,1082 @@
+{
+    "XBridge.listToken": {
+        "step1": {
+            "prompt1": "\nYou are an experienced cross-chain protocol analysis expert. Your task is to map the specified cross-chain attributes to parameters in the provided Solidity code. If an attribute cannot be found in the code, do not list it in the output. If there are multiple possible parameter mappings for the same attribute, output up to 3 mapping schemes for each attribute. Please strictly follow the input and output formats defined below:\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"attribute\": \n{ \n\"<attribute>\": \"<attribute description>\" ,\n\"<attribute>\": \"<attribute description>\",\n...\n}\n\"code\": \"...\" // Solidity contract code string\n}\nOutput format:\nReturn a JSON array, each item structured as follows, only produce output in the required format, without any additional content:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // The input cross-chain attribute\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}, ... \n]\nIn the reason, please point out both the core basis for the mapping and potential uncertainties (e.g., parameter name similarity, ambiguous contextual meaning, etc.).\n\nInput:\n{\n\"attribute\": {\"toChainID\": \"Specifies the destination blockchain network ID.\", \"tokenAddress\": \"Indicates the contract address of the token to be transferred.\", \"amount\": \"The number of tokens to be transferred across chains.\", \"nonce\": \"Check and mark that nonce has not been consumed to prevent replay\", \"recipientAddress\": \"The address that will receive the tokens on the destination chain.\", \"externalCallAddress\": \"The address of a contract to be called after the cross-chain transfer.\", \"externalCallFunction\": \"The specific function or calldata to be executed on the `externalCallAddress`.\", \"routerAddress\": \"The address of the cross-chain router or bridge handler.\"},\n\"code\": [\"XBridge.listToken:function listToken(tokenInfo memory baseToken, tokenInfo memory correspondingToken, bool _isMintable) external payable {\\n        address _baseToken = baseToken.token;\\n        address _correspondingToken = correspondingToken.token;\\n        require(_baseToken != address(0), \\\"INVALID_ADDR\\\");\\n        require(_correspondingToken != address(0), \\\"INVALID_ADDR\\\");\\n        require(tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] == address(0) && tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] == address(0), \\\"THIS_PAIR_ALREADY_LISTED\\\");\\n\\n        isMintableWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = _isMintable;\\n        isMintableWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = _isMintable;\\n        isMintableWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = _isMintable;\\n        isMintableWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = _isMintable;\\n\\n        tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] = _correspondingToken;\\n        tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = _baseToken;\\n        tokenToTokenWithChainId[correspondingToken.chain][baseToken.chain][_baseToken] = _correspondingToken;\\n        tokenToTokenWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken] = _baseToken;\\n\\n\\n        if(_isMintable) {\\n            isWrappedWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = true;\\n            isWrappedWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken] = true;\\n            isWrapped[_correspondingToken] = true;\\n\\n        }\\n\\n        tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = msg.sender;\\n        tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = msg.sender;\\n        tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = msg.sender;\\n        tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = msg.sender;\\n\\n        if(_baseToken == _correspondingToken) _tokenOwner[_baseToken] = msg.sender;\\n        else {\\n            if(_baseToken.code.length > 0) _tokenOwner[_baseToken] = msg.sender;\\n            else _tokenOwner[_correspondingToken] = msg.sender;\\n        }\\n\\n        if(!excludeFeeFromListing[msg.sender]) transferListingFee(listingFeeCollector, msg.sender, msg.value);\\n\\n        emit TokenListed(_baseToken, baseToken.chain, _correspondingToken, correspondingToken.chain, _isMintable, msg.sender);\\n\\n    }\", \"XBridge.transferListingFee:function transferListingFee(address to, address _user,  uint256 _value) private nonReentrant {\\n        require(to != address(0), \\\"CANT_SEND_TO_NULL_ADDRESS\\\");\\n        require(_value >= listingFee, \\\"INCREASE_LISTING_FEE\\\");\\n        (bool success, ) = payable(to).call{value:listingFee}(\\\"\\\");\\n        require(success, \\\"LISTING_FEE_TRANSFER_FAILED\\\");\\n        uint256 remainingEth = _value - listingFee;\\n        if (remainingEth > 0) {\\n            (success,) = payable(_user).call{value: remainingEth}(\\\"\\\");\\n            require(success, \\\"REFUND_REMAINING_ETHER_SENT_FAILED\\\");\\n        }\\n    }\"]\n}\n",
+            "outputs1": [
+                [
+                    {
+                        "parameter": "baseToken.chain",
+                        "attribute": "toChainID",
+                        "reason": "This parameter represents the chain ID for the base token which is used during cross-chain transfers, linking it to the destination network. However, it could also relate to other contexts where chain IDs are utilized."
+                    },
+                    {
+                        "parameter": "correspondingToken.chain",
+                        "attribute": "toChainID",
+                        "reason": "Similar to baseToken.chain, this refers to the chain ID for the corresponding token, indicating the target network for transfers. Ambiguity arises as both tokens may have chain IDs associated with their respective blockchain."
+                    },
+                    {
+                        "parameter": "baseToken.token",
+                        "attribute": "tokenAddress",
+                        "reason": "This parameter directly reflects the address of the token being transferred in the context of a cross-chain transaction, though it might not specify which token address specifically if multiple contexts exist."
+                    },
+                    {
+                        "parameter": "correspondingToken.token",
+                        "attribute": "tokenAddress",
+                        "reason": "It denotes the corresponding token's address that relates to another blockchain, thus also suitable for this attribute, yet the contextual differentiation could lead to confusion."
+                    },
+                    {
+                        "parameter": "_value",
+                        "attribute": "amount",
+                        "reason": "This parameter is involved in transfers and is likely to refer to the amount of tokens involved in the transaction, but the naming reflects a broader use that could refer to Ether or other contextually different transfers."
+                    },
+                    {
+                        "parameter": "listingFee",
+                        "attribute": "amount",
+                        "reason": "Although this refers to a fee related to listings rather than the token transfer itself, it nonetheless represents a quantifiable amount, creating potential confusion with the actual token amount being transferred."
+                    },
+                    {
+                        "parameter": "msg.sender",
+                        "attribute": "recipientAddress",
+                        "reason": "This parameter captures the address initiating the transfer, which can relate to the recipient's address in a cross-chain transaction, though ‘msg.sender’ usually indicates the sender, leading to some context ambiguity."
+                    },
+                    {
+                        "parameter": "to",
+                        "attribute": "recipientAddress",
+                        "reason": "In function calls involving transfers, 'to' indicates the destination address—the recipient on the other side of a cross-chain operation—however, it can refer to various types of transactions, not limited to cross-chains."
+                    }
+                ]
+            ],
+            "v_prompt1": "\nYou are a rigorous cross-chain protocol auditor and data consistency verifier. Carefully review whether the meaning of each cross-chain attribute and parameter in the code is consistent, assign a confidence score (0-100%), and state the reason for the given confidence score.\n\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"correspondence\":    // Array of attribute-parameter correspondences in the code\n[\n{\n\"attribute\": \"...\", // Input cross-chain attribute\n\"parameter\": \"...\", // Corresponding parameter\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}\n...\n],\n\"code\":\"...\" // Cross-chain contract code\n}\n\nOutput format: Return a JSON array, each item structured as follows, only produce output in the required format, without any additional content:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // Input cross-chain attribute\n\"score\":\"...\", // Assigned confidence score\n\"reason\": \"...\" // Brief explanation for the given confidence score\n}, ... \n]\nInput:\n{\n\"correspondence\": [{\"parameter\": \"baseToken.chain\", \"attribute\": \"toChainID\", \"reason\": \"This parameter represents the chain ID for the base token which is used during cross-chain transfers, linking it to the destination network. However, it could also relate to other contexts where chain IDs are utilized.\"}, {\"parameter\": \"correspondingToken.chain\", \"attribute\": \"toChainID\", \"reason\": \"Similar to baseToken.chain, this refers to the chain ID for the corresponding token, indicating the target network for transfers. Ambiguity arises as both tokens may have chain IDs associated with their respective blockchain.\"}, {\"parameter\": \"baseToken.token\", \"attribute\": \"tokenAddress\", \"reason\": \"This parameter directly reflects the address of the token being transferred in the context of a cross-chain transaction, though it might not specify which token address specifically if multiple contexts exist.\"}, {\"parameter\": \"correspondingToken.token\", \"attribute\": \"tokenAddress\", \"reason\": \"It denotes the corresponding token's address that relates to another blockchain, thus also suitable for this attribute, yet the contextual differentiation could lead to confusion.\"}, {\"parameter\": \"_value\", \"attribute\": \"amount\", \"reason\": \"This parameter is involved in transfers and is likely to refer to the amount of tokens involved in the transaction, but the naming reflects a broader use that could refer to Ether or other contextually different transfers.\"}, {\"parameter\": \"listingFee\", \"attribute\": \"amount\", \"reason\": \"Although this refers to a fee related to listings rather than the token transfer itself, it nonetheless represents a quantifiable amount, creating potential confusion with the actual token amount being transferred.\"}, {\"parameter\": \"msg.sender\", \"attribute\": \"recipientAddress\", \"reason\": \"This parameter captures the address initiating the transfer, which can relate to the recipient's address in a cross-chain transaction, though ‘msg.sender’ usually indicates the sender, leading to some context ambiguity.\"}, {\"parameter\": \"to\", \"attribute\": \"recipientAddress\", \"reason\": \"In function calls involving transfers, 'to' indicates the destination address—the recipient on the other side of a cross-chain operation—however, it can refer to various types of transactions, not limited to cross-chains.\"}],\n\"code\": [\"XBridge.listToken:function listToken(tokenInfo memory baseToken, tokenInfo memory correspondingToken, bool _isMintable) external payable {\\n        address _baseToken = baseToken.token;\\n        address _correspondingToken = correspondingToken.token;\\n        require(_baseToken != address(0), \\\"INVALID_ADDR\\\");\\n        require(_correspondingToken != address(0), \\\"INVALID_ADDR\\\");\\n        require(tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] == address(0) && tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] == address(0), \\\"THIS_PAIR_ALREADY_LISTED\\\");\\n\\n        isMintableWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = _isMintable;\\n        isMintableWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = _isMintable;\\n        isMintableWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = _isMintable;\\n        isMintableWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = _isMintable;\\n\\n        tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] = _correspondingToken;\\n        tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = _baseToken;\\n        tokenToTokenWithChainId[correspondingToken.chain][baseToken.chain][_baseToken] = _correspondingToken;\\n        tokenToTokenWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken] = _baseToken;\\n\\n\\n        if(_isMintable) {\\n            isWrappedWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = true;\\n            isWrappedWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken] = true;\\n            isWrapped[_correspondingToken] = true;\\n\\n        }\\n\\n        tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = msg.sender;\\n        tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = msg.sender;\\n        tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = msg.sender;\\n        tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = msg.sender;\\n\\n        if(_baseToken == _correspondingToken) _tokenOwner[_baseToken] = msg.sender;\\n        else {\\n            if(_baseToken.code.length > 0) _tokenOwner[_baseToken] = msg.sender;\\n            else _tokenOwner[_correspondingToken] = msg.sender;\\n        }\\n\\n        if(!excludeFeeFromListing[msg.sender]) transferListingFee(listingFeeCollector, msg.sender, msg.value);\\n\\n        emit TokenListed(_baseToken, baseToken.chain, _correspondingToken, correspondingToken.chain, _isMintable, msg.sender);\\n\\n    }\", \"XBridge.transferListingFee:function transferListingFee(address to, address _user,  uint256 _value) private nonReentrant {\\n        require(to != address(0), \\\"CANT_SEND_TO_NULL_ADDRESS\\\");\\n        require(_value >= listingFee, \\\"INCREASE_LISTING_FEE\\\");\\n        (bool success, ) = payable(to).call{value:listingFee}(\\\"\\\");\\n        require(success, \\\"LISTING_FEE_TRANSFER_FAILED\\\");\\n        uint256 remainingEth = _value - listingFee;\\n        if (remainingEth > 0) {\\n            (success,) = payable(_user).call{value: remainingEth}(\\\"\\\");\\n            require(success, \\\"REFUND_REMAINING_ETHER_SENT_FAILED\\\");\\n        }\\n    }\"]:\n}\n\n",
+            "v_outputs1": [
+                [
+                    {
+                        "parameter": "baseToken.chain",
+                        "attribute": "toChainID",
+                        "score": "85%",
+                        "reason": "This parameter represents the chain ID for the base token's network, which strongly relates to the target network for transfers. Yet, the broader context of chain IDs may introduce ambiguity as it could apply to other scenarios outside of transfers."
+                    },
+                    {
+                        "parameter": "correspondingToken.chain",
+                        "attribute": "toChainID",
+                        "score": "85%",
+                        "reason": "Like baseToken.chain, this signifies the chain ID for the corresponding token, indicating the intended network. However, the potential overlap with multiple tokens' chain IDs creates some uncertainty."
+                    },
+                    {
+                        "parameter": "baseToken.token",
+                        "attribute": "tokenAddress",
+                        "score": "90%",
+                        "reason": "This parameter accurately denotes the address of the token being transferred, which generally aligns with the tokenAddress attribute. The potential for different contexts with multiple tokens does create minor ambiguity."
+                    },
+                    {
+                        "parameter": "correspondingToken.token",
+                        "attribute": "tokenAddress",
+                        "score": "90%",
+                        "reason": "It reflects the address of the token corresponding to another blockchain, aligning well with the tokenAddress attribute. The possibility of various contexts could lead to some confusion but it is mostly clear."
+                    },
+                    {
+                        "parameter": "_value",
+                        "attribute": "amount",
+                        "score": "80%",
+                        "reason": "The parameter pertains to transfers, likely representing the amount of tokens in a transaction. However, its broader naming may cause confusion as it can refer to different asset classes like Ether."
+                    },
+                    {
+                        "parameter": "listingFee",
+                        "attribute": "amount",
+                        "score": "75%",
+                        "reason": "This is linked to a fee associated with listings, hence it is a quantifiable amount. Nevertheless, its association with listing rather than direct transfers could create confusion with the actual token transfer amount."
+                    },
+                    {
+                        "parameter": "msg.sender",
+                        "attribute": "recipientAddress",
+                        "score": "70%",
+                        "reason": "While msg.sender indicates the address initiating the call, which could relate to the recipient's address in a cross-chain transfer, it customarily identifies the sender, introducing some ambiguity in context."
+                    },
+                    {
+                        "parameter": "to",
+                        "attribute": "recipientAddress",
+                        "score": "90%",
+                        "reason": "This parameter clearly specifies the destination address for the transfer, effectively aligning with the recipientAddress attribute. However, it could have broader implications outside of cross-chain transactions."
+                    }
+                ]
+            ],
+            "formatted_outputs1": {
+                "baseToken.chain": {
+                    "toChainID": {
+                        "reason": "This parameter represents the chain ID for the base token which is used during cross-chain transfers, linking it to the destination network. However, it could also relate to other contexts where chain IDs are utilized.",
+                        "score": "85%",
+                        "s_reason": "This parameter represents the chain ID for the base token's network, which strongly relates to the target network for transfers. Yet, the broader context of chain IDs may introduce ambiguity as it could apply to other scenarios outside of transfers."
+                    }
+                },
+                "correspondingToken.chain": {
+                    "toChainID": {
+                        "reason": "Similar to baseToken.chain, this refers to the chain ID for the corresponding token, indicating the target network for transfers. Ambiguity arises as both tokens may have chain IDs associated with their respective blockchain.",
+                        "score": "85%",
+                        "s_reason": "Like baseToken.chain, this signifies the chain ID for the corresponding token, indicating the intended network. However, the potential overlap with multiple tokens' chain IDs creates some uncertainty."
+                    }
+                },
+                "baseToken.token": {
+                    "tokenAddress": {
+                        "reason": "This parameter directly reflects the address of the token being transferred in the context of a cross-chain transaction, though it might not specify which token address specifically if multiple contexts exist.",
+                        "score": "90%",
+                        "s_reason": "This parameter accurately denotes the address of the token being transferred, which generally aligns with the tokenAddress attribute. The potential for different contexts with multiple tokens does create minor ambiguity."
+                    }
+                },
+                "correspondingToken.token": {
+                    "tokenAddress": {
+                        "reason": "It denotes the corresponding token's address that relates to another blockchain, thus also suitable for this attribute, yet the contextual differentiation could lead to confusion.",
+                        "score": "90%",
+                        "s_reason": "It reflects the address of the token corresponding to another blockchain, aligning well with the tokenAddress attribute. The possibility of various contexts could lead to some confusion but it is mostly clear."
+                    }
+                },
+                "_value": {
+                    "amount": {
+                        "reason": "This parameter is involved in transfers and is likely to refer to the amount of tokens involved in the transaction, but the naming reflects a broader use that could refer to Ether or other contextually different transfers.",
+                        "score": "80%",
+                        "s_reason": "The parameter pertains to transfers, likely representing the amount of tokens in a transaction. However, its broader naming may cause confusion as it can refer to different asset classes like Ether."
+                    }
+                },
+                "listingFee": {
+                    "amount": {
+                        "reason": "Although this refers to a fee related to listings rather than the token transfer itself, it nonetheless represents a quantifiable amount, creating potential confusion with the actual token amount being transferred.",
+                        "score": "75%",
+                        "s_reason": "This is linked to a fee associated with listings, hence it is a quantifiable amount. Nevertheless, its association with listing rather than direct transfers could create confusion with the actual token transfer amount."
+                    }
+                },
+                "msg.sender": {
+                    "recipientAddress": {
+                        "reason": "This parameter captures the address initiating the transfer, which can relate to the recipient's address in a cross-chain transaction, though ‘msg.sender’ usually indicates the sender, leading to some context ambiguity.",
+                        "score": "70%",
+                        "s_reason": "While msg.sender indicates the address initiating the call, which could relate to the recipient's address in a cross-chain transfer, it customarily identifies the sender, introducing some ambiguity in context."
+                    }
+                },
+                "to": {
+                    "recipientAddress": {
+                        "reason": "In function calls involving transfers, 'to' indicates the destination address—the recipient on the other side of a cross-chain operation—however, it can refer to various types of transactions, not limited to cross-chains.",
+                        "score": "90%",
+                        "s_reason": "This parameter clearly specifies the destination address for the transfer, effectively aligning with the recipientAddress attribute. However, it could have broader implications outside of cross-chain transactions."
+                    }
+                }
+            }
+        },
+        "step2": {
+            "toChainID": {
+                "baseToken.chain": {
+                    "dataflows": [
+                        {
+                            "parameter": "baseToken.chain",
+                            "dataflow": {
+                                "listToken": [
+                                    "function listToken(tokenInfo memory baseToken, tokenInfo memory correspondingToken, bool _isMintable) external payable {",
+                                    "    address _baseToken = baseToken.token;",
+                                    "    address _correspondingToken = correspondingToken.token;",
+                                    "    require(_baseToken != address(0), \"INVALID_ADDR\");",
+                                    "    require(_correspondingToken != address(0), \"INVALID_ADDR\");",
+                                    "    require(tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] == address(0) && tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] == address(0), \"THIS_PAIR_ALREADY_LISTED\");",
+                                    "    isMintableWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = _isMintable;",
+                                    "    isMintableWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = _isMintable;",
+                                    "    isMintableWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = _isMintable;",
+                                    "    isMintableWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = _isMintable;",
+                                    "    tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] = _correspondingToken;",
+                                    "    tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = _baseToken;",
+                                    "    tokenToTokenWithChainId[correspondingToken.chain][baseToken.chain][_baseToken] = _correspondingToken;",
+                                    "    tokenToTokenWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken] = _baseToken;",
+                                    "    if(_isMintable) {",
+                                    "        isWrappedWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = true;",
+                                    "        isWrappedWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken] = true;",
+                                    "        isWrapped[_correspondingToken] = true;",
+                                    "    }",
+                                    "    tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = msg.sender;",
+                                    "    tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = msg.sender;",
+                                    "    tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = msg.sender;",
+                                    "    tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = msg.sender;",
+                                    "    if(_baseToken == _correspondingToken) _tokenOwner[_baseToken] = msg.sender;",
+                                    "    else {",
+                                    "        if(_baseToken.code.length > 0) _tokenOwner[_baseToken] = msg.sender;",
+                                    "        else _tokenOwner[_correspondingToken] = msg.sender;",
+                                    "    }",
+                                    "    if(!excludeFeeFromListing[msg.sender]) transferListingFee(listingFeeCollector, msg.sender, msg.value);",
+                                    "    emit TokenListed(_baseToken, baseToken.chain, _correspondingToken, correspondingToken.chain, _isMintable, msg.sender);",
+                                    "}"
+                                ],
+                                "transferListingFee": []
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "100",
+                            "reason": "The data flow for 'baseToken.chain' is fully covered in the original code, with multiple references demonstrating its usage. The references correctly implement the intended logic related to the given parameter, ensuring its validity and interactions are properly handled according to specification."
+                        },
+                        {
+                            "parameter": "baseToken.chain",
+                            "dataflow": {
+                                "listToken": [
+                                    "function listToken(tokenInfo memory baseToken, tokenInfo memory correspondingToken, bool _isMintable) external payable {",
+                                    "        require(_baseToken != address(0), \"INVALID_ADDR\");",
+                                    "        require(_correspondingToken != address(0), \"INVALID_ADDR\");",
+                                    "        require(tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] == address(0) && tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] == address(0), \"THIS_PAIR_ALREADY_LISTED\");",
+                                    "        isMintableWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = _isMintable;",
+                                    "        isMintableWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = _isMintable;",
+                                    "        isMintableWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = _isMintable;",
+                                    "        isMintableWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = _isMintable;",
+                                    "        tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] = _correspondingToken;",
+                                    "        tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = _baseToken;",
+                                    "        tokenToTokenWithChainId[correspondingToken.chain][baseToken.chain][_baseToken] = _correspondingToken;",
+                                    "        tokenToTokenWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken] = _baseToken;",
+                                    "        if(_isMintable) {",
+                                    "            isWrappedWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = true;",
+                                    "            isWrappedWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken] = true;",
+                                    "            isWrapped[_correspondingToken] = true;",
+                                    "        }",
+                                    "        tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = msg.sender;",
+                                    "        tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = msg.sender;",
+                                    "        tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = msg.sender;",
+                                    "        tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = msg.sender;",
+                                    "        if(_baseToken == _correspondingToken) _tokenOwner[_baseToken] = msg.sender;",
+                                    "        else {",
+                                    "            if(_baseToken.code.length > 0) _tokenOwner[_baseToken] = msg.sender;",
+                                    "            else _tokenOwner[_correspondingToken] = msg.sender;",
+                                    "        }",
+                                    "        if(!excludeFeeFromListing[msg.sender]) transferListingFee(listingFeeCollector, msg.sender, msg.value);",
+                                    "        emit TokenListed(_baseToken, baseToken.chain, _correspondingToken, correspondingToken.chain, _isMintable, msg.sender);",
+                                    "    }"
+                                ],
+                                "transferListingFee": [
+                                    "function transferListingFee(address to, address _user,  uint256 _value) private nonReentrant {",
+                                    "        require(to != address(0), \"CANT_SEND_TO_NULL_ADDRESS\");",
+                                    "        require(_value >= listingFee, \"INCREASE_LISTING_FEE\");",
+                                    "        (bool success, ) = payable(to).call{value:listingFee}(\"\");",
+                                    "        require(success, \"LISTING_FEE_TRANSFER_FAILED\");",
+                                    "        uint256 remainingEth = _value - listingFee;",
+                                    "        if (remainingEth > 0) {",
+                                    "            (success,) = payable(_user).call{value: remainingEth}(\"\");",
+                                    "            require(success, \"REFUND_REMAINING_ETHER_SENT_FAILED\");",
+                                    "        }",
+                                    "    }"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "100",
+                            "reason": "The input data flow code matches the original code for the parameter 'baseToken.chain' completely, covering all aspects of its usage within the function. There are no discrepancies found in the logic or flow related to this parameter, indicating full correctness."
+                        }
+                    ],
+                    "merge_dataflows": "function listToken(tokenInfo memory baseToken, tokenInfo memory correspondingToken, bool _isMintable) external payable {    address _baseToken = baseToken.token;    address _correspondingToken = correspondingToken.token;    require(_baseToken != address(0), \"INVALID_ADDR\");    require(_correspondingToken != address(0), \"INVALID_ADDR\");    require(tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] == address(0) && tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] == address(0), \"THIS_PAIR_ALREADY_LISTED\");    isMintableWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = _isMintable;    isMintableWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = _isMintable;    isMintableWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = _isMintable;    isMintableWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = _isMintable;    tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] = _correspondingToken;    tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = _baseToken;    tokenToTokenWithChainId[correspondingToken.chain][baseToken.chain][_baseToken] = _correspondingToken;    tokenToTokenWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken] = _baseToken;    if(_isMintable) {        isWrappedWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = true;        isWrappedWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken] = true;        isWrapped[_correspondingToken] = true;    }    tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = msg.sender;    tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = msg.sender;    tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = msg.sender;    tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = msg.sender;    if(_baseToken == _correspondingToken) _tokenOwner[_baseToken] = msg.sender;    else {        if(_baseToken.code.length > 0) _tokenOwner[_baseToken] = msg.sender;        else _tokenOwner[_correspondingToken] = msg.sender;    }    if(!excludeFeeFromListing[msg.sender]) transferListingFee(listingFeeCollector, msg.sender, msg.value);    emit TokenListed(_baseToken, baseToken.chain, _correspondingToken, correspondingToken.chain, _isMintable, msg.sender);}function transferListingFee(address to, address _user,  uint256 _value) private nonReentrant {        require(to != address(0), \"CANT_SEND_TO_NULL_ADDRESS\");        require(_value >= listingFee, \"INCREASE_LISTING_FEE\");        (bool success, ) = payable(to).call{value:listingFee}(\"\");        require(success, \"LISTING_FEE_TRANSFER_FAILED\");        uint256 remainingEth = _value - listingFee;        if (remainingEth > 0) {            (success,) = payable(_user).call{value: remainingEth}(\"\");            require(success, \"REFUND_REMAINING_ETHER_SENT_FAILED\");        }    }"
+                }
+            },
+            "tokenAddress": {
+                "baseToken.token": {
+                    "dataflows": [
+                        {
+                            "parameter": "baseToken.token",
+                            "dataflow": {
+                                "listToken": [
+                                    "function listToken(tokenInfo memory baseToken, tokenInfo memory correspondingToken, bool _isMintable) external payable {",
+                                    "        address _baseToken = baseToken.token;",
+                                    "        require(_baseToken != address(0), \"INVALID_ADDR\");",
+                                    "        ...",
+                                    "        tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] = _correspondingToken;",
+                                    "        ...",
+                                    "        if(_baseToken == _correspondingToken) _tokenOwner[_baseToken] = msg.sender;",
+                                    "        else {",
+                                    "            if(_baseToken.code.length > 0) _tokenOwner[_baseToken] = msg.sender;",
+                                    "            else _tokenOwner[_correspondingToken] = msg.sender;",
+                                    "        }",
+                                    "        emit TokenListed(_baseToken, baseToken.chain, _correspondingToken, correspondingToken.chain, _isMintable, msg.sender);",
+                                    "    }"
+                                ],
+                                "transferListingFee": []
+                            },
+                            "coverage": "90",
+                            "correctness": "85",
+                            "score": "88",
+                            "reason": "The data flow for 'baseToken.token' is well covered in the original code, as it is extracted correctly and utilized in multiple places for validation and state changes. However, there are some additional requirements in the original code that aren't addressed in the extracted data flow, which lowers its correctness score slightly."
+                        },
+                        {
+                            "parameter": "baseToken.token",
+                            "dataflow": {
+                                "listToken": [
+                                    "function listToken(tokenInfo memory baseToken, tokenInfo memory correspondingToken, bool _isMintable) external payable {",
+                                    "    address _baseToken = baseToken.token;",
+                                    "    require(_baseToken != address(0), \"INVALID_ADDR\");",
+                                    "    require(tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] == address(0) && tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] == address(0), \"THIS_PAIR_ALREADY_LISTED\");",
+                                    "    tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] = _correspondingToken;",
+                                    "    tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = msg.sender;",
+                                    "    if(_baseToken == _correspondingToken) _tokenOwner[_baseToken] = msg.sender;",
+                                    "    else {",
+                                    "        if(_baseToken.code.length > 0) _tokenOwner[_baseToken] = msg.sender;",
+                                    "        else _tokenOwner[_correspondingToken] = msg.sender;",
+                                    "    }",
+                                    "    emit TokenListed(_baseToken, baseToken.chain, _correspondingToken, correspondingToken.chain, _isMintable, msg.sender);",
+                                    "}"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "85",
+                            "score": "87.5",
+                            "reason": "The coverage is high as the provided data flow captures most aspects of how 'baseToken.token' is used, particularly with the address check and integration into various mappings. However, it misses some parts of the logic related to minting and fee handling present in the original implementation. The correctness score is slightly lower due to minor discrepancies in managing the state and associated checks that are not fully replicated."
+                        }
+                    ],
+                    "merge_dataflows": "function listToken(tokenInfo memory baseToken, tokenInfo memory correspondingToken, bool _isMintable) external payable {    address _baseToken = baseToken.token;    require(_baseToken != address(0), \"INVALID_ADDR\");    require(tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] == address(0) && tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] == address(0), \"THIS_PAIR_ALREADY_LISTED\");    tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] = _correspondingToken;    tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = msg.sender;    if(_baseToken == _correspondingToken) _tokenOwner[_baseToken] = msg.sender;    else {        if(_baseToken.code.length > 0) _tokenOwner[_baseToken] = msg.sender;        else _tokenOwner[_correspondingToken] = msg.sender;    }    emit TokenListed(_baseToken, baseToken.chain, _correspondingToken, correspondingToken.chain, _isMintable, msg.sender);}"
+                }
+            },
+            "amount": {
+                "_value": {
+                    "dataflows": [
+                        {
+                            "parameter": "_isMintable",
+                            "dataflow": {
+                                "listToken": [
+                                    "function listToken(tokenInfo memory baseToken, tokenInfo memory correspondingToken, bool _isMintable) external payable {",
+                                    "    address _baseToken = baseToken.token;",
+                                    "    address _correspondingToken = correspondingToken.token;",
+                                    "    require(_baseToken != address(0), \"INVALID_ADDR\");",
+                                    "    require(_correspondingToken != address(0), \"INVALID_ADDR\");",
+                                    "    require(tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] == address(0) && tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] == address(0), \"THIS_PAIR_ALREADY_LISTED\");",
+                                    "    isMintableWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = _isMintable;",
+                                    "    isMintableWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = _isMintable;",
+                                    "    isMintableWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = _isMintable;",
+                                    "    isMintableWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = _isMintable;",
+                                    "    if (_isMintable) {",
+                                    "        isWrappedWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = true;",
+                                    "        isWrappedWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken] = true;",
+                                    "        isWrapped[_correspondingToken] = true;",
+                                    "    }",
+                                    "    tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = msg.sender;",
+                                    "    tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = msg.sender;",
+                                    "    tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = msg.sender;",
+                                    "    tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = msg.sender;",
+                                    "    if (_baseToken == _correspondingToken) _tokenOwner[_baseToken] = msg.sender;",
+                                    "    else {",
+                                    "        if (_baseToken.code.length > 0) _tokenOwner[_baseToken] = msg.sender;",
+                                    "        else _tokenOwner[_correspondingToken] = msg.sender;",
+                                    "    }",
+                                    "    if (!excludeFeeFromListing[msg.sender]) transferListingFee(listingFeeCollector, msg.sender, msg.value);",
+                                    "    emit TokenListed(_baseToken, baseToken.chain, _correspondingToken, correspondingToken.chain, _isMintable, msg.sender);"
+                                ],
+                                "transferListingFee": [
+                                    "function transferListingFee(address to, address _user, uint256 _value) private nonReentrant {",
+                                    "    require(to != address(0), \"CANT_SEND_TO_NULL_ADDRESS\");",
+                                    "    require(_value >= listingFee, \"INCREASE_LISTING_FEE\");",
+                                    "    (bool success, ) = payable(to).call{value:listingFee}(\"\");",
+                                    "    require(success, \"LISTING_FEE_TRANSFER_FAILED\");",
+                                    "    uint256 remainingEth = _value - listingFee;",
+                                    "    if (remainingEth > 0) {",
+                                    "        (success,) = payable(_user).call{value: remainingEth}(\"\");",
+                                    "        require(success, \"REFUND_REMAINING_ETHER_SENT_FAILED\");",
+                                    "    }",
+                                    "}"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "95",
+                            "score": "92.5",
+                            "reason": "The extracted data flow code covers most critical paths and variable assignments related to the parameter. Minor coverage gaps may exist in edge cases not explicitly tested. The functions and logic around managing fees and checking conditions appear correct, indicating high correctness. Overall, these factors lead to a strong confidence score."
+                        },
+                        {
+                            "parameter": "_isMintable",
+                            "dataflow": {
+                                "listToken": [
+                                    "require(_baseToken != address(0), \"INVALID_ADDR\");",
+                                    "require(_correspondingToken != address(0), \"INVALID_ADDR\");",
+                                    "require(tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] == address(0) && tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] == address(0), \"THIS_PAIR_ALREADY_LISTED\");",
+                                    "isMintableWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = _isMintable;",
+                                    "isMintableWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = _isMintable;",
+                                    "isMintableWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = _isMintable;",
+                                    "isMintableWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = _isMintable;",
+                                    "if(_isMintable) {\n    isWrappedWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = true;\n    isWrappedWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken] = true;\n    isWrapped[_correspondingToken] = true;\n}",
+                                    "tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = msg.sender;",
+                                    "tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = msg.sender;",
+                                    "tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = msg.sender;",
+                                    "tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = msg.sender;",
+                                    "if(_baseToken == _correspondingToken) _tokenOwner[_baseToken] = msg.sender;\nelse {\n    if(_baseToken.code.length > 0) _tokenOwner[_baseToken] = msg.sender;\n    else _tokenOwner[_correspondingToken] = msg.sender;\n}",
+                                    "if(!excludeFeeFromListing[msg.sender]) transferListingFee(listingFeeCollector, msg.sender, msg.value);",
+                                    "emit TokenListed(_baseToken, baseToken.chain, _correspondingToken, correspondingToken.chain, _isMintable, msg.sender);"
+                                ],
+                                "transferListingFee": [
+                                    "require(_value >= listingFee, \"INCREASE_LISTING_FEE\");",
+                                    "(bool success, ) = payable(to).call{value:listingFee}(\"\");",
+                                    "require(success, \"LISTING_FEE_TRANSFER_FAILED\");",
+                                    "uint256 remainingEth = _value - listingFee;",
+                                    "if (remainingEth > 0) {\n    (success,) = payable(_user).call{value: remainingEth}(\"\");\n    require(success, \"REFUND_REMAINING_ETHER_SENT_FAILED\");\n}"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "95",
+                            "score": "92.5",
+                            "reason": "The coverage score is high because most of the necessary checks and functions related to the '_value' parameter are present in the original code, though not all possible edge cases are exhaustively checked. The correctness score is slightly lower due to the possibility of handling unexpected values or failure during the transfer process, which could be improved with additional safeguards. Overall, the essential functionalities related to '_value' are implemented correctly."
+                        }
+                    ],
+                    "merge_dataflows": "function listToken(tokenInfo memory baseToken, tokenInfo memory correspondingToken, bool _isMintable) external payable {address _baseToken = baseToken.token;address _correspondingToken = correspondingToken.token;require(_baseToken != address(0), \"INVALID_ADDR\");require(_correspondingToken != address(0), \"INVALID_ADDR\");require(tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] == address(0) && tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] == address(0), \"THIS_PAIR_ALREADY_LISTED\");isMintableWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = _isMintable;isMintableWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = _isMintable;isMintableWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = _isMintable;isMintableWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = _isMintable;if(_isMintable) {isWrappedWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = true;isWrappedWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken] = true;isWrapped[_correspondingToken] = true;}tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = msg.sender;tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = msg.sender;tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = msg.sender;tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = msg.sender;if(_baseToken == _correspondingToken) _tokenOwner[_baseToken] = msg.sender;else {if(_baseToken.code.length > 0) _tokenOwner[_baseToken] = msg.sender;else _tokenOwner[_correspondingToken] = msg.sender;}if(!excludeFeeFromListing[msg.sender]) transferListingFee(listingFeeCollector, msg.sender, msg.value);emit TokenListed(_baseToken, baseToken.chain, _correspondingToken, correspondingToken.chain, _isMintable, msg.sender);}function transferListingFee(address to, address _user, uint256 _value) private nonReentrant {require(to != address(0), \"CANT_SEND_TO_NULL_ADDRESS\");require(_value >= listingFee, \"INCREASE_LISTING_FEE\");(bool success, ) = payable(to).call{value:listingFee}(\"\");require(success, \"LISTING_FEE_TRANSFER_FAILED\");uint256 remainingEth = _value - listingFee;if (remainingEth > 0) {(success,) = payable(_user).call{value: remainingEth}(\"\");require(success, \"REFUND_REMAINING_ETHER_SENT_FAILED\");}}"
+                }
+            },
+            "recipientAddress": {
+                "to": {
+                    "dataflows": [
+                        {
+                            "parameter": "to",
+                            "dataflow": {
+                                "XBridge.listToken": [
+                                    "function listToken(tokenInfo memory baseToken, tokenInfo memory correspondingToken, bool _isMintable) external payable {",
+                                    "    address _baseToken = baseToken.token;",
+                                    "    address _correspondingToken = correspondingToken.token;",
+                                    "    require(_baseToken != address(0), \"INVALID_ADDR\");",
+                                    "    require(_correspondingToken != address(0), \"INVALID_ADDR\");",
+                                    "    require(tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] == address(0) && tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] == address(0), \"THIS_PAIR_ALREADY_LISTED\");",
+                                    "    isMintableWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = _isMintable;",
+                                    "    isMintableWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = _isMintable;",
+                                    "    isMintableWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = _isMintable;",
+                                    "    isMintableWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = _isMintable;",
+                                    "    tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] = _correspondingToken;",
+                                    "    tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = _baseToken;",
+                                    "    tokenToTokenWithChainId[correspondingToken.chain][baseToken.chain][_baseToken] = _correspondingToken;",
+                                    "    tokenToTokenWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken] = _baseToken;",
+                                    "    if(_isMintable) {",
+                                    "        isWrappedWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = true;",
+                                    "        isWrappedWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken] = true;",
+                                    "        isWrapped[_correspondingToken] = true;",
+                                    "    }",
+                                    "    tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = msg.sender;",
+                                    "    tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = msg.sender;",
+                                    "    tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = msg.sender;",
+                                    "    tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = msg.sender;",
+                                    "    if(_baseToken == _correspondingToken) _tokenOwner[_baseToken] = msg.sender;",
+                                    "    else {",
+                                    "        if(_baseToken.code.length > 0) _tokenOwner[_baseToken] = msg.sender;",
+                                    "        else _tokenOwner[_correspondingToken] = msg.sender;",
+                                    "    }",
+                                    "    if(!excludeFeeFromListing[msg.sender]) transferListingFee(listingFeeCollector, msg.sender, msg.value);",
+                                    "    emit TokenListed(_baseToken, baseToken.chain, _correspondingToken, correspondingToken.chain, _isMintable, msg.sender);",
+                                    "}"
+                                ],
+                                "XBridge.transferListingFee": [
+                                    "function transferListingFee(address to, address _user,  uint256 _value) private nonReentrant {",
+                                    "    require(to != address(0), \"CANT_SEND_TO_NULL_ADDRESS\");",
+                                    "    require(_value >= listingFee, \"INCREASE_LISTING_FEE\");",
+                                    "    (bool success, ) = payable(to).call{value:listingFee}(\"\");",
+                                    "    require(success, \"LISTING_FEE_TRANSFER_FAILED\");",
+                                    "    uint256 remainingEth = _value - listingFee;",
+                                    "    if (remainingEth > 0) {",
+                                    "        (success,) = payable(_user).call{value: remainingEth}(\"\");",
+                                    "        require(success, \"REFUND_REMAINING_ETHER_SENT_FAILED\");",
+                                    "    }",
+                                    "}"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "95",
+                            "score": "97.5",
+                            "reason": "The data flow for the 'to' parameter is fully covered in both the listing and fee transfer functions. All relevant conditions are verified, and data handling is consistent with the original code. Minor correctness issues arise from potential mismanagement in gas costs or invisible changes that could affect the flow, leading to a slight deduction in correctness."
+                        },
+                        {
+                            "parameter": "to",
+                            "dataflow": {
+                                "listToken": [
+                                    "function listToken(tokenInfo memory baseToken, tokenInfo memory correspondingToken, bool _isMintable) external payable {",
+                                    "    address _baseToken = baseToken.token;",
+                                    "    address _correspondingToken = correspondingToken.token;",
+                                    "    require(_baseToken != address(0), \"INVALID_ADDR\");",
+                                    "    require(_correspondingToken != address(0), \"INVALID_ADDR\");",
+                                    "    require(tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] == address(0) && tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] == address(0), \"THIS_PAIR_ALREADY_LISTED\");",
+                                    "    isMintableWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = _isMintable;",
+                                    "    isMintableWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = _isMintable;",
+                                    "    isMintableWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = _isMintable;",
+                                    "    isMintableWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = _isMintable;",
+                                    "    tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] = _correspondingToken;",
+                                    "    tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = _baseToken;",
+                                    "    tokenToTokenWithChainId[correspondingToken.chain][baseToken.chain][_baseToken] = _correspondingToken;",
+                                    "    tokenToTokenWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken] = _baseToken;",
+                                    "    if(_isMintable) {",
+                                    "        isWrappedWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = true;",
+                                    "        isWrappedWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken] = true;",
+                                    "        isWrapped[_correspondingToken] = true;",
+                                    "    }",
+                                    "    tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = msg.sender;",
+                                    "    tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = msg.sender;",
+                                    "    tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = msg.sender;",
+                                    "    tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = msg.sender;",
+                                    "    if(_baseToken == _correspondingToken) _tokenOwner[_baseToken] = msg.sender;",
+                                    "    else {",
+                                    "        if(_baseToken.code.length > 0) _tokenOwner[_baseToken] = msg.sender;",
+                                    "        else _tokenOwner[_correspondingToken] = msg.sender;",
+                                    "    }",
+                                    "    if(!excludeFeeFromListing[msg.sender]) transferListingFee(listingFeeCollector, msg.sender, msg.value);",
+                                    "    emit TokenListed(_baseToken, baseToken.chain, _correspondingToken, correspondingToken.chain, _isMintable, msg.sender);",
+                                    "}"
+                                ],
+                                "transferListingFee": [
+                                    "function transferListingFee(address to, address _user, uint256 _value) private nonReentrant {",
+                                    "    require(to != address(0), \"CANT_SEND_TO_NULL_ADDRESS\");",
+                                    "    require(_value >= listingFee, \"INCREASE_LISTING_FEE\");",
+                                    "    (bool success, ) = payable(to).call{value:listingFee}(\"\");",
+                                    "    require(success, \"LISTING_FEE_TRANSFER_FAILED\");",
+                                    "    uint256 remainingEth = _value - listingFee;",
+                                    "    if (remainingEth > 0) {",
+                                    "        (success,) = payable(_user).call{value: remainingEth}(\"\");",
+                                    "        require(success, \"REFUND_REMAINING_ETHER_SENT_FAILED\");",
+                                    "    }",
+                                    "}"
+                                ]
+                            },
+                            "coverage": "95",
+                            "correctness": "90",
+                            "score": "92.5",
+                            "reason": "The extracted data flow code covers nearly all relevant aspects of the original code related to the 'to' parameter, as it captures the core logic of the transferListingFee function. However, some minor edge cases could be overlooked, such as ensuring error handling for the 'to' parameter in some scenarios. The correctness score is high, indicating valid data handling but acknowledging potential shortcomings in comprehensive edge case coverage."
+                        }
+                    ],
+                    "merge_dataflows": "function listToken(tokenInfo memory baseToken, tokenInfo memory correspondingToken, bool _isMintable) external payable {    address _baseToken = baseToken.token;    address _correspondingToken = correspondingToken.token;    require(_baseToken != address(0), \"INVALID_ADDR\");    require(_correspondingToken != address(0), \"INVALID_ADDR\");    require(tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] == address(0) && tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] == address(0), \"THIS_PAIR_ALREADY_LISTED\");    isMintableWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = _isMintable;    isMintableWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = _isMintable;    isMintableWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = _isMintable;    isMintableWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = _isMintable;    tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] = _correspondingToken;    tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = _baseToken;    tokenToTokenWithChainId[correspondingToken.chain][baseToken.chain][_baseToken] = _correspondingToken;    tokenToTokenWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken] = _baseToken;    if(_isMintable) {        isWrappedWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] = true;        isWrappedWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken] = true;        isWrapped[_correspondingToken] = true;    }    tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_baseToken][_correspondingToken] = msg.sender;    tokenOwnerWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken][_baseToken] = msg.sender;    tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_baseToken][_correspondingToken] = msg.sender;    tokenOwnerWithChainId[correspondingToken.chain][baseToken.chain][_correspondingToken][_baseToken] = msg.sender;    if(_baseToken == _correspondingToken) _tokenOwner[_baseToken] = msg.sender;    else {        if(_baseToken.code.length > 0) _tokenOwner[_baseToken] = msg.sender;        else _tokenOwner[_correspondingToken] = msg.sender;    }    if(!excludeFeeFromListing[msg.sender]) transferListingFee(listingFeeCollector, msg.sender, msg.value);    emit TokenListed(_baseToken, baseToken.chain, _correspondingToken, correspondingToken.chain, _isMintable, msg.sender);}function transferListingFee(address to, address _user,  uint256 _value) private nonReentrant {    require(to != address(0), \"CANT_SEND_TO_NULL_ADDRESS\");    require(_value >= listingFee, \"INCREASE_LISTING_FEE\");    (bool success, ) = payable(to).call{value:listingFee}(\"\");    require(success, \"LISTING_FEE_TRANSFER_FAILED\");    uint256 remainingEth = _value - listingFee;    if (remainingEth > 0) {        (success,) = payable(_user).call{value: remainingEth}(\"\");        require(success, \"REFUND_REMAINING_ETHER_SENT_FAILED\");    }}"
+                }
+            }
+        },
+        "step3": {
+            "toChainID": {
+                "baseToken.chain": {
+                    "Check whether toChainID is authorized.": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": [
+                                    "tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] == address(0)",
+                                    "tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] == address(0)"
+                                ],
+                                "reason": "The code includes checks that ensure the combination of baseToken.chain and correspondingToken.chain is only allowed if it has not been previously listed, which suggests authorization is being checked."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "While there is a check for already listed tokens, the specific authorization for toChainID is not directly addressed in the code. Thus, the constraint is not fully validated."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The absence of explicit checks for whether toChainID is authorized prevents coverage of the constraint, indicating a potential oversight in the constraint management."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "baseToken.chain",
+                                "constraint": "Check whether toChainID is authorized.",
+                                "validation": "[[\"tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] == address(0)\", \"tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] == address(0)\"]]",
+                                "score": "90",
+                                "reason": "The validation checks if the token pair is already listed on the specified chains, which implies if the given chain IDs are authorized. However, it doesn't directly confirm authorization; it merely ensures the absence of a prior listing.",
+                                "results": [
+                                    {
+                                        "result": true,
+                                        "poc": "A malicious actor can create a token that has a non-standard 'code' length (i.e., a contract that behaves unexpectedly). By using an ERC-20 token that does not conform to standard behaviors, they can exploit the reentrancy if the token's contract calls back to the listToken function, allowing for a bypass of the validation checks.",
+                                        "score": "75",
+                                        "reason": "While the validation checks ensure that the tokens are not already listed, the potential reentrancy vulnerability via non-standard ERC-20 tokens poses a risk where a malicious actor could manipulate the flow to bypass these checks. The existing checks are not sufficient to prevent this exploit, especially given that external token contracts may not conform to expected behaviors."
+                                    },
+                                    {
+                                        "result": true,
+                                        "poc": "By leveraging the 'isWrappedWithChainId' or 'isMintableWithChainId' mappings, an attacker can manipulate the state by setting values that allow certain pairs to become listed without adhering to the required checks. For example, if they manage to set 'isWrappedWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken]' to true before calling listToken, then the validations could be bypassed.",
+                                        "score": "70",
+                                        "reason": "While the validation condition checks for zero addresses in the mapping before allowing a pair to be listed, there are manipulation risks through the 'isWrappedWithChainId' or 'isMintableWithChainId' mappings. An attacker can potentially set values in these mappings prior to the call to 'listToken', allowing them to bypass validations. This introduces a vulnerability though checks are present, indicating that there are flaws in the trustedness of the data leading to the validation conditions."
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "Check that the destination chain ID is not equal to the source chain ID.": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not explicitly check if the destination chain ID (correspondingToken.chain) is not equal to the source chain ID (baseToken.chain)."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "No equality check is performed between baseToken.chain and correspondingToken.chain within the provided code."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The contract allows linking tokens across chains without enforcing a condition that ensures that these chains are different."
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            },
+            "tokenAddress": {
+                "baseToken.token": {
+                    "Check whether the tokenAddress is authorized to use.": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not check whether the tokenAddress is authorized to use; it only validates that the token address is not zero and that the token pair is not already listed."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "There is no logic in the provided code to verify any authorization status for the token address specified by baseToken.token."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The contract code does not contain any permissions or checks related to the authorization of the token."
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            },
+            "amount": {
+                "_value": {
+                    "Validate that amount is greater than 0": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": [
+                                    "require(_value >= listingFee, \"INCREASE_LISTING_FEE\");"
+                                ],
+                                "reason": "The code checks if the value passed (_value) is greater than or equal to the listing fee, which inherently validates that the amount is greater than 0 whenever a listing fee is involved."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "There are no other conditions in the provided code to ensure that the _value is always greater than 0 outside of the listing fee context."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The function does not explicitly validate that _value must always be greater than 0 for all transactions, only checks related to the listing fee."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "_value",
+                                "constraint": "Validate that amount is greater than 0",
+                                "validation": "[[\"require(_value >= listingFee, \\\"INCREASE_LISTING_FEE\\\");\"]]",
+                                "score": "60",
+                                "reason": "The validation checks if _value is greater than or equal to listingFee, but it does not ensure that _value is greater than 0. The condition needs to specifically validate if _value > 0 to fully meet the requirement."
+                            }
+                        ]
+                    },
+                    "Validate that msg.sender's balance change before and after equals amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not include any logic that tracks or verifies the balance of msg.sender before and after the execution of the listing function."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "There are no checks implemented for verifying if the amount deducted as listing fee corresponds to the balance change of msg.sender."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The function only transfers a listing fee without confirming any overall balance changes for the sender."
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Validate that the bridge's balance change before and after equals amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The provided code does not include any explicit checks to validate that the bridge's balance changes by the specified amount before and after the function execution."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code focuses primarily on listing tokens and transferring fees without implementing any mechanism to verify balance adjustments related to the bridge."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "There are no references to measuring the bridge's balance before and after the function execution or any assertions ensuring that the balance change aligns with the specified amount."
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Validate that msg.sender's balance ≥ amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not verify the balance of msg.sender against an amount; it requires a listing fee to be sent instead."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "There are no checks in the code to ensure that msg.sender's balance is sufficient for any transaction."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The function focuses on listing tokens and handling fees without validating sender balances."
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            },
+            "recipientAddress": {
+                "to": {
+                    "Validate that recipientAddress is not the zero address": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": [
+                                    "require(to != address(0), \"CANT_SEND_TO_NULL_ADDRESS\");"
+                                ],
+                                "reason": "The code checks that the 'to' address is not the zero address using a require statement, which ensures that the condition is met before proceeding with the transfer."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "While 'to' is validated against the zero address in the transferListingFee function, the input does not imply any other usage where the 'parameter' encompasses all cases where 'to' might be used."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The constraint specifically asks about 'recipientAddress' but does not clarify if it applies to other conditions in the code that do not involve the 'to' address."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "to",
+                                "constraint": "Validate that recipientAddress is not the zero address",
+                                "validation": "[[\"require(to != address(0), \\\"CANT_SEND_TO_NULL_ADDRESS\\\");\"]]",
+                                "score": "100",
+                                "reason": "The validation code correctly checks if the 'to' address is not a zero address with an appropriate error message. Additionally, the original code also implements this check in the 'transferListingFee' function, ensuring consistency across relevant functions.",
+                                "results": [
+                                    {
+                                        "result": true,
+                                        "poc": "If the 'to' address is replaced or manipulated to be address(0) after the validation check but before any actual transfers, the validation can be bypassed.",
+                                        "score": "70",
+                                        "reason": "The function contains checks to ensure the 'to' address is not a null address, but the logic allows for manipulation of the 'to' address before the actual transfer occurs, which could result in a scenario where the null address is used. This indicates a potential vulnerability that could be exploited if not properly safeguarded against such state changes before calls are made."
+                                    },
+                                    {
+                                        "result": true,
+                                        "poc": "If a malicious contract is deployed at the 'to' address which has a fallback function that doesn't revert, it could accept Ether even though the 'to' address is validated as non-null initially.",
+                                        "score": "70",
+                                        "reason": "The validation for the 'to' parameter checks if it is not a zero address. However, a malicious contract can still be deployed at a valid address (non-zero) which could accept funds due to its fallback function. Thus, while the validation prevents a typical zero address attack, it does not prevent a more sophisticated attack where the actual recipient address may not handle the Ether as expected."
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "step4": {
+            "toChainID": {
+                "baseToken.chain": {
+                    "Check whether toChainID is authorized.": [
+                        {
+                            "parameter": "baseToken.chain",
+                            "constraint": "Check whether toChainID is authorized.",
+                            "validation": "[[\"tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] == address(0)\", \"tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] == address(0)\"]]",
+                            "score": "90",
+                            "reason": "The validation checks if the token pair is already listed on the specified chains, which implies if the given chain IDs are authorized. However, it doesn't directly confirm authorization; it merely ensures the absence of a prior listing.",
+                            "results": [
+                                {
+                                    "result": true,
+                                    "poc": "A malicious actor can create a token that has a non-standard 'code' length (i.e., a contract that behaves unexpectedly). By using an ERC-20 token that does not conform to standard behaviors, they can exploit the reentrancy if the token's contract calls back to the listToken function, allowing for a bypass of the validation checks.",
+                                    "score": "75",
+                                    "reason": "While the validation checks ensure that the tokens are not already listed, the potential reentrancy vulnerability via non-standard ERC-20 tokens poses a risk where a malicious actor could manipulate the flow to bypass these checks. The existing checks are not sufficient to prevent this exploit, especially given that external token contracts may not conform to expected behaviors."
+                                },
+                                {
+                                    "result": true,
+                                    "poc": "By leveraging the 'isWrappedWithChainId' or 'isMintableWithChainId' mappings, an attacker can manipulate the state by setting values that allow certain pairs to become listed without adhering to the required checks. For example, if they manage to set 'isWrappedWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken]' to true before calling listToken, then the validations could be bypassed.",
+                                    "score": "70",
+                                    "reason": "While the validation condition checks for zero addresses in the mapping before allowing a pair to be listed, there are manipulation risks through the 'isWrappedWithChainId' or 'isMintableWithChainId' mappings. An attacker can potentially set values in these mappings prior to the call to 'listToken', allowing them to bypass validations. This introduces a vulnerability though checks are present, indicating that there are flaws in the trustedness of the data leading to the validation conditions."
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "tokenAddress": {
+                "baseToken.token": {}
+            },
+            "amount": {
+                "_value": {}
+            },
+            "recipientAddress": {
+                "to": {
+                    "Validate that recipientAddress is not the zero address": [
+                        {
+                            "parameter": "to",
+                            "constraint": "Validate that recipientAddress is not the zero address",
+                            "validation": "[[\"require(to != address(0), \\\"CANT_SEND_TO_NULL_ADDRESS\\\");\"]]",
+                            "score": "100",
+                            "reason": "The validation code correctly checks if the 'to' address is not a zero address with an appropriate error message. Additionally, the original code also implements this check in the 'transferListingFee' function, ensuring consistency across relevant functions.",
+                            "results": [
+                                {
+                                    "result": true,
+                                    "poc": "If the 'to' address is replaced or manipulated to be address(0) after the validation check but before any actual transfers, the validation can be bypassed.",
+                                    "score": "70",
+                                    "reason": "The function contains checks to ensure the 'to' address is not a null address, but the logic allows for manipulation of the 'to' address before the actual transfer occurs, which could result in a scenario where the null address is used. This indicates a potential vulnerability that could be exploited if not properly safeguarded against such state changes before calls are made."
+                                },
+                                {
+                                    "result": true,
+                                    "poc": "If a malicious contract is deployed at the 'to' address which has a fallback function that doesn't revert, it could accept Ether even though the 'to' address is validated as non-null initially.",
+                                    "score": "70",
+                                    "reason": "The validation for the 'to' parameter checks if it is not a zero address. However, a malicious contract can still be deployed at a valid address (non-zero) which could accept funds due to its fallback function. Thus, while the validation prevents a typical zero address attack, it does not prevent a more sophisticated attack where the actual recipient address may not handle the Ether as expected."
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        "final_result": {
+            "toChainID": {
+                "baseToken.chain": {
+                    "Check whether toChainID is authorized.": [
+                        {
+                            "validation": "[[\"tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] == address(0)\", \"tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] == address(0)\"]]",
+                            "poc": "A malicious actor can create a token that has a non-standard 'code' length (i.e., a contract that behaves unexpectedly). By using an ERC-20 token that does not conform to standard behaviors, they can exploit the reentrancy if the token's contract calls back to the listToken function, allowing for a bypass of the validation checks.",
+                            "score": "75",
+                            "reason": "While the validation checks ensure that the tokens are not already listed, the potential reentrancy vulnerability via non-standard ERC-20 tokens poses a risk where a malicious actor could manipulate the flow to bypass these checks. The existing checks are not sufficient to prevent this exploit, especially given that external token contracts may not conform to expected behaviors."
+                        },
+                        {
+                            "validation": "[[\"tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] == address(0)\", \"tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] == address(0)\"]]",
+                            "poc": "By leveraging the 'isWrappedWithChainId' or 'isMintableWithChainId' mappings, an attacker can manipulate the state by setting values that allow certain pairs to become listed without adhering to the required checks. For example, if they manage to set 'isWrappedWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken]' to true before calling listToken, then the validations could be bypassed.",
+                            "score": "70",
+                            "reason": "While the validation condition checks for zero addresses in the mapping before allowing a pair to be listed, there are manipulation risks through the 'isWrappedWithChainId' or 'isMintableWithChainId' mappings. An attacker can potentially set values in these mappings prior to the call to 'listToken', allowing them to bypass validations. This introduces a vulnerability though checks are present, indicating that there are flaws in the trustedness of the data leading to the validation conditions."
+                        }
+                    ],
+                    "Check that the destination chain ID is not equal to the source chain ID.": [
+                        {
+                            "parameter": "baseToken.chain",
+                            "constraint": "Check that the destination chain ID is not equal to the source chain ID.",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            },
+            "tokenAddress": {
+                "baseToken.token": {
+                    "Check whether the tokenAddress is authorized to use.": [
+                        {
+                            "parameter": "baseToken.token",
+                            "constraint": "Check whether the tokenAddress is authorized to use.",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            },
+            "amount": {
+                "_value": {
+                    "Validate that amount is greater than 0": [],
+                    "Validate that msg.sender's balance change before and after equals amount": [
+                        {
+                            "parameter": "_value",
+                            "constraint": "Validate that msg.sender's balance change before and after equals amount",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Validate that the bridge's balance change before and after equals amount": [
+                        {
+                            "parameter": "_value",
+                            "constraint": "Validate that the bridge's balance change before and after equals amount",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Validate that msg.sender's balance ≥ amount": [
+                        {
+                            "parameter": "_value",
+                            "constraint": "Validate that msg.sender's balance ≥ amount",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            },
+            "recipientAddress": {
+                "to": {
+                    "Validate that recipientAddress is not the zero address": [
+                        {
+                            "validation": "[[\"require(to != address(0), \\\"CANT_SEND_TO_NULL_ADDRESS\\\");\"]]",
+                            "poc": "If the 'to' address is replaced or manipulated to be address(0) after the validation check but before any actual transfers, the validation can be bypassed.",
+                            "score": "70",
+                            "reason": "The function contains checks to ensure the 'to' address is not a null address, but the logic allows for manipulation of the 'to' address before the actual transfer occurs, which could result in a scenario where the null address is used. This indicates a potential vulnerability that could be exploited if not properly safeguarded against such state changes before calls are made."
+                        },
+                        {
+                            "validation": "[[\"require(to != address(0), \\\"CANT_SEND_TO_NULL_ADDRESS\\\");\"]]",
+                            "poc": "If a malicious contract is deployed at the 'to' address which has a fallback function that doesn't revert, it could accept Ether even though the 'to' address is validated as non-null initially.",
+                            "score": "70",
+                            "reason": "The validation for the 'to' parameter checks if it is not a zero address. However, a malicious contract can still be deployed at a valid address (non-zero) which could accept funds due to its fallback function. Thus, while the validation prevents a typical zero address attack, it does not prevent a more sophisticated attack where the actual recipient address may not handle the Ether as expected."
+                        }
+                    ]
+                }
+            }
+        },
+        "context": {
+            "event": "TokenListed",
+            "call_graph": "listToken",
+            "state_variables": {
+                "listingFeeCollector": "address public listingFeeCollector;",
+                "isWrapped": "mapping(address => bool) public isWrapped;",
+                "excludeFeeFromListing": "mapping(address => bool) public excludeFeeFromListing;",
+                "isWrappedWithChainId": "mapping(uint256 => mapping(uint256 => mapping(address => bool))) public isWrappedWithChainId;",
+                "tokenOwnerWithChainId": "mapping(uint256 => mapping(uint256 => mapping(address => mapping(address => address)))) public tokenOwnerWithChainId;",
+                "tokenToTokenWithChainId": "mapping(uint256 => mapping(uint256 => mapping(address => address))) public tokenToTokenWithChainId;",
+                "isMintableWithChainId": "mapping(uint256 => mapping(uint256 => mapping(address => mapping(address => bool)))) public isMintableWithChainId;",
+                "_tokenOwner": "mapping(address => address) public _tokenOwner;",
+                "listingFee": "uint256 public listingFee;",
+                "_ENTERED": "uint256 private constant _ENTERED = 2;",
+                "_status": "uint256 private _status;",
+                "_NOT_ENTERED": "uint256 private constant _NOT_ENTERED = 1;"
+            },
+            "external_functions": [
+                "modifier nonReentrant(){ _nonReentrantBefore(); _; _nonReentrantAfter();}",
+                "function _nonReentrantBefore() private{ require(_status != _ENTERED, \"ReentrancyGuard: reentrant call\"); _status = _ENTERED;}",
+                "function _nonReentrantAfter() private{ _status = _NOT_ENTERED;}"
+            ]
+        },
+        "step1-time": 9.323582887649536,
+        "step2-time": 230.02801418304443,
+        "step2-call_api_times": 28,
+        "step3-time": 40.832664489746094,
+        "step3-call_api_times": 11,
+        "step4-time": 16.021992206573486,
+        "step4-call_api_times": 6,
+        "compare_audit": {
+            "result": [
+                {
+                    "vuln": "require(tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_baseToken] == address(0) && tokenToTokenWithChainId[baseToken.chain][correspondingToken.chain][_correspondingToken] == address(0), \"THIS_PAIR_ALREADY_LISTED\");",
+                    "reason": "This check does not prevent re-entrancy attacks. An attacker can deploy a malicious contract and call this function to bypass the condition if they can control the input parameters, leading to token pairs being listed multiple times."
+                },
+                {
+                    "vuln": "(bool success, ) = payable(to).call{value:listingFee}(\"\");",
+                    "reason": "Using low-level call for transferring Ether may lead to a failure without a revert if the recipient contract does not implement proper receive or fallback functions, particularly across chains where the behavior can vary."
+                },
+                {
+                    "vuln": "if(_baseToken.code.length > 0) _tokenOwner[_baseToken] = msg.sender; else _tokenOwner[_correspondingToken] = msg.sender;",
+                    "reason": "This line may allow an unintended address to be set as the token owner if the check does not properly validate that _baseToken is indeed a token. Cross-chain interactions can exacerbate this risk if the token contracts are not rigorously validated."
+                }
+            ]
+        },
+        "compare_attribute_verification": {
+            "result": [
+                {
+                    "toChainID": null,
+                    "findings": [
+                        {
+                            "constraint": "Check whether toChainID is authorized.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No implementation found for authorization of toChainID."
+                        },
+                        {
+                            "constraint": "Check that the destination chain ID is not equal to the source chain ID.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No implementation to check chain ID equality."
+                        }
+                    ]
+                },
+                {
+                    "tokenAddress": null,
+                    "findings": [
+                        {
+                            "constraint": "Check whether the tokenAddress is authorized to use.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No implementation for authorization check on tokenAddress."
+                        }
+                    ]
+                },
+                {
+                    "nonce": null,
+                    "findings": [
+                        {
+                            "constraint": "Check if the transaction's nonce is equal to the account's current nonce.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No nonce verification implemented."
+                        }
+                    ]
+                },
+                {
+                    "amount": null,
+                    "findings": [
+                        {
+                            "constraint": "Validate that amount is greater than 0",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No validation for amount being greater than 0."
+                        },
+                        {
+                            "constraint": "Validate that msg.sender's balance change before and after equals amount",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No implementation to validate balance changes."
+                        },
+                        {
+                            "constraint": "Validate that the bridge's balance change before and after equals amount",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No validation for bridge's balance change."
+                        },
+                        {
+                            "constraint": "Validate that msg.sender's balance ≥ amount",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No implementation ensuring msg.sender's balance is sufficient."
+                        }
+                    ]
+                },
+                {
+                    "recipientAddress": null,
+                    "findings": [
+                        {
+                            "constraint": "Validate that recipientAddress is not the zero address",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No check to prevent zero address for recipientAddress."
+                        }
+                    ]
+                },
+                {
+                    "externalCallAddress": null,
+                    "findings": [
+                        {
+                            "constraint": "Check whether the externalCallAddress is authorized to use.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No authorization check for externalCallAddress."
+                        }
+                    ]
+                },
+                {
+                    "externalCallFunction": null,
+                    "findings": [
+                        {
+                            "constraint": "Validate that externalCallFunction is in the allowed function signature list",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No validation mechanism for externalCallFunction."
+                        }
+                    ]
+                },
+                {
+                    "routerAddress": null,
+                    "findings": [
+                        {
+                            "constraint": "Check whether the routerAddress is authorized to use.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No implementation for authorization check on routerAddress."
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "time": 336.5535910129547,
+    "this_cost": 0,
+    "this_prompt_tokens": 72661,
+    "this_completion_tokens": 16895
+}

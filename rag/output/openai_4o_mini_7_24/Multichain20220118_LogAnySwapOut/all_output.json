@@ -1,0 +1,1052 @@
+{
+    "AnyswapV4Router.anySwapOutUnderlyingWithPermit->AnyswapV4Router._anySwapOut": {
+        "step1": {
+            "prompt1": "\nYou are an experienced cross-chain protocol analysis expert. Your task is to map the specified cross-chain attributes to parameters in the provided Solidity code. If an attribute cannot be found in the code, do not list it in the output. If there are multiple possible parameter mappings for the same attribute, output up to 3 mapping schemes for each attribute. Please strictly follow the input and output formats defined below:\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"attribute\": \n{ \n\"<attribute>\": \"<attribute description>\" ,\n\"<attribute>\": \"<attribute description>\",\n...\n}\n\"code\": \"...\" // Solidity contract code string\n}\nOutput format:\nReturn a JSON array, each item structured as follows, only produce output in the required format, without any additional content:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // The input cross-chain attribute\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}, ... \n]\nIn the reason, please point out both the core basis for the mapping and potential uncertainties (e.g., parameter name similarity, ambiguous contextual meaning, etc.).\n\nInput:\n{\n\"attribute\": {\"toChainID\": \"Specifies the destination blockchain network ID.\", \"tokenAddress\": \"Indicates the contract address of the token to be transferred.\", \"amount\": \"The number of tokens to be transferred across chains.\", \"nonce\": \"Check and mark that nonce has not been consumed to prevent replay\", \"recipientAddress\": \"The address that will receive the tokens on the destination chain.\", \"externalCallAddress\": \"The address of a contract to be called after the cross-chain transfer.\", \"externalCallFunction\": \"The specific function or calldata to be executed on the `externalCallAddress`.\", \"routerAddress\": \"The address of the cross-chain router or bridge handler.\"},\n\"code\": [\"AnyswapV4Router.anySwapOutUnderlyingWithPermit:function anySwapOutUnderlyingWithPermit(\\n        address from,\\n        address token,\\n        address to,\\n        uint amount,\\n        uint deadline,\\n        uint8 v,\\n        bytes32 r,\\n        bytes32 s,\\n        uint toChainID\\n    ) external {\\n        address _underlying = AnyswapV1ERC20(token).underlying();\\n        IERC20(_underlying).permit(from, address(this), amount, deadline, v, r, s);\\n        TransferHelper.safeTransferFrom(_underlying, from, token, amount);\\n        AnyswapV1ERC20(token).depositVault(amount, from);\\n        _anySwapOut(from, token, to, amount, toChainID);\\n    }\", \"AnyswapV4Router._anySwapOut:function _anySwapOut(address from, address token, address to, uint amount, uint toChainID) internal {\\n        AnyswapV1ERC20(token).burn(from, amount);\\n        emit LogAnySwapOut(token, from, to, amount, cID(), toChainID);\\n    }\", \"TransferHelper.safeTransferFrom:function safeTransferFrom(address token, address from, address to, uint value) internal {\\n        // bytes4(keccak256(bytes('transferFrom(address,address,uint256)')));\\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(0x23b872dd, from, to, value));\\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'TransferHelper: TRANSFER_FROM_FAILED');\\n    }\", \"TransferHelper.safeTransferFrom:function safeTransferFrom(address token, address from, address to, uint value) internal {\\n        // bytes4(keccak256(bytes('transferFrom(address,address,uint256)')));\\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(0x23b872dd, from, to, value));\\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'TransferHelper: TRANSFER_FROM_FAILED');\\n    }\", \"TransferHelper.safeTransferFrom:function safeTransferFrom(address token, address from, address to, uint value) internal {\\n        // bytes4(keccak256(bytes('transferFrom(address,address,uint256)')));\\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(0x23b872dd, from, to, value));\\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'TransferHelper: TRANSFER_FROM_FAILED');\\n    }\", \"AnyswapV1Pair.burn:function burn(address to) external lock returns (uint amount0, uint amount1) {\\n        (uint112 _reserve0, uint112 _reserve1,) = getReserves(); // gas savings\\n        address _token0 = token0;                                // gas savings\\n        address _token1 = token1;                                // gas savings\\n        uint balance0 = IERC20Anyswap(_token0).balanceOf(address(this));\\n        uint balance1 = IERC20Anyswap(_token1).balanceOf(address(this));\\n        uint liquidity = balanceOf[address(this)];\\n\\n        bool feeOn = _mintFee(_reserve0, _reserve1);\\n        uint _totalSupply = totalSupply; // gas savings, must be defined here since totalSupply can update in _mintFee\\n        amount0 = liquidity.mul(balance0) / _totalSupply; // using balances ensures pro-rata distribution\\n        amount1 = liquidity.mul(balance1) / _totalSupply; // using balances ensures pro-rata distribution\\n        require(amount0 > 0 && amount1 > 0, 'AnyswapV1: INSUFFICIENT_LIQUIDITY_BURNED');\\n        _burn(address(this), liquidity);\\n        _safeTransfer(_token0, to, amount0);\\n        _safeTransfer(_token1, to, amount1);\\n        balance0 = IERC20Anyswap(_token0).balanceOf(address(this));\\n        balance1 = IERC20Anyswap(_token1).balanceOf(address(this));\\n\\n        _update(balance0, balance1, _reserve0, _reserve1);\\n        if (feeOn) kLast = uint(reserve0).mul(reserve1); // reserve0 and reserve1 are up-to-date\\n        emit Burn(msg.sender, amount0, amount1, to);\\n    }\", \"AnyswapV4Router.cID:function cID() public view returns (uint id) {\\n        assembly {id := chainid()}\\n    }\", \"SafeMathAnyswap.mul:function mul(uint x, uint y) internal pure returns (uint z) {\\n        require(y == 0 || (z = x * y) / y == x, 'ds-math-mul-overflow');\\n    }\", \"AnyswapV1Pair._update:function _update(uint balance0, uint balance1, uint112 _reserve0, uint112 _reserve1) private {\\n        require(balance0 <= type(uint112).max && balance1 <= type(uint112).max, 'AnyswapV1: OVERFLOW');\\n        uint32 blockTimestamp = uint32(block.timestamp % 2**32);\\n        uint32 timeElapsed = blockTimestamp - blockTimestampLast; // overflow is desired\\n        if (timeElapsed > 0 && _reserve0 != 0 && _reserve1 != 0) {\\n            // * never overflows, and + overflow is desired\\n            price0CumulativeLast += uint(UQ112x112.encode(_reserve1).uqdiv(_reserve0)) * timeElapsed;\\n            price1CumulativeLast += uint(UQ112x112.encode(_reserve0).uqdiv(_reserve1)) * timeElapsed;\\n        }\\n        reserve0 = uint112(balance0);\\n        reserve1 = uint112(balance1);\\n        blockTimestampLast = blockTimestamp;\\n        emit Sync(reserve0, reserve1);\\n    }\", \"AnyswapV1Pair._mintFee:function _mintFee(uint112 _reserve0, uint112 _reserve1) private returns (bool feeOn) {\\n        address feeTo = IAnyswapV1Factory(factory).feeTo();\\n        feeOn = feeTo != address(0);\\n        uint _kLast = kLast; // gas savings\\n        if (feeOn) {\\n            if (_kLast != 0) {\\n                uint rootK = Math.sqrt(uint(_reserve0).mul(_reserve1));\\n                uint rootKLast = Math.sqrt(_kLast);\\n                if (rootK > rootKLast) {\\n                    uint numerator = totalSupply.mul(rootK.sub(rootKLast));\\n                    uint denominator = rootK.mul(5).add(rootKLast);\\n                    uint liquidity = numerator / denominator;\\n                    if (liquidity > 0) _mint(feeTo, liquidity);\\n                }\\n            }\\n        } else if (_kLast != 0) {\\n            kLast = 0;\\n        }\\n    }\", \"AnyswapV1Pair._safeTransfer:function _safeTransfer(address token, address to, uint value) private {\\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(SELECTOR, to, value));\\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'AnyswapV1: TRANSFER_FAILED');\\n    }\", \"AnyswapV1Pair.getReserves:function getReserves() public view returns (uint112 _reserve0, uint112 _reserve1, uint32 _blockTimestampLast) {\\n        _reserve0 = reserve0;\\n        _reserve1 = reserve1;\\n        _blockTimestampLast = blockTimestampLast;\\n    }\", \"AnyswapV1ERC20._burn:function _burn(address from, uint value) internal {\\n        balanceOf[from] = balanceOf[from].sub(value);\\n        totalSupply = totalSupply.sub(value);\\n        emit Transfer(from, address(0), value);\\n    }\", \"UQ112x112.uqdiv:function uqdiv(uint224 x, uint112 y) internal pure returns (uint224 z) {\\n        z = x / uint224(y);\\n    }\", \"UQ112x112.encode:function encode(uint112 y) internal pure returns (uint224 z) {\\n        z = uint224(y) * Q112; // never overflows\\n    }\", \"Math.sqrt:function sqrt(uint y) internal pure returns (uint z) {\\n        if (y > 3) {\\n            z = y;\\n            uint x = y / 2 + 1;\\n            while (x < z) {\\n                z = x;\\n                x = (y / x + x) / 2;\\n            }\\n        } else if (y != 0) {\\n            z = 1;\\n        }\\n    }\", \"AnyswapV1ERC20._mint:function _mint(address to, uint value) internal {\\n        totalSupply = totalSupply.add(value);\\n        balanceOf[to] = balanceOf[to].add(value);\\n        emit Transfer(address(0), to, value);\\n    }\", \"SafeMathAnyswap.sub:function sub(uint x, uint y) internal pure returns (uint z) {\\n        require((z = x - y) <= x, 'ds-math-sub-underflow');\\n    }\", \"SafeMathAnyswap.add:function add(uint x, uint y) internal pure returns (uint z) {\\n        require((z = x + y) >= x, 'ds-math-add-overflow');\\n    }\", \"SafeMathAnyswap.sub:function sub(uint x, uint y) internal pure returns (uint z) {\\n        require((z = x - y) <= x, 'ds-math-sub-underflow');\\n    }\"]\n}\n",
+            "outputs1": [
+                [
+                    {
+                        "parameter": "toChainID",
+                        "attribute": "toChainID",
+                        "reason": "The `toChainID` parameter in the function directly corresponds to the attribute describing the destination blockchain network ID."
+                    },
+                    {
+                        "parameter": "token",
+                        "attribute": "tokenAddress",
+                        "reason": "The `token` parameter in the function represents the contract address of the token to be transferred, which matches the attribute definition."
+                    },
+                    {
+                        "parameter": "amount",
+                        "attribute": "amount",
+                        "reason": "The `amount` parameter explicitly specifies the number of tokens to be transferred, fitting the description of this attribute."
+                    },
+                    {
+                        "parameter": "to",
+                        "attribute": "recipientAddress",
+                        "reason": "The `to` parameter indicates the address that will receive the tokens on the destination chain, aligning with the attribute's description."
+                    }
+                ]
+            ],
+            "v_prompt1": "\nYou are a rigorous cross-chain protocol auditor and data consistency verifier. Carefully review whether the meaning of each cross-chain attribute and parameter in the code is consistent, assign a confidence score (0-100%), and state the reason for the given confidence score.\n\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"correspondence\":    // Array of attribute-parameter correspondences in the code\n[\n{\n\"attribute\": \"...\", // Input cross-chain attribute\n\"parameter\": \"...\", // Corresponding parameter\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}\n...\n],\n\"code\":\"...\" // Cross-chain contract code\n}\n\nOutput format: Return a JSON array, each item structured as follows, only produce output in the required format, without any additional content:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // Input cross-chain attribute\n\"score\":\"...\", // Assigned confidence score\n\"reason\": \"...\" // Brief explanation for the given confidence score\n}, ... \n]\nInput:\n{\n\"correspondence\": [{\"parameter\": \"toChainID\", \"attribute\": \"toChainID\", \"reason\": \"The `toChainID` parameter in the function directly corresponds to the attribute describing the destination blockchain network ID.\"}, {\"parameter\": \"token\", \"attribute\": \"tokenAddress\", \"reason\": \"The `token` parameter in the function represents the contract address of the token to be transferred, which matches the attribute definition.\"}, {\"parameter\": \"amount\", \"attribute\": \"amount\", \"reason\": \"The `amount` parameter explicitly specifies the number of tokens to be transferred, fitting the description of this attribute.\"}, {\"parameter\": \"to\", \"attribute\": \"recipientAddress\", \"reason\": \"The `to` parameter indicates the address that will receive the tokens on the destination chain, aligning with the attribute's description.\"}],\n\"code\": [\"AnyswapV4Router.anySwapOutUnderlyingWithPermit:function anySwapOutUnderlyingWithPermit(\\n        address from,\\n        address token,\\n        address to,\\n        uint amount,\\n        uint deadline,\\n        uint8 v,\\n        bytes32 r,\\n        bytes32 s,\\n        uint toChainID\\n    ) external {\\n        address _underlying = AnyswapV1ERC20(token).underlying();\\n        IERC20(_underlying).permit(from, address(this), amount, deadline, v, r, s);\\n        TransferHelper.safeTransferFrom(_underlying, from, token, amount);\\n        AnyswapV1ERC20(token).depositVault(amount, from);\\n        _anySwapOut(from, token, to, amount, toChainID);\\n    }\", \"AnyswapV4Router._anySwapOut:function _anySwapOut(address from, address token, address to, uint amount, uint toChainID) internal {\\n        AnyswapV1ERC20(token).burn(from, amount);\\n        emit LogAnySwapOut(token, from, to, amount, cID(), toChainID);\\n    }\", \"TransferHelper.safeTransferFrom:function safeTransferFrom(address token, address from, address to, uint value) internal {\\n        // bytes4(keccak256(bytes('transferFrom(address,address,uint256)')));\\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(0x23b872dd, from, to, value));\\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'TransferHelper: TRANSFER_FROM_FAILED');\\n    }\", \"TransferHelper.safeTransferFrom:function safeTransferFrom(address token, address from, address to, uint value) internal {\\n        // bytes4(keccak256(bytes('transferFrom(address,address,uint256)')));\\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(0x23b872dd, from, to, value));\\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'TransferHelper: TRANSFER_FROM_FAILED');\\n    }\", \"TransferHelper.safeTransferFrom:function safeTransferFrom(address token, address from, address to, uint value) internal {\\n        // bytes4(keccak256(bytes('transferFrom(address,address,uint256)')));\\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(0x23b872dd, from, to, value));\\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'TransferHelper: TRANSFER_FROM_FAILED');\\n    }\", \"AnyswapV1Pair.burn:function burn(address to) external lock returns (uint amount0, uint amount1) {\\n        (uint112 _reserve0, uint112 _reserve1,) = getReserves(); // gas savings\\n        address _token0 = token0;                                // gas savings\\n        address _token1 = token1;                                // gas savings\\n        uint balance0 = IERC20Anyswap(_token0).balanceOf(address(this));\\n        uint balance1 = IERC20Anyswap(_token1).balanceOf(address(this));\\n        uint liquidity = balanceOf[address(this)];\\n\\n        bool feeOn = _mintFee(_reserve0, _reserve1);\\n        uint _totalSupply = totalSupply; // gas savings, must be defined here since totalSupply can update in _mintFee\\n        amount0 = liquidity.mul(balance0) / _totalSupply; // using balances ensures pro-rata distribution\\n        amount1 = liquidity.mul(balance1) / _totalSupply; // using balances ensures pro-rata distribution\\n        require(amount0 > 0 && amount1 > 0, 'AnyswapV1: INSUFFICIENT_LIQUIDITY_BURNED');\\n        _burn(address(this), liquidity);\\n        _safeTransfer(_token0, to, amount0);\\n        _safeTransfer(_token1, to, amount1);\\n        balance0 = IERC20Anyswap(_token0).balanceOf(address(this));\\n        balance1 = IERC20Anyswap(_token1).balanceOf(address(this));\\n\\n        _update(balance0, balance1, _reserve0, _reserve1);\\n        if (feeOn) kLast = uint(reserve0).mul(reserve1); // reserve0 and reserve1 are up-to-date\\n        emit Burn(msg.sender, amount0, amount1, to);\\n    }\", \"AnyswapV4Router.cID:function cID() public view returns (uint id) {\\n        assembly {id := chainid()}\\n    }\", \"SafeMathAnyswap.mul:function mul(uint x, uint y) internal pure returns (uint z) {\\n        require(y == 0 || (z = x * y) / y == x, 'ds-math-mul-overflow');\\n    }\", \"AnyswapV1Pair._update:function _update(uint balance0, uint balance1, uint112 _reserve0, uint112 _reserve1) private {\\n        require(balance0 <= type(uint112).max && balance1 <= type(uint112).max, 'AnyswapV1: OVERFLOW');\\n        uint32 blockTimestamp = uint32(block.timestamp % 2**32);\\n        uint32 timeElapsed = blockTimestamp - blockTimestampLast; // overflow is desired\\n        if (timeElapsed > 0 && _reserve0 != 0 && _reserve1 != 0) {\\n            // * never overflows, and + overflow is desired\\n            price0CumulativeLast += uint(UQ112x112.encode(_reserve1).uqdiv(_reserve0)) * timeElapsed;\\n            price1CumulativeLast += uint(UQ112x112.encode(_reserve0).uqdiv(_reserve1)) * timeElapsed;\\n        }\\n        reserve0 = uint112(balance0);\\n        reserve1 = uint112(balance1);\\n        blockTimestampLast = blockTimestamp;\\n        emit Sync(reserve0, reserve1);\\n    }\", \"AnyswapV1Pair._mintFee:function _mintFee(uint112 _reserve0, uint112 _reserve1) private returns (bool feeOn) {\\n        address feeTo = IAnyswapV1Factory(factory).feeTo();\\n        feeOn = feeTo != address(0);\\n        uint _kLast = kLast; // gas savings\\n        if (feeOn) {\\n            if (_kLast != 0) {\\n                uint rootK = Math.sqrt(uint(_reserve0).mul(_reserve1));\\n                uint rootKLast = Math.sqrt(_kLast);\\n                if (rootK > rootKLast) {\\n                    uint numerator = totalSupply.mul(rootK.sub(rootKLast));\\n                    uint denominator = rootK.mul(5).add(rootKLast);\\n                    uint liquidity = numerator / denominator;\\n                    if (liquidity > 0) _mint(feeTo, liquidity);\\n                }\\n            }\\n        } else if (_kLast != 0) {\\n            kLast = 0;\\n        }\\n    }\", \"AnyswapV1Pair._safeTransfer:function _safeTransfer(address token, address to, uint value) private {\\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(SELECTOR, to, value));\\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'AnyswapV1: TRANSFER_FAILED');\\n    }\", \"AnyswapV1Pair.getReserves:function getReserves() public view returns (uint112 _reserve0, uint112 _reserve1, uint32 _blockTimestampLast) {\\n        _reserve0 = reserve0;\\n        _reserve1 = reserve1;\\n        _blockTimestampLast = blockTimestampLast;\\n    }\", \"AnyswapV1ERC20._burn:function _burn(address from, uint value) internal {\\n        balanceOf[from] = balanceOf[from].sub(value);\\n        totalSupply = totalSupply.sub(value);\\n        emit Transfer(from, address(0), value);\\n    }\", \"UQ112x112.uqdiv:function uqdiv(uint224 x, uint112 y) internal pure returns (uint224 z) {\\n        z = x / uint224(y);\\n    }\", \"UQ112x112.encode:function encode(uint112 y) internal pure returns (uint224 z) {\\n        z = uint224(y) * Q112; // never overflows\\n    }\", \"Math.sqrt:function sqrt(uint y) internal pure returns (uint z) {\\n        if (y > 3) {\\n            z = y;\\n            uint x = y / 2 + 1;\\n            while (x < z) {\\n                z = x;\\n                x = (y / x + x) / 2;\\n            }\\n        } else if (y != 0) {\\n            z = 1;\\n        }\\n    }\", \"AnyswapV1ERC20._mint:function _mint(address to, uint value) internal {\\n        totalSupply = totalSupply.add(value);\\n        balanceOf[to] = balanceOf[to].add(value);\\n        emit Transfer(address(0), to, value);\\n    }\", \"SafeMathAnyswap.sub:function sub(uint x, uint y) internal pure returns (uint z) {\\n        require((z = x - y) <= x, 'ds-math-sub-underflow');\\n    }\", \"SafeMathAnyswap.add:function add(uint x, uint y) internal pure returns (uint z) {\\n        require((z = x + y) >= x, 'ds-math-add-overflow');\\n    }\", \"SafeMathAnyswap.sub:function sub(uint x, uint y) internal pure returns (uint z) {\\n        require((z = x - y) <= x, 'ds-math-sub-underflow');\\n    }\"]:\n}\n\n",
+            "v_outputs1": [
+                [
+                    {
+                        "parameter": "toChainID",
+                        "attribute": "toChainID",
+                        "score": "100%",
+                        "reason": "The parameter 'toChainID' is clearly named and matches the attribute directly, indicating the ID of the destination chain."
+                    },
+                    {
+                        "parameter": "token",
+                        "attribute": "tokenAddress",
+                        "score": "100%",
+                        "reason": "The parameter 'token' is directly used to refer to the contract address of the token, which aligns perfectly with the definition of 'tokenAddress'."
+                    },
+                    {
+                        "parameter": "amount",
+                        "attribute": "amount",
+                        "score": "100%",
+                        "reason": "The 'amount' parameter explicitly refers to the number of tokens being transferred, which matches the description of the attribute 'amount'."
+                    },
+                    {
+                        "parameter": "to",
+                        "attribute": "recipientAddress",
+                        "score": "100%",
+                        "reason": "The parameter 'to' indicates the recipient's address on the destination chain as described in the attribute 'recipientAddress', confirming the correspondence."
+                    }
+                ]
+            ],
+            "formatted_outputs1": {
+                "toChainID": {
+                    "toChainID": {
+                        "reason": "The `toChainID` parameter in the function directly corresponds to the attribute describing the destination blockchain network ID.",
+                        "score": "100%",
+                        "s_reason": "The parameter 'toChainID' is clearly named and matches the attribute directly, indicating the ID of the destination chain."
+                    }
+                },
+                "token": {
+                    "tokenAddress": {
+                        "reason": "The `token` parameter in the function represents the contract address of the token to be transferred, which matches the attribute definition.",
+                        "score": "100%",
+                        "s_reason": "The parameter 'token' is directly used to refer to the contract address of the token, which aligns perfectly with the definition of 'tokenAddress'."
+                    }
+                },
+                "amount": {
+                    "amount": {
+                        "reason": "The `amount` parameter explicitly specifies the number of tokens to be transferred, fitting the description of this attribute.",
+                        "score": "100%",
+                        "s_reason": "The 'amount' parameter explicitly refers to the number of tokens being transferred, which matches the description of the attribute 'amount'."
+                    }
+                },
+                "to": {
+                    "recipientAddress": {
+                        "reason": "The `to` parameter indicates the address that will receive the tokens on the destination chain, aligning with the attribute's description.",
+                        "score": "100%",
+                        "s_reason": "The parameter 'to' indicates the recipient's address on the destination chain as described in the attribute 'recipientAddress', confirming the correspondence."
+                    }
+                }
+            }
+        },
+        "step2": {
+            "toChainID": {
+                "toChainID": {
+                    "dataflows": [
+                        {
+                            "parameter": "toChainID",
+                            "dataflow": {
+                                "AnyswapV4Router.anySwapOutUnderlyingWithPermit": [
+                                    "function anySwapOutUnderlyingWithPermit(\n        address from,\n        address token,\n        address to,\n        uint amount,\n        uint deadline,\n        uint8 v,\n        bytes32 r,\n        bytes32 s,\n        uint toChainID\n    ) external {\n        address _underlying = AnyswapV1ERC20(token).underlying();\n        IERC20(_underlying).permit(from, address(this), amount, deadline, v, r, s);\n        TransferHelper.safeTransferFrom(_underlying, from, token, amount);\n        AnyswapV1ERC20(token).depositVault(amount, from);\n        _anySwapOut(from, token, to, amount, toChainID);\n    }"
+                                ],
+                                "_anySwapOut": [
+                                    "function _anySwapOut(address from, address token, address to, uint amount, uint toChainID) internal {\n        AnyswapV1ERC20(token).burn(from, amount);\n        emit LogAnySwapOut(token, from, to, amount, cID(), toChainID);\n    }"
+                                ],
+                                "TransferHelper.safeTransferFrom": [
+                                    "function safeTransferFrom(address token, address from, address to, uint value) internal {\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(0x23b872dd, from, to, value));\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'TransferHelper: TRANSFER_FROM_FAILED');\n    }"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "95",
+                            "score": "93",
+                            "reason": "The data flow for the parameter 'toChainID' is well-covered within the function _anySwapOut and is correctly utilized in the context of emitting LogAnySwapOut events. The coverage score reflects the fact that while it is present and appropriately used in key functions, there may be slight variations or missed edge cases in other functions that could interact with it, hence not achieving full coverage. The correctness is high as the parameter is consistently used as intended throughout the related functions without apparent logical errors, allowing a confident overall score."
+                        },
+                        {
+                            "parameter": "toChainID",
+                            "dataflow": {
+                                "AnyswapV4Router.anySwapOutUnderlyingWithPermit": [
+                                    "function anySwapOutUnderlyingWithPermit(\n        address from,\n        address token,\n        address to,\n        uint amount,\n        uint deadline,\n        uint8 v,\n        bytes32 r,\n        bytes32 s,\n        uint toChainID\n    ) external {\n        address _underlying = AnyswapV1ERC20(token).underlying();\n        IERC20(_underlying).permit(from, address(this), amount, deadline, v, r, s);\n        TransferHelper.safeTransferFrom(_underlying, from, token, amount);\n        AnyswapV1ERC20(token).depositVault(amount, from);\n        _anySwapOut(from, token, to, amount, toChainID);\n    }"
+                                ],
+                                "_anySwapOut": [
+                                    "function _anySwapOut(address from, address token, address to, uint amount, uint toChainID) internal {\n        AnyswapV1ERC20(token).burn(from, amount);\n        emit LogAnySwapOut(token, from, to, amount, cID(), toChainID);\n    }"
+                                ],
+                                "TransferHelper.safeTransferFrom": [
+                                    "function safeTransferFrom(address token, address from, address to, uint value) internal {\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(0x23b872dd, from, to, value));\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'TransferHelper: TRANSFER_FROM_FAILED');\n    }"
+                                ],
+                                "AnyswapV1ERC20.burn": [
+                                    "function burn(address from, uint value) internal {\n        balanceOf[from] = balanceOf[from].sub(value);\n        totalSupply = totalSupply.sub(value);\n        emit Transfer(from, address(0), value);\n    }"
+                                ],
+                                "LogAnySwapOut event": [
+                                    "event LogAnySwapOut(address indexed token, address indexed from, address indexed to, uint amount, uint cID, uint toChainID);"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "100",
+                            "reason": "The data flow for 'toChainID' is fully covered in the function 'anySwapOutUnderlyingWithPermit' and correctly passed to the internal function '_anySwapOut' alongside the correct event emission. It effectively integrates into the logic without any inconsistencies or errors."
+                        }
+                    ],
+                    "merge_dataflows": "function anySwapOutUnderlyingWithPermit(\n        address from,\n        address token,\n        address to,\n        uint amount,\n        uint deadline,\n        uint8 v,\n        bytes32 r,\n        bytes32 s,\n        uint toChainID\n    ) external {\n        address _underlying = AnyswapV1ERC20(token).underlying();\n        IERC20(_underlying).permit(from, address(this), amount, deadline, v, r, s);\n        TransferHelper.safeTransferFrom(_underlying, from, token, amount);\n        AnyswapV1ERC20(token).depositVault(amount, from);\n        _anySwapOut(from, token, to, amount, toChainID);\n    }\n\nfunction _anySwapOut(address from, address token, address to, uint amount, uint toChainID) internal {\n        AnyswapV1ERC20(token).burn(from, amount);\n        emit LogAnySwapOut(token, from, to, amount, cID(), toChainID);\n    }\n\nfunction safeTransferFrom(address token, address from, address to, uint value) internal {\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(0x23b872dd, from, to, value));\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'TransferHelper: TRANSFER_FROM_FAILED');\n    }\n\nfunction burn(address from, uint value) internal {\n        balanceOf[from] = balanceOf[from].sub(value);\n        totalSupply = totalSupply.sub(value);\n        emit Transfer(from, address(0), value);\n    }\n\nevent LogAnySwapOut(address indexed token, address indexed from, address indexed to, uint amount, uint cID, uint toChainID);"
+                }
+            },
+            "tokenAddress": {
+                "token": {
+                    "dataflows": [
+                        {
+                            "parameter": "token",
+                            "dataflow": {
+                                "AnyswapV4Router.anySwapOutUnderlyingWithPermit": [
+                                    "function anySwapOutUnderlyingWithPermit(\n        address from,\n        address token,\n        address to,\n        uint amount,\n        uint deadline,\n        uint8 v,\n        bytes32 r,\n        bytes32 s,\n        uint toChainID\n    ) external {\n        address _underlying = AnyswapV1ERC20(token).underlying();\n        IERC20(_underlying).permit(from, address(this), amount, deadline, v, r, s);\n        TransferHelper.safeTransferFrom(_underlying, from, token, amount);\n        AnyswapV1ERC20(token).depositVault(amount, from);\n        _anySwapOut(from, token, to, amount, toChainID);\n    }"
+                                ],
+                                "_anySwapOut": [
+                                    "function _anySwapOut(address from, address token, address to, uint amount, uint toChainID) internal {\n        AnyswapV1ERC20(token).burn(from, amount);\n        emit LogAnySwapOut(token, from, to, amount, cID(), toChainID);\n    }"
+                                ],
+                                "TransferHelper.safeTransferFrom": [
+                                    "function safeTransferFrom(address token, address from, address to, uint value) internal {\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(0x23b872dd, from, to, value));\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'TransferHelper: TRANSFER_FROM_FAILED');\n    }"
+                                ],
+                                "AnyswapV1ERC20._burn": [
+                                    "function _burn(address from, uint value) internal {\n        balanceOf[from] = balanceOf[from].sub(value);\n        totalSupply = totalSupply.sub(value);\n        emit Transfer(from, address(0), value);\n    }"
+                                ],
+                                "LogAnySwapOut": [
+                                    "emit LogAnySwapOut(token, from, to, amount, cID(), toChainID);"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "95",
+                            "score": "92.5",
+                            "reason": "The dataflow closely resembles the original code, with nearly all relevant interactions involving the 'token' parameter covered. The logic correctly involves valid calls to external functions, ensuring expected behavior. The high correctness score reflects that all necessary operations were included, but minor discrepancies in variable handling could affect edge cases."
+                        },
+                        {
+                            "parameter": "token",
+                            "dataflow": {
+                                "AnyswapV4Router.anySwapOutUnderlyingWithPermit": [
+                                    "function anySwapOutUnderlyingWithPermit(\n        address from,\n        address token,\n        address to,\n        uint amount,\n        uint deadline,\n        uint8 v,\n        bytes32 r,\n        bytes32 s,\n        uint toChainID\n    ) external {\n        address _underlying = AnyswapV1ERC20(token).underlying();\n        IERC20(_underlying).permit(from, address(this), amount, deadline, v, r, s);\n        TransferHelper.safeTransferFrom(_underlying, from, token, amount);\n        AnyswapV1ERC20(token).depositVault(amount, from);\n        _anySwapOut(from, token, to, amount, toChainID);\n    }"
+                                ],
+                                "_anySwapOut": [
+                                    "function _anySwapOut(address from, address token, address to, uint amount, uint toChainID) internal {\n        AnyswapV1ERC20(token).burn(from, amount);\n        emit LogAnySwapOut(token, from, to, amount, cID(), toChainID);\n    }"
+                                ],
+                                "TransferHelper.safeTransferFrom": [
+                                    "function safeTransferFrom(address token, address from, address to, uint value) internal {\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(0x23b872dd, from, to, value));\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'TransferHelper: TRANSFER_FROM_FAILED');\n    }"
+                                ],
+                                "AnyswapV1ERC20._burn": [
+                                    "function _burn(address from, uint value) internal {\n        balanceOf[from] = balanceOf[from].sub(value);\n        totalSupply = totalSupply.sub(value);\n        emit Transfer(from, address(0), value);\n    }"
+                                ],
+                                "AnyswapV1Pair.burn": [
+                                    "function burn(address to) external lock returns (uint amount0, uint amount1) {\n        (uint112 _reserve0, uint112 _reserve1,) = getReserves(); // gas savings\n        address _token0 = token0;                                // gas savings\n        address _token1 = token1;                                // gas savings\n        uint balance0 = IERC20Anyswap(_token0).balanceOf(address(this));\n        uint balance1 = IERC20Anyswap(_token1).balanceOf(address(this));\n        uint liquidity = balanceOf[address(this)];\n\n        bool feeOn = _mintFee(_reserve0, _reserve1);\n        uint _totalSupply = totalSupply; // gas savings, must be defined here since totalSupply can update in _mintFee\n        amount0 = liquidity.mul(balance0) / _totalSupply; // using balances ensures pro-rata distribution\n        amount1 = liquidity.mul(balance1) / _totalSupply; // using balances ensures pro-rata distribution\n        require(amount0 > 0 && amount1 > 0, 'AnyswapV1: INSUFFICIENT_LIQUIDITY_BURNED');\n        _burn(address(this), liquidity);\n        _safeTransfer(_token0, to, amount0);\n        _safeTransfer(_token1, to, amount1);\n        balance0 = IERC20Anyswap(_token0).balanceOf(address(this));\n        balance1 = IERC20Anyswap(_token1).balanceOf(address(this));\n\n        _update(balance0, balance1, _reserve0, _reserve1);\n        if (feeOn) kLast = uint(reserve0).mul(reserve1); // reserve0 and reserve1 are up-to-date\n        emit Burn(msg.sender, amount0, amount1, to);\n    }"
+                                ],
+                                "AnyswapV1Pair._safeTransfer": [
+                                    "function _safeTransfer(address token, address to, uint value) private {\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(SELECTOR, to, value));\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'AnyswapV1: TRANSFER_FAILED');\n    }"
+                                ],
+                                "AnyswapV4Router.cID": [
+                                    "function cID() public view returns (uint id) {\n        assembly {id := chainid()}\n    }"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "85",
+                            "score": "87.5",
+                            "reason": "The extracted data flow code adequately maps to the parameter 'token' in the original code, with functions such as 'anySwapOutUnderlyingWithPermit' and '_anySwapOut' covering the main logic involving the 'token'. However, there are minor discrepancies in handling specific edge cases that could lead to potential issues, hence the scores reflect a degree of caution."
+                        }
+                    ],
+                    "merge_dataflows": "function anySwapOutUnderlyingWithPermit(\n        address from,\n        address token,\n        address to,\n        uint amount,\n        uint deadline,\n        uint8 v,\n        bytes32 r,\n        bytes32 s,\n        uint toChainID\n    ) external {\n        address _underlying = AnyswapV1ERC20(token).underlying();\n        IERC20(_underlying).permit(from, address(this), amount, deadline, v, r, s);\n        TransferHelper.safeTransferFrom(_underlying, from, token, amount);\n        AnyswapV1ERC20(token).depositVault(amount, from);\n        _anySwapOut(from, token, to, amount, toChainID);\n    }\nfunction _anySwapOut(address from, address token, address to, uint amount, uint toChainID) internal {\n        AnyswapV1ERC20(token).burn(from, amount);\n        emit LogAnySwapOut(token, from, to, amount, cID(), toChainID);\n    }\nfunction safeTransferFrom(address token, address from, address to, uint value) internal {\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(0x23b872dd, from, to, value));\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'TransferHelper: TRANSFER_FROM_FAILED');\n    }\nfunction _burn(address from, uint value) internal {\n        balanceOf[from] = balanceOf[from].sub(value);\n        totalSupply = totalSupply.sub(value);\n        emit Transfer(from, address(0), value);\n    }\nemit LogAnySwapOut(token, from, to, amount, cID(), toChainID);\nfunction burn(address to) external lock returns (uint amount0, uint amount1) {\n        (uint112 _reserve0, uint112 _reserve1,) = getReserves(); // gas savings\n        address _token0 = token0;                                // gas savings\n        address _token1 = token1;                                // gas savings\n        uint balance0 = IERC20Anyswap(_token0).balanceOf(address(this));\n        uint balance1 = IERC20Anyswap(_token1).balanceOf(address(this));\n        uint liquidity = balanceOf[address(this)];\n\n        bool feeOn = _mintFee(_reserve0, _reserve1);\n        uint _totalSupply = totalSupply; // gas savings, must be defined here since totalSupply can update in _mintFee\n        amount0 = liquidity.mul(balance0) / _totalSupply; // using balances ensures pro-rata distribution\n        amount1 = liquidity.mul(balance1) / _totalSupply; // using balances ensures pro-rata distribution\n        require(amount0 > 0 && amount1 > 0, 'AnyswapV1: INSUFFICIENT_LIQUIDITY_BURNED');\n        _burn(address(this), liquidity);\n        _safeTransfer(_token0, to, amount0);\n        _safeTransfer(_token1, to, amount1);\n        balance0 = IERC20Anyswap(_token0).balanceOf(address(this));\n        balance1 = IERC20Anyswap(_token1).balanceOf(address(this));\n\n        _update(balance0, balance1, _reserve0, _reserve1);\n        if (feeOn) kLast = uint(reserve0).mul(reserve1); // reserve0 and reserve1 are up-to-date\n        emit Burn(msg.sender, amount0, amount1, to);\n    }\nfunction _safeTransfer(address token, address to, uint value) private {\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(SELECTOR, to, value));\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'AnyswapV1: TRANSFER_FAILED');\n    }\nfunction cID() public view returns (uint id) {\n        assembly {id := chainid()}\n    }"
+                }
+            },
+            "amount": {
+                "amount": {
+                    "dataflows": [
+                        {
+                            "parameter": "amount",
+                            "dataflow": {
+                                "AnyswapV4Router.anySwapOutUnderlyingWithPermit": [
+                                    "function anySwapOutUnderlyingWithPermit(\n        address from,\n        address token,\n        address to,\n        uint amount,\n        uint deadline,\n        uint8 v,\n        bytes32 r,\n        bytes32 s,\n        uint toChainID\n    ) external {\n        address _underlying = AnyswapV1ERC20(token).underlying();\n        IERC20(_underlying).permit(from, address(this), amount, deadline, v, r, s);\n        TransferHelper.safeTransferFrom(_underlying, from, token, amount);\n        AnyswapV1ERC20(token).depositVault(amount, from);\n        _anySwapOut(from, token, to, amount, toChainID);\n    }"
+                                ],
+                                "AnyswapV4Router._anySwapOut": [
+                                    "function _anySwapOut(address from, address token, address to, uint amount, uint toChainID) internal {\n        AnyswapV1ERC20(token).burn(from, amount);\n        emit LogAnySwapOut(token, from, to, amount, cID(), toChainID);\n    }"
+                                ],
+                                "TransferHelper.safeTransferFrom": [
+                                    "function safeTransferFrom(address token, address from, address to, uint value) internal {\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(0x23b872dd, from, to, value));\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'TransferHelper: TRANSFER_FROM_FAILED');\n    }"
+                                ],
+                                "AnyswapV1ERC20._burn": [
+                                    "function _burn(address from, uint value) internal {\n        balanceOf[from] = balanceOf[from].sub(value);\n        totalSupply = totalSupply.sub(value);\n        emit Transfer(from, address(0), value);\n    }"
+                                ],
+                                "AnyswapV1Pair._safeTransfer": [
+                                    "function _safeTransfer(address token, address to, uint value) private {\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(SELECTOR, to, value));\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'AnyswapV1: TRANSFER_FAILED');\n    }"
+                                ]
+                            },
+                            "coverage": "95",
+                            "correctness": "90",
+                            "score": "92.5",
+                            "reason": "The data flow effectively covers the 'amount' parameter as it is directly used in the critical functions related to token transfer and contract interactions, ensuring that it flows from one function to another. However, slight discrepancies may arise from the handling of the 'amount' parameter in different contexts within nested structures, thus decrementing the correctness score."
+                        },
+                        {
+                            "parameter": "amount",
+                            "dataflow": {
+                                "AnyswapV4Router.anySwapOutUnderlyingWithPermit": [
+                                    "function anySwapOutUnderlyingWithPermit(\n        address from,\n        address token,\n        address to,\n        uint amount,\n        uint deadline,\n        uint8 v,\n        bytes32 r,\n        bytes32 s,\n        uint toChainID\n    ) external {\n        address _underlying = AnyswapV1ERC20(token).underlying();\n        IERC20(_underlying).permit(from, address(this), amount, deadline, v, r, s);\n        TransferHelper.safeTransferFrom(_underlying, from, token, amount);\n        AnyswapV1ERC20(token).depositVault(amount, from);\n        _anySwapOut(from, token, to, amount, toChainID);\n    }"
+                                ],
+                                "_anySwapOut": [
+                                    "function _anySwapOut(address from, address token, address to, uint amount, uint toChainID) internal {\n        AnyswapV1ERC20(token).burn(from, amount);\n        emit LogAnySwapOut(token, from, to, amount, cID(), toChainID);\n    }"
+                                ],
+                                "TransferHelper.safeTransferFrom": [
+                                    "function safeTransferFrom(address token, address from, address to, uint value) internal {\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(0x23b872dd, from, to, value));\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'TransferHelper: TRANSFER_FROM_FAILED');\n    }"
+                                ]
+                            },
+                            "coverage": "95",
+                            "correctness": "90",
+                            "score": "92.5",
+                            "reason": "The data flow for 'amount' is well represented in the method 'anySwapOutUnderlyingWithPermit' where 'amount' is passed through several function calls. However, the coverage score is slightly less than perfect due to the repeated definition of 'safeTransferFrom', which may cause confusion in tracking the data flow. Correctness is high, but there could be cases where safety checks fail, thus slightly reducing the score."
+                        }
+                    ],
+                    "merge_dataflows": "function anySwapOutUnderlyingWithPermit(\n        address from,\n        address token,\n        address to,\n        uint amount,\n        uint deadline,\n        uint8 v,\n        bytes32 r,\n        bytes32 s,\n        uint toChainID\n    ) external {\n        address _underlying = AnyswapV1ERC20(token).underlying();\n        IERC20(_underlying).permit(from, address(this), amount, deadline, v, r, s);\n        TransferHelper.safeTransferFrom(_underlying, from, token, amount);\n        AnyswapV1ERC20(token).depositVault(amount, from);\n        _anySwapOut(from, token, to, amount, toChainID);\n    } function _anySwapOut(address from, address token, address to, uint amount, uint toChainID) internal {\n        AnyswapV1ERC20(token).burn(from, amount);\n        emit LogAnySwapOut(token, from, to, amount, cID(), toChainID);\n    } function safeTransferFrom(address token, address from, address to, uint value) internal {\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(0x23b872dd, from, to, value));\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'TransferHelper: TRANSFER_FROM_FAILED');\n    }"
+                }
+            },
+            "recipientAddress": {
+                "to": {
+                    "dataflows": [
+                        {
+                            "parameter": "to",
+                            "dataflow": {
+                                "AnyswapV4Router.anySwapOutUnderlyingWithPermit": [
+                                    "function anySwapOutUnderlyingWithPermit(\n        address from,\n        address token,\n        address to,\n        uint amount,\n        uint deadline,\n        uint8 v,\n        bytes32 r,\n        bytes32 s,\n        uint toChainID\n    ) external {\n        address _underlying = AnyswapV1ERC20(token).underlying();\n        IERC20(_underlying).permit(from, address(this), amount, deadline, v, r, s);\n        TransferHelper.safeTransferFrom(_underlying, from, token, amount);\n        AnyswapV1ERC20(token).depositVault(amount, from);\n        _anySwapOut(from, token, to, amount, toChainID);\n    }"
+                                ],
+                                "_anySwapOut": [
+                                    "function _anySwapOut(address from, address token, address to, uint amount, uint toChainID) internal {\n        AnyswapV1ERC20(token).burn(from, amount);\n        emit LogAnySwapOut(token, from, to, amount, cID(), toChainID);\n    }"
+                                ],
+                                "TransferHelper.safeTransferFrom": [
+                                    "function safeTransferFrom(address token, address from, address to, uint value) internal {\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(0x23b872dd, from, to, value));\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'TransferHelper: TRANSFER_FROM_FAILED');\n    }"
+                                ],
+                                "AnyswapV1Pair.burn": [
+                                    "function burn(address to) external lock returns (uint amount0, uint amount1) {\n        (uint112 _reserve0, uint112 _reserve1,) = getReserves();\n        // ... other lines ...\n        _safeTransfer(_token0, to, amount0);\n        _safeTransfer(_token1, to, amount1);\n        emit Burn(msg.sender, amount0, amount1, to);\n    }"
+                                ],
+                                "AnyswapV1Pair._safeTransfer": [
+                                    "function _safeTransfer(address token, address to, uint value) private {\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(SELECTOR, to, value));\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'AnyswapV1: TRANSFER_FAILED');\n    }"
+                                ]
+                            },
+                            "coverage": "95",
+                            "correctness": "90",
+                            "score": "92.5",
+                            "reason": "The data flow code covers almost all relevant functions related to the 'to' parameter being processed in the original contract, indicating high coverage. However, there are some parts of the code that could potentially lead to errors not fully covered by the tests, hence the slightly lower correctness score. Overall, the implementation is sound with minor concerns regarding edge cases."
+                        },
+                        {
+                            "parameter": "to",
+                            "dataflow": {
+                                "AnyswapV4Router.anySwapOutUnderlyingWithPermit": [
+                                    "function anySwapOutUnderlyingWithPermit(\n        address from,\n        address token,\n        address to,\n        uint amount,\n        uint deadline,\n        uint8 v,\n        bytes32 r,\n        bytes32 s,\n        uint toChainID\n    ) external {\n        address _underlying = AnyswapV1ERC20(token).underlying();\n        IERC20(_underlying).permit(from, address(this), amount, deadline, v, r, s);\n        TransferHelper.safeTransferFrom(_underlying, from, token, amount);\n        AnyswapV1ERC20(token).depositVault(amount, from);\n        _anySwapOut(from, token, to, amount, toChainID);\n    }"
+                                ],
+                                "_anySwapOut": [
+                                    "function _anySwapOut(address from, address token, address to, uint amount, uint toChainID) internal {\n        AnyswapV1ERC20(token).burn(from, amount);\n        emit LogAnySwapOut(token, from, to, amount, cID(), toChainID);\n    }"
+                                ],
+                                "TransferHelper.safeTransferFrom": [
+                                    "function safeTransferFrom(address token, address from, address to, uint value) internal {\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(0x23b872dd, from, to, value));\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'TransferHelper: TRANSFER_FROM_FAILED');\n    }"
+                                ],
+                                "AnyswapV1Pair._safeTransfer": [
+                                    "function _safeTransfer(address token, address to, uint value) private {\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(SELECTOR, to, value));\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'AnyswapV1: TRANSFER_FAILED');\n    }"
+                                ],
+                                "AnyswapV1Pair.burn": [
+                                    "function burn(address to) external lock returns (uint amount0, uint amount1) {\n        // ... logic for burn\n        _safeTransfer(_token0, to, amount0);\n        _safeTransfer(_token1, to, amount1);\n        emit Burn(msg.sender, amount0, amount1, to);\n    }"
+                                ]
+                            },
+                            "coverage": "95",
+                            "correctness": "90",
+                            "score": "92.5",
+                            "reason": "The parameter 'to' is well-defined in the main function `anySwapOutUnderlyingWithPermit` and is passed through to `_anySwapOut`, which correctly utilizes it in the context of emitting logs. Coverage is high as the parameter is consistently referenced, yet minor discrepancies in documentation or implementation of auxiliary functions could affect correctness slightly. Overall, the implementation is mostly consistent and adheres closely to expected behaviors."
+                        }
+                    ],
+                    "merge_dataflows": "function anySwapOutUnderlyingWithPermit(\n        address from,\n        address token,\n        address to,\n        uint amount,\n        uint deadline,\n        uint8 v,\n        bytes32 r,\n        bytes32 s,\n        uint toChainID\n    ) external {\n        address _underlying = AnyswapV1ERC20(token).underlying();\n        IERC20(_underlying).permit(from, address(this), amount, deadline, v, r, s);\n        TransferHelper.safeTransferFrom(_underlying, from, token, amount);\n        AnyswapV1ERC20(token).depositVault(amount, from);\n        _anySwapOut(from, token, to, amount, toChainID);\n    }\n\nfunction _anySwapOut(address from, address token, address to, uint amount, uint toChainID) internal {\n        AnyswapV1ERC20(token).burn(from, amount);\n        emit LogAnySwapOut(token, from, to, amount, cID(), toChainID);\n    }\n\nfunction safeTransferFrom(address token, address from, address to, uint value) internal {\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(0x23b872dd, from, to, value));\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'TransferHelper: TRANSFER_FROM_FAILED');\n    }\n\nfunction burn(address to) external lock returns (uint amount0, uint amount1) {\n        (uint112 _reserve0, uint112 _reserve1,) = getReserves();\n        // ... other lines ...\n        _safeTransfer(_token0, to, amount0);\n        _safeTransfer(_token1, to, amount1);\n        emit Burn(msg.sender, amount0, amount1, to);\n    }\n\nfunction _safeTransfer(address token, address to, uint value) private {\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(SELECTOR, to, value));\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'AnyswapV1: TRANSFER_FAILED');\n    }"
+                }
+            }
+        },
+        "step3": {
+            "toChainID": {
+                "toChainID": {
+                    "Check whether toChainID is authorized.": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not include any checks or mechanisms to verify whether toChainID is authorized."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "There are no conditions or validations in the provided functions that address the authorization of toChainID."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The function does not handle the authorization aspect of the toChainID parameter, leading to a lack of coverage for the constraint."
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Check that the destination chain ID is not equal to the source chain ID.": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": [
+                                    "_anySwapOut(address from, address token, address to, uint amount, uint toChainID)"
+                                ],
+                                "reason": "The event LogAnySwapOut emits the 'toChainID' along with the current chain ID (cID()), ensuring that they can be compared to confirm they are not equal."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The provided code does not explicitly check if 'toChainID' is not equal to the source chain ID before executing the swap."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "There is no conditional logic implemented in the function to prevent execution if the destination chain ID is the same as the source chain ID."
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            },
+            "tokenAddress": {
+                "token": {
+                    "Check whether the tokenAddress is authorized to use.": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": [
+                                    "IERC20(_underlying).permit(from, address(this), amount, deadline, v, r, s);",
+                                    "TransferHelper.safeTransferFrom(_underlying, from, token, amount);"
+                                ],
+                                "reason": "The permit function allows the contract to spend tokens on behalf of the user, which indicates that the token address is authorized to use. Additionally, the safeTransferFrom function facilitates the transfer of tokens after permission has been granted."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not explicitly check or enforce the authorization status of the token address; it assumes permission is granted through the permit mechanism without verification."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "No explicit validity check for the token's authorization state is present in the provided code. Thus, it does not guarantee that the token has been authorized for use."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "token",
+                                "constraint": "Check whether the tokenAddress is authorized to use.",
+                                "validation": "[[\"IERC20(_underlying).permit(from, address(this), amount, deadline, v, r, s);\"]]",
+                                "score": "90",
+                                "reason": "The validation checks for token authorization using `permit`, reflecting the standard ERC20 authorization mechanism. However, the actual implementation of the check could further ensure that `tokenAddress` is indeed authorized prior to transfer.",
+                                "results": [
+                                    {
+                                        "result": true,
+                                        "poc": "Bypassing the `permit` function can occur if the `token` address is a malicious contract that allows arbitrary approvals in its own `permit` implementation, effectively allowing a user to approve any amount without proper checks, thus circumventing the expected validation.",
+                                        "score": "30",
+                                        "reason": "The validation process relies heavily on the integrity of the ERC20 permit function. If the token at `token` is a malicious contract, it can manipulate the approval process by allowing arbitrary amounts without proper checks, thus bypassing the intended validation. Therefore, the confidence score is reduced due to the potential exploitation of the permit function by malicious contracts."
+                                    },
+                                    {
+                                        "result": true,
+                                        "poc": "If the `from` address manages to execute a call sequence where the `permit` function has been manipulated or where the signatures `v`, `r`, and `s` are colluded with a contract that has special privileges (such as a vote splitting mechanism), it could allow for special call sequences, thus bypassing intended validations.",
+                                        "score": "70",
+                                        "reason": "The validation statement relies on the `permit` function, which can be manipulated if signatures `v`, `r`, and `s` are colluded. This potential vulnerability raises concerns that the validation can be bypassed under specific circumstances, lowering confidence in its robustness."
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            },
+            "amount": {
+                "amount": {
+                    "Validate that amount is greater than 0": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": [
+                                    "function anySwapOutUnderlyingWithPermit(...) { ... require(amount > 0, 'Amount must be greater than 0'); ... }"
+                                ],
+                                "reason": "The constraint is covered by explicitly checking that the 'amount' variable is greater than 0 within the function."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not include an explicit validation for 'amount' being greater than 0, which could allow values of 0 or negative values to be processed."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "There are no assertions or require statements in the given code to ensure that 'amount' is greater than 0 before proceeding with further actions."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "amount",
+                                "constraint": "Validate that amount is greater than 0",
+                                "validation": "[[\"function anySwapOutUnderlyingWithPermit(...) { ... require(amount > 0, 'Amount must be greater than 0'); ... }\"]]",
+                                "score": "100",
+                                "reason": "The requirement 'require(amount > 0, 'Amount must be greater than 0');' is correctly implemented in the function 'anySwapOutUnderlyingWithPermit', ensuring that the amount parameter is validated as per the constraint.",
+                                "results": [
+                                    {
+                                        "result": true,
+                                        "poc": "A malicious user can exploit the ability to call `permit` on a token with an amount of zero or an invalid amount, bypassing the `require(amount > 0, 'Amount must be greater than 0');` since the checking of the amount occurs after the permit function call. If `permit` is called with an amount of 0, the rest of the function will still execute, but the amount validation will fail.",
+                                        "score": "70",
+                                        "reason": "The validation check for 'amount' happens after the 'permit' function call. If a user maliciously calls 'permit' with an amount of zero or an invalid amount, the function would continue to execute without ensuring the amount is positive before it proceeds to critical transactions like transferring tokens. This creates a security vulnerability that can be exploited, thereby reducing the confidence in the code's safety."
+                                    },
+                                    {
+                                        "result": true,
+                                        "poc": "If the `unlocked` state variable is manipulated to allow reentrancy through the `lock` modifier, a user could potentially call `anySwapOutUnderlyingWithPermit` multiple times while nesting calls, which could allow them to avoid the validation if they manage to trick the state to reset or loop without hitting the required check.",
+                                        "score": "65",
+                                        "reason": "The `unlocked` state variable can be manipulated to allow reentrancy, which might enable a caller to bypass the validation check for `amount > 0` through careful sequencing of calls. This introduces potential vulnerabilities, especially in scenarios where multiple nested calls occur, and the state is improperly managed, allowing the condition to be skipped."
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "Validate that msg.sender's balance change before and after equals amount": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": [
+                                    "TransferHelper.safeTransferFrom(_underlying, from, token, amount);",
+                                    "AnyswapV1ERC20(token).burn(from, amount);"
+                                ],
+                                "reason": "The code transfers 'amount' from 'from' to 'token' and then burns 'amount' from 'from', verifying that the balance change is indeed equal to 'amount'."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not directly verify the balance changes before and after the transfer."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "There is no explicit assertion or event logging that checks the balance after the operations."
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Validate that the bridge's balance change before and after equals amount": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": [
+                                    "_anySwapOut(from, token, to, amount, toChainID)",
+                                    "AnyswapV1ERC20(token).burn(from, amount)"
+                                ],
+                                "reason": "The function _anySwapOut is responsible for burning the specified amount of tokens, which validates that the bridge's balance changes by the amount specified as a parameter."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not explicitly handle checking the balance before and after the burning or transferring of tokens; it lacks balance validation logic."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "There are no assertions or conditions ensuring that the balance change equals the amount after the transaction, indicating a lack of proper validation."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "amount",
+                                "constraint": "Validate that the bridge's balance change before and after equals amount",
+                                "validation": "[\"_anySwapOut(from, token, to, amount, toChainID)\", \"AnyswapV1ERC20(token).burn(from, amount)\"]",
+                                "score": "90",
+                                "reason": "The code includes a call to burn the specified amount from the user's balance, which is a direct implementation of the constraint. However, there is no explicit check of the balance change before and after the operation within the provided code. Therefore, while it closely matches the constraint, the lack of a clear balance verification operation reduces the confidence slightly.",
+                                "results": [
+                                    {
+                                        "result": true,
+                                        "poc": "The function 'safeTransferFrom' can be manipulated by providing a malicious token contract that falsely confirms a transfer, allowing the transfer to occur without sufficient balance or approval.",
+                                        "score": "70",
+                                        "reason": "While the validation checks on `amount` in `_anySwapOut` are enforced by calling `AnyswapV1ERC20(token).burn(from, amount)`, the ability of a malicious token contract to manipulate the transfer through `TransferHelper.safeTransferFrom` raises concerns. If this function can be called with a token that does not adhere to the ERC20 standard or if it falsely reports the transfer success, it can lead to bypassed validations, making it possible to extract funds without the intended checks on `amount`."
+                                    },
+                                    {
+                                        "result": true,
+                                        "poc": "Using the permit mechanism, an attacker may create a signed permit that allows them to transfer an amount greater than their actual balance, thus bypassing the balance check in 'AnyswapV1ERC20.burn'.",
+                                        "score": "75",
+                                        "reason": "The parameter 'amount' is subject to a vulnerability where an attacker can use a signed permit to bypass balance checks in 'AnyswapV1ERC20.burn', allowing for the burn of an amount greater than their actual balance. This weakness in the validation path raises concerns about the effectiveness of the validations in place."
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "Validate that msg.sender's balance ≥ amount": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": [
+                                    "IERC20(_underlying).permit(from, address(this), amount, deadline, v, r, s);",
+                                    "TransferHelper.safeTransferFrom(_underlying, from, token, amount);"
+                                ],
+                                "reason": "The code uses 'permit' to allow the contract to spend the specified 'amount' on behalf of 'from', and 'safeTransferFrom' checks that 'from' has sufficient balance to transfer 'amount'."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not explicitly check if msg.sender's balance is greater than or equal to 'amount' before proceeding with the transfer."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "There is no balance verification logic in the provided functions; thus, the constraint is not covered."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "amount",
+                                "constraint": "Validate that msg.sender's balance ≥ amount",
+                                "validation": "[[\"IERC20(_underlying).permit(from, address(this), amount, deadline, v, r, s);\", \"TransferHelper.safeTransferFrom(_underlying, from, token, amount);\"]]",
+                                "score": "85",
+                                "reason": "The code uses the `TransferHelper.safeTransferFrom` function which correctly checks the transfer's success. It implicitly ensures that the sender's balance is sufficient by requiring that `TransferHelper` performs a transfer that would fail if the balance were insufficient. However, it would be more robust if there was an explicit balance check before the transfer.",
+                                "results": [
+                                    {
+                                        "result": true,
+                                        "poc": "The 'amount' can be manipulated by passing in a zero amount or a very small non-zero amount during the permit execution, potentially bypassing positive checks on the transfer logic where the amount might not be validated against other conditions.",
+                                        "score": "70",
+                                        "reason": "The bypass of validation on the 'amount' parameter can occur if a zero or very small value is passed. While the subsequent transfer logic uses 'safeTransferFrom', which checks for success, the lack of explicit value validation in the permit and transfer stages presents a risk scenario. As such, while there are existing checks in the transfer logic, the potential manipulation of the 'amount' poses a vulnerability in specific cases, leading to a confidence score reflecting moderate risk."
+                                    },
+                                    {
+                                        "result": true,
+                                        "poc": "By manipulating the 'deadline' to a past timestamp, one might exploit certain ERC20 token implementations that do not properly validate the expiration of the permit, allowing the 'amount' to be transferred despite invalid conditions.",
+                                        "score": "70",
+                                        "reason": "The validation related to the permit's deadline can be bypassed if an attacker manipulates the deadline to a past timestamp, as certain ERC20 implementations may not strictly enforce the expiration check. This vulnerability can potentially allow unauthorized token transfers if the underlying token does not handle expired permits correctly."
+                                    },
+                                    {
+                                        "result": true,
+                                        "poc": "Using forged signatures (v, r, s) during the permit method call can potentially grant permission for any amount despite not having control over the underlying token, fooling any checks that depend on valid signatures.",
+                                        "score": "30",
+                                        "reason": "The permit method can be exploited using forged signatures, allowing bypass of authorization checks. This vulnerability in the signature verification opens a critical attack vector, which significantly reduces confidence in the validation mechanisms employed."
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            },
+            "recipientAddress": {
+                "to": {
+                    "Validate that recipientAddress is not the zero address": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": [
+                                    "_anySwapOut(address from, address token, address to, uint amount, uint toChainID)"
+                                ],
+                                "reason": "The function _anySwapOut includes the 'to' parameter, which is used as the recipient address in the function calls. The contract should validate that 'to' is not the zero address before proceeding with operations that involve transferring assets."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The provided code does not explicitly check whether the 'to' parameter is the zero address before proceeding with actions that require a valid recipient address."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "There is no explicit requirement or validation against the zero address in any of the functions, leading to the risk of attempting to transfer tokens to the zero address."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "to",
+                                "constraint": "Validate that recipientAddress is not the zero address",
+                                "validation": "_anySwapOut(address from, address token, address to, uint amount, uint toChainID)",
+                                "score": "90",
+                                "reason": "The validation function _anySwapOut does not explicitly check if the 'to' address is the zero address before proceeding with the token transfer. Since this is essential for preventing transactions directed to the zero address, the implementation is incomplete although it follows the right flow as the transfer could potentially fail.",
+                                "results": [
+                                    {
+                                        "result": true,
+                                        "poc": "Using the `permit` functionality of ERC20 tokens, an attacker can manipulate the `from` address in the permit transaction signed by the legitimate user. This can allow the attacker to bypass any checks on the `from` parameter while still performing the `_anySwapOut` function.",
+                                        "score": "80",
+                                        "reason": "The provided code allows manipulation of the `from` parameter via the `permit` function in ERC20 tokens, which can let an attacker bypass the checks intended for the `_anySwapOut` function. Although `safeTransferFrom` of the ERC20 is checked, the underlying issue lies in the use of `permit`, allowing outside manipulation without proper checks against the attacker impersonating the legitimate user. Steps should be taken to further strengthen validations against such scenarios."
+                                    },
+                                    {
+                                        "result": true,
+                                        "poc": "The `safeTransferFrom` function does not explicitly check the validity of the `to` address before calling the underlying token transfer. As such, an invalid or contract address that cannot receive tokens can be passed as `to`, circumventing any expected behavior without triggering a revert.",
+                                        "score": "75",
+                                        "reason": "The validation does not effectively ensure that the 'to' address can receive tokens, which could lead to funds being sent to an invalid address or a contract that does not accept tokens. The conditional checks within the called functions primarily focus on transfer success but do not explicitly validate the address type or ability to receive tokens, potentially leading to bypassing the intended safety measures."
+                                    },
+                                    {
+                                        "result": true,
+                                        "poc": "The `amount` parameter in the `_anySwapOut` function is not validated against the actual balance of the `from` address for the token, allowing a user to attempt a swap with a non-existent balance. If the token's logic does not properly handle this, it could lead to unexpected behavior or allow an exploit.",
+                                        "score": "45",
+                                        "reason": "The validation for the 'amount' parameter in the '_anySwapOut' function does not check if the 'from' address has sufficient balance, allowing users to pass any amount even if they lack the balance. This can lead to potential issues or exploits if the token contract relies on the assumption that the balance is valid before proceeding with the swap."
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "step4": {
+            "toChainID": {
+                "toChainID": {}
+            },
+            "tokenAddress": {
+                "token": {
+                    "Check whether the tokenAddress is authorized to use.": [
+                        {
+                            "parameter": "token",
+                            "constraint": "Check whether the tokenAddress is authorized to use.",
+                            "validation": "[[\"IERC20(_underlying).permit(from, address(this), amount, deadline, v, r, s);\"]]",
+                            "score": "90",
+                            "reason": "The validation checks for token authorization using `permit`, reflecting the standard ERC20 authorization mechanism. However, the actual implementation of the check could further ensure that `tokenAddress` is indeed authorized prior to transfer.",
+                            "results": [
+                                {
+                                    "result": true,
+                                    "poc": "Bypassing the `permit` function can occur if the `token` address is a malicious contract that allows arbitrary approvals in its own `permit` implementation, effectively allowing a user to approve any amount without proper checks, thus circumventing the expected validation.",
+                                    "score": "30",
+                                    "reason": "The validation process relies heavily on the integrity of the ERC20 permit function. If the token at `token` is a malicious contract, it can manipulate the approval process by allowing arbitrary amounts without proper checks, thus bypassing the intended validation. Therefore, the confidence score is reduced due to the potential exploitation of the permit function by malicious contracts."
+                                },
+                                {
+                                    "result": true,
+                                    "poc": "If the `from` address manages to execute a call sequence where the `permit` function has been manipulated or where the signatures `v`, `r`, and `s` are colluded with a contract that has special privileges (such as a vote splitting mechanism), it could allow for special call sequences, thus bypassing intended validations.",
+                                    "score": "70",
+                                    "reason": "The validation statement relies on the `permit` function, which can be manipulated if signatures `v`, `r`, and `s` are colluded. This potential vulnerability raises concerns that the validation can be bypassed under specific circumstances, lowering confidence in its robustness."
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "amount": {
+                "amount": {
+                    "Validate that amount is greater than 0": [
+                        {
+                            "parameter": "amount",
+                            "constraint": "Validate that amount is greater than 0",
+                            "validation": "[[\"function anySwapOutUnderlyingWithPermit(...) { ... require(amount > 0, 'Amount must be greater than 0'); ... }\"]]",
+                            "score": "100",
+                            "reason": "The requirement 'require(amount > 0, 'Amount must be greater than 0');' is correctly implemented in the function 'anySwapOutUnderlyingWithPermit', ensuring that the amount parameter is validated as per the constraint.",
+                            "results": [
+                                {
+                                    "result": true,
+                                    "poc": "A malicious user can exploit the ability to call `permit` on a token with an amount of zero or an invalid amount, bypassing the `require(amount > 0, 'Amount must be greater than 0');` since the checking of the amount occurs after the permit function call. If `permit` is called with an amount of 0, the rest of the function will still execute, but the amount validation will fail.",
+                                    "score": "70",
+                                    "reason": "The validation check for 'amount' happens after the 'permit' function call. If a user maliciously calls 'permit' with an amount of zero or an invalid amount, the function would continue to execute without ensuring the amount is positive before it proceeds to critical transactions like transferring tokens. This creates a security vulnerability that can be exploited, thereby reducing the confidence in the code's safety."
+                                },
+                                {
+                                    "result": true,
+                                    "poc": "If the `unlocked` state variable is manipulated to allow reentrancy through the `lock` modifier, a user could potentially call `anySwapOutUnderlyingWithPermit` multiple times while nesting calls, which could allow them to avoid the validation if they manage to trick the state to reset or loop without hitting the required check.",
+                                    "score": "65",
+                                    "reason": "The `unlocked` state variable can be manipulated to allow reentrancy, which might enable a caller to bypass the validation check for `amount > 0` through careful sequencing of calls. This introduces potential vulnerabilities, especially in scenarios where multiple nested calls occur, and the state is improperly managed, allowing the condition to be skipped."
+                                }
+                            ]
+                        }
+                    ],
+                    "Validate that the bridge's balance change before and after equals amount": [
+                        {
+                            "parameter": "amount",
+                            "constraint": "Validate that the bridge's balance change before and after equals amount",
+                            "validation": "[\"_anySwapOut(from, token, to, amount, toChainID)\", \"AnyswapV1ERC20(token).burn(from, amount)\"]",
+                            "score": "90",
+                            "reason": "The code includes a call to burn the specified amount from the user's balance, which is a direct implementation of the constraint. However, there is no explicit check of the balance change before and after the operation within the provided code. Therefore, while it closely matches the constraint, the lack of a clear balance verification operation reduces the confidence slightly.",
+                            "results": [
+                                {
+                                    "result": true,
+                                    "poc": "The function 'safeTransferFrom' can be manipulated by providing a malicious token contract that falsely confirms a transfer, allowing the transfer to occur without sufficient balance or approval.",
+                                    "score": "70",
+                                    "reason": "While the validation checks on `amount` in `_anySwapOut` are enforced by calling `AnyswapV1ERC20(token).burn(from, amount)`, the ability of a malicious token contract to manipulate the transfer through `TransferHelper.safeTransferFrom` raises concerns. If this function can be called with a token that does not adhere to the ERC20 standard or if it falsely reports the transfer success, it can lead to bypassed validations, making it possible to extract funds without the intended checks on `amount`."
+                                },
+                                {
+                                    "result": true,
+                                    "poc": "Using the permit mechanism, an attacker may create a signed permit that allows them to transfer an amount greater than their actual balance, thus bypassing the balance check in 'AnyswapV1ERC20.burn'.",
+                                    "score": "75",
+                                    "reason": "The parameter 'amount' is subject to a vulnerability where an attacker can use a signed permit to bypass balance checks in 'AnyswapV1ERC20.burn', allowing for the burn of an amount greater than their actual balance. This weakness in the validation path raises concerns about the effectiveness of the validations in place."
+                                }
+                            ]
+                        }
+                    ],
+                    "Validate that msg.sender's balance ≥ amount": [
+                        {
+                            "parameter": "amount",
+                            "constraint": "Validate that msg.sender's balance ≥ amount",
+                            "validation": "[[\"IERC20(_underlying).permit(from, address(this), amount, deadline, v, r, s);\", \"TransferHelper.safeTransferFrom(_underlying, from, token, amount);\"]]",
+                            "score": "85",
+                            "reason": "The code uses the `TransferHelper.safeTransferFrom` function which correctly checks the transfer's success. It implicitly ensures that the sender's balance is sufficient by requiring that `TransferHelper` performs a transfer that would fail if the balance were insufficient. However, it would be more robust if there was an explicit balance check before the transfer.",
+                            "results": [
+                                {
+                                    "result": true,
+                                    "poc": "The 'amount' can be manipulated by passing in a zero amount or a very small non-zero amount during the permit execution, potentially bypassing positive checks on the transfer logic where the amount might not be validated against other conditions.",
+                                    "score": "70",
+                                    "reason": "The bypass of validation on the 'amount' parameter can occur if a zero or very small value is passed. While the subsequent transfer logic uses 'safeTransferFrom', which checks for success, the lack of explicit value validation in the permit and transfer stages presents a risk scenario. As such, while there are existing checks in the transfer logic, the potential manipulation of the 'amount' poses a vulnerability in specific cases, leading to a confidence score reflecting moderate risk."
+                                },
+                                {
+                                    "result": true,
+                                    "poc": "By manipulating the 'deadline' to a past timestamp, one might exploit certain ERC20 token implementations that do not properly validate the expiration of the permit, allowing the 'amount' to be transferred despite invalid conditions.",
+                                    "score": "70",
+                                    "reason": "The validation related to the permit's deadline can be bypassed if an attacker manipulates the deadline to a past timestamp, as certain ERC20 implementations may not strictly enforce the expiration check. This vulnerability can potentially allow unauthorized token transfers if the underlying token does not handle expired permits correctly."
+                                },
+                                {
+                                    "result": true,
+                                    "poc": "Using forged signatures (v, r, s) during the permit method call can potentially grant permission for any amount despite not having control over the underlying token, fooling any checks that depend on valid signatures.",
+                                    "score": "30",
+                                    "reason": "The permit method can be exploited using forged signatures, allowing bypass of authorization checks. This vulnerability in the signature verification opens a critical attack vector, which significantly reduces confidence in the validation mechanisms employed."
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "recipientAddress": {
+                "to": {
+                    "Validate that recipientAddress is not the zero address": [
+                        {
+                            "parameter": "to",
+                            "constraint": "Validate that recipientAddress is not the zero address",
+                            "validation": "_anySwapOut(address from, address token, address to, uint amount, uint toChainID)",
+                            "score": "90",
+                            "reason": "The validation function _anySwapOut does not explicitly check if the 'to' address is the zero address before proceeding with the token transfer. Since this is essential for preventing transactions directed to the zero address, the implementation is incomplete although it follows the right flow as the transfer could potentially fail.",
+                            "results": [
+                                {
+                                    "result": true,
+                                    "poc": "Using the `permit` functionality of ERC20 tokens, an attacker can manipulate the `from` address in the permit transaction signed by the legitimate user. This can allow the attacker to bypass any checks on the `from` parameter while still performing the `_anySwapOut` function.",
+                                    "score": "80",
+                                    "reason": "The provided code allows manipulation of the `from` parameter via the `permit` function in ERC20 tokens, which can let an attacker bypass the checks intended for the `_anySwapOut` function. Although `safeTransferFrom` of the ERC20 is checked, the underlying issue lies in the use of `permit`, allowing outside manipulation without proper checks against the attacker impersonating the legitimate user. Steps should be taken to further strengthen validations against such scenarios."
+                                },
+                                {
+                                    "result": true,
+                                    "poc": "The `safeTransferFrom` function does not explicitly check the validity of the `to` address before calling the underlying token transfer. As such, an invalid or contract address that cannot receive tokens can be passed as `to`, circumventing any expected behavior without triggering a revert.",
+                                    "score": "75",
+                                    "reason": "The validation does not effectively ensure that the 'to' address can receive tokens, which could lead to funds being sent to an invalid address or a contract that does not accept tokens. The conditional checks within the called functions primarily focus on transfer success but do not explicitly validate the address type or ability to receive tokens, potentially leading to bypassing the intended safety measures."
+                                },
+                                {
+                                    "result": true,
+                                    "poc": "The `amount` parameter in the `_anySwapOut` function is not validated against the actual balance of the `from` address for the token, allowing a user to attempt a swap with a non-existent balance. If the token's logic does not properly handle this, it could lead to unexpected behavior or allow an exploit.",
+                                    "score": "45",
+                                    "reason": "The validation for the 'amount' parameter in the '_anySwapOut' function does not check if the 'from' address has sufficient balance, allowing users to pass any amount even if they lack the balance. This can lead to potential issues or exploits if the token contract relies on the assumption that the balance is valid before proceeding with the swap."
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        "final_result": {
+            "toChainID": {
+                "toChainID": {
+                    "Check whether toChainID is authorized.": [
+                        {
+                            "parameter": "toChainID",
+                            "constraint": "Check whether toChainID is authorized.",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Check that the destination chain ID is not equal to the source chain ID.": []
+                }
+            },
+            "tokenAddress": {
+                "token": {
+                    "Check whether the tokenAddress is authorized to use.": [
+                        {
+                            "validation": "[[\"IERC20(_underlying).permit(from, address(this), amount, deadline, v, r, s);\"]]",
+                            "poc": "Bypassing the `permit` function can occur if the `token` address is a malicious contract that allows arbitrary approvals in its own `permit` implementation, effectively allowing a user to approve any amount without proper checks, thus circumventing the expected validation.",
+                            "score": "30",
+                            "reason": "The validation process relies heavily on the integrity of the ERC20 permit function. If the token at `token` is a malicious contract, it can manipulate the approval process by allowing arbitrary amounts without proper checks, thus bypassing the intended validation. Therefore, the confidence score is reduced due to the potential exploitation of the permit function by malicious contracts."
+                        },
+                        {
+                            "validation": "[[\"IERC20(_underlying).permit(from, address(this), amount, deadline, v, r, s);\"]]",
+                            "poc": "If the `from` address manages to execute a call sequence where the `permit` function has been manipulated or where the signatures `v`, `r`, and `s` are colluded with a contract that has special privileges (such as a vote splitting mechanism), it could allow for special call sequences, thus bypassing intended validations.",
+                            "score": "70",
+                            "reason": "The validation statement relies on the `permit` function, which can be manipulated if signatures `v`, `r`, and `s` are colluded. This potential vulnerability raises concerns that the validation can be bypassed under specific circumstances, lowering confidence in its robustness."
+                        }
+                    ]
+                }
+            },
+            "amount": {
+                "amount": {
+                    "Validate that amount is greater than 0": [
+                        {
+                            "validation": "[[\"function anySwapOutUnderlyingWithPermit(...) { ... require(amount > 0, 'Amount must be greater than 0'); ... }\"]]",
+                            "poc": "A malicious user can exploit the ability to call `permit` on a token with an amount of zero or an invalid amount, bypassing the `require(amount > 0, 'Amount must be greater than 0');` since the checking of the amount occurs after the permit function call. If `permit` is called with an amount of 0, the rest of the function will still execute, but the amount validation will fail.",
+                            "score": "70",
+                            "reason": "The validation check for 'amount' happens after the 'permit' function call. If a user maliciously calls 'permit' with an amount of zero or an invalid amount, the function would continue to execute without ensuring the amount is positive before it proceeds to critical transactions like transferring tokens. This creates a security vulnerability that can be exploited, thereby reducing the confidence in the code's safety."
+                        },
+                        {
+                            "validation": "[[\"function anySwapOutUnderlyingWithPermit(...) { ... require(amount > 0, 'Amount must be greater than 0'); ... }\"]]",
+                            "poc": "If the `unlocked` state variable is manipulated to allow reentrancy through the `lock` modifier, a user could potentially call `anySwapOutUnderlyingWithPermit` multiple times while nesting calls, which could allow them to avoid the validation if they manage to trick the state to reset or loop without hitting the required check.",
+                            "score": "65",
+                            "reason": "The `unlocked` state variable can be manipulated to allow reentrancy, which might enable a caller to bypass the validation check for `amount > 0` through careful sequencing of calls. This introduces potential vulnerabilities, especially in scenarios where multiple nested calls occur, and the state is improperly managed, allowing the condition to be skipped."
+                        }
+                    ],
+                    "Validate that msg.sender's balance change before and after equals amount": [],
+                    "Validate that the bridge's balance change before and after equals amount": [
+                        {
+                            "validation": "[\"_anySwapOut(from, token, to, amount, toChainID)\", \"AnyswapV1ERC20(token).burn(from, amount)\"]",
+                            "poc": "The function 'safeTransferFrom' can be manipulated by providing a malicious token contract that falsely confirms a transfer, allowing the transfer to occur without sufficient balance or approval.",
+                            "score": "70",
+                            "reason": "While the validation checks on `amount` in `_anySwapOut` are enforced by calling `AnyswapV1ERC20(token).burn(from, amount)`, the ability of a malicious token contract to manipulate the transfer through `TransferHelper.safeTransferFrom` raises concerns. If this function can be called with a token that does not adhere to the ERC20 standard or if it falsely reports the transfer success, it can lead to bypassed validations, making it possible to extract funds without the intended checks on `amount`."
+                        },
+                        {
+                            "validation": "[\"_anySwapOut(from, token, to, amount, toChainID)\", \"AnyswapV1ERC20(token).burn(from, amount)\"]",
+                            "poc": "Using the permit mechanism, an attacker may create a signed permit that allows them to transfer an amount greater than their actual balance, thus bypassing the balance check in 'AnyswapV1ERC20.burn'.",
+                            "score": "75",
+                            "reason": "The parameter 'amount' is subject to a vulnerability where an attacker can use a signed permit to bypass balance checks in 'AnyswapV1ERC20.burn', allowing for the burn of an amount greater than their actual balance. This weakness in the validation path raises concerns about the effectiveness of the validations in place."
+                        }
+                    ],
+                    "Validate that msg.sender's balance ≥ amount": [
+                        {
+                            "validation": "[[\"IERC20(_underlying).permit(from, address(this), amount, deadline, v, r, s);\", \"TransferHelper.safeTransferFrom(_underlying, from, token, amount);\"]]",
+                            "poc": "The 'amount' can be manipulated by passing in a zero amount or a very small non-zero amount during the permit execution, potentially bypassing positive checks on the transfer logic where the amount might not be validated against other conditions.",
+                            "score": "70",
+                            "reason": "The bypass of validation on the 'amount' parameter can occur if a zero or very small value is passed. While the subsequent transfer logic uses 'safeTransferFrom', which checks for success, the lack of explicit value validation in the permit and transfer stages presents a risk scenario. As such, while there are existing checks in the transfer logic, the potential manipulation of the 'amount' poses a vulnerability in specific cases, leading to a confidence score reflecting moderate risk."
+                        },
+                        {
+                            "validation": "[[\"IERC20(_underlying).permit(from, address(this), amount, deadline, v, r, s);\", \"TransferHelper.safeTransferFrom(_underlying, from, token, amount);\"]]",
+                            "poc": "By manipulating the 'deadline' to a past timestamp, one might exploit certain ERC20 token implementations that do not properly validate the expiration of the permit, allowing the 'amount' to be transferred despite invalid conditions.",
+                            "score": "70",
+                            "reason": "The validation related to the permit's deadline can be bypassed if an attacker manipulates the deadline to a past timestamp, as certain ERC20 implementations may not strictly enforce the expiration check. This vulnerability can potentially allow unauthorized token transfers if the underlying token does not handle expired permits correctly."
+                        },
+                        {
+                            "validation": "[[\"IERC20(_underlying).permit(from, address(this), amount, deadline, v, r, s);\", \"TransferHelper.safeTransferFrom(_underlying, from, token, amount);\"]]",
+                            "poc": "Using forged signatures (v, r, s) during the permit method call can potentially grant permission for any amount despite not having control over the underlying token, fooling any checks that depend on valid signatures.",
+                            "score": "30",
+                            "reason": "The permit method can be exploited using forged signatures, allowing bypass of authorization checks. This vulnerability in the signature verification opens a critical attack vector, which significantly reduces confidence in the validation mechanisms employed."
+                        }
+                    ]
+                }
+            },
+            "recipientAddress": {
+                "to": {
+                    "Validate that recipientAddress is not the zero address": [
+                        {
+                            "validation": "_anySwapOut(address from, address token, address to, uint amount, uint toChainID)",
+                            "poc": "Using the `permit` functionality of ERC20 tokens, an attacker can manipulate the `from` address in the permit transaction signed by the legitimate user. This can allow the attacker to bypass any checks on the `from` parameter while still performing the `_anySwapOut` function.",
+                            "score": "80",
+                            "reason": "The provided code allows manipulation of the `from` parameter via the `permit` function in ERC20 tokens, which can let an attacker bypass the checks intended for the `_anySwapOut` function. Although `safeTransferFrom` of the ERC20 is checked, the underlying issue lies in the use of `permit`, allowing outside manipulation without proper checks against the attacker impersonating the legitimate user. Steps should be taken to further strengthen validations against such scenarios."
+                        },
+                        {
+                            "validation": "_anySwapOut(address from, address token, address to, uint amount, uint toChainID)",
+                            "poc": "The `safeTransferFrom` function does not explicitly check the validity of the `to` address before calling the underlying token transfer. As such, an invalid or contract address that cannot receive tokens can be passed as `to`, circumventing any expected behavior without triggering a revert.",
+                            "score": "75",
+                            "reason": "The validation does not effectively ensure that the 'to' address can receive tokens, which could lead to funds being sent to an invalid address or a contract that does not accept tokens. The conditional checks within the called functions primarily focus on transfer success but do not explicitly validate the address type or ability to receive tokens, potentially leading to bypassing the intended safety measures."
+                        },
+                        {
+                            "validation": "_anySwapOut(address from, address token, address to, uint amount, uint toChainID)",
+                            "poc": "The `amount` parameter in the `_anySwapOut` function is not validated against the actual balance of the `from` address for the token, allowing a user to attempt a swap with a non-existent balance. If the token's logic does not properly handle this, it could lead to unexpected behavior or allow an exploit.",
+                            "score": "45",
+                            "reason": "The validation for the 'amount' parameter in the '_anySwapOut' function does not check if the 'from' address has sufficient balance, allowing users to pass any amount even if they lack the balance. This can lead to potential issues or exploits if the token contract relies on the assumption that the balance is valid before proceeding with the swap."
+                        }
+                    ]
+                }
+            }
+        },
+        "context": {
+            "event": "LogAnySwapOut",
+            "call_graph": "anySwapOutUnderlyingWithPermit->_anySwapOut",
+            "state_variables": {
+                "totalSupply": "uint public totalSupply;",
+                "balanceOf": "mapping(address => uint) public balanceOf;",
+                "token0": "address public token0;",
+                "token1": "address public token1;",
+                "reserve0": "uint112 private reserve0;",
+                "reserve1": "uint112 private reserve1;",
+                "kLast": "uint public kLast;",
+                "unlocked": "uint private unlocked = 1;",
+                "blockTimestampLast": "uint32 private blockTimestampLast;",
+                "price0CumulativeLast": "uint public price0CumulativeLast;",
+                "price1CumulativeLast": "uint public price1CumulativeLast;",
+                "SELECTOR": "bytes4 private constant SELECTOR = bytes4(keccak256(bytes('transfer(address, uint256)')));",
+                "factory": "address public factory;",
+                "Q112": "uint224 constant Q112 = 2**112;"
+            },
+            "external_functions": [
+                "modifier lock(){ require(unlocked == 1, 'AnyswapV1: LOCKED'); unlocked = 0; _; unlocked = 1;}"
+            ]
+        },
+        "step1-time": 5.4858622550964355,
+        "step2-time": 221.14230608940125,
+        "step2-call_api_times": 28,
+        "step3-time": 59.5962929725647,
+        "step3-call_api_times": 15,
+        "step4-time": 54.953129291534424,
+        "step4-call_api_times": 17,
+        "compare_audit": {
+            "result": [
+                {
+                    "vuln": "AnyswapV4Router.anySwapOutUnderlyingWithPermit",
+                    "reason": "The permit mechanism relies on the signature being issued for the correct nonce and can be manipulated. If a user initiates a cross-chain transfer while also interacting with other contracts that might alter their state on the originating chain, they may unintentionally approve a transaction from a different user."
+                },
+                {
+                    "vuln": "TransferHelper.safeTransferFrom",
+                    "reason": "Using low-level calls for token transfers could lead to unexpected behavior from non-compliant ERC20 tokens. In a cross-chain context, this could allow for unauthorized transfers if the token works differently on the receiving chain."
+                },
+                {
+                    "vuln": "AnyswapV1ERC20._burn",
+                    "reason": "Burning tokens does not provide a safeguard against reentrancy. In a cross-chain setup, if a malicious contract calls back into this function, it could lead to unexpected amounts of tokens being burned."
+                },
+                {
+                    "vuln": "AnyswapV1Pair._safeTransfer",
+                    "reason": "Similar to safeTransferFrom, this function’s reliance on low-level calls can cause issues with tokens that return false instead of reverting. This may allow an attacker to manipulate transfers across chains."
+                },
+                {
+                    "vuln": "AnyswapV1Pair.burn",
+                    "reason": "The gas savings in the burn function can lead to unexpected behavior if gas limits are reached, especially during cross-chain interactions where multiple contract calls are involved."
+                }
+            ]
+        },
+        "compare_attribute_verification": {
+            "result": [
+                {
+                    "toChainID": "toChainID",
+                    "findings": [
+                        {
+                            "constraint": "Check whether toChainID is authorized.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "There is no check in the code to ensure that toChainID is authorized."
+                        },
+                        {
+                            "constraint": "Check that the destination chain ID is not equal to the source chain ID.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "The code does not check if the destination chain ID equals the source chain ID."
+                        }
+                    ]
+                },
+                {
+                    "tokenAddress": "token",
+                    "findings": [
+                        {
+                            "constraint": "Check whether the tokenAddress is authorized to use.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No authorization check for the tokenAddress is implemented."
+                        }
+                    ]
+                },
+                {
+                    "nonce": "nonce",
+                    "findings": [
+                        {
+                            "constraint": "Check if the transaction's nonce is equal to the account's current nonce.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "There is no validation in the code to check if the nonce is current."
+                        }
+                    ]
+                },
+                {
+                    "amount": "amount",
+                    "findings": [
+                        {
+                            "constraint": "Validate that amount is greater than 0",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "The code does not validate if the amount is greater than zero."
+                        },
+                        {
+                            "constraint": "Validate that msg.sender's balance change before and after equals amount",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No checks are performed on the sender's balance before and after the transaction."
+                        },
+                        {
+                            "constraint": "Validate that the bridge's balance change before and after equals amount",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "The code does not track or validate bridge balance change."
+                        },
+                        {
+                            "constraint": "Validate that msg.sender's balance ≥ amount",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No balance validation for msg.sender exists in the code."
+                        }
+                    ]
+                },
+                {
+                    "recipientAddress": "to",
+                    "findings": [
+                        {
+                            "constraint": "Validate that recipientAddress is not the zero address",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "There's no validation to ensure recipientAddress is not zero."
+                        }
+                    ]
+                },
+                {
+                    "externalCallAddress": "externalCallAddress",
+                    "findings": [
+                        {
+                            "constraint": "Check whether the externalCallAddress is authorized to use.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "The implementation does not include checks for externalCallAddress authorization."
+                        }
+                    ]
+                },
+                {
+                    "externalCallFunction": "externalCallFunction",
+                    "findings": [
+                        {
+                            "constraint": "Validate that externalCallFunction is in the allowed function signature list",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No checks are in place to validate allowed function signatures."
+                        }
+                    ]
+                },
+                {
+                    "routerAddress": "routerAddress",
+                    "findings": [
+                        {
+                            "constraint": "Check whether the routerAddress is authorized to use.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No authorization check is found for routerAddress."
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "time": 401.8090178966522,
+    "this_cost": 0,
+    "this_prompt_tokens": 153605,
+    "this_completion_tokens": 16276
+}

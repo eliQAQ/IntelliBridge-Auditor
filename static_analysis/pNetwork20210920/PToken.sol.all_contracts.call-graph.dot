@@ -1,0 +1,427 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_1682_SafeMathUpgradeable {
+label = "SafeMathUpgradeable"
+"1682_tryDiv" [label="tryDiv"]
+"1682_mul" [label="mul"]
+"1682_add" [label="add"]
+"1682_div" [label="div"]
+"1682_tryAdd" [label="tryAdd"]
+"1682_mod" [label="mod"]
+"1682_tryMod" [label="tryMod"]
+"1682_trySub" [label="trySub"]
+"1682_sub" [label="sub"]
+"1682_tryMul" [label="tryMul"]
+}subgraph cluster_2967_ECDSAUpgradeable {
+label = "ECDSAUpgradeable"
+"2967_recover" [label="recover"]
+"2967_toEthSignedMessageHash" [label="toEthSignedMessageHash"]
+"2967_recover" -> "2967_recover"
+}subgraph cluster_293_Initializable {
+label = "Initializable"
+"293__isConstructor" [label="_isConstructor"]
+}subgraph cluster_806_ContextUpgradeable {
+label = "ContextUpgradeable"
+"806___Context_init_unchained" [label="__Context_init_unchained"]
+"806___Context_init" [label="__Context_init"]
+"806__msgData" [label="_msgData"]
+"806__msgSender" [label="_msgSender"]
+"806___Context_init" -> "806___Context_init_unchained"
+"806___Context_init" -> "806_initializer"
+"806___Context_init_unchained" -> "806_initializer"
+}subgraph cluster_2856_ERC777Upgradeable {
+label = "ERC777Upgradeable"
+"2856_decimals" [label="decimals"]
+"2856_authorizeOperator" [label="authorizeOperator"]
+"2856_transfer" [label="transfer"]
+"2856_operatorBurn" [label="operatorBurn"]
+"2856__move" [label="_move"]
+"2856__send" [label="_send"]
+"2856__callTokensToSend" [label="_callTokensToSend"]
+"2856_transferFrom" [label="transferFrom"]
+"2856__beforeTokenTransfer" [label="_beforeTokenTransfer"]
+"2856___ERC777_init_unchained" [label="__ERC777_init_unchained"]
+"2856_symbol" [label="symbol"]
+"2856_send" [label="send"]
+"2856_balanceOf" [label="balanceOf"]
+"2856__callTokensReceived" [label="_callTokensReceived"]
+"2856_allowance" [label="allowance"]
+"2856__burn" [label="_burn"]
+"2856__mint" [label="_mint"]
+"2856_defaultOperators" [label="defaultOperators"]
+"2856___ERC777_init" [label="__ERC777_init"]
+"2856_isOperatorFor" [label="isOperatorFor"]
+"2856_name" [label="name"]
+"2856_burn" [label="burn"]
+"2856_granularity" [label="granularity"]
+"2856_approve" [label="approve"]
+"2856_revokeOperator" [label="revokeOperator"]
+"2856_operatorSend" [label="operatorSend"]
+"2856_totalSupply" [label="totalSupply"]
+"2856__approve" [label="_approve"]
+"2856_transfer" -> "2856__callTokensToSend"
+"2856_send" -> "2856__send"
+"2856__send" -> "2856__move"
+"2856_operatorSend" -> "2856__send"
+"2856___ERC777_init" -> "2856_initializer"
+"2856___ERC777_init_unchained" -> "2856_initializer"
+"2856_operatorSend" -> "2856__msgSender"
+"2856__burn" -> "2856__beforeTokenTransfer"
+"2856_send" -> "2856__msgSender"
+"2856_transferFrom" -> "2856__approve"
+"2856_operatorBurn" -> "2856_isOperatorFor"
+"2856__move" -> "2856__beforeTokenTransfer"
+"2856__mint" -> "2856__callTokensReceived"
+"2856__mint" -> "2856__msgSender"
+"2856_transferFrom" -> "2856__move"
+"2856__send" -> "2856__msgSender"
+"2856_transferFrom" -> "2856__callTokensReceived"
+"2856__send" -> "2856__callTokensReceived"
+"2856_transferFrom" -> "2856__msgSender"
+"2856_burn" -> "2856__burn"
+"2856_transfer" -> "2856__callTokensReceived"
+"2856__send" -> "2856__callTokensToSend"
+"2856_operatorBurn" -> "2856__burn"
+"2856_revokeOperator" -> "2856__msgSender"
+"2856_transferFrom" -> "2856__callTokensToSend"
+"2856_approve" -> "2856__msgSender"
+"2856_operatorBurn" -> "2856__msgSender"
+"2856__burn" -> "2856__callTokensToSend"
+"2856_transfer" -> "2856__move"
+"2856___ERC777_init" -> "2856___Context_init_unchained"
+"2856_approve" -> "2856__approve"
+"2856___ERC777_init" -> "2856___ERC777_init_unchained"
+"2856__mint" -> "2856__beforeTokenTransfer"
+"2856_authorizeOperator" -> "2856__msgSender"
+"2856_transfer" -> "2856__msgSender"
+"2856__burn" -> "2856__msgSender"
+"2856_operatorSend" -> "2856_isOperatorFor"
+"2856_burn" -> "2856__msgSender"
+}subgraph cluster_3755_OwnableUpgradeable {
+label = "OwnableUpgradeable"
+"3755___Ownable_init" [label="__Ownable_init"]
+"3755___Ownable_init_unchained" [label="__Ownable_init_unchained"]
+"3755_owner" [label="owner"]
+"3755_transferOwnership" [label="transferOwnership"]
+"3755_renounceOwnership" [label="renounceOwnership"]
+"3755___Ownable_init" -> "3755_initializer"
+"3755___Ownable_init" -> "3755___Context_init_unchained"
+"3755___Ownable_init" -> "3755___Ownable_init_unchained"
+"3755_renounceOwnership" -> "3755_onlyOwner"
+"3755___Ownable_init_unchained" -> "3755_initializer"
+"3755_transferOwnership" -> "3755_onlyOwner"
+"3755___Ownable_init_unchained" -> "3755__msgSender"
+}subgraph cluster_3633_GSNRecipientUpgradeable {
+label = "GSNRecipientUpgradeable"
+"3633___GSNRecipient_init" [label="__GSNRecipient_init"]
+"3633_postRelayedCall" [label="postRelayedCall"]
+"3633__rejectRelayedCall" [label="_rejectRelayedCall"]
+"3633__approveRelayedCall" [label="_approveRelayedCall"]
+"3633___GSNRecipient_init_unchained" [label="__GSNRecipient_init_unchained"]
+"3633_getHubAddr" [label="getHubAddr"]
+"3633__upgradeRelayHub" [label="_upgradeRelayHub"]
+"3633__getRelayedCallSender" [label="_getRelayedCallSender"]
+"3633__preRelayedCall" [label="_preRelayedCall"]
+"3633__msgSender" [label="_msgSender"]
+"3633_relayHubVersion" [label="relayHubVersion"]
+"3633__computeCharge" [label="_computeCharge"]
+"3633__withdrawDeposits" [label="_withdrawDeposits"]
+"3633__getRelayedCallData" [label="_getRelayedCallData"]
+"3633__msgData" [label="_msgData"]
+"3633_preRelayedCall" [label="preRelayedCall"]
+"3633__postRelayedCall" [label="_postRelayedCall"]
+"3633__msgSender" -> "3633_getHubAddr"
+"3633__approveRelayedCall" -> "3633__approveRelayedCall"
+"3633___GSNRecipient_init" -> "3633_initializer"
+"3633__msgData" -> "3633__getRelayedCallData"
+"3633_preRelayedCall" -> "3633__preRelayedCall"
+"3633___GSNRecipient_init_unchained" -> "3633_initializer"
+"3633__msgData" -> "3633_getHubAddr"
+"3633_preRelayedCall" -> "3633_getHubAddr"
+"3633_postRelayedCall" -> "3633__postRelayedCall"
+"3633___GSNRecipient_init" -> "3633___GSNRecipient_init_unchained"
+"3633_postRelayedCall" -> "3633_getHubAddr"
+"3633__withdrawDeposits" -> "3633_getHubAddr"
+"3633__msgSender" -> "3633__getRelayedCallSender"
+"3633___GSNRecipient_init" -> "3633___Context_init_unchained"
+}subgraph cluster_1342_IERC20Upgradeable {
+label = "IERC20Upgradeable"
+"1342_approve" [label="approve"]
+"1342_balanceOf" [label="balanceOf"]
+"1342_totalSupply" [label="totalSupply"]
+"1342_transferFrom" [label="transferFrom"]
+"1342_transfer" [label="transfer"]
+"1342_allowance" [label="allowance"]
+}subgraph cluster_3269_IRelayHubUpgradeable {
+label = "IRelayHubUpgradeable"
+"3269_removeRelayByOwner" [label="removeRelayByOwner"]
+"3269_registerRelay" [label="registerRelay"]
+"3269_requiredGas" [label="requiredGas"]
+"3269_stake" [label="stake"]
+"3269_withdraw" [label="withdraw"]
+"3269_getNonce" [label="getNonce"]
+"3269_canRelay" [label="canRelay"]
+"3269_penalizeIllegalTransaction" [label="penalizeIllegalTransaction"]
+"3269_penalizeRepeatedNonce" [label="penalizeRepeatedNonce"]
+"3269_depositFor" [label="depositFor"]
+"3269_balanceOf" [label="balanceOf"]
+"3269_unstake" [label="unstake"]
+"3269_relayCall" [label="relayCall"]
+"3269_maxPossibleCharge" [label="maxPossibleCharge"]
+"3269_getRelay" [label="getRelay"]
+}subgraph cluster_1096_AccessControlUpgradeable {
+label = "AccessControlUpgradeable"
+"1096__grantRole" [label="_grantRole"]
+"1096_grantRole" [label="grantRole"]
+"1096__setRoleAdmin" [label="_setRoleAdmin"]
+"1096_renounceRole" [label="renounceRole"]
+"1096___AccessControl_init_unchained" [label="__AccessControl_init_unchained"]
+"1096_getRoleMember" [label="getRoleMember"]
+"1096__setupRole" [label="_setupRole"]
+"1096__revokeRole" [label="_revokeRole"]
+"1096_getRoleMemberCount" [label="getRoleMemberCount"]
+"1096_getRoleAdmin" [label="getRoleAdmin"]
+"1096_hasRole" [label="hasRole"]
+"1096_revokeRole" [label="revokeRole"]
+"1096___AccessControl_init" [label="__AccessControl_init"]
+"1096_revokeRole" -> "1096__msgSender"
+"1096___AccessControl_init" -> "1096___AccessControl_init_unchained"
+"1096_grantRole" -> "1096_hasRole"
+"1096__setupRole" -> "1096__grantRole"
+"1096_revokeRole" -> "1096_hasRole"
+"1096_renounceRole" -> "1096__revokeRole"
+"1096__revokeRole" -> "1096__msgSender"
+"1096__grantRole" -> "1096__msgSender"
+"1096_grantRole" -> "1096__grantRole"
+"1096_revokeRole" -> "1096__revokeRole"
+"1096_renounceRole" -> "1096__msgSender"
+"1096___AccessControl_init" -> "1096_initializer"
+"1096___AccessControl_init" -> "1096___Context_init_unchained"
+"1096_grantRole" -> "1096__msgSender"
+"1096___AccessControl_init_unchained" -> "1096_initializer"
+}subgraph cluster_3017_IRelayRecipientUpgradeable {
+label = "IRelayRecipientUpgradeable"
+"3017_preRelayedCall" [label="preRelayedCall"]
+"3017_postRelayedCall" [label="postRelayedCall"]
+"3017_getHubAddr" [label="getHubAddr"]
+"3017_acceptRelayedCall" [label="acceptRelayedCall"]
+}subgraph cluster_4427_PToken {
+label = "PToken"
+"4427__msgSender" [label="_msgSender"]
+"4427_redeem" [label="redeem"]
+"4427__msgData" [label="_msgData"]
+"4427_revokeMinterRole" [label="revokeMinterRole"]
+"4427_mint" [label="mint"]
+"4427_initialize" [label="initialize"]
+"4427_grantMinterRole" [label="grantMinterRole"]
+"4427_operatorRedeem" [label="operatorRedeem"]
+"4427_hasMinterRole" [label="hasMinterRole"]
+"4427__msgSender" -> "4427__msgSender"
+"4427_mint" -> "4427__msgSender"
+"4427_mint" -> "4427__mint"
+"4427_initialize" -> "4427__setupRole"
+"4427_operatorRedeem" -> "4427__msgSender"
+"4427_initialize" -> "4427___ERC777GSNUpgreadable_init"
+"4427_redeem" -> "4427__burn"
+"4427_revokeMinterRole" -> "4427_revokeRole"
+"4427_grantMinterRole" -> "4427_grantRole"
+"4427_mint" -> "4427_mint"
+"4427_operatorRedeem" -> "4427__burn"
+"4427_hasMinterRole" -> "4427_hasRole"
+"4427_initialize" -> "4427___ERC777_init"
+"4427_initialize" -> "4427___ERC777WithAdminOperatorUpgreadable_init"
+"4427_redeem" -> "4427__msgSender"
+"4427_initialize" -> "4427___AccessControl_init"
+"4427_initialize" -> "4427_initializer"
+"4427_mint" -> "4427_hasRole"
+"4427_operatorRedeem" -> "4427_isOperatorFor"
+"4427__msgData" -> "4427__msgData"
+}subgraph cluster_4174_ERC777WithAdminOperatorUpgreadable {
+label = "ERC777WithAdminOperatorUpgreadable"
+"4174_setAdminOperator" [label="setAdminOperator"]
+"4174___ERC777WithAdminOperatorUpgreadable_init" [label="__ERC777WithAdminOperatorUpgreadable_init"]
+"4174_adminTransfer" [label="adminTransfer"]
+"4174_adminTransfer" -> "4174__send"
+"4174_setAdminOperator" -> "4174__msgSender"
+"4174_adminTransfer" -> "4174__msgSender"
+"4174___ERC777WithAdminOperatorUpgreadable_init" -> "4174_initializer"
+}subgraph cluster_1240_IERC777Upgradeable {
+label = "IERC777Upgradeable"
+"1240_balanceOf" [label="balanceOf"]
+"1240_defaultOperators" [label="defaultOperators"]
+"1240_name" [label="name"]
+"1240_isOperatorFor" [label="isOperatorFor"]
+"1240_authorizeOperator" [label="authorizeOperator"]
+"1240_send" [label="send"]
+"1240_burn" [label="burn"]
+"1240_operatorSend" [label="operatorSend"]
+"1240_totalSupply" [label="totalSupply"]
+"1240_revokeOperator" [label="revokeOperator"]
+"1240_symbol" [label="symbol"]
+"1240_granularity" [label="granularity"]
+"1240_operatorBurn" [label="operatorBurn"]
+}subgraph cluster_1762_IERC1820RegistryUpgradeable {
+label = "IERC1820RegistryUpgradeable"
+"1762_getManager" [label="getManager"]
+"1762_setManager" [label="setManager"]
+"1762_updateERC165Cache" [label="updateERC165Cache"]
+"1762_getInterfaceImplementer" [label="getInterfaceImplementer"]
+"1762_setInterfaceImplementer" [label="setInterfaceImplementer"]
+"1762_implementsERC165Interface" [label="implementsERC165Interface"]
+"1762_implementsERC165InterfaceNoCache" [label="implementsERC165InterfaceNoCache"]
+"1762_interfaceHash" [label="interfaceHash"]
+}subgraph cluster_1257_IERC777RecipientUpgradeable {
+label = "IERC777RecipientUpgradeable"
+"1257_tokensReceived" [label="tokensReceived"]
+}subgraph cluster_234_AddressUpgradeable {
+label = "AddressUpgradeable"
+"234_functionCall" [label="functionCall"]
+"234_isContract" [label="isContract"]
+"234_functionCallWithValue" [label="functionCallWithValue"]
+"234_sendValue" [label="sendValue"]
+"234__verifyCallResult" [label="_verifyCallResult"]
+"234_functionStaticCall" [label="functionStaticCall"]
+"234_functionCall" -> "234_functionCallWithValue"
+"234_functionCallWithValue" -> "234_functionCallWithValue"
+"234_functionStaticCall" -> "234_isContract"
+"234_functionCallWithValue" -> "234__verifyCallResult"
+"234_functionCallWithValue" -> "234_isContract"
+"234_functionStaticCall" -> "234__verifyCallResult"
+"234_functionCall" -> "234_functionCall"
+"234_functionStaticCall" -> "234_functionStaticCall"
+}subgraph cluster_4086_ERC777GSNUpgreadable {
+label = "ERC777GSNUpgreadable"
+"4086_setGSNExtraGas" [label="setGSNExtraGas"]
+"4086__msgSender" [label="_msgSender"]
+"4086_setFeeTarget" [label="setFeeTarget"]
+"4086__postRelayedCall" [label="_postRelayedCall"]
+"4086___ERC777GSNUpgreadable_init" [label="__ERC777GSNUpgreadable_init"]
+"4086_acceptRelayedCall" [label="acceptRelayedCall"]
+"4086__msgData" [label="_msgData"]
+"4086__preRelayedCall" [label="_preRelayedCall"]
+"4086_setTrustedSigner" [label="setTrustedSigner"]
+"4086_acceptRelayedCall" -> "4086_getHubAddr"
+"4086_setFeeTarget" -> "4086_onlyOwner"
+"4086__postRelayedCall" -> "4086__computeCharge"
+"4086__msgData" -> "4086__msgData"
+"4086___ERC777GSNUpgreadable_init" -> "4086_initializer"
+"4086___ERC777GSNUpgreadable_init" -> "4086___GSNRecipient_init"
+"4086_acceptRelayedCall" -> "4086__rejectRelayedCall"
+"4086_acceptRelayedCall" -> "4086__approveRelayedCall"
+"4086__postRelayedCall" -> "4086__send"
+"4086__msgSender" -> "4086__msgSender"
+"4086___ERC777GSNUpgreadable_init" -> "4086___Ownable_init"
+"4086_setTrustedSigner" -> "4086_onlyOwner"
+"4086_setGSNExtraGas" -> "4086_onlyOwner"
+}subgraph cluster_1274_IERC777SenderUpgradeable {
+label = "IERC777SenderUpgradeable"
+"1274_tokensToSend" [label="tokensToSend"]
+}subgraph cluster_763_EnumerableSetUpgradeable {
+label = "EnumerableSetUpgradeable"
+"763_remove" [label="remove"]
+"763_at" [label="at"]
+"763_add" [label="add"]
+"763__length" [label="_length"]
+"763__at" [label="_at"]
+"763__remove" [label="_remove"]
+"763_contains" [label="contains"]
+"763__contains" [label="_contains"]
+"763_length" [label="length"]
+"763__add" [label="_add"]
+"763_contains" -> "763__contains"
+"763_at" -> "763__at"
+"763__add" -> "763__contains"
+"763_length" -> "763__length"
+"763_add" -> "763__add"
+"763_remove" -> "763__remove"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"keccak256(bytes)" 
+"mload(uint256)" 
+"byte(uint256,uint256)" 
+"ecrecover(bytes32,uint8,bytes32,bytes32)" 
+"balance(address)" 
+"revert(uint256,uint256)" 
+"revert(string)" 
+"abi.encode()" 
+"require(bool,string)" 
+"abi.decode()" 
+"abi.encodePacked()" 
+"1682_mod" -> "require(bool,string)"
+"2856_authorizeOperator" -> "require(bool,string)"
+"2967_recover" -> "require(bool,string)"
+"2856__send" -> "require(bool,string)"
+"234_functionCallWithValue" -> "require(bool,string)"
+"2967_toEthSignedMessageHash" -> "keccak256(bytes)"
+"2967_recover" -> "ecrecover(bytes32,uint8,bytes32,bytes32)"
+"4086_acceptRelayedCall" -> "abi.encode()"
+"2856__callTokensReceived" -> "require(bool,string)"
+"4086_acceptRelayedCall" -> "abi.decode()"
+"3755_transferOwnership" -> "require(bool,string)"
+"4086_setFeeTarget" -> "require(bool,string)"
+"1096_grantRole" -> "require(bool,string)"
+"234__verifyCallResult" -> "revert(uint256,uint256)"
+"2856_operatorSend" -> "require(bool,string)"
+"234_sendValue" -> "balance(address)"
+"2856___ERC777_init_unchained" -> "keccak256(bytes)"
+"4174_adminTransfer" -> "require(bool,string)"
+"2856__burn" -> "require(bool,string)"
+"4086_setTrustedSigner" -> "require(bool,string)"
+"1682_div" -> "require(bool,string)"
+"234__verifyCallResult" -> "mload(uint256)"
+"234_sendValue" -> "require(bool,string)"
+"4086__postRelayedCall" -> "abi.decode()"
+"1682_mul" -> "require(bool,string)"
+"1682_sub" -> "require(bool,string)"
+"1682_add" -> "require(bool,string)"
+"2967_recover" -> "mload(uint256)"
+"4427_operatorRedeem" -> "require(bool,string)"
+"4427_mint" -> "require(bool,string)"
+"2856__approve" -> "require(bool,string)"
+"2856_operatorBurn" -> "require(bool,string)"
+"2967_recover" -> "revert(string)"
+"2856_transfer" -> "require(bool,string)"
+"2856__mint" -> "require(bool,string)"
+"3633_postRelayedCall" -> "require(bool,string)"
+"2856_revokeOperator" -> "require(bool,string)"
+"234__verifyCallResult" -> "revert(string)"
+"234_functionCallWithValue" -> "balance(address)"
+"1096_revokeRole" -> "require(bool,string)"
+"763__at" -> "require(bool,string)"
+"3633__upgradeRelayHub" -> "require(bool,string)"
+"4086_acceptRelayedCall" -> "abi.encodePacked()"
+"4086___ERC777GSNUpgreadable_init" -> "require(bool,string)"
+"3633_preRelayedCall" -> "require(bool,string)"
+"2856_transferFrom" -> "require(bool,string)"
+"3633__getRelayedCallSender" -> "mload(uint256)"
+"1096_renounceRole" -> "require(bool,string)"
+"4174_setAdminOperator" -> "require(bool,string)"
+"2967_toEthSignedMessageHash" -> "abi.encodePacked()"
+"234_functionStaticCall" -> "require(bool,string)"
+"2967_recover" -> "byte(uint256,uint256)"
+"4086_acceptRelayedCall" -> "keccak256(bytes)"
+}"2856__callTokensReceived" -> "234_isContract"
+"1096_hasRole" -> "763_contains"
+"2856___ERC777_init_unchained" -> "1762_setInterfaceImplementer"
+"4086__postRelayedCall" -> "1682_div"
+"1096_getRoleMemberCount" -> "763_length"
+"2856__callTokensToSend" -> "1762_getInterfaceImplementer"
+"2856__callTokensReceived" -> "1762_getInterfaceImplementer"
+"2856__callTokensReceived" -> "1257_tokensReceived"
+"4086_acceptRelayedCall" -> "2967_toEthSignedMessageHash"
+"4086__postRelayedCall" -> "1682_mul"
+"1096__grantRole" -> "763_add"
+"1096__revokeRole" -> "763_remove"
+"2856__mint" -> "1682_add"
+"4086_acceptRelayedCall" -> "2967_recover"
+"2856__burn" -> "1682_sub"
+"2856_transferFrom" -> "1682_sub"
+"4086__postRelayedCall" -> "1682_sub"
+"2856__callTokensToSend" -> "1274_tokensToSend"
+"2856__move" -> "1682_sub"
+"293__isConstructor" -> "234_isContract"
+"3633__withdrawDeposits" -> "3269_withdraw"
+"1096_getRoleMember" -> "763_at"
+"2856__move" -> "1682_add"
+}

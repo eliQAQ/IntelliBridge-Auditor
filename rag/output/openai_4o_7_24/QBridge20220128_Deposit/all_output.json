@@ -1,0 +1,1246 @@
+{
+    "QBridge.depositETH": {
+        "step1": {
+            "prompt1": "\nYou are an experienced cross-chain protocol analysis expert. Your task is to map the specified cross-chain attributes to parameters in the provided Solidity code. If an attribute cannot be found in the code, do not list it in the output. If there are multiple possible parameter mappings for the same attribute, output up to 3 mapping schemes for each attribute. Please strictly follow the input and output formats defined below:\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"attribute\": \n{ \n\"<attribute>\": \"<attribute description>\" ,\n\"<attribute>\": \"<attribute description>\",\n...\n}\n\"code\": \"...\" // Solidity contract code string\n}\nOutput format:\nReturn a JSON array, each item structured as follows, only produce output in the required format, without any additional content:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // The input cross-chain attribute\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}, ... \n]\nIn the reason, please point out both the core basis for the mapping and potential uncertainties (e.g., parameter name similarity, ambiguous contextual meaning, etc.).\n\nInput:\n{\n\"attribute\": {\"toChainID\": \"Specifies the destination blockchain network ID.\", \"tokenAddress\": \"Indicates the contract address of the token to be transferred.\", \"amount\": \"The number of tokens to be transferred across chains.\", \"nonce\": \"Check and mark that nonce has not been consumed to prevent replay\", \"recipientAddress\": \"The address that will receive the tokens on the destination chain.\", \"externalCallAddress\": \"The address of a contract to be called after the cross-chain transfer.\", \"externalCallFunction\": \"The specific function or calldata to be executed on the `externalCallAddress`.\", \"routerAddress\": \"The address of the cross-chain router or bridge handler.\"},\n\"code\": [\"QBridge.depositETH:function depositETH(uint8 destinationDomainID, bytes32 resourceID, bytes calldata data) external payable notPaused {\\n        uint option;\\n        uint amount;\\n        (option, amount) = abi.decode(data, (uint, uint));\\n        // AC inconsistency\\n        require(msg.value == amount.add(fee), \\\"QBridge: invalid fee\\\");\\n\\n        address handler = resourceIDToHandlerAddress[resourceID];\\n        require(handler != address(0), \\\"QBridge: invalid resourceID\\\");\\n\\n        uint64 depositNonce = ++_depositCounts[destinationDomainID];\\n\\n        IQBridgeHandler(handler).depositETH{value:amount}(resourceID, msg.sender, data);\\n        //DF inconsistency\\n        emit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);\\n    }\"]\n}\n",
+            "outputs1": [
+                [
+                    {
+                        "parameter": "destinationDomainID",
+                        "attribute": "toChainID",
+                        "reason": "The parameter `destinationDomainID` directly correlates with an ID specifying a destination. Its naming convention strongly suggests it represents the ID of the destination blockchain network. The function `depositETH` implies a cross-chain operation, making a 'destination domain ID' equivalent to 'toChainID'."
+                    },
+                    {
+                        "parameter": "amount",
+                        "attribute": "amount",
+                        "reason": "The parameter `amount` is explicitly decoded from the `data` calldata and used in `msg.value == amount.add(fee)` and `IQBridgeHandler(handler).depositETH{value:amount}`. This directly indicates it represents the quantity of tokens (or ETH in this case) being transferred. There's no ambiguity about its purpose since it's directly tied to the transaction value."
+                    },
+                    {
+                        "parameter": "depositNonce",
+                        "attribute": "nonce",
+                        "reason": "The variable `depositNonce` is incremented using `++_depositCounts[destinationDomainID]` and then emitted in the `Deposit` event. The term 'nonce' is widely used in blockchain for uniqueness and preventing replay attacks. Its usage here, incrementing a count per destination, aligns with the concept of a transaction nonce."
+                    },
+                    {
+                        "parameter": "msg.sender",
+                        "attribute": "recipientAddress",
+                        "reason": "In the `IQBridgeHandler(handler).depositETH{value:amount}(resourceID, msg.sender, data)` call, `msg.sender` is passed as an argument. While `msg.sender` is the initiator of the current transaction, in a cross-chain deposit context (especially from the perspective of the bridge handler), the `msg.sender` of the initial deposit often acts as the intended **recipient** on the destination chain, or at least the address associated with the origin of the funds. There's an ambiguity here since the contract itself receives the funds initially, but the handler receives `msg.sender` for its logic, suggesting it's the intended recipient **through** the bridge."
+                    },
+                    {
+                        "parameter": "handler",
+                        "attribute": "routerAddress",
+                        "reason": "The `handler` variable is resolved from `resourceIDToHandlerAddress[resourceID]` and then cast to `IQBridgeHandler`. It's used to execute the cross-chain deposit (`IQBridgeHandler(handler).depositETH`). This suggests `handler` represents the component responsible for routing or dispatching the cross-chain operation, fitting the description of a 'router address'."
+                    }
+                ]
+            ],
+            "v_prompt1": "\nYou are a rigorous cross-chain protocol auditor and data consistency verifier. Carefully review whether the meaning of each cross-chain attribute and parameter in the code is consistent, assign a confidence score (0-100%), and state the reason for the given confidence score.\n\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"correspondence\":    // Array of attribute-parameter correspondences in the code\n[\n{\n\"attribute\": \"...\", // Input cross-chain attribute\n\"parameter\": \"...\", // Corresponding parameter\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}\n...\n],\n\"code\":\"...\" // Cross-chain contract code\n}\n\nOutput format: Return a JSON array, each item structured as follows, only produce output in the required format, without any additional content:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // Input cross-chain attribute\n\"score\":\"...\", // Assigned confidence score\n\"reason\": \"...\" // Brief explanation for the given confidence score\n}, ... \n]\nInput:\n{\n\"correspondence\": [{\"parameter\": \"destinationDomainID\", \"attribute\": \"toChainID\", \"reason\": \"The parameter `destinationDomainID` directly correlates with an ID specifying a destination. Its naming convention strongly suggests it represents the ID of the destination blockchain network. The function `depositETH` implies a cross-chain operation, making a 'destination domain ID' equivalent to 'toChainID'.\"}, {\"parameter\": \"amount\", \"attribute\": \"amount\", \"reason\": \"The parameter `amount` is explicitly decoded from the `data` calldata and used in `msg.value == amount.add(fee)` and `IQBridgeHandler(handler).depositETH{value:amount}`. This directly indicates it represents the quantity of tokens (or ETH in this case) being transferred. There's no ambiguity about its purpose since it's directly tied to the transaction value.\"}, {\"parameter\": \"depositNonce\", \"attribute\": \"nonce\", \"reason\": \"The variable `depositNonce` is incremented using `++_depositCounts[destinationDomainID]` and then emitted in the `Deposit` event. The term 'nonce' is widely used in blockchain for uniqueness and preventing replay attacks. Its usage here, incrementing a count per destination, aligns with the concept of a transaction nonce.\"}, {\"parameter\": \"msg.sender\", \"attribute\": \"recipientAddress\", \"reason\": \"In the `IQBridgeHandler(handler).depositETH{value:amount}(resourceID, msg.sender, data)` call, `msg.sender` is passed as an argument. While `msg.sender` is the initiator of the current transaction, in a cross-chain deposit context (especially from the perspective of the bridge handler), the `msg.sender` of the initial deposit often acts as the intended **recipient** on the destination chain, or at least the address associated with the origin of the funds. There's an ambiguity here since the contract itself receives the funds initially, but the handler receives `msg.sender` for its logic, suggesting it's the intended recipient **through** the bridge.\"}, {\"parameter\": \"handler\", \"attribute\": \"routerAddress\", \"reason\": \"The `handler` variable is resolved from `resourceIDToHandlerAddress[resourceID]` and then cast to `IQBridgeHandler`. It's used to execute the cross-chain deposit (`IQBridgeHandler(handler).depositETH`). This suggests `handler` represents the component responsible for routing or dispatching the cross-chain operation, fitting the description of a 'router address'.\"}],\n\"code\": [\"QBridge.depositETH:function depositETH(uint8 destinationDomainID, bytes32 resourceID, bytes calldata data) external payable notPaused {\\n        uint option;\\n        uint amount;\\n        (option, amount) = abi.decode(data, (uint, uint));\\n        // AC inconsistency\\n        require(msg.value == amount.add(fee), \\\"QBridge: invalid fee\\\");\\n\\n        address handler = resourceIDToHandlerAddress[resourceID];\\n        require(handler != address(0), \\\"QBridge: invalid resourceID\\\");\\n\\n        uint64 depositNonce = ++_depositCounts[destinationDomainID];\\n\\n        IQBridgeHandler(handler).depositETH{value:amount}(resourceID, msg.sender, data);\\n        //DF inconsistency\\n        emit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);\\n    }\"]:\n}\n\n",
+            "v_outputs1": [
+                [
+                    {
+                        "parameter": "destinationDomainID",
+                        "attribute": "toChainID",
+                        "score": "95",
+                        "reason": "The parameter `destinationDomainID` is used to increment `_depositCounts[destinationDomainID]` and is emitted in the `Deposit` event. Its name convention `destinationDomainID` strongly implies it's the identifier for the target blockchain or 'domain'. This directly aligns with the concept of `toChainID` in a cross-chain context. The high confidence comes from its explicit naming and usage in tracking deposits destined for specific domains."
+                    },
+                    {
+                        "parameter": "amount",
+                        "attribute": "amount",
+                        "score": "100",
+                        "reason": "The `amount` parameter is decoded from `data`, used in a `require` statement `msg.value == amount.add(fee)` for value validation, and directly passed as `value:amount` to the `IQBridgeHandler(handler).depositETH` call. This unequivocally confirms `amount` represents the quantity of ETH being deposited. There is no ambiguity."
+                    },
+                    {
+                        "parameter": "depositNonce",
+                        "attribute": "nonce",
+                        "score": "90",
+                        "reason": "The variable `depositNonce` is incremented using `++_depositCounts[destinationDomainID]` and is immediately emitted in the `Deposit` event. This pattern of a monotonically increasing counter, especially one tied to a specific destination ('domain' in this context), is a classic implementation of a nonce to ensure uniqueness and prevent replay issues for cross-chain operations. The `DF inconsistency` comment in the original code snippet might suggest other interpretations in a broader context but within the provided snippet, it functions as a nonce."
+                    },
+                    {
+                        "parameter": "msg.sender",
+                        "attribute": "recipientAddress",
+                        "score": "60",
+                        "reason": "In `IQBridgeHandler(handler).depositETH{value:amount}(resourceID, msg.sender, data)`, `msg.sender` is passed to the bridge handler. While `msg.sender` is the initiator on the source chain, its role as `recipientAddress` on the destination chain is an **assumption** based on common cross-chain bridge patterns where the sender on the origin chain is often the intended receiver on the destination. However, the contract does not explicitly define that `msg.sender` **is** the `recipientAddress` *on the destination chain*. The `handler` could potentially map `msg.sender` to a different recipient or use it merely as an originator identifier. Thus, while plausible, it's not a direct and guaranteed mapping without further handler logic."
+                    },
+                    {
+                        "parameter": "handler",
+                        "attribute": "routerAddress",
+                        "score": "85",
+                        "reason": "The `handler` address is resolved from `resourceIDToHandlerAddress[resourceID]` and then cast to `IQBridgeHandler` to execute the core cross-chain deposit function `IQBridgeHandler(handler).depositETH`. This design indicates `handler` is the specific contract responsible for processing and forwarding the cross-chain operation for a given resource, effectively acting as a 'router' or dispacher for that resource. The term 'routerAddress' fits well with this functional role."
+                    }
+                ]
+            ],
+            "formatted_outputs1": {
+                "destinationDomainID": {
+                    "toChainID": {
+                        "reason": "The parameter `destinationDomainID` directly correlates with an ID specifying a destination. Its naming convention strongly suggests it represents the ID of the destination blockchain network. The function `depositETH` implies a cross-chain operation, making a 'destination domain ID' equivalent to 'toChainID'.",
+                        "score": "95",
+                        "s_reason": "The parameter `destinationDomainID` is used to increment `_depositCounts[destinationDomainID]` and is emitted in the `Deposit` event. Its name convention `destinationDomainID` strongly implies it's the identifier for the target blockchain or 'domain'. This directly aligns with the concept of `toChainID` in a cross-chain context. The high confidence comes from its explicit naming and usage in tracking deposits destined for specific domains."
+                    }
+                },
+                "amount": {
+                    "amount": {
+                        "reason": "The parameter `amount` is explicitly decoded from the `data` calldata and used in `msg.value == amount.add(fee)` and `IQBridgeHandler(handler).depositETH{value:amount}`. This directly indicates it represents the quantity of tokens (or ETH in this case) being transferred. There's no ambiguity about its purpose since it's directly tied to the transaction value.",
+                        "score": "100",
+                        "s_reason": "The `amount` parameter is decoded from `data`, used in a `require` statement `msg.value == amount.add(fee)` for value validation, and directly passed as `value:amount` to the `IQBridgeHandler(handler).depositETH` call. This unequivocally confirms `amount` represents the quantity of ETH being deposited. There is no ambiguity."
+                    }
+                },
+                "depositNonce": {
+                    "nonce": {
+                        "reason": "The variable `depositNonce` is incremented using `++_depositCounts[destinationDomainID]` and then emitted in the `Deposit` event. The term 'nonce' is widely used in blockchain for uniqueness and preventing replay attacks. Its usage here, incrementing a count per destination, aligns with the concept of a transaction nonce.",
+                        "score": "90",
+                        "s_reason": "The variable `depositNonce` is incremented using `++_depositCounts[destinationDomainID]` and is immediately emitted in the `Deposit` event. This pattern of a monotonically increasing counter, especially one tied to a specific destination ('domain' in this context), is a classic implementation of a nonce to ensure uniqueness and prevent replay issues for cross-chain operations. The `DF inconsistency` comment in the original code snippet might suggest other interpretations in a broader context but within the provided snippet, it functions as a nonce."
+                    }
+                },
+                "msg.sender": {
+                    "recipientAddress": {
+                        "reason": "In the `IQBridgeHandler(handler).depositETH{value:amount}(resourceID, msg.sender, data)` call, `msg.sender` is passed as an argument. While `msg.sender` is the initiator of the current transaction, in a cross-chain deposit context (especially from the perspective of the bridge handler), the `msg.sender` of the initial deposit often acts as the intended **recipient** on the destination chain, or at least the address associated with the origin of the funds. There's an ambiguity here since the contract itself receives the funds initially, but the handler receives `msg.sender` for its logic, suggesting it's the intended recipient **through** the bridge.",
+                        "score": "60",
+                        "s_reason": "In `IQBridgeHandler(handler).depositETH{value:amount}(resourceID, msg.sender, data)`, `msg.sender` is passed to the bridge handler. While `msg.sender` is the initiator on the source chain, its role as `recipientAddress` on the destination chain is an **assumption** based on common cross-chain bridge patterns where the sender on the origin chain is often the intended receiver on the destination. However, the contract does not explicitly define that `msg.sender` **is** the `recipientAddress` *on the destination chain*. The `handler` could potentially map `msg.sender` to a different recipient or use it merely as an originator identifier. Thus, while plausible, it's not a direct and guaranteed mapping without further handler logic."
+                    }
+                },
+                "handler": {
+                    "routerAddress": {
+                        "reason": "The `handler` variable is resolved from `resourceIDToHandlerAddress[resourceID]` and then cast to `IQBridgeHandler`. It's used to execute the cross-chain deposit (`IQBridgeHandler(handler).depositETH`). This suggests `handler` represents the component responsible for routing or dispatching the cross-chain operation, fitting the description of a 'router address'.",
+                        "score": "85",
+                        "s_reason": "The `handler` address is resolved from `resourceIDToHandlerAddress[resourceID]` and then cast to `IQBridgeHandler` to execute the core cross-chain deposit function `IQBridgeHandler(handler).depositETH`. This design indicates `handler` is the specific contract responsible for processing and forwarding the cross-chain operation for a given resource, effectively acting as a 'router' or dispacher for that resource. The term 'routerAddress' fits well with this functional role."
+                    }
+                }
+            }
+        },
+        "step2": {
+            "toChainID": {
+                "destinationDomainID": {
+                    "dataflows": [
+                        {
+                            "parameter": "destinationDomainID",
+                            "dataflow": {
+                                "QBridge.depositETH": [
+                                    "function depositETH(uint8 destinationDomainID, bytes32 resourceID, bytes calldata data) external payable notPaused {",
+                                    "        uint64 depositNonce = ++_depositCounts[destinationDomainID];",
+                                    "        emit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "95",
+                            "reason": "The provided dataflow accurately captures all relevant uses of 'destinationDomainID' within the 'depositETH' function. It covers its use in incrementing '_depositCounts' and emitting the 'Deposit' event. No direct computation or transformation of 'destinationDomainID' is missed within the scope shown. The data flow within the provided code snippet is consistent. While the full contract might have other usages, within the given snippet, the coverage and correctness are high. The only minor point of consideration is that 'data' is decoded to 'option' and 'amount', and 'amount' is used in 'depositETH' call, but this is outside the scope of 'destinationDomainID' flow."
+                        },
+                        {
+                            "parameter": "destinationDomainID",
+                            "dataflow": {
+                                "depositETH": [
+                                    "function depositETH(uint8 destinationDomainID, bytes32 resourceID, bytes calldata data) external payable notPaused{",
+                                    "uint64 depositNonce = ++_depositCounts[destinationDomainID];",
+                                    "emit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "95",
+                            "reason": "The extracted data flow correctly identifies all occurrences of 'destinationDomainID' and its direct assignments/usages within the 'depositETH' function in the provided original code. The 'depositNonce' update and 'Deposit' event emission correctly reflect its usage. The full context shows no other relevant data flow for this parameter that has been missed."
+                        }
+                    ],
+                    "merge_dataflows": "function depositETH(uint8 destinationDomainID, bytes32 resourceID, bytes calldata data) external payable notPaused {\n        uint64 depositNonce = ++_depositCounts[destinationDomainID];\n        emit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);\n}"
+                }
+            },
+            "amount": {
+                "amount": {
+                    "dataflows": [
+                        {
+                            "parameter": "amount",
+                            "dataflow": {
+                                "depositETH": [
+                                    "function depositETH(uint8 destinationDomainID, bytes32 resourceID, bytes calldata data) external payable notPaused {",
+                                    "        uint amount;",
+                                    "        (option, amount) = abi.decode(data, (uint, uint));",
+                                    "        require(msg.value == amount.add(fee), \"QBridge: invalid fee\");",
+                                    "        IQBridgeHandler(handler).depositETH{value:amount}(resourceID, msg.sender, data);"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "95",
+                            "reason": "The extracted dataflow for 'amount' accurately captures its definition via `abi.decode` and its subsequent use in the `require` statement and the `depositETH` call, matching the original code. All relevant dataflow operations are included."
+                        },
+                        {
+                            "parameter": "amount",
+                            "dataflow": {
+                                "depositETH": [
+                                    "function depositETH(uint8 destinationDomainID, bytes32 resourceID, bytes calldata data) external payable notPaused {",
+                                    "        uint amount;",
+                                    "        (option, amount) = abi.decode(data, (uint, uint));",
+                                    "        require(msg.value == amount.add(fee), \"QBridge: invalid fee\");",
+                                    "        IQBridgeHandler(handler).depositETH{value:amount}(resourceID, msg.sender, data);"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "95",
+                            "reason": "The dataflow correctly captures the definition and primary usage of 'amount'. It shows how 'amount' is derived from 'abi.decode(data, (uint, uint))' and then used in the 'require' statement and the 'IQBridgeHandler(handler).depositETH' call, including the value transfer."
+                        }
+                    ],
+                    "merge_dataflows": "function depositETH(uint8 destinationDomainID, bytes32 resourceID, bytes calldata data) external payable notPaused {\n        uint amount;\n        (option, amount) = abi.decode(data, (uint, uint));\n        require(msg.value == amount.add(fee), \"QBridge: invalid fee\");\n        IQBridgeHandler(handler).depositETH{value:amount}(resourceID, msg.sender, data);"
+                }
+            },
+            "nonce": {
+                "depositNonce": {
+                    "dataflows": [
+                        {
+                            "parameter": "depositNonce",
+                            "dataflow": {
+                                "depositETH": [
+                                    "uint64 depositNonce = ++_depositCounts[destinationDomainID];",
+                                    "emit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "100",
+                            "reason": "The provided dataflow accurately captures both the assignment and the usage of 'depositNonce' within the 'depositETH' function in the original code, covering all relevant lines where the variable is defined and utilized."
+                        },
+                        {
+                            "parameter": "depositNonce",
+                            "dataflow": {
+                                "depositETH": [
+                                    "uint64 depositNonce = ++_depositCounts[destinationDomainID];",
+                                    "emit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "100",
+                            "reason": "The extracted data flow for 'depositNonce' perfectly covers its definition and all its uses within the 'depositETH' function in the provided code. The increment operation and its use in the 'emit Deposit' event are both captured correctly."
+                        }
+                    ],
+                    "merge_dataflows": "uint64 depositNonce = ++_depositCounts[destinationDomainID];\nemit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);"
+                }
+            },
+            "routerAddress": {
+                "handler": {
+                    "dataflows": [
+                        {
+                            "parameter": "handler",
+                            "dataflow": {
+                                "depositETH": [
+                                    "address handler = resourceIDToHandlerAddress[resourceID];",
+                                    "require(handler != address(0), \"QBridge: invalid resourceID\");",
+                                    "IQBridgeHandler(handler).depositETH{value:amount}(resourceID, msg.sender, data);"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "100",
+                            "score": "95",
+                            "reason": "The extracted dataflow for 'handler' accurately captures its assignment and subsequent usage. The definition `address handler = resourceIDToHandlerAddress[resourceID];` is present, and its use in `IQBridgeHandler(handler).depositETH{value:amount}(resourceID, msg.sender, data);` is also included. The only line missing is the `emit Deposit` line, which uses the `handler` implicitly as part of the overarching function call, but it's not a direct dataflow operation involving the `handler` variable itself. Therefore, coverage is high, and correctness is perfect for the explicit data flow."
+                        },
+                        {
+                            "parameter": "handler",
+                            "dataflow": {
+                                "depositETH": [
+                                    "address handler = resourceIDToHandlerAddress[resourceID];",
+                                    "require(handler != address(0), \"QBridge: invalid resourceID\");",
+                                    "IQBridgeHandler(handler).depositETH{value:amount}(resourceID, msg.sender, data);"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "100",
+                            "reason": "The extracted data flow for the 'handler' parameter perfectly captures its definition and usage within the depositETH function in the original code. It shows the assignment from `resourceIDToHandlerAddress[resourceID]`, the subsequent null address check, and its ultimate use in the `IQBridgeHandler(handler).depositETH` call. All relevant lines for the data flow of 'handler' are included and are in the correct sequence."
+                        }
+                    ],
+                    "merge_dataflows": "address handler = resourceIDToHandlerAddress[resourceID];require(handler != address(0), \"QBridge: invalid resourceID\");IQBridgeHandler(handler).depositETH{value:amount}(resourceID, msg.sender, data);"
+                }
+            }
+        },
+        "step3": {
+            "toChainID": {
+                "destinationDomainID": {
+                    "Check whether toChainID is authorized.": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": "function depositETH(uint8 destinationDomainID, bytes32 resourceID, bytes calldata data) external payable notPaused {\n        uint64 depositNonce = ++_depositCounts[destinationDomainID];\n        emit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);\n}",
+                                "reason": "The provided code snippet does not contain any logic to explicitly check or verify if `destinationDomainID` (aliased as `toChainID` in the constraint) is authorized. The `destinationDomainID` is used directly to increment `_depositCounts` and in the `Deposit` event emission, without any authorization checks against a whitelist, role-based access control, or predefined authorized IDs."
+                            },
+                            {
+                                "result": false,
+                                "validation": "function depositETH(uint8 destinationDomainID, bytes32 resourceID, bytes calldata data) external payable notPaused {\n        uint64 depositNonce = ++_depositCounts[destinationDomainID];\n        emit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);\n}",
+                                "reason": "There's no `require` statement, `if` condition, or state variable lookup related to `destinationDomainID` that would enforce an authorization check. The function proceeds with using the `destinationDomainID` as provided by the caller without validation against a list of authorized chain IDs."
+                            },
+                            {
+                                "result": false,
+                                "validation": "function depositETH(uint8 destinationDomainID, bytes32 resourceID, bytes calldata data) external payable notPaused {\n        uint64 depositNonce = ++_depositCounts[destinationDomainID];\n        emit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);\n}",
+                                "reason": "The function `depositETH` takes `destinationDomainID` as a direct input parameter and uses it without any internal logic to confirm its authorization status. Authorization typically involves comparing the input to a predefined set of allowed values or checking against a mapping/access control list, none of which are present in this snippet for `destinationDomainID`."
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Check that the destination chain ID is not equal to the source chain ID.": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": "function depositETH(uint8 destinationDomainID, bytes32 resourceID, bytes calldata data) external payable notPaused {\n        uint64 depositNonce = ++_depositCounts[destinationDomainID];\n        emit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);\n}",
+                                "reason": "The provided code snippet for `depositETH` does not contain any logic to check or compare `destinationDomainID` with a source chain ID. The parameter `destinationDomainID` is used, but no assertion or conditional statement based on its equality to a source ID is present. Therefore, this specific constraint is not covered."
+                            },
+                            {
+                                "result": false,
+                                "validation": "function depositETH(uint8 destinationDomainID, bytes32 resourceID, bytes calldata data) external payable notPaused {\n        uint64 depositNonce = ++_depositCounts[destinationDomainID];\n        emit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);\n}",
+                                "reason": "The function `depositETH` uses `destinationDomainID` to increment a counter (`_depositCounts[destinationDomainID]`) and emit an event, but there is no explicit check to ensure `destinationDomainID` is different from the current chain's ID (source chain ID). Without additional context or code, this constraint is not met."
+                            },
+                            {
+                                "result": false,
+                                "validation": "function depositETH(uint8 destinationDomainID, bytes32 resourceID, bytes calldata data) external payable notPaused {\n        uint64 depositNonce = ++_depositCounts[destinationDomainID];\n        emit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);\n}",
+                                "reason": "The given code snippet does not include any mechanism to retrieve the source chain ID or to compare it with the `destinationDomainID`. To satisfy the constraint, a line similar to `require(destinationDomainID != block.chainid, \"Destination cannot be source chain\");` would be needed, which is absent."
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            },
+            "amount": {
+                "amount": {
+                    "Validate that amount is greater than 0": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The provided code snippet does not explicitly contain a 'require' or 'if' statement that validates 'amount > 0'. While 'msg.value == amount.add(fee)' implies 'amount' is positive if 'msg.value' is positive and 'fee' is non-negative, this is an indirect inference, not a direct check on 'amount' itself. There is no direct validation of 'amount > 0'."
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Validate that msg.sender's balance change before and after equals amount": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": "IQBridgeHandler(handler).depositETH{value:amount}(resourceID, msg.sender, data);",
+                                "reason": "The `depositETH` function explicitly uses `msg.value == amount.add(fee)` to validate the amount of ETH sent. Although `msg.value` includes a fee, the contract then forwards `amount` (which is `msg.value - fee`) to the handler via `IQBridgeHandler(handler).depositETH{value:amount}(...)`. This implies that `amount` is the intended value to be transferred from `msg.sender` for the core deposit logic, excluding the fee."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The provided code snippet does not directly monitor or assert `msg.sender`'s balance change before and after the transaction in a way that unequivocally proves it equals `amount`. Instead, it checks `msg.value`, which is the total ETH sent by `msg.sender`, and then uses a derived `amount` for the internal call. There's no explicit balance check in this snippet itself."
+                            },
+                            {
+                                "result": true,
+                                "validation": "require(msg.value == amount.add(fee), \"QBridge: invalid fee\");\n        IQBridgeHandler(handler).depositETH{value:amount}(resourceID, msg.sender, data);",
+                                "reason": "The line `require(msg.value == amount.add(fee), \"QBridge: invalid fee\");` ensures that the `msg.value` (the total balance change for `msg.sender` due to this call) is exactly `amount` plus a `fee`. Subsequently, `IQBridgeHandler(handler).depositETH{value:amount}(...)` passes `amount` as the value for the internal call. This implies that the 'amount' portion of `msg.sender`'s sent ETH is indeed `amount` (excluding the `fee`), effectively covering the constraint under the assumption that `amount` is the core value being transferred for the deposit, and the `fee` is a separate charge."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "amount",
+                                "constraint": "Validate that msg.sender's balance change before and after equals amount,",
+                                "validation": "require(msg.value == amount.add(fee), \"QBridge: invalid fee\");\n        IQBridgeHandler(handler).depositETH{value:amount}(resourceID, msg.sender, data);",
+                                "score": "30",
+                                "reason": "The `require(msg.value == amount.add(fee))` line verifies that the total value sent (`msg.value`) includes the `amount` plus a `fee`. While `amount` is part of `msg.value`, this still doesn't directly validate the 'msg.sender's balance change before and after' to precisely equal `amount`. The `depositETH{value:amount}` call merely specifies the value for the internal call. A true balance change validation requires pre/post balance snapshots."
+                            }
+                        ]
+                    },
+                    "Validate that the bridge's balance change before and after equals amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The provided code snippet does not include any explicit balance checks or assertions that directly validate the bridge's balance change before and after the transaction equals 'amount'. While 'msg.value' is checked against 'amount.add(fee)', this primarily validates the incoming value from the depositor, not the bridge's internal balance status."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The code 'IQBridgeHandler(handler).depositETH{value:amount}(resourceID, msg.sender, data);' forwards 'amount' to another contract. To validate the bridge's balance change, one would need to inspect the balance of the 'handler' contract or the calling contract (QBridge) before and after this call, which is not present in the given snippet."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "There are no 'balanceOf' calls on the bridge contract or equivalent operations that explicitly measure or assert changes in the contract's ETH balance attributable solely to 'amount'. A complete validation would require examining the balance of 'address(this)' (the bridge itself) before and after the critical operation."
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Validate that msg.sender's balance ≥ amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The provided code snippet does not explicitly check if msg.sender's balance is greater than or equal to 'amount'. While msg.value is checked against 'amount.add(fee)', this only ensures the sent value covers the sum of 'amount' and 'fee', it does not directly validate msg.sender's overall balance."
+                            },
+                            {
+                                "result": true,
+                                "validation": "require(msg.value == amount.add(fee), \"QBridge: invalid fee\");\nIQBridgeHandler(handler).depositETH{value:amount}(resourceID, msg.sender, data);",
+                                "reason": "Although not an explicit 'balance check' as such, the `depositETH{value:amount}` call implies that `msg.sender` must have at least `amount` (plus `fee` in the `require` statement) in their balance for the transaction to succeed. If `msg.sender` did not have sufficient balance, the transaction would revert during the `value` transfer. Therefore, implicitly, `msg.sender`'s balance must be ≥ `amount` for the function to execute successfully."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The code only checks that `msg.value` equals `amount + fee`. This is not a direct check of `msg.sender`'s balance, but rather a check of the value provided with the current transaction. A separate explicit check `require(address(this).balance >= amount, ...)` or `require(msg.sender.balance >= amount, ...)` would be needed to fulfill the constraint directly as stated. The current code relies on the EVM's inherent behavior to revert if `msg.value` is not available, rather than performing an explicit balance check before or during the transfer."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "amount",
+                                "constraint": "Validate that msg.sender's balance ≥ amount",
+                                "validation": "require(msg.value == amount.add(fee), \"QBridge: invalid fee\");\nIQBridgeHandler(handler).depositETH{value:amount}(resourceID, msg.sender, data);",
+                                "score": "0",
+                                "reason": "The validation code 'require(msg.value == amount.add(fee), \"QBridge: invalid fee\")' checks if the sent Ether (msg.value) is equal to 'amount + fee'. While 'msg.value' is a proxy for the sender's balance being at least 'msg.value' (since the transaction wouldn't execute otherwise), it does not directly validate 'msg.sender's balance ≥ amount'. Furthermore, 'amount' in the validation code refers to a decoded value from 'data', not necessarily the 'amount' that needs direct balance checking against 'msg.sender'. The constraint explicitly asks to validate 'msg.sender's balance ≥ amount', which is a pre-condition for sending 'amount' Ether. The provided validation checks the value sent, but not the explicit balance of the sender before the operation."
+                            }
+                        ]
+                    }
+                }
+            },
+            "nonce": {
+                "depositNonce": {
+                    "Check if the transaction's nonce is equal to the account's current nonce.": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The provided code snippet 'uint64 depositNonce = ++_depositCounts[destinationDomainID];' increments a deposit counter specific to a destination domain ID. This `depositNonce` is not related to the transaction's nonce (which is a counter of transactions sent by an externally owned account) or an account's current nonce."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The `depositNonce` in the code is a custom application-level nonce managed within the contract's state (`_depositCounts[destinationDomainID]`). It does not refer to the standard Ethereum transaction nonce (e.g., `tx.nonce`)."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The code `uint64 depositNonce = ++_depositCounts[destinationDomainID];` is creating a `depositNonce` for a specific cross-domain deposit mechanism, not checking the `msg.sender`'s transaction nonce."
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            },
+            "routerAddress": {
+                "handler": {
+                    "Check whether the routerAddress is authorized to use.": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The provided code snippet initializes `handler` from `resourceIDToHandlerAddress[resourceID]` and then calls a function on it. It ensures `handler` is not the zero address but does not contain any logic for checking if `routerAddress` is authorized to use this `handler`. The authorisation logic would likely exist in `resourceIDToHandlerAddress` mapping or in the `IQBridgeHandler(handler)` contract itself, neither of which is shown here."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The code `address handler = resourceIDToHandlerAddress[resourceID];` implicitly relies on some prior authorization or registration process where the `resourceIDToHandlerAddress` mapping was populated. However, the provided snippet itself does not perform any explicit authorization check for `routerAddress` related to `handler`."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The only check present is `require(handler != address(0), \"QBridge: invalid resourceID\");`. This is a null address check for the `handler` itself, not an authorization check for `routerAddress` to use this `handler`. Therefore, the constraint is not covered by the given code."
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            }
+        },
+        "step4": {
+            "toChainID": {
+                "destinationDomainID": {}
+            },
+            "amount": {
+                "amount": {}
+            },
+            "nonce": {
+                "depositNonce": {}
+            },
+            "routerAddress": {
+                "handler": {}
+            }
+        },
+        "final_result": {
+            "toChainID": {
+                "destinationDomainID": {
+                    "Check whether toChainID is authorized.": [
+                        {
+                            "parameter": "destinationDomainID",
+                            "constraint": "Check whether toChainID is authorized.",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Check that the destination chain ID is not equal to the source chain ID.": [
+                        {
+                            "parameter": "destinationDomainID",
+                            "constraint": "Check that the destination chain ID is not equal to the source chain ID.",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            },
+            "amount": {
+                "amount": {
+                    "Validate that amount is greater than 0": [
+                        {
+                            "parameter": "amount",
+                            "constraint": "Validate that amount is greater than 0",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Validate that msg.sender's balance change before and after equals amount": [],
+                    "Validate that the bridge's balance change before and after equals amount": [
+                        {
+                            "parameter": "amount",
+                            "constraint": "Validate that the bridge's balance change before and after equals amount",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Validate that msg.sender's balance ≥ amount": []
+                }
+            },
+            "nonce": {
+                "depositNonce": {
+                    "Check if the transaction's nonce is equal to the account's current nonce.": [
+                        {
+                            "parameter": "depositNonce",
+                            "constraint": "Check if the transaction's nonce is equal to the account's current nonce.",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            },
+            "routerAddress": {
+                "handler": {
+                    "Check whether the routerAddress is authorized to use.": [
+                        {
+                            "parameter": "handler",
+                            "constraint": "Check whether the routerAddress is authorized to use.",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            }
+        },
+        "context": {
+            "event": "Deposit",
+            "call_graph": "depositETH",
+            "state_variables": {
+                "fee": "uint128 public fee;",
+                "_depositCounts": "mapping(uint8 => uint64) public _depositCounts;",
+                "resourceIDToHandlerAddress": "mapping(bytes32 => address) public resourceIDToHandlerAddress;"
+            },
+            "external_functions": [
+                "function add(uint256 a, uint256 b) internal pure returns (uint256){ uint256 c = a + b; require(c >= a, \"SafeMath: addition overflow\"); return c;}"
+            ]
+        },
+        "step1-time": 5.508472204208374,
+        "step2-time": 40.325955867767334,
+        "step2-call_api_times": 28,
+        "step3-time": 30.884116411209106,
+        "step3-call_api_times": 10,
+        "step4-time": 6.604194641113281e-05,
+        "step4-call_api_times": 0,
+        "compare_audit": {
+            "result": [
+                {
+                    "vuln": "require(msg.value == amount.add(fee), \"QBridge: invalid fee\");",
+                    "reason": "The comment `// AC inconsistency` suggests a potential issue with 'amount' or 'fee' not being correctly aligned or validated across chains, which could lead to discrepancies in deposited value versus actual amount transferred or processed by other chain. This is particularly problematic in a cross-chain context where `msg.value` is on one chain, but `amount` and `fee` might be derived from or intended for another."
+                },
+                {
+                    "vuln": "IQBridgeHandler(handler).depositETH{value:amount}(resourceID, msg.sender, data);",
+                    "reason": "The comment `//DF inconsistency` suggests a potential issue with 'data flow' inconsistency. If the `data` passed here is not consistently interpreted or validated on the destination chain's handler, it could lead to different behaviors or state updates than intended. In a cross-chain scenario, this could result in replay attacks, unexpected fund transfers, or protocol logic bypasses if the `data` format or interpretation differs across domains or is not strictly enforced."
+                }
+            ]
+        },
+        "compare_attribute_verification": {
+            "result": [
+                {
+                    "toChainID": "destinationDomainID",
+                    "findings": [
+                        {
+                            "constraint": "Check whether toChainID is authorized.",
+                            "validation": "No explicit authorization check for `destinationDomainID` is found. It's used directly from input.",
+                            "poc": null,
+                            "reason": "The `destinationDomainID` (toChainID) is taken directly from the function argument without any validation against a whitelist or authorized list. An attacker could specify an arbitrary `destinationDomainID` which might lead to unexpected behavior if downstream handlers do not validate it."
+                        },
+                        {
+                            "constraint": "Check that the destination chain ID is not equal to the source chain ID.",
+                            "validation": "No explicit check is performed to ensure `destinationDomainID` is not equal to the source chain ID.",
+                            "poc": null,
+                            "reason": "The contract does not prevent a user from specifying the current chain's ID as the `destinationDomainID`. While this might not directly lead to a loss of funds, it could cause unnecessary transactions or lead to logicalerrors in downstream components expecting a cross-chain transfer."
+                        }
+                    ]
+                },
+                {
+                    "tokenAddress": "msg.sender (implicitly for native token)",
+                    "findings": [
+                        {
+                            "constraint": "Check whether the tokenAddress is authorized to use.",
+                            "validation": "This function handles native ETH (msg.value), so there isn't a specific `tokenAddress` parameter to authorize in the traditional sense. The `handler` is checked via `resourceIDToHandlerAddress[resourceID]`.",
+                            "poc": null,
+                            "reason": "Since this function is for `depositETH`, the 'tokenAddress' is implicitly `address(0)` or the native token. Authorization for which tokens are allowed is typically handled by mapping `resourceID` to `handler` addresses. The `handler` itself is checked to be non-zero, but `resourceID` can be arbitrary as long as it maps to a non-zero handler, which might imply authorization but not explicit permission for a specific token contract."
+                        }
+                    ]
+                },
+                {
+                    "amount": "amount",
+                    "findings": [
+                        {
+                            "constraint": "Validate that amount is greater than 0",
+                            "validation": "No explicit `require(amount > 0)` check is present. However, `msg.value` is compared to `amount.add(fee)`, implying `amount` is expected to be positive for the transaction to proceed meaningfully with a fee.",
+                            "poc": null,
+                            "reason": "While `msg.value == amount.add(fee)` implies `amount` is positive for a non-zero fee, if `fee` is zero, a zero `amount` could theoretically pass this check. This is not a direct vulnerability but a missed explicit validation."
+                        },
+                        {
+                            "constraint": "Validate that msg.sender's balance change before and after equals amount",
+                            "validation": "`msg.value` is validated against `amount.add(fee)`. The `amount` portion of `msg.value` is then sent to the handler via `IQBridgeHandler(handler).depositETH{value:amount}(...)`.",
+                            "poc": null,
+                            "reason": "The `depositETH` function uses `msg.value` to deduct ETH from the sender. The check `msg.value == amount.add(fee)` ensures the sender provides the exact amount plus fee. The `value:amount` transfer to the handler correctly accounts for the `amount` portion, while the `fee` is implicitly retained by the QBridge contract. This correctly reflects the sender's balance change."
+                        },
+                        {
+                            "constraint": "Validate that the bridge's balance change before and after equals amount",
+                            "validation": "The `QBridge` contract receives `msg.value`. The `amount` portion is then forwarded to the `handler` via `IQBridgeHandler(handler).depositETH{value:amount}(...)`. The `fee` portion remains in the `QBridge` contract.",
+                            "poc": null,
+                            "reason": "The `QBridge` contract's balance changes by `msg.value` initially. However, it then forwards `amount` to the handler. So, the QBridge contract's balance effectively only changes by `fee`, not `amount`. The `amount` is transferred from `msg.sender` to the `handler` through `QBridge`. The constraint 'bridge's balance change' is ambiguous; if it refers to the `QBridge` contract, it changes by `fee`. If it refers to the entire bridging system (QBridge + handler), then the total change would be `amount` + `fee` received by the system, with `amount` specifically moving towards the destination."
+                        },
+                        {
+                            "constraint": "Validate that msg.sender's balance ≥ amount",
+                            "validation": "Implicitly validated by the EVM's `CALL` opcode during `msg.value` transfer. The `require(msg.value == amount.add(fee))` ensures that `msg.sender` has at least `amount + fee` ETH.",
+                            "poc": null,
+                            "reason": "The EVM inherently ensures that `msg.sender` has sufficient balance to cover `msg.value` before the transaction executes. The `require` statement further ensures that the provided `msg.value` matches the expected `amount + fee`, thereby verifying that the sender had at least that much to begin with."
+                        }
+                    ]
+                },
+                {
+                    "nonce": "_depositCounts[destinationDomainID]",
+                    "findings": [
+                        {
+                            "constraint": "Check if the transaction's nonce is equal to the account's current nonce.",
+                            "validation": "The code uses `uint64 depositNonce = ++_depositCounts[destinationDomainID];` which increments a per-destination domain ID counter. This is a custom nonce for the bridge, not the Ethereum account's transaction nonce.",
+                            "poc": null,
+                            "reason": "The `depositNonce` is a unique sequence number for cross-chain deposits specific to a `destinationDomainID` within the QBridge contract. It prevents replay attacks for cross-chain messages by ensuring each deposit for a given domain ID has a unique, incrementing identifier. It does not check the `msg.sender`'s Ethereum transaction nonce, nor should it, as those are handled by the EVM itself."
+                        }
+                    ]
+                },
+                {
+                    "recipientAddress": "msg.sender (as the sender on the source chain, implying recipient on destination)",
+                    "findings": [
+                        {
+                            "constraint": "Validate that recipientAddress is not the zero address",
+                            "validation": "The `recipientAddress` is `msg.sender`. The Ethereum blockchain ensures that `msg.sender` is never the zero address for externally owned accounts or contract calls.",
+                            "poc": null,
+                            "reason": "Since `msg.sender` is used as the recipient on the source chain (and is typically passed as the recipient on the destination), it is inherently non-zero according to EVM rules. Thus, a direct check for zero address is not required here."
+                        }
+                    ]
+                },
+                {
+                    "externalCallAddress": "No direct externalCallAddress parameter in this function.",
+                    "findings": [
+                        {
+                            "constraint": "Check whether the externalCallAddress is authorized to use.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "The `depositETH` function does not implement a direct `externalCallAddress` parameter or subsequent arbitrary external call. Therefore, this constraint is not applicable to the provided code snippet."
+                        }
+                    ]
+                },
+                {
+                    "externalCallFunction": "No direct externalCallFunction parameter in this function.",
+                    "findings": [
+                        {
+                            "constraint": "Validate that externalCallFunction is in the allowed function signature list",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "The `depositETH` function does not implement a direct `externalCallFunction` parameter or subsequent arbitrary external call. Therefore, this constraint is not applicable to the provided code snippet."
+                        }
+                    ]
+                },
+                {
+                    "routerAddress": "handler",
+                    "findings": [
+                        {
+                            "constraint": "Check whether the routerAddress is authorized to use.",
+                            "validation": "The `handler` (acting as a router/bridge handler for the `resourceID`) is retrieved from `resourceIDToHandlerAddress[resourceID]`. A check `require(handler != address(0), \"QBridge: invalid resourceID\");` exists.",
+                            "poc": null,
+                            "reason": "The `routerAddress` (represented by `handler`) is authorized by the contract maintainer through the `resourceIDToHandlerAddress` mapping. Only pre-configured `resourceID`s that map to valid, non-zero addresses are allowed. This is a common and secure way to authorize specific handlers for specific resources. There is no obvious bypass as long as the mapping is managed securely by trusted parties."
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "QBridge.deposit": {
+        "step1": {
+            "prompt1": "\nYou are an experienced cross-chain protocol analysis expert. Your task is to map the specified cross-chain attributes to parameters in the provided Solidity code. If an attribute cannot be found in the code, do not list it in the output. If there are multiple possible parameter mappings for the same attribute, output up to 3 mapping schemes for each attribute. Please strictly follow the input and output formats defined below:\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"attribute\": \n{ \n\"<attribute>\": \"<attribute description>\" ,\n\"<attribute>\": \"<attribute description>\",\n...\n}\n\"code\": \"...\" // Solidity contract code string\n}\nOutput format:\nReturn a JSON array, each item structured as follows, only produce output in the required format, without any additional content:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // The input cross-chain attribute\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}, ... \n]\nIn the reason, please point out both the core basis for the mapping and potential uncertainties (e.g., parameter name similarity, ambiguous contextual meaning, etc.).\n\nInput:\n{\n\"attribute\": {\"toChainID\": \"Specifies the destination blockchain network ID.\", \"tokenAddress\": \"Indicates the contract address of the token to be transferred.\", \"amount\": \"The number of tokens to be transferred across chains.\", \"nonce\": \"Check and mark that nonce has not been consumed to prevent replay\", \"recipientAddress\": \"The address that will receive the tokens on the destination chain.\", \"externalCallAddress\": \"The address of a contract to be called after the cross-chain transfer.\", \"externalCallFunction\": \"The specific function or calldata to be executed on the `externalCallAddress`.\", \"routerAddress\": \"The address of the cross-chain router or bridge handler.\"},\n\"code\": [\"QBridge.deposit:function deposit(uint8 destinationDomainID, bytes32 resourceID, bytes calldata data) external payable notPaused {\\n        // AC inconsistency\\n        require(msg.value == fee, \\\"QBridge: invalid fee\\\");\\n\\n        address handler = resourceIDToHandlerAddress[resourceID];\\n        require(handler != address(0), \\\"QBridge: invalid resourceID\\\");\\n\\n        uint64 depositNonce = ++_depositCounts[destinationDomainID];\\n\\n        IQBridgeHandler(handler).deposit(resourceID, msg.sender, data);\\n        //DF inconsistency\\n        emit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);\\n    }\"]\n}\n",
+            "outputs1": [
+                [
+                    {
+                        "parameter": "destinationDomainID",
+                        "attribute": "toChainID",
+                        "reason": "The parameter 'destinationDomainID' clearly indicates the destination chain ID, aligning with the description 'Specifies the destination blockchain network ID'. There is no ambiguity in its naming or context."
+                    },
+                    {
+                        "parameter": "data",
+                        "attribute": "tokenAddress",
+                        "reason": "The 'data' parameter is a general calldata field. It's possible that the token address is encoded within this 'data' for the `IQBridgeHandler(handler).deposit` call, as the `data` parameter is passed directly to the handler's deposit function which would handle token-related information. However, this is uncertain as 'data' could contain various other parameters depending on the handler's implementation."
+                    },
+                    {
+                        "parameter": "data",
+                        "attribute": "amount",
+                        "reason": "Similar to tokenAddress, 'amount' is likely to be encoded within the generic 'data' parameter supplied to the `IQBridgeHandler(handler).deposit` function. The `data` parameter is a common way to pass packed arguments in Solidity. However, the exact structure of 'data' is not defined here, leading to uncertainty."
+                    },
+                    {
+                        "parameter": "_depositCounts[destinationDomainID]",
+                        "attribute": "nonce",
+                        "reason": "The variable `_depositCounts[destinationDomainID]` is incremented (pre-increment `++_depositCounts`) to create `depositNonce`. This `depositNonce` is then emitted in the `Deposit` event. This strongly suggests a role as a replay protection mechanism, making it a strong candidate for 'nonce'. The name 'depositNonce' further supports this. There is low ambiguity."
+                    },
+                    {
+                        "parameter": "msg.sender",
+                        "attribute": "recipientAddress",
+                        "reason": "The `msg.sender` is passed as one of the arguments to `IQBridgeHandler(handler).deposit` and is also emitted in the `Deposit` event. While `msg.sender` is the depositor on the source chain, it is highly probable that this address (or derived from it) will be the recipient on the destination chain for a standard cross-chain transfer. Uncertainty exists because the `data` parameter could also specify a different recipient if the handler supports proxy transfers."
+                    },
+                    {
+                        "parameter": "data",
+                        "attribute": "externalCallAddress",
+                        "reason": "The 'data' parameter is unstructured `bytes calldata` that is passed to the `IQBridgeHandler(handler).deposit` function. If the cross-chain protocol supports arbitrary external calls post-transfer, then the external call address would typically be encoded within such 'data'. This is an assumption based on common cross-chain patterns, leading to high uncertainty as the code doesn't explicitly reveal its structure."
+                    },
+                    {
+                        "parameter": "data",
+                        "attribute": "externalCallFunction",
+                        "reason": "Similar to 'externalCallAddress', 'externalCallFunction' (likely as calldata for the external call) would be embedded within the generic 'data' parameter, which is then processed by the `IQBridgeHandler`. Without additional context on the 'data' encoding, this mapping is speculative and highly uncertain."
+                    },
+                    {
+                        "parameter": "resourceIDToHandlerAddress[resourceID]",
+                        "attribute": "routerAddress",
+                        "reason": "The variable `handler` is obtained from `resourceIDToHandlerAddress[resourceID]` and then cast to `IQBridgeHandler`. This `handler` contract is responsible for processing the deposit. In many cross-chain architectures, such a handler acts as a specialized router or bridge component for a specific resource, thus aligning with 'routerAddress'. The `handler` variable itself represents the address being called. Low ambiguity."
+                    },
+                    {
+                        "parameter": "handler",
+                        "attribute": "routerAddress",
+                        "reason": "The variable `handler` itself, derived from `resourceIDToHandlerAddress[resourceID]`, directly represents the address of the specific bridge handler or router responsible for processing the cross-chain deposit for the given resource. This is a direct mapping. Low ambiguity."
+                    }
+                ]
+            ],
+            "v_prompt1": "\nYou are a rigorous cross-chain protocol auditor and data consistency verifier. Carefully review whether the meaning of each cross-chain attribute and parameter in the code is consistent, assign a confidence score (0-100%), and state the reason for the given confidence score.\n\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"correspondence\":    // Array of attribute-parameter correspondences in the code\n[\n{\n\"attribute\": \"...\", // Input cross-chain attribute\n\"parameter\": \"...\", // Corresponding parameter\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}\n...\n],\n\"code\":\"...\" // Cross-chain contract code\n}\n\nOutput format: Return a JSON array, each item structured as follows, only produce output in the required format, without any additional content:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // Input cross-chain attribute\n\"score\":\"...\", // Assigned confidence score\n\"reason\": \"...\" // Brief explanation for the given confidence score\n}, ... \n]\nInput:\n{\n\"correspondence\": [{\"parameter\": \"destinationDomainID\", \"attribute\": \"toChainID\", \"reason\": \"The parameter 'destinationDomainID' clearly indicates the destination chain ID, aligning with the description 'Specifies the destination blockchain network ID'. There is no ambiguity in its naming or context.\"}, {\"parameter\": \"data\", \"attribute\": \"tokenAddress\", \"reason\": \"The 'data' parameter is a general calldata field. It's possible that the token address is encoded within this 'data' for the `IQBridgeHandler(handler).deposit` call, as the `data` parameter is passed directly to the handler's deposit function which would handle token-related information. However, this is uncertain as 'data' could contain various other parameters depending on the handler's implementation.\"}, {\"parameter\": \"data\", \"attribute\": \"amount\", \"reason\": \"Similar to tokenAddress, 'amount' is likely to be encoded within the generic 'data' parameter supplied to the `IQBridgeHandler(handler).deposit` function. The `data` parameter is a common way to pass packed arguments in Solidity. However, the exact structure of 'data' is not defined here, leading to uncertainty.\"}, {\"parameter\": \"_depositCounts[destinationDomainID]\", \"attribute\": \"nonce\", \"reason\": \"The variable `_depositCounts[destinationDomainID]` is incremented (pre-increment `++_depositCounts`) to create `depositNonce`. This `depositNonce` is then emitted in the `Deposit` event. This strongly suggests a role as a replay protection mechanism, making it a strong candidate for 'nonce'. The name 'depositNonce' further supports this. There is low ambiguity.\"}, {\"parameter\": \"msg.sender\", \"attribute\": \"recipientAddress\", \"reason\": \"The `msg.sender` is passed as one of the arguments to `IQBridgeHandler(handler).deposit` and is also emitted in the `Deposit` event. While `msg.sender` is the depositor on the source chain, it is highly probable that this address (or derived from it) will be the recipient on the destination chain for a standard cross-chain transfer. Uncertainty exists because the `data` parameter could also specify a different recipient if the handler supports proxy transfers.\"}, {\"parameter\": \"data\", \"attribute\": \"externalCallAddress\", \"reason\": \"The 'data' parameter is unstructured `bytes calldata` that is passed to the `IQBridgeHandler(handler).deposit` function. If the cross-chain protocol supports arbitrary external calls post-transfer, then the external call address would typically be encoded within such 'data'. This is an assumption based on common cross-chain patterns, leading to high uncertainty as the code doesn't explicitly reveal its structure.\"}, {\"parameter\": \"data\", \"attribute\": \"externalCallFunction\", \"reason\": \"Similar to 'externalCallAddress', 'externalCallFunction' (likely as calldata for the external call) would be embedded within the generic 'data' parameter, which is then processed by the `IQBridgeHandler`. Without additional context on the 'data' encoding, this mapping is speculative and highly uncertain.\"}, {\"parameter\": \"resourceIDToHandlerAddress[resourceID]\", \"attribute\": \"routerAddress\", \"reason\": \"The variable `handler` is obtained from `resourceIDToHandlerAddress[resourceID]` and then cast to `IQBridgeHandler`. This `handler` contract is responsible for processing the deposit. In many cross-chain architectures, such a handler acts as a specialized router or bridge component for a specific resource, thus aligning with 'routerAddress'. The `handler` variable itself represents the address being called. Low ambiguity.\"}, {\"parameter\": \"handler\", \"attribute\": \"routerAddress\", \"reason\": \"The variable `handler` itself, derived from `resourceIDToHandlerAddress[resourceID]`, directly represents the address of the specific bridge handler or router responsible for processing the cross-chain deposit for the given resource. This is a direct mapping. Low ambiguity.\"}],\n\"code\": [\"QBridge.deposit:function deposit(uint8 destinationDomainID, bytes32 resourceID, bytes calldata data) external payable notPaused {\\n        // AC inconsistency\\n        require(msg.value == fee, \\\"QBridge: invalid fee\\\");\\n\\n        address handler = resourceIDToHandlerAddress[resourceID];\\n        require(handler != address(0), \\\"QBridge: invalid resourceID\\\");\\n\\n        uint64 depositNonce = ++_depositCounts[destinationDomainID];\\n\\n        IQBridgeHandler(handler).deposit(resourceID, msg.sender, data);\\n        //DF inconsistency\\n        emit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);\\n    }\"]:\n}\n\n",
+            "v_outputs1": [
+                [
+                    {
+                        "parameter": "destinationDomainID",
+                        "attribute": "toChainID",
+                        "score": "100",
+                        "reason": "The parameter 'destinationDomainID' is explicitly named to denote the destination domain ID. This directly corresponds to 'toChainID' without any ambiguity. Its usage confirms it specifies the target blockchain network."
+                    },
+                    {
+                        "parameter": "data",
+                        "attribute": "tokenAddress",
+                        "score": "20",
+                        "reason": "The 'data' parameter is a generic `bytes calldata` field. While it's plausible that 'tokenAddress' could be encoded within 'data' for the `IQBridgeHandler`'s deposit function, the lack of specific encoding information or a clear schema makes this highly uncertain. 'data' could contain various other parameters, or token address might be implied by 'resourceID' depending on the handler's logic. This mapping is speculative."
+                    },
+                    {
+                        "parameter": "data",
+                        "attribute": "amount",
+                        "score": "20",
+                        "reason": "Similar to 'tokenAddress', the 'amount' is likely to be encoded within the generic 'data' parameter supplied to `IQBridgeHandler(handler).deposit`. However, without the ABI or schema for the `data` parameter within the handler's function, it's impossible to confirm its presence or location. This is an assumption based on common cross-chain patterns, leading to low confidence."
+                    },
+                    {
+                        "parameter": "_depositCounts[destinationDomainID]",
+                        "attribute": "nonce",
+                        "score": "95",
+                        "reason": "The variable `_depositCounts[destinationDomainID]` is pre-incremented and assigned to `depositNonce`. This `depositNonce` is then emitted in the `Deposit` event. This pattern is a very strong indicator of a nonce for replay protection. The name `depositNonce` further solidifies this interpretation. The slight uncertainty comes only from the theoretical possibility of a different, highly unusual, interpretation, which is unlikely given the context."
+                    },
+                    {
+                        "parameter": "msg.sender",
+                        "attribute": "recipientAddress",
+                        "score": "70",
+                        "reason": "`msg.sender` is the initiator of the deposit on the source chain and is passed to the `IQBridgeHandler.deposit` function and emitted in the `Deposit` event. In many cross-chain protocols, the sender on the source chain is the default recipient on the destination chain. However, the `data` parameter could theoretically contain an override or a different recipient address for more complex scenarios (e.g., meta-transactions or proxies), which introduces some uncertainty regarding whether `msg.sender` is *always* the final recipient or just the initial actor."
+                    },
+                    {
+                        "parameter": "data",
+                        "attribute": "externalCallAddress",
+                        "score": "10",
+                        "reason": "The 'data' parameter is unstructured `bytes calldata` passed to the handler. While some cross-chain protocols embed external call data within such a generic parameter, there's no explicit indication or mechanism shown in the provided code snippet to confirm this. This is purely speculative based on a common design pattern without concrete evidence, resulting in very low confidence."
+                    },
+                    {
+                        "parameter": "data",
+                        "attribute": "externalCallFunction",
+                        "score": "10",
+                        "reason": "Similar to 'externalCallAddress', the 'externalCallFunction' (likely part of calldata for an external call) would be embedded within the generic 'data' parameter. Without any schema or further implementation details of the `IQBridgeHandler.deposit` function, this is a highly uncertain assumption based on common but not guaranteed cross-chain patterns."
+                    },
+                    {
+                        "parameter": "resourceIDToHandlerAddress[resourceID]",
+                        "attribute": "routerAddress",
+                        "score": "90",
+                        "reason": "The expression `resourceIDToHandlerAddress[resourceID]` retrieves an address which is then cast to `IQBridgeHandler`. This 'handler' is the specific contract responsible for processing the deposit for a given `resourceID`. In cross-chain architectures, such handlers often serve as specialized routers or bridge components. This mapping is highly consistent with the functional role of a 'routerAddress' for specific resource bridging. The direct variable `handler` represents this address."
+                    },
+                    {
+                        "parameter": "handler",
+                        "attribute": "routerAddress",
+                        "score": "95",
+                        "reason": "The `handler` variable directly holds the address of the `IQBridgeHandler` instance responsible for processing the deposit for a given `resourceID`. This handler acts as the specific router or bridge component for that resource. This is a very direct and highly confident mapping, as the `handler` *is* the address of the component that routes/processes the cross-chain operation for a specific resource."
+                    }
+                ]
+            ],
+            "formatted_outputs1": {
+                "destinationDomainID": {
+                    "toChainID": {
+                        "reason": "The parameter 'destinationDomainID' clearly indicates the destination chain ID, aligning with the description 'Specifies the destination blockchain network ID'. There is no ambiguity in its naming or context.",
+                        "score": "100",
+                        "s_reason": "The parameter 'destinationDomainID' is explicitly named to denote the destination domain ID. This directly corresponds to 'toChainID' without any ambiguity. Its usage confirms it specifies the target blockchain network."
+                    }
+                },
+                "data": {
+                    "tokenAddress": {
+                        "reason": "The 'data' parameter is a general calldata field. It's possible that the token address is encoded within this 'data' for the `IQBridgeHandler(handler).deposit` call, as the `data` parameter is passed directly to the handler's deposit function which would handle token-related information. However, this is uncertain as 'data' could contain various other parameters depending on the handler's implementation.",
+                        "score": "20",
+                        "s_reason": "The 'data' parameter is a generic `bytes calldata` field. While it's plausible that 'tokenAddress' could be encoded within 'data' for the `IQBridgeHandler`'s deposit function, the lack of specific encoding information or a clear schema makes this highly uncertain. 'data' could contain various other parameters, or token address might be implied by 'resourceID' depending on the handler's logic. This mapping is speculative."
+                    },
+                    "amount": {
+                        "reason": "Similar to tokenAddress, 'amount' is likely to be encoded within the generic 'data' parameter supplied to the `IQBridgeHandler(handler).deposit` function. The `data` parameter is a common way to pass packed arguments in Solidity. However, the exact structure of 'data' is not defined here, leading to uncertainty.",
+                        "score": "20",
+                        "s_reason": "Similar to 'tokenAddress', the 'amount' is likely to be encoded within the generic 'data' parameter supplied to `IQBridgeHandler(handler).deposit`. However, without the ABI or schema for the `data` parameter within the handler's function, it's impossible to confirm its presence or location. This is an assumption based on common cross-chain patterns, leading to low confidence."
+                    },
+                    "externalCallAddress": {
+                        "reason": "The 'data' parameter is unstructured `bytes calldata` that is passed to the `IQBridgeHandler(handler).deposit` function. If the cross-chain protocol supports arbitrary external calls post-transfer, then the external call address would typically be encoded within such 'data'. This is an assumption based on common cross-chain patterns, leading to high uncertainty as the code doesn't explicitly reveal its structure.",
+                        "score": "10",
+                        "s_reason": "The 'data' parameter is unstructured `bytes calldata` passed to the handler. While some cross-chain protocols embed external call data within such a generic parameter, there's no explicit indication or mechanism shown in the provided code snippet to confirm this. This is purely speculative based on a common design pattern without concrete evidence, resulting in very low confidence."
+                    },
+                    "externalCallFunction": {
+                        "reason": "Similar to 'externalCallAddress', 'externalCallFunction' (likely as calldata for the external call) would be embedded within the generic 'data' parameter, which is then processed by the `IQBridgeHandler`. Without additional context on the 'data' encoding, this mapping is speculative and highly uncertain.",
+                        "score": "10",
+                        "s_reason": "Similar to 'externalCallAddress', the 'externalCallFunction' (likely part of calldata for an external call) would be embedded within the generic 'data' parameter. Without any schema or further implementation details of the `IQBridgeHandler.deposit` function, this is a highly uncertain assumption based on common but not guaranteed cross-chain patterns."
+                    }
+                },
+                "_depositCounts[destinationDomainID]": {
+                    "nonce": {
+                        "reason": "The variable `_depositCounts[destinationDomainID]` is incremented (pre-increment `++_depositCounts`) to create `depositNonce`. This `depositNonce` is then emitted in the `Deposit` event. This strongly suggests a role as a replay protection mechanism, making it a strong candidate for 'nonce'. The name 'depositNonce' further supports this. There is low ambiguity.",
+                        "score": "95",
+                        "s_reason": "The variable `_depositCounts[destinationDomainID]` is pre-incremented and assigned to `depositNonce`. This `depositNonce` is then emitted in the `Deposit` event. This pattern is a very strong indicator of a nonce for replay protection. The name `depositNonce` further solidifies this interpretation. The slight uncertainty comes only from the theoretical possibility of a different, highly unusual, interpretation, which is unlikely given the context."
+                    }
+                },
+                "msg.sender": {
+                    "recipientAddress": {
+                        "reason": "The `msg.sender` is passed as one of the arguments to `IQBridgeHandler(handler).deposit` and is also emitted in the `Deposit` event. While `msg.sender` is the depositor on the source chain, it is highly probable that this address (or derived from it) will be the recipient on the destination chain for a standard cross-chain transfer. Uncertainty exists because the `data` parameter could also specify a different recipient if the handler supports proxy transfers.",
+                        "score": "70",
+                        "s_reason": "`msg.sender` is the initiator of the deposit on the source chain and is passed to the `IQBridgeHandler.deposit` function and emitted in the `Deposit` event. In many cross-chain protocols, the sender on the source chain is the default recipient on the destination chain. However, the `data` parameter could theoretically contain an override or a different recipient address for more complex scenarios (e.g., meta-transactions or proxies), which introduces some uncertainty regarding whether `msg.sender` is *always* the final recipient or just the initial actor."
+                    }
+                },
+                "resourceIDToHandlerAddress[resourceID]": {
+                    "routerAddress": {
+                        "reason": "The variable `handler` is obtained from `resourceIDToHandlerAddress[resourceID]` and then cast to `IQBridgeHandler`. This `handler` contract is responsible for processing the deposit. In many cross-chain architectures, such a handler acts as a specialized router or bridge component for a specific resource, thus aligning with 'routerAddress'. The `handler` variable itself represents the address being called. Low ambiguity.",
+                        "score": "90",
+                        "s_reason": "The expression `resourceIDToHandlerAddress[resourceID]` retrieves an address which is then cast to `IQBridgeHandler`. This 'handler' is the specific contract responsible for processing the deposit for a given `resourceID`. In cross-chain architectures, such handlers often serve as specialized routers or bridge components. This mapping is highly consistent with the functional role of a 'routerAddress' for specific resource bridging. The direct variable `handler` represents this address."
+                    }
+                },
+                "handler": {
+                    "routerAddress": {
+                        "reason": "The variable `handler` itself, derived from `resourceIDToHandlerAddress[resourceID]`, directly represents the address of the specific bridge handler or router responsible for processing the cross-chain deposit for the given resource. This is a direct mapping. Low ambiguity.",
+                        "score": "95",
+                        "s_reason": "The `handler` variable directly holds the address of the `IQBridgeHandler` instance responsible for processing the deposit for a given `resourceID`. This handler acts as the specific router or bridge component for that resource. This is a very direct and highly confident mapping, as the `handler` *is* the address of the component that routes/processes the cross-chain operation for a specific resource."
+                    }
+                }
+            }
+        },
+        "step2": {
+            "toChainID": {
+                "destinationDomainID": {
+                    "dataflows": [
+                        {
+                            "parameter": "destinationDomainID",
+                            "dataflow": {
+                                "deposit": [
+                                    "function deposit(uint8 destinationDomainID, bytes32 resourceID, bytes calldata data) external payable notPaused {",
+                                    "        uint64 depositNonce = ++_depositCounts[destinationDomainID];",
+                                    "        emit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "95",
+                            "reason": "The extracted data flow for `destinationDomainID` accurately captures its usage in incrementing `_depositCounts` and in the `emit Deposit` event. All relevant lines where the parameter is used or modified within the `deposit` function are included in the `dataflow` provided, ensuring high coverage and correctness."
+                        },
+                        {
+                            "parameter": "destinationDomainID",
+                            "dataflow": {
+                                "deposit": [
+                                    "function deposit(uint8 destinationDomainID, bytes32 resourceID, bytes calldata data) external payable notPaused {",
+                                    "        uint64 depositNonce = ++_depositCounts[destinationDomainID];",
+                                    "        emit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "95",
+                            "reason": "The 'dataflow' provided for 'destinationDomainID' accurately identifies its usage in '_depositCounts[destinationDomainID]' and 'emit Deposit(destinationDomainID, ...)' within the 'deposit' function, covering all direct instances of its usage in the provided 'code'. The extracted dataflow is fully consistent with the original code."
+                        }
+                    ],
+                    "merge_dataflows": "function deposit(uint8 destinationDomainID, bytes32 resourceID, bytes calldata data) external payable notPaused {\n        uint64 depositNonce = ++_depositCounts[destinationDomainID];\n        emit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);\n}"
+                }
+            },
+            "nonce": {
+                "_depositCounts[destinationDomainID]": {
+                    "dataflows": [
+                        {
+                            "parameter": "_depositCounts[destinationDomainID]",
+                            "dataflow": {
+                                "deposit": [
+                                    "uint64 depositNonce = ++_depositCounts[destinationDomainID];",
+                                    "emit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "95",
+                            "reason": "The dataflow correctly identifies the increment and usage of `_depositCounts[destinationDomainID]` for `depositNonce` in the `deposit` function and its emission in the `Deposit` event."
+                        },
+                        {
+                            "parameter": "_depositCounts[destinationDomainID]",
+                            "dataflow": {
+                                "deposit": [
+                                    "uint64 depositNonce = ++_depositCounts[destinationDomainID];",
+                                    "emit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "100",
+                            "reason": "The dataflow correctly identifies both instructions where '_depositCounts[destinationDomainID]' is used: the increment and assignment to 'depositNonce', and its subsequent use in the 'emit' statement. All relevant usages are included."
+                        }
+                    ],
+                    "merge_dataflows": "uint64 depositNonce = ++_depositCounts[destinationDomainID];\nemit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);"
+                }
+            },
+            "routerAddress": {
+                "handler": {
+                    "dataflows": [
+                        {
+                            "parameter": "handler",
+                            "dataflow": {
+                                "QBridge.deposit": [
+                                    "address handler = resourceIDToHandlerAddress[resourceID];",
+                                    "require(handler != address(0), \"QBridge: invalid resourceID\");",
+                                    "IQBridgeHandler(handler).deposit(resourceID, msg.sender, data);"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "100",
+                            "reason": "The extracted data flow for the 'handler' parameter in the 'QBridge.deposit' function is complete and accurately reflects its usage and assignment in the original code. The 'handler' is assigned from 'resourceIDToHandlerAddress[resourceID]' and then checked for non-zero address before being used in the 'IQBridgeHandler(handler).deposit' call. All relevant lines are included."
+                        },
+                        {
+                            "parameter": "handler",
+                            "dataflow": {
+                                "QBridge.deposit": [
+                                    "address handler = resourceIDToHandlerAddress[resourceID];",
+                                    "require(handler != address(0), \"QBridge: invalid resourceID\");",
+                                    "IQBridgeHandler(handler).deposit(resourceID, msg.sender, data);"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "100",
+                            "reason": "The extracted data flow code precisely captures all relevant operations and assignments related to the 'handler' parameter within the 'QBridge.deposit' function. It correctly identifies the assignment from 'resourceIDToHandlerAddress[resourceID]' and its subsequent usage in the require statement and the IQBridgeHandler call. No additional context is needed, and no relevant code is missing."
+                        }
+                    ],
+                    "merge_dataflows": "address handler = resourceIDToHandlerAddress[resourceID];require(handler != address(0), \"QBridge: invalid resourceID\");IQBridgeHandler(handler).deposit(resourceID, msg.sender, data);"
+                }
+            }
+        },
+        "step3": {
+            "toChainID": {
+                "destinationDomainID": {
+                    "Check whether toChainID is authorized.": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The provided code snippet does not contain any logic to check if 'destinationDomainID' (which is analogous to 'toChainID' in a cross-chain context) is authorized. There are no authorization checks, whitelists, or permissioning logic applied to 'destinationDomainID'."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The function 'deposit' increments a counter based on 'destinationDomainID' and emits an event, but it lacks any specific validation or authorization mechanism related to the value of 'destinationDomainID' itself. It assumes the provided 'destinationDomainID' is valid without explicit checks."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The code 'uint64 depositNonce = ++_depositCounts[destinationDomainID];' and 'emit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);' manipulate and use 'destinationDomainID' but do not involve any authorization or permissioning to confirm if the 'destinationDomainID' is allowed or recognized by the contract."
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Check that the destination chain ID is not equal to the source chain ID.": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": "function deposit(uint8 destinationDomainID, bytes32 resourceID, bytes calldata data) external payable notPaused {\n        uint64 depositNonce = ++_depositCounts[destinationDomainID];\n        emit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);\n}",
+                                "reason": "The provided code snippet does not contain any logic to compare 'destinationDomainID' with a 'source chain ID'. The 'destinationDomainID' is used to increment a deposit counter and emit an event, but there's no explicit check against the source chain ID within this function."
+                            },
+                            {
+                                "result": false,
+                                "validation": "function deposit(uint8 destinationDomainID, bytes32 resourceID, bytes calldata data) external payable notPaused {\n        uint64 depositNonce = ++_depositCounts[destinationDomainID];\n        emit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);\n}",
+                                "reason": "The 'deposit' function uses 'destinationDomainID' as an input parameter and for indexing a mapping '_depositCounts'. It does not inherently include mechanisms to obtain or compare with a 'source chain ID'. Such a check would likely be found in a different part of the contract or within a modifier."
+                            },
+                            {
+                                "result": false,
+                                "validation": "function deposit(uint8 destinationDomainID, bytes32 resourceID, bytes calldata data) external payable notPaused {\n        uint64 depositNonce = ++_depositCounts[destinationDomainID];\n        emit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);\n}",
+                                "reason": "The given code snippet only handles the 'deposit' operation. The constraint 'Check that the destination chain ID is not equal to the source chain ID' is a business rule related to cross-chain transfers that would require knowing both chain IDs. This specific function, as provided, does not have access to or implement a comparison with a source chain ID."
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            },
+            "nonce": {
+                "_depositCounts[destinationDomainID]": {
+                    "Check if the transaction's nonce is equal to the account's current nonce.": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The code `uint64 depositNonce = ++_depositCounts[destinationDomainID];` increments a `depositNonce` variable which is stored within the contract's state for a specific `destinationDomainID`. This `depositNonce` is internal to the contract's logic and is not related to the transaction nonce that EVM accounts use to prevent replay attacks and order transactions."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The provided code snippet specifically deals with an internal counter `_depositCounts[destinationDomainID]` which is incremented and emitted as `depositNonce`. This variable controls a sequence of deposits within the contract's application logic, not the Ethereum account's nonce that is checked by the EVM itself for transaction validity and ordering."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "Solidity code does not directly check the Ethereum transaction nonce (`tx.nonce`). This check is performed at a lower level by the Ethereum Virtual Machine (EVM) itself as part of transaction processing. The `_depositCounts[destinationDomainID]` variable is a contract-specific counter and has no bearing on the EVM's transaction nonce validation."
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            },
+            "routerAddress": {
+                "handler": {
+                    "Check whether the routerAddress is authorized to use.": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The provided code snippet focuses on retrieving a handler address from a mapping and using it to call a deposit function. There is no explicit authorization check for 'routerAddress' within this code related to the 'handler' parameter."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The code 'address handler = resourceIDToHandlerAddress[resourceID];' retrieves the handler address. The 'require(handler != address(0), \"QBridge: invalid resourceID\");' ensures the handler is not a zero address. Finally, 'IQBridgeHandler(handler).deposit(...)' calls a method on the handler. None of these operations directly check the authorization of a 'routerAddress' in relation to this 'handler'."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The code provided does not contain any logic that verifies if a 'routerAddress' is authorized to use the 'handler'. The 'handler' is obtained via a lookup and then used for a 'deposit' call. Authorization for the 'routerAddress' would typically involve a separate mapping, role-based access control, or some other permission check not present here."
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            }
+        },
+        "step4": {
+            "toChainID": {
+                "destinationDomainID": {}
+            },
+            "nonce": {
+                "_depositCounts[destinationDomainID]": {}
+            },
+            "routerAddress": {
+                "handler": {}
+            }
+        },
+        "final_result": {
+            "toChainID": {
+                "destinationDomainID": {
+                    "Check whether toChainID is authorized.": [
+                        {
+                            "parameter": "destinationDomainID",
+                            "constraint": "Check whether toChainID is authorized.",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Check that the destination chain ID is not equal to the source chain ID.": [
+                        {
+                            "parameter": "destinationDomainID",
+                            "constraint": "Check that the destination chain ID is not equal to the source chain ID.",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            },
+            "nonce": {
+                "_depositCounts[destinationDomainID]": {
+                    "Check if the transaction's nonce is equal to the account's current nonce.": [
+                        {
+                            "parameter": "_depositCounts[destinationDomainID]",
+                            "constraint": "Check if the transaction's nonce is equal to the account's current nonce.",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            },
+            "routerAddress": {
+                "handler": {
+                    "Check whether the routerAddress is authorized to use.": [
+                        {
+                            "parameter": "handler",
+                            "constraint": "Check whether the routerAddress is authorized to use.",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            }
+        },
+        "context": {
+            "event": "Deposit",
+            "call_graph": "deposit",
+            "state_variables": {
+                "fee": "uint128 public fee;",
+                "_depositCounts": "mapping(uint8 => uint64) public _depositCounts;",
+                "resourceIDToHandlerAddress": "mapping(bytes32 => address) public resourceIDToHandlerAddress;"
+            },
+            "external_functions": []
+        },
+        "step1-time": 7.934614419937134,
+        "step2-time": 27.234718561172485,
+        "step2-call_api_times": 21,
+        "step3-time": 12.740556240081787,
+        "step3-call_api_times": 4,
+        "step4-time": 1.7881393432617188e-05,
+        "step4-call_api_times": 0,
+        "compare_audit": {
+            "result": [
+                {
+                    "vuln": "require(msg.value == fee, \"QBridge: invalid fee\");",
+                    "reason": "The `fee` is checked against `msg.value`. If `fee` is a fixed value, cross-chain relay costs can fluctuate significantly making this fixed fee potentially insufficient or excessive. In a cross-chain context, a fixed fee might not account for varying gas costs on different chains, leading to failed transactions or unfair charges. Dynamic fee calculation based on destination chain's gas prices or a minimum `fee` that is adjustable via governance would be more robust."
+                },
+                {
+                    "vuln": "IQBridgeHandler(handler).deposit(resourceID, msg.sender, data);",
+                    "reason": "This direct call to `IQBridgeHandler(handler).deposit` without proper access control or reentrancy guards could be problematic. If the `handler` contract is malicious or compromised, it could perform reentrancy attacks or unexpected state changes within the `QBridge.deposit` function's execution flow. In a cross-chain scenario, a malicious handler on a destination chain could exploit this to drain funds or manipulate state on the source chain if not meticulously secured. Even if reentrancy isn't a direct fund drain in this specific snippet, it can lead to unexpected behavior and state inconsistencies, especially when dealing with locks or approvals."
+                },
+                {
+                    "vuln": "emit Deposit(destinationDomainID, resourceID, depositNonce, msg.sender, data);",
+                    "reason": "The `Deposit` event is emitted after the `IQBridgeHandler` call. If the `IQBridgeHandler` call reverts, the event is not emitted, but if the `IQBridgeHandler` call succeeds but has internal logical flaws, or reverts asynchronously (e.g., in a batched transaction or later execution), the state indicated by the event might be inaccurate or misleading to off-chain listeners. In a cross-chain context, sequence and atomicity of events are critical for relayers and off-chain watchers to accurately track cross-chain transfers and state. Reordering the event emission (after IQBridgeHandler call) can lead to a false sense of security or difficulties in reconstructing the exact state for relayers."
+                }
+            ]
+        },
+        "compare_attribute_verification": {
+            "result": [
+                {
+                    "toChainID": "destinationDomainID",
+                    "findings": [
+                        {
+                            "constraint": "Check whether toChainID is authorized.",
+                            "validation": "null",
+                            "poc": "null",
+                            "reason": "No explicit authorization check for destinationDomainID (toChainID) in the provided code snippet beyond basic validity checks inherent in resourceIDToHandlerAddress mapping. If resourceIDToHandlerAddress[resourceID] implicitly provides this authorization, it's not clear from the snippet."
+                        },
+                        {
+                            "constraint": "Check that the destination chain ID is not equal to the source chain ID.",
+                            "validation": "null",
+                            "poc": "null",
+                            "reason": "The code does not explicitly check if `destinationDomainID` is different from the source chain ID. Without knowing the source chain ID context (e.g., `block.chainid`), this check is missing."
+                        }
+                    ]
+                },
+                {
+                    "tokenAddress": "null",
+                    "findings": [
+                        {
+                            "constraint": "Check whether the tokenAddress is authorized to use.",
+                            "validation": "null",
+                            "poc": "null",
+                            "reason": "The provided `deposit` function does not take a `tokenAddress` parameter directly. The transfer seems to be related to `msg.value` (native token) and `resourceID`, which maps to a handler. There's no explicit tokenAddress authorization in this snippet."
+                        }
+                    ]
+                },
+                {
+                    "amount": "msg.value",
+                    "findings": [
+                        {
+                            "constraint": "Validate that amount is greater than 0",
+                            "validation": "require(msg.value == fee, \"QBridge: invalid fee\")",
+                            "poc": "msg.value could conceptually be 0 if 'fee' is 0, which would bypass the 'greater than 0' validation for the amount being transferred. However, the exact meaning of 'amount' vs 'fee' is ambiguous here. If 'amount' refers to the `msg.value`, then if `fee` is configured to 0, this check wouldn't ensure `msg.value > 0`. If 'amount' refers to something handled by `IQBridgeHandler(handler).deposit`, then there's no check here.",
+                            "reason": "The `msg.value == fee` does not explicitly validate `msg.value > 0`. If `fee` is set to 0, then `msg.value` can be 0, effectively bypassing the 'amount > 0' check if `msg.value` is considered the 'amount'."
+                        },
+                        {
+                            "constraint": "Validate that msg.sender's balance change before and after equals amount",
+                            "validation": "null",
+                            "poc": "null",
+                            "reason": "This code snippet only shows the `deposit` function. The actual balance change for `msg.sender` would occur implicitly through the `msg.value` transfer, but the contract itself doesn't explicitly validate the sender's balance change equals the amount. This logic is handled by the EVM for `msg.value`."
+                        },
+                        {
+                            "constraint": "Validate that the bridge's balance change before and after equals amount",
+                            "validation": "null",
+                            "poc": "null",
+                            "reason": "Similar to the sender's balance, the bridge's balance change is an implicit EVM behavior. The contract does not contain explicit checks for its own balance change relative to the `amount` (msg.value) received."
+                        },
+                        {
+                            "constraint": "Validate that msg.sender's balance ≥ amount",
+                            "validation": "null",
+                            "poc": "null",
+                            "reason": "This validation is implicitly handled by the EVM when `msg.value` is sent. If `msg.sender` does not have sufficient balance, the transaction would revert before reaching this point in the contract execution. No explicit Solidity code for this check is needed or present."
+                        }
+                    ]
+                },
+                {
+                    "nonce": "_depositCounts[destinationDomainID]",
+                    "findings": [
+                        {
+                            "constraint": "Check if the transaction's nonce is equal to the account's current nonce.",
+                            "validation": "uint64 depositNonce = ++_depositCounts[destinationDomainID];",
+                            "poc": "The `_depositCounts[destinationDomainID]` serves as a nonce specific to each `destinationDomainID`. This prevents replay attacks for cross-chain deposits to a *specific* destination domain ID. However, it's not directly related to an *account's* nonce (e.g., `web3.eth.getTransactionCount`). This specific nonce tracks cross-chain operations per domain ID, not per sender account. If `amount` is not checked for > 0, an attacker could potentially increment the nonce with zero-value transactions.",
+                            "reason": "The code increments a `_depositCounts` mapping for each `destinationDomainID`, acting as a nonce for operations to that specific domain. This helps prevent replay attacks for cross-chain transfers targeting the same domain. It's not a check against the `msg.sender`'s Ethereum transaction count, but rather an internal state nonce for cross-chain activity."
+                        }
+                    ]
+                },
+                {
+                    "recipientAddress": "null",
+                    "findings": [
+                        {
+                            "constraint": "Validate that recipientAddress is not the zero address",
+                            "validation": "IQBridgeHandler(handler).deposit(resourceID, msg.sender, data);",
+                            "poc": "The `msg.sender` parameter is passed to the handler's deposit function. If the `data` parameter within `IQBridgeHandler(handler).deposit(resourceID, msg.sender, data)` contains the actual `recipientAddress`, and the handler itself doesn't validate it against the zero address, then a zero address recipient could be possible. However, based on the provided snippet, `msg.sender` is used as the recipient on the source chain, which cannot be zero address by definition. The ultimate `recipientAddress` on the destination chain is embedded within `data` and validated by the `IQBridgeHandler`.",
+                            "reason": "The `deposit` function uses `msg.sender` as a parameter to the handler, which cannot be the zero address. The actual `recipientAddress` on the destination chain would likely be parsed from the `data` parameter by the `IQBridgeHandler`. This contract snippet doesn't perform that validation itself, relying on the handler."
+                        }
+                    ]
+                },
+                {
+                    "externalCallAddress": "null",
+                    "findings": [
+                        {
+                            "constraint": "Check whether the externalCallAddress is authorized to use.",
+                            "validation": "null",
+                            "poc": "null",
+                            "reason": "The provided `deposit` function does not include parameters for an `externalCallAddress` or logic to perform an external call after the bridge transfer directly within this snippet. This functionality is not present here."
+                        }
+                    ]
+                },
+                {
+                    "externalCallFunction": "null",
+                    "findings": [
+                        {
+                            "constraint": "Validate that externalCallFunction is in the allowed function signature list",
+                            "validation": "null",
+                            "poc": "null",
+                            "reason": "The provided `deposit` function does not include parameters for an `externalCallFunction` or logic to perform an external call after the bridge transfer directly within this snippet. This functionality is not present here."
+                        }
+                    ]
+                },
+                {
+                    "routerAddress": "handler",
+                    "findings": [
+                        {
+                            "constraint": "Check whether the routerAddress is authorized to use.",
+                            "validation": "address handler = resourceIDToHandlerAddress[resourceID]; require(handler != address(0), \"QBridge: invalid resourceID\");",
+                            "poc": "The `handler` (acting as the router/bridge handler here) is authorized if its address is mapped to a `resourceID` and is not the zero address. The security relies on how `resourceIDToHandlerAddress` is populated and managed. If an unauthorized `resourceID` can be mapped to a malicious `handler` address, then this could be bypassed. For instance, if `resourceIDToHandlerAddress` is publicly writable.",
+                            "reason": "The `handler` address, which can be considered the 'routerAddress' for a specific `resourceID`, is authorized by being present in the `resourceIDToHandlerAddress` mapping and not being the zero address. The authorization mechanism relies on the integrity and access control of this mapping."
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "time": 179.2863733768463,
+    "this_cost": 0,
+    "this_prompt_tokens": 41659,
+    "this_completion_tokens": 18348
+}

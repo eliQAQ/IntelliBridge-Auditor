@@ -1,0 +1,26 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_2967_ECDSAUpgradeable {
+label = "ECDSAUpgradeable"
+"2967_recover" [label="recover"]
+"2967_toEthSignedMessageHash" [label="toEthSignedMessageHash"]
+"2967_recover" -> "2967_recover"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"keccak256(bytes)" 
+"mload(uint256)" 
+"byte(uint256,uint256)" 
+"ecrecover(bytes32,uint8,bytes32,bytes32)" 
+"revert(string)" 
+"require(bool,string)" 
+"abi.encodePacked()" 
+"2967_recover" -> "require(bool,string)"
+"2967_recover" -> "mload(uint256)"
+"2967_toEthSignedMessageHash" -> "keccak256(bytes)"
+"2967_recover" -> "ecrecover(bytes32,uint8,bytes32,bytes32)"
+"2967_recover" -> "revert(string)"
+"2967_toEthSignedMessageHash" -> "abi.encodePacked()"
+"2967_recover" -> "byte(uint256,uint256)"
+}
+}

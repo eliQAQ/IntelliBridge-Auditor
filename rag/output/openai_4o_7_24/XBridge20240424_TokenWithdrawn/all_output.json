@@ -1,0 +1,597 @@
+{
+    "XBridge.withdrawTokens": {
+        "step1": {
+            "prompt1": "\nYou are an experienced cross-chain protocol analysis expert. Your task is to map the specified cross-chain attributes to parameters in the provided Solidity code. If an attribute cannot be found in the code, do not list it in the output. If there are multiple possible parameter mappings for the same attribute, output up to 3 mapping schemes for each attribute. Please strictly follow the input and output formats defined below:\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"attribute\": \n{ \n\"<attribute>\": \"<attribute description>\" ,\n\"<attribute>\": \"<attribute description>\",\n...\n}\n\"code\": \"...\" // Solidity contract code string\n}\nOutput format:\nReturn a JSON array, each item structured as follows, only produce output in the required format, without any additional content:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // The input cross-chain attribute\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}, ... \n]\nIn the reason, please point out both the core basis for the mapping and potential uncertainties (e.g., parameter name similarity, ambiguous contextual meaning, etc.).\n\nInput:\n{\n\"attribute\": {\"toChainID\": \"Specifies the destination blockchain network ID.\", \"tokenAddress\": \"Indicates the contract address of the token to be transferred.\", \"amount\": \"The number of tokens to be transferred across chains.\", \"nonce\": \"Check and mark that nonce has not been consumed to prevent replay\", \"recipientAddress\": \"The address that will receive the tokens on the destination chain.\", \"externalCallAddress\": \"The address of a contract to be called after the cross-chain transfer.\", \"externalCallFunction\": \"The specific function or calldata to be executed on the `externalCallAddress`.\", \"routerAddress\": \"The address of the cross-chain router or bridge handler.\"},\n\"code\": [\"XBridge.withdrawTokens:function withdrawTokens(address token, address receiver, uint256 amount) external {\\n        // require(token.code.length > 0, \\\"TOKEN_NOT_DEPLOYED_ON_THIS_CHAIN\\\");\\n        // address _correspondingToken = tokenToTokenWithChainId[srcId][dstId][token];\\n        require(token != address(0), \\\"TOKEN_NOT_LISTED\\\");\\n        require(amount > 0, \\\"AMOUNT_CANT_BE_ZERO\\\");\\n        address user = msg.sender;\\n        require(user == _tokenOwner[token], \\\"ONLY_TOKEN_LISTER_CAN_WITHDRAW\\\");\\n        // require(user == tokenOwnerWithChainId[srcId][dstId][token][_correspondingToken], \\\"ONLY_TOKEN_LISTER_CAN_WITHDRAW\\\");\\n\\n        if(token != native) {\\n\\n            require(amount <= (IERC20(token).balanceOf(address(this)) - tokenTax[token]), \\\"WITHDRAW_LESS\\\");\\n\\n            if(isWrapped[token]) revert(\\\"CANT_WITHDRAW_WRAPPED_TOKENS\\\");\\n\\n            IERC20(token).transfer(receiver, amount);\\n        } else {\\n            require(amount <= address(this).balance, \\\"WITHDRAW_LESS\\\");\\n            (bool success, ) = payable(receiver).call{value: amount}(\\\"\\\");\\n            require(success, \\\"WITHDRAW_FAILED\\\");\\n        }\\n\\n        emit TokenWithdrawn(user, receiver, amount);\\n    }\"]\n}\n",
+            "outputs1": [
+                [
+                    {
+                        "parameter": "token",
+                        "attribute": "tokenAddress",
+                        "reason": "The parameter 'token' of type 'address' is likely the token address. The function name 'withdrawTokens' and the use of 'IERC20(token)' support this, as it refers to an ERC-20 token contract. Uncertainty: Could also potentially be a wrapped token address, depends on context."
+                    },
+                    {
+                        "parameter": "amount",
+                        "attribute": "amount",
+                        "reason": "The parameter 'amount' of type 'uint256' directly corresponds to the amount. The checks 'amount > 0' and 'amount <= ...balance' confirm it represents a quantity of tokens or native currency being withdrawn."
+                    },
+                    {
+                        "parameter": "receiver",
+                        "attribute": "recipientAddress",
+                        "reason": "The parameter 'receiver' of type 'address' is clearly the recipient, as tokens/native currency are transferred to this address via 'IERC20(token).transfer(receiver, amount)' or 'payable(receiver).call{value: amount}'. "
+                    }
+                ]
+            ],
+            "v_prompt1": "\nYou are a rigorous cross-chain protocol auditor and data consistency verifier. Carefully review whether the meaning of each cross-chain attribute and parameter in the code is consistent, assign a confidence score (0-100%), and state the reason for the given confidence score.\n\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"correspondence\":    // Array of attribute-parameter correspondences in the code\n[\n{\n\"attribute\": \"...\", // Input cross-chain attribute\n\"parameter\": \"...\", // Corresponding parameter\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}\n...\n],\n\"code\":\"...\" // Cross-chain contract code\n}\n\nOutput format: Return a JSON array, each item structured as follows, only produce output in the required format, without any additional content:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // Input cross-chain attribute\n\"score\":\"...\", // Assigned confidence score\n\"reason\": \"...\" // Brief explanation for the given confidence score\n}, ... \n]\nInput:\n{\n\"correspondence\": [{\"parameter\": \"token\", \"attribute\": \"tokenAddress\", \"reason\": \"The parameter 'token' of type 'address' is likely the token address. The function name 'withdrawTokens' and the use of 'IERC20(token)' support this, as it refers to an ERC-20 token contract. Uncertainty: Could also potentially be a wrapped token address, depends on context.\"}, {\"parameter\": \"amount\", \"attribute\": \"amount\", \"reason\": \"The parameter 'amount' of type 'uint256' directly corresponds to the amount. The checks 'amount > 0' and 'amount <= ...balance' confirm it represents a quantity of tokens or native currency being withdrawn.\"}, {\"parameter\": \"receiver\", \"attribute\": \"recipientAddress\", \"reason\": \"The parameter 'receiver' of type 'address' is clearly the recipient, as tokens/native currency are transferred to this address via 'IERC20(token).transfer(receiver, amount)' or 'payable(receiver).call{value: amount}'. \"}],\n\"code\": [\"XBridge.withdrawTokens:function withdrawTokens(address token, address receiver, uint256 amount) external {\\n        // require(token.code.length > 0, \\\"TOKEN_NOT_DEPLOYED_ON_THIS_CHAIN\\\");\\n        // address _correspondingToken = tokenToTokenWithChainId[srcId][dstId][token];\\n        require(token != address(0), \\\"TOKEN_NOT_LISTED\\\");\\n        require(amount > 0, \\\"AMOUNT_CANT_BE_ZERO\\\");\\n        address user = msg.sender;\\n        require(user == _tokenOwner[token], \\\"ONLY_TOKEN_LISTER_CAN_WITHDRAW\\\");\\n        // require(user == tokenOwnerWithChainId[srcId][dstId][token][_correspondingToken], \\\"ONLY_TOKEN_LISTER_CAN_WITHDRAW\\\");\\n\\n        if(token != native) {\\n\\n            require(amount <= (IERC20(token).balanceOf(address(this)) - tokenTax[token]), \\\"WITHDRAW_LESS\\\");\\n\\n            if(isWrapped[token]) revert(\\\"CANT_WITHDRAW_WRAPPED_TOKENS\\\");\\n\\n            IERC20(token).transfer(receiver, amount);\\n        } else {\\n            require(amount <= address(this).balance, \\\"WITHDRAW_LESS\\\");\\n            (bool success, ) = payable(receiver).call{value: amount}(\\\"\\\");\\n            require(success, \\\"WITHDRAW_FAILED\\\");\\n        }\\n\\n        emit TokenWithdrawn(user, receiver, amount);\\n    }\"]:\n}\n\n",
+            "v_outputs1": [
+                [
+                    {
+                        "parameter": "token",
+                        "attribute": "tokenAddress",
+                        "score": "95",
+                        "reason": "The parameter 'token' is consistently used with IERC20 interfaces and balance checks, strongly indicating it represents an ERC20 token address. The main function of 'withdrawTokens' further supports this. The 'isWrapped[token]' check differentiates between types of tokens, but 'token' itself refers to the address."
+                    },
+                    {
+                        "parameter": "amount",
+                        "attribute": "amount",
+                        "score": "100",
+                        "reason": "The 'amount' parameter is directly involved in quantity checks ('amount > 0', 'amount <= balance') and native/ERC20 transfers. Its usage is unambiguous and perfectly aligns with the definition of 'amount'."
+                    },
+                    {
+                        "parameter": "receiver",
+                        "attribute": "recipientAddress",
+                        "score": "100",
+                        "reason": "The 'receiver' parameter is directly used as the destination in both ERC20 token transfers (IERC20(token).transfer(receiver, amount)) and native currency transfers (payable(receiver).call{value: amount}). Its role as the recipient is explicit and consistently applied throughout the function."
+                    }
+                ]
+            ],
+            "formatted_outputs1": {
+                "token": {
+                    "tokenAddress": {
+                        "reason": "The parameter 'token' of type 'address' is likely the token address. The function name 'withdrawTokens' and the use of 'IERC20(token)' support this, as it refers to an ERC-20 token contract. Uncertainty: Could also potentially be a wrapped token address, depends on context.",
+                        "score": "95",
+                        "s_reason": "The parameter 'token' is consistently used with IERC20 interfaces and balance checks, strongly indicating it represents an ERC20 token address. The main function of 'withdrawTokens' further supports this. The 'isWrapped[token]' check differentiates between types of tokens, but 'token' itself refers to the address."
+                    }
+                },
+                "amount": {
+                    "amount": {
+                        "reason": "The parameter 'amount' of type 'uint256' directly corresponds to the amount. The checks 'amount > 0' and 'amount <= ...balance' confirm it represents a quantity of tokens or native currency being withdrawn.",
+                        "score": "100",
+                        "s_reason": "The 'amount' parameter is directly involved in quantity checks ('amount > 0', 'amount <= balance') and native/ERC20 transfers. Its usage is unambiguous and perfectly aligns with the definition of 'amount'."
+                    }
+                },
+                "receiver": {
+                    "recipientAddress": {
+                        "reason": "The parameter 'receiver' of type 'address' is clearly the recipient, as tokens/native currency are transferred to this address via 'IERC20(token).transfer(receiver, amount)' or 'payable(receiver).call{value: amount}'. ",
+                        "score": "100",
+                        "s_reason": "The 'receiver' parameter is directly used as the destination in both ERC20 token transfers (IERC20(token).transfer(receiver, amount)) and native currency transfers (payable(receiver).call{value: amount}). Its role as the recipient is explicit and consistently applied throughout the function."
+                    }
+                }
+            }
+        },
+        "step2": {
+            "tokenAddress": {
+                "token": {
+                    "dataflows": [
+                        {
+                            "parameter": "token",
+                            "dataflow": {
+                                "withdrawTokens": [
+                                    "function withdrawTokens(address token, address receiver, uint256 amount) external {",
+                                    "        require(token != address(0), \"TOKEN_NOT_LISTED\");",
+                                    "        require(user == _tokenOwner[token], \"ONLY_TOKEN_LISTER_CAN_WITHDRAW\");",
+                                    "        if(token != native) {",
+                                    "            require(amount <= (IERC20(token).balanceOf(address(this)) - tokenTax[token]), \"WITHDRAW_LESS\");",
+                                    "            if(isWrapped[token]) revert(\"CANT_WITHDRAW_WRAPPED_TOKENS\");",
+                                    "            IERC20(token).transfer(receiver, amount);",
+                                    "        } else {",
+                                    "            require(amount <= address(this).balance, \"WITHDRAW_LESS\");",
+                                    "            (bool success, ) = payable(receiver).call{value: amount}(\"\");",
+                                    "            require(success, \"WITHDRAW_FAILED\");",
+                                    "        }",
+                                    "        emit TokenWithdrawn(user, receiver, amount);",
+                                    "    }"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "95",
+                            "score": "92",
+                            "reason": "The extracted data flow for the 'token' parameter captures almost all relevant code lines where 'token' is used or checked. It correctly identifies the 'require(token != address(0), \"TOKEN_NOT_LISTED\")' and the conditional logic based on 'token != native', including the IERC20 calls and 'isWrapped' check. The missing part is the initial declaration and some commented-out lines in the original code, which are likely not active data flow. The 'user' variable assignment and its subsequent use for '_tokenOwner[token]' is also included, showing the indirect data flow relevant to 'token'. The dataflow provided is very close to the actual code's logic concerning the 'token' parameter."
+                        },
+                        {
+                            "parameter": "token",
+                            "dataflow": {
+                                "XBridge.withdrawTokens": [
+                                    "function withdrawTokens(address token, address receiver, uint256 amount) external {",
+                                    "require(token != address(0), \"TOKEN_NOT_LISTED\");",
+                                    "require(user == _tokenOwner[token], \"ONLY_TOKEN_LISTER_CAN_WITHDRAW\");",
+                                    "if(token != native) {",
+                                    "require(amount <= (IERC20(token).balanceOf(address(this)) - tokenTax[token]), \"WITHDRAW_LESS\");",
+                                    "if(isWrapped[token]) revert(\"CANT_WITHDRAW_WRAPPED_TOKENS\");",
+                                    "IERC20(token).transfer(receiver, amount);",
+                                    "}"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "90",
+                            "score": "90",
+                            "reason": "The extracted data flow for the 'token' parameter in the 'withdrawTokens' function covers most of its critical usages. It includes the initial `require(token != address(0), \"TOKEN_NOT_LISTED\")`, the `require(user == _tokenOwner[token], \"ONLY_TOKEN_LISTER_CAN_WITHDRAW\")`, and the conditional logic `if(token != native)` which leads to `IERC20(token).transfer(receiver, amount)`. It also correctly captures the check `if(isWrapped[token]) revert(\"CANT_WITHDRAW_WRAPPED_TOKENS\")`. However, it misses the 'else' branch where `token == native` is handled for native token withdrawals, which also depends on the 'token' parameter implicitly. This is a minor omission for the dataflow of 'token'."
+                        }
+                    ],
+                    "merge_dataflows": "function withdrawTokens(address token, address receiver, uint256 amount) external {\n        require(token != address(0), \"TOKEN_NOT_LISTED\");\n        require(user == _tokenOwner[token], \"ONLY_TOKEN_LISTER_CAN_WITHDRAW\");\n        if(token != native) {\n            require(amount <= (IERC20(token).balanceOf(address(this)) - tokenTax[token]), \"WITHDRAW_LESS\");\n            if(isWrapped[token]) revert(\"CANT_WITHDRAW_WRAPPED_TOKENS\");\n            IERC20(token).transfer(receiver, amount);\n        } else {\n            require(amount <= address(this).balance, \"WITHDRAW_LESS\");\n            (bool success, ) = payable(receiver).call{value: amount}(\"\");\n            require(success, \"WITHDRAW_FAILED\");\n        }\n        emit TokenWithdrawn(user, receiver, amount);\n    }"
+                }
+            },
+            "amount": {
+                "amount": {
+                    "dataflows": [
+                        {
+                            "parameter": "amount",
+                            "dataflow": {
+                                "XBridge.withdrawTokens": [
+                                    "function withdrawTokens(address token, address receiver, uint256 amount) external {",
+                                    "        require(amount > 0, \"AMOUNT_CANT_BE_ZERO\");",
+                                    "        if(token != native) {",
+                                    "            require(amount <= (IERC20(token).balanceOf(address(this)) - tokenTax[token]), \"WITHDRAW_LESS\");",
+                                    "            IERC20(token).transfer(receiver, amount);",
+                                    "        } else {",
+                                    "            require(amount <= address(this).balance, \"WITHDRAW_LESS\");",
+                                    "            (bool success, ) = payable(receiver).call{value: amount}(\"\");",
+                                    "        }",
+                                    "        emit TokenWithdrawn(user, receiver, amount);",
+                                    "    }"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "95",
+                            "reason": "The extracted data flow for the 'amount' parameter accurately captures all lines where 'amount' is used or influenced in the original `withdrawTokens` function. This includes its initial validation, conditional checks based on token type, the actual transfer/call operation, and its emission in the event. The data flow also correctly includes the `require` statement for `amount > 0`."
+                        },
+                        {
+                            "parameter": "amount",
+                            "dataflow": {
+                                "XBridge.withdrawTokens": [
+                                    "function withdrawTokens(address token, address receiver, uint256 amount) external {",
+                                    "        require(amount > 0, \"AMOUNT_CANT_BE_ZERO\");",
+                                    "        if(token != native) {",
+                                    "            require(amount <= (IERC20(token).balanceOf(address(this)) - tokenTax[token]), \"WITHDRAW_LESS\");",
+                                    "            IERC20(token).transfer(receiver, amount);",
+                                    "        } else {",
+                                    "            require(amount <= address(this).balance, \"WITHDRAW_LESS\");",
+                                    "            (bool success, ) = payable(receiver).call{value: amount}(\"\");",
+                                    "            require(success, \"WITHDRAW_FAILED\");",
+                                    "        }",
+                                    "        emit TokenWithdrawn(user, receiver, amount);",
+                                    "}"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "90",
+                            "score": "95",
+                            "reason": "The extracted dataflow for 'amount' covers all relevant usages and checks within the 'withdrawTokens' function where 'amount' is directly involved in require statements, balance checks, and the final transfer/call. However, the original code contains a 'require(user == _tokenOwner[token], \"ONLY_TOKEN_LISTER_CAN_WITHDRAW\");' which, while not directly involving 'amount' in an arithmetic or comparison operation, indirectly impacts the execution path that uses 'amount' by restricting who can call the function. This is a subtle dependency that wasn't included in the dataflow, hence a slightly reduced correctness score to acknowledge this indirect influence, although the primary data flow is accurate."
+                        }
+                    ],
+                    "merge_dataflows": "function withdrawTokens(address token, address receiver, uint256 amount) external {\n        require(amount > 0, \"AMOUNT_CANT_BE_ZERO\");\n        if(token != native) {\n            require(amount <= (IERC20(token).balanceOf(address(this)) - tokenTax[token]), \"WITHDRAW_LESS\");\n            IERC20(token).transfer(receiver, amount);\n        } else {\n            require(amount <= address(this).balance, \"WITHDRAW_LESS\");\n            (bool success, ) = payable(receiver).call{value: amount}(\"\");\n            require(success, \"WITHDRAW_FAILED\");\n        }\n        emit TokenWithdrawn(user, receiver, amount);\n    }"
+                }
+            },
+            "recipientAddress": {
+                "receiver": {
+                    "dataflows": [
+                        {
+                            "parameter": "receiver",
+                            "dataflow": {
+                                "XBridge.withdrawTokens": [
+                                    "function withdrawTokens(address token, address receiver, uint256 amount) external {",
+                                    "            IERC20(token).transfer(receiver, amount);",
+                                    "            (bool success, ) = payable(receiver).call{value: amount}(\"\");",
+                                    "        emit TokenWithdrawn(user, receiver, amount);"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "95",
+                            "reason": "The extracted data flow correctly identifies the uses of the 'receiver' parameter in the `XBridge.withdrawTokens` function. It captures both the ERC20 token transfer and the native token transfer (or Ether transfer) interactions, as well as its inclusion in the `TokenWithdrawn` event. The provided context in 'code' fully supports this extraction."
+                        },
+                        {
+                            "parameter": "receiver",
+                            "dataflow": {
+                                "XBridge.withdrawTokens": [
+                                    "function withdrawTokens(address token, address receiver, uint256 amount) external {",
+                                    "            IERC20(token).transfer(receiver, amount);",
+                                    "            (bool success, ) = payable(receiver).call{value: amount}(\"\");",
+                                    "        emit TokenWithdrawn(user, receiver, amount);",
+                                    "}"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "95",
+                            "reason": "The extracted data flow for 'receiver' correctly identifies its usage in both the IERC20 transfer and the payable call for native token withdrawal. The provided dataflow covers all instances where 'receiver' is utilized within the 'withdrawTokens' function as shown in the original code, hence high coverage and correctness."
+                        }
+                    ],
+                    "merge_dataflows": "function withdrawTokens(address token, address receiver, uint256 amount) external {\n            IERC20(token).transfer(receiver, amount);\n            (bool success, ) = payable(receiver).call{value: amount}(\"\");\n        emit TokenWithdrawn(user, receiver, amount);\n}"
+                }
+            }
+        },
+        "step3": {
+            "tokenAddress": {
+                "token": {
+                    "Check whether the tokenAddress is authorized to use.": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": "require(token != address(0), \"TOKEN_NOT_LISTED\");\nrequire(user == _tokenOwner[token], \"ONLY_TOKEN_LISTER_CAN_WITHDRAW\");",
+                                "reason": "The code explicitly checks if the token is not the zero address with 'require(token != address(0), \"TOKEN_NOT_LISTED\");', ensuring a valid token address. More importantly, it checks 'require(user == _tokenOwner[token], \"ONLY_TOKEN_LISTER_CAN_WITHDRAW\");', which directly verifies if the 'user' (the caller) is the authorized owner of the specified 'token', effectively authorizing its use by the owner."
+                            },
+                            {
+                                "result": true,
+                                "validation": "require(user == _tokenOwner[token], \"ONLY_TOKEN_LISTER_CAN_WITHDRAW\");",
+                                "reason": "The line 'require(user == _tokenOwner[token], \"ONLY_TOKEN_LISTER_CAN_WITHDRAW\");' directly authorizes the 'token' by checking if the 'user' (presumably the function caller) is indeed the registered owner of that specific token. This is a clear authorization check for the token's use in this context."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The code does not explicitly define an 'authorization' mechanism for a generic 'tokenAddress'. While it checks if the calling 'user' is the 'tokenOwner', this is a specific ownership check, not a general authorization of the token itself for any use. There's no broader 'isAuthorizedToUse' function or state variable that the 'token' itself passes."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "token",
+                                "constraint": "Check whether the tokenAddress is authorized to use.",
+                                "validation": "require(token != address(0), \"TOKEN_NOT_LISTED\");\nrequire(user == _tokenOwner[token], \"ONLY_TOKEN_LISTER_CAN_WITHDRAW\");",
+                                "score": "95",
+                                "reason": "The validation code accurately checks if the token is not the zero address (implying a listed/valid token) and if the user is the owner, which implies authorization to use or withdraw the token. The original code's relevant checks are included. The only slight disconnect is the constraint 'authorized to use' which is more directly translated to 'authorized to withdraw' in the context of the function and the 'ONLY_TOKEN_LISTER_CAN_WITHDRAW' message.",
+                                "results": []
+                            }
+                        ]
+                    }
+                }
+            },
+            "amount": {
+                "amount": {
+                    "Validate that amount is greater than 0": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": "require(amount > 0, \"AMOUNT_CANT_BE_ZERO\");",
+                                "reason": "The code explicitly checks if 'amount' is greater than 0 using 'require(amount > 0, \"AMOUNT_CANT_BE_ZERO\");'. If 'amount' is not greater than 0, the transaction will revert, enforcing the constraint."
+                            },
+                            {
+                                "result": true,
+                                "validation": "require(amount > 0, \"AMOUNT_CANT_BE_ZERO\");",
+                                "reason": "The line `require(amount > 0, \"AMOUNT_CANT_BE_ZERO\");` directly implements the validation that 'amount' must be greater than zero. Any value of 'amount' that is zero or less will cause this require statement to fail."
+                            },
+                            {
+                                "result": true,
+                                "validation": "require(amount > 0, \"AMOUNT_CANT_BE_ZERO\");",
+                                "reason": "The contract includes a robust check 'require(amount > 0, \"AMOUNT_CANT_BE_ZERO\");' at the beginning of the `withdrawTokens` function. This ensures that any 'amount' provided must be a positive value to proceed, thereby satisfying the given constraint."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "amount",
+                                "constraint": "Validate that amount is greater than 0,",
+                                "validation": "require(amount > 0, \"AMOUNT_CANT_BE_ZERO\");",
+                                "score": "100",
+                                "reason": "The validation code `require(amount > 0, \"AMOUNT_CANT_BE_ZERO\");` directly and accurately implements the constraint 'amount is greater than 0'. This exact line is also present in the original contract code, confirming its implementation.",
+                                "results": []
+                            }
+                        ]
+                    },
+                    "Validate that msg.sender's balance change before and after equals amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The provided code snippet does not include any balance changes for `msg.sender`. The `withdrawTokens` function primarily deals with transferring tokens/native currency from the contract's balance to a `receiver` address. The `msg.sender` in this context is the one initiating the withdrawal but their balance is not directly affected by `amount` within this function as a debit. If `msg.sender` were also the `receiver`, then their balance would increase by `amount`, but the constraint specifies `msg.sender`'s balance change, which is not implicitly handled here as a debit or credit unless they are `receiver`."
+                            },
+                            {
+                                "result": true,
+                                "validation": "IERC20(token).transfer(receiver, amount); /* If token is ERC20 */ (bool success, ) = payable(receiver).call{value: amount}(\"\"); /* If token is native */",
+                                "reason": "If we assume 'msg.sender' is the 'receiver' due to a common withdrawal pattern where the funds are returned to the caller, then the contract effectively sends 'amount' to 'msg.sender'. In the ERC20 case, `IERC20(token).transfer(receiver, amount);` would increase `msg.sender`'s token balance by `amount` if `receiver` is `msg.sender`. In the native token case, `payable(receiver).call{value: amount}(\"\");` would increase `msg.sender`'s native balance by `amount` if `receiver` is `msg.sender`. This covers the constraint under the assumption that `receiver` is `msg.sender`, making it a valid balance change equivalent to `amount`."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The code explicitly transfers to `receiver`, not `msg.sender`. The constraint specifically asks about `msg.sender`'s balance change. While `msg.sender` initiates the transaction and might expect a return, the function's logic affects `receiver`'s balance, not necessarily `msg.sender`'s. There is no direct code that decreases `msg.sender`'s balance by `amount` (e.g., as cost of withdrawal) or explicitly increases it when `msg.sender` is not the `receiver`. Therefore, without further context or a different `receiver` value, the constraint isn't covered for `msg.sender`'s balance change."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "amount",
+                                "constraint": "Validate that msg.sender's balance change before and after equals amount,",
+                                "validation": "IERC20(token).transfer(receiver, amount); /* If token is ERC20 */ (bool success, ) = payable(receiver).call{value: amount}(\"\"); /* If token is native */",
+                                "score": "50",
+                                "reason": "The validation code provided only covers the token transfer out of the contract (`IERC20(token).transfer(receiver, amount)`) or native token transfer (`payable(receiver).call{value: amount}(\"\")`). The constraint is to validate `msg.sender`'s balance change. In the given `withdrawTokens` function, `msg.sender` is the one initiating the withdrawal, and the tokens/native currency are sent to `receiver`. Therefore, `msg.sender`'s balance does *not* change by `amount` directly in this transaction; rather, the contract's balance decreases and the `receiver`'s balance increases. The validation implicitly assumes `msg.sender` *is* the `receiver`, or that the balance change for `msg.sender` is being checked for a different scenario (e.g., depositing tokens). Thus, the validation provided does not directly implement the logic to check `msg.sender`'s balance change in the context of this specific withdrawal function, as `msg.sender` is the withdrawer, not the recipient whose balance increases."
+                            }
+                        ]
+                    },
+                    "Validate that the bridge's balance change before and after equals amount": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": "function withdrawTokens(address token, address receiver, uint256 amount) external {\n        require(amount > 0, \"AMOUNT_CANT_BE_ZERO\");\n        if(token != native) {\n            require(amount <= (IERC20(token).balanceOf(address(this)) - tokenTax[token]), \"WITHDRAW_LESS\");\n            IERC20(token).transfer(receiver, amount);\n        } else {\n            require(amount <= address(this).balance, \"WITHDRAW_LESS\");\n            (bool success, ) = payable(receiver).call{value: amount}(\"\");\n            require(success, \"WITHDRAW_FAILED\");\n        }\n        emit TokenWithdrawn(user, receiver, amount);\n    }",
+                                "reason": "The code explicitly handles two cases: native token and ERC20 tokens. For native tokens, `payable(receiver).call{value: amount}(\"\")` attempts to send exactly `amount` of native tokens from the bridge's balance to the receiver. For ERC20 tokens, `IERC20(token).transfer(receiver, amount)` transfers exactly `amount` of the specified ERC20 token from the bridge's balance to the receiver. In both cases, the intention is for the bridge's balance to decrease by exactly `amount`."
+                            },
+                            {
+                                "result": true,
+                                "validation": "        if(token != native) {\n            require(amount <= (IERC20(token).balanceOf(address(this)) - tokenTax[token]), \"WITHDRAW_LESS\");\n            IERC20(token).transfer(receiver, amount);\n        } else {\n            require(amount <= address(this).balance, \"WITHDRAW_LESS\");\n            (bool success, ) = payable(receiver).call{value: amount}(\"\");\n            require(success, \"WITHDRAW_FAILED\");\n        }",
+                                "reason": "The code validates that `amount` is less than or equal to the current balance (`IERC20(token).balanceOf(address(this))` for ERC20 or `address(this).balance` for native) before attempting the transfer. This ensures that the operation is possible with the specified `amount`. The `transfer` and `call{value: amount}` functions are designed to move precisely the `amount` specified, thereby changing the bridge's balance by that exact value."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "Although the code attempts to transfer 'amount', there's no explicit post-condition check within the `withdrawTokens` function that verifies the bridge's balance has changed by exactly `amount` after the transfer. While `transfer` and `call{value: amount}` are expected to move the exact amount, a robust validation might include an `assert` or a post-check comparison of balances (before and after calls) to formally confirm the change, especially considering potential reentrancy risks or unexpected external contract behaviors, though standard token contracts are expected to behave as described."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "amount",
+                                "constraint": "Validate that the bridge's balance change before and after equals amount",
+                                "validation": "function withdrawTokens(address token, address receiver, uint256 amount) external {\n        require(amount > 0, \"AMOUNT_CANT_BE_ZERO\");\n        if(token != native) {\n            require(amount <= (IERC20(token).balanceOf(address(this)) - tokenTax[token]), \"WITHDRAW_LESS\");\n            IERC20(token).transfer(receiver, amount);\n        } else {\n            require(amount <= address(this).balance, \"WITHDRAW_LESS\");\n            (bool success, ) = payable(receiver).call{value: amount}(\"\");\n            require(success, \"WITHDRAW_FAILED\");\n        }\n        emit TokenWithdrawn(user, receiver, amount);\n    }",
+                                "score": "60",
+                                "reason": "The validation code snippet covers the core logic of `transfer` for ERC20 and direct `call` for native tokens, which directly affects the bridge's balance. However, it does not explicitly assert or verify the balance *change* before and after the operation. It only performs the transfer. The `amount` parameter is used in the transfer, implying that the change *should* be `amount`, but no explicit validation of this change is present. The `require(amount <= ...)` checks are for sufficient balance, not for confirming the actual change was precisely `amount`."
+                            }
+                        ]
+                    },
+                    "Validate that msg.sender's balance ≥ amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The provided code for `withdrawTokens` checks the contract's balance (`address(this).balance` or `IERC20(token).balanceOf(address(this))`) against `amount`, not `msg.sender`'s balance. The function's logic revolves around transferring tokens *from the contract* to the `receiver`, not from `msg.sender`."
+                            },
+                            {
+                                "result": true,
+                                "validation": "require(amount <= (IERC20(token).balanceOf(address(this)) - tokenTax[token]), \"WITHDRAW_LESS\");\nrequire(amount <= address(this).balance, \"WITHDRAW_LESS\");",
+                                "reason": "While the code doesn't directly validate `msg.sender`'s balance, it implicitly assumes `msg.sender` has enough funds to initiate the transaction if it were to send funds, or that the contract itself has enough funds to fulfill the `amount` request. However, the constraint specifically asks for `msg.sender`'s balance check, which is not present. If we interpret 'balance' broadly as 'funds available for the operation', then the contract's balance is checked, and `msg.sender`'s role is to call the function, not to provide the `amount` from their balance within this specific function's context."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The `withdrawTokens` function is designed to transfer tokens *from the contract's balance* to a `receiver`, not from `msg.sender`'s balance. Therefore, there is no explicit or implicit check that `msg.sender` has a balance greater than or equal to `amount` for the purpose of this withdrawal operation."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "amount",
+                                "constraint": "Validate that msg.sender's balance ≥ amount",
+                                "validation": "require(amount <= (IERC20(token).balanceOf(address(this)) - tokenTax[token]), \"WITHDRAW_LESS\");\nrequire(amount <= address(this).balance, \"WITHDRAW_LESS\");",
+                                "score": "0",
+                                "reason": "The constraint requires validating `msg.sender`'s balance, but the provided validation code checks the contract's balance (`address(this)`) for ERC20 tokens and native tokens, not the sender's balance. This is a complete mismatch of the intended logic."
+                            }
+                        ]
+                    }
+                }
+            },
+            "recipientAddress": {
+                "receiver": {
+                    "Validate that recipientAddress is not the zero address": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The provided code snippet does not explicitly validate if the 'receiver' address is not the zero address. The `transfer` function of IERC20 might revert if the receiver is zero, or it might silently fail depending on the token implementation, but there's no direct Solidity check like `require(receiver != address(0))` built into this specific function."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "There is no explicit `require` or `if` statement within the `withdrawTokens` function that checks `receiver != address(0)`. While transferring tokens to the zero address might cause issues with some tokens, the current code does not enforce this check at the contract level for the 'receiver' parameter directly."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The function `withdrawTokens` does not contain any check to prevent `receiver` from being the zero address. Calls to `IERC20(token).transfer(receiver, amount)` and `payable(receiver).call` would fail or behave unexpectedly if `receiver` is `address(0)`, but this is not a proactive validation within the provided code."
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            }
+        },
+        "step4": {
+            "tokenAddress": {
+                "token": {
+                    "Check whether the tokenAddress is authorized to use.": [
+                        {
+                            "parameter": "token",
+                            "constraint": "Check whether the tokenAddress is authorized to use.",
+                            "validation": "require(token != address(0), \"TOKEN_NOT_LISTED\");\nrequire(user == _tokenOwner[token], \"ONLY_TOKEN_LISTER_CAN_WITHDRAW\");",
+                            "score": "95",
+                            "reason": "The validation code accurately checks if the token is not the zero address (implying a listed/valid token) and if the user is the owner, which implies authorization to use or withdraw the token. The original code's relevant checks are included. The only slight disconnect is the constraint 'authorized to use' which is more directly translated to 'authorized to withdraw' in the context of the function and the 'ONLY_TOKEN_LISTER_CAN_WITHDRAW' message.",
+                            "results": []
+                        }
+                    ]
+                }
+            },
+            "amount": {
+                "amount": {
+                    "Validate that amount is greater than 0": [
+                        {
+                            "parameter": "amount",
+                            "constraint": "Validate that amount is greater than 0,",
+                            "validation": "require(amount > 0, \"AMOUNT_CANT_BE_ZERO\");",
+                            "score": "100",
+                            "reason": "The validation code `require(amount > 0, \"AMOUNT_CANT_BE_ZERO\");` directly and accurately implements the constraint 'amount is greater than 0'. This exact line is also present in the original contract code, confirming its implementation.",
+                            "results": []
+                        }
+                    ]
+                }
+            },
+            "recipientAddress": {
+                "receiver": {}
+            }
+        },
+        "final_result": {
+            "tokenAddress": {
+                "token": {
+                    "Check whether the tokenAddress is authorized to use.": []
+                }
+            },
+            "amount": {
+                "amount": {
+                    "Validate that amount is greater than 0": [],
+                    "Validate that msg.sender's balance change before and after equals amount": [],
+                    "Validate that the bridge's balance change before and after equals amount": [],
+                    "Validate that msg.sender's balance ≥ amount": []
+                }
+            },
+            "recipientAddress": {
+                "receiver": {
+                    "Validate that recipientAddress is not the zero address": [
+                        {
+                            "parameter": "receiver",
+                            "constraint": "Validate that recipientAddress is not the zero address",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            }
+        },
+        "context": {
+            "event": "TokenWithdrawn",
+            "call_graph": "withdrawTokens",
+            "state_variables": {
+                "isWrapped": "mapping(address => bool) public isWrapped;",
+                "tokenTax": "mapping(address => uint256) public tokenTax;",
+                "_tokenOwner": "mapping(address => address) public _tokenOwner;",
+                "native": "address public native;"
+            },
+            "external_functions": []
+        },
+        "step1-time": 3.021947145462036,
+        "step2-time": 41.1702675819397,
+        "step2-call_api_times": 21,
+        "step3-time": 41.30268907546997,
+        "step3-call_api_times": 11,
+        "step4-time": 4.146561622619629,
+        "step4-call_api_times": 2,
+        "compare_audit": {
+            "result": [
+                {
+                    "vuln": "require(amount <= (IERC20(token).balanceOf(address(this)) - tokenTax[token]), \"WITHDRAW_LESS\");",
+                    "reason": "This line attempts to calculate the withdrawable amount by subtracting `tokenTax` from the contract's balance. If `tokenTax[token]` is larger than `IERC20(token).balanceOf(address(this))`, it will lead to an integer underflow, as `uint256` cannot represent negative numbers. This can cause the `require` statement to revert unexpectedly, preventing legitimate withdrawals. In a cross-chain context, this issue could be triggered by misconfigured token taxes or unexpected variations in token balances across chains, leading to denial of service for users trying to withdraw their tokens."
+                }
+            ]
+        },
+        "compare_attribute_verification": {
+            "result": [
+                {
+                    "toChainID": "null",
+                    "findings": [
+                        {
+                            "constraint": "Check whether toChainID is authorized.",
+                            "validation": "null",
+                            "poc": "null",
+                            "reason": "The provided code snippet does not include any logic related to cross-chain operations or `toChainID`."
+                        },
+                        {
+                            "constraint": "Check that the destination chain ID is not equal to the source chain ID.",
+                            "validation": "null",
+                            "poc": "null",
+                            "reason": "The provided code snippet does not include any logic related to cross-chain operations or chain IDs."
+                        }
+                    ]
+                },
+                {
+                    "tokenAddress": "token",
+                    "findings": [
+                        {
+                            "constraint": "Check whether the tokenAddress is authorized to use.",
+                            "validation": "require(token != address(0), \"TOKEN_NOT_LISTED\");\nrequire(user == _tokenOwner[token], \"ONLY_TOKEN_LISTER_CAN_WITHDRAW\");",
+                            "poc": null,
+                            "reason": "The contract checks if the token is not the zero address and if the `msg.sender` is the registered owner of the token. This suggests a form of authorization for listed tokens or tokens owned by specific users. No obvious bypass identified without further context on `_tokenOwner`."
+                        }
+                    ]
+                },
+                {
+                    "amount": "amount",
+                    "findings": [
+                        {
+                            "constraint": "Validate that amount is greater than 0",
+                            "validation": "require(amount > 0, \"AMOUNT_CANT_BE_ZERO\");",
+                            "poc": null,
+                            "reason": "The contract explicitly checks that `amount` is greater than 0, preventing zero-value transfers."
+                        },
+                        {
+                            "constraint": "Validate that msg.sender's balance change before and after equals amount",
+                            "validation": "null",
+                            "poc": "null",
+                            "reason": "The function `withdrawTokens` transfers tokens *from* the contract *to* the receiver, not from `msg.sender`. Therefore, `msg.sender`'s balance is not directly affected in the way described by this constraint. The contract's balance is affected, and a check for `amount <= (IERC20(token).balanceOf(address(this)) - tokenTax[token])` (for ERC20) and `amount <= address(this).balance` (for native) is present to ensure the contract has enough funds to cover the withdrawal."
+                        },
+                        {
+                            "constraint": "Validate that the bridge's balance change before and after equals amount",
+                            "validation": "if(token != native) { require(amount <= (IERC20(token).balanceOf(address(this)) - tokenTax[token]), \"WITHDRAW_LESS\"); IERC20(token).transfer(receiver, amount); } else { require(amount <= address(this).balance, \"WITHDRAW_LESS\"); (bool success, ) = payable(receiver).call{value: amount}(\"\"); }",
+                            "poc": null,
+                            "reason": "For ERC20 tokens, the `transfer` function ensures the balance change. For native tokens, the `call` function with `value` ensures transfer. The `require` statements before these calls ensure the contract holds sufficient funds. The balance change is implied by these operations."
+                        },
+                        {
+                            "constraint": "Validate that msg.sender's balance ≥ amount",
+                            "validation": "null",
+                            "poc": "null",
+                            "reason": "The `withdrawTokens` function transfers tokens *from* the contract's balance *to* the `receiver`, not from `msg.sender`. Thus, `msg.sender`'s balance is not directly checked against the `amount` for deduction."
+                        }
+                    ]
+                },
+                {
+                    "nonce": "null",
+                    "findings": [
+                        {
+                            "constraint": "Check if the transaction's nonce is equal to the account's current nonce.",
+                            "validation": "null",
+                            "poc": "null",
+                            "reason": "The provided code snippet is a single function and does not contain any nonce management for replay protection in a cross-chain context. The nonce check would typically be part of a broader message processing or relaying mechanism, not a simple `withdrawTokens` function."
+                        }
+                    ]
+                },
+                {
+                    "recipientAddress": "receiver",
+                    "findings": [
+                        {
+                            "constraint": "Validate that recipientAddress is not the zero address",
+                            "validation": "null",
+                            "poc": "null",
+                            "reason": "The code does not explicitly check if `receiver` is not the zero address. However, for native token transfers, a call to `payable(receiver).call` with `address(0)` as receiver would likely revert or be unspendable. For ERC20 transfers, transferring to `address(0)` would typically burn the tokens, which might be an undesired outcome but not necessarily a direct vulnerability for the protocol if the intent is to withdraw and the `_tokenOwner` check is robust. An explicit check `require(receiver != address(0), \"ZERO_ADDRESS_RECEIVER\");` would be safer."
+                        }
+                    ]
+                },
+                {
+                    "externalCallAddress": "null",
+                    "findings": [
+                        {
+                            "constraint": "Check whether the externalCallAddress is authorized to use.",
+                            "validation": "null",
+                            "poc": "null",
+                            "reason": "The provided code snippet does not include any logic for making external calls to a specified `externalCallAddress` after a cross-chain transfer. This function is a simple withdrawal."
+                        }
+                    ]
+                },
+                {
+                    "externalCallFunction": "null",
+                    "findings": [
+                        {
+                            "constraint": "Validate that externalCallFunction is in the allowed function signature list",
+                            "validation": "null",
+                            "poc": "null",
+                            "reason": "The provided code snippet does not include any logic for making external calls to a specified `externalCallFunction` after a cross-chain transfer."
+                        }
+                    ]
+                },
+                {
+                    "routerAddress": "null",
+                    "findings": [
+                        {
+                            "constraint": "Check whether the routerAddress is authorized to use.",
+                            "validation": "null",
+                            "poc": "null",
+                            "reason": "The provided code snippet represents a `withdrawTokens` function and does not contain logic related to a cross-chain router address. This function seems to handle withdrawals from the bridge contract itself, rather than initiating new cross-chain transfers via a router."
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "time": 108.96568059921265,
+    "this_cost": 0,
+    "this_prompt_tokens": 28814,
+    "this_completion_tokens": 10608
+}

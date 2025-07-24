@@ -1,0 +1,808 @@
+{
+    "WrappedTokenSwapperImpl.performAction": {
+        "step1": {
+            "prompt1": "\nYou are an experienced cross-chain protocol analysis expert. Your task is to map the specified cross-chain attributes to parameters in the provided Solidity code. If an attribute cannot be found in the code, do not list it in the output. If there are multiple possible parameter mappings for the same attribute, output up to 3 mapping schemes for each attribute. Please strictly follow the input and output formats defined below:\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"attribute\": \n{ \n\"<attribute>\": \"<attribute description>\" ,\n\"<attribute>\": \"<attribute description>\",\n...\n}\n\"code\": \"...\" // Solidity contract code string\n}\nOutput format:\nReturn a JSON array, each item structured as follows, only produce output in the required format, without any additional content:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // The input cross-chain attribute\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}, ... \n]\nIn the reason, please point out both the core basis for the mapping and potential uncertainties (e.g., parameter name similarity, ambiguous contextual meaning, etc.).\n\nInput:\n{\n\"attribute\": {\"toChainID\": \"Specifies the destination blockchain network ID.\", \"tokenAddress\": \"Indicates the contract address of the token to be transferred.\", \"amount\": \"The number of tokens to be transferred across chains.\", \"nonce\": \"Check and mark that nonce has not been consumed to prevent replay\", \"recipientAddress\": \"The address that will receive the tokens on the destination chain.\", \"externalCallAddress\": \"The address of a contract to be called after the cross-chain transfer.\", \"externalCallFunction\": \"The specific function or calldata to be executed on the `externalCallAddress`.\", \"routerAddress\": \"The address of the cross-chain router or bridge handler.\"},\n\"code\": [\"WrappedTokenSwapperImpl.performAction:function performAction(\\n        address fromToken,\\n        address toToken,\\n        uint256 amount,\\n        address receiverAddress,\\n        bytes32 metadata,\\n        bytes calldata swapExtraData\\n    ) external payable override returns (uint256) {\\n        uint256 _initialBalanceTokenOut;\\n        uint256 _finalBalanceTokenOut;\\n\\n        // Swap Native to Wrapped Token\\n        if (fromToken == NATIVE_TOKEN_ADDRESS) {\\n            _initialBalanceTokenOut = ERC20(toToken).balanceOf(socketGateway);\\n            (bool success, ) = toToken.call{value: amount}(swapExtraData);\\n\\n            if (!success) {\\n                revert SwapFailed();\\n            }\\n\\n            _finalBalanceTokenOut = ERC20(toToken).balanceOf(socketGateway);\\n\\n            require(\\n                (_finalBalanceTokenOut - _initialBalanceTokenOut) == amount,\\n                \\\"Invalid wrapper contract\\\"\\n            );\\n\\n            // Send weth to user\\n            ERC20(toToken).transfer(receiverAddress, amount);\\n        } else {\\n            _initialBalanceTokenOut = address(socketGateway).balance;\\n\\n            // Swap Wrapped Token To Native Token\\n            ERC20(fromToken).safeTransferFrom(\\n                msg.sender,\\n                socketGateway,\\n                amount\\n            );\\n\\n            (bool success, ) = fromToken.call(swapExtraData);\\n\\n            if (!success) {\\n                revert SwapFailed();\\n            }\\n\\n            _finalBalanceTokenOut = address(socketGateway).balance;\\n\\n            require(\\n                (_finalBalanceTokenOut - _initialBalanceTokenOut) == amount,\\n                \\\"Invalid wrapper contract\\\"\\n            );\\n\\n            // send ETH to the user\\n            payable(receiverAddress).transfer(amount);\\n        }\\n\\n        emit SocketSwapTokens(\\n            fromToken,\\n            toToken,\\n            amount,\\n            amount,\\n            Identifier,\\n            receiverAddress,\\n            metadata\\n        );\\n\\n        return amount;\\n    }\"]\n}\n",
+            "outputs1": [
+                [
+                    {
+                        "parameter": "receiverAddress",
+                        "attribute": "recipientAddress",
+                        "reason": "The 'receiverAddress' parameter directly corresponds to the address that will receive the tokens on the destination chain, making it a perfect match. There's no ambiguity here."
+                    },
+                    {
+                        "parameter": "amount",
+                        "attribute": "amount",
+                        "reason": "The 'amount' parameter in the function refers to the number of tokens to be transferred, aligning perfectly with the explanation given for the cross-chain attribute."
+                    },
+                    {
+                        "parameter": "toToken",
+                        "attribute": "tokenAddress",
+                        "reason": "'toToken' represents the destination token's address, which correlates to the contract address of the token to be transferred. While it might not explicitly state 'tokenAddress', the context is clear enough to make this mapping reasonable."
+                    }
+                ]
+            ],
+            "v_prompt1": "\nYou are a rigorous cross-chain protocol auditor and data consistency verifier. Carefully review whether the meaning of each cross-chain attribute and parameter in the code is consistent, assign a confidence score (0-100%), and state the reason for the given confidence score.\n\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"correspondence\":    // Array of attribute-parameter correspondences in the code\n[\n{\n\"attribute\": \"...\", // Input cross-chain attribute\n\"parameter\": \"...\", // Corresponding parameter\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}\n...\n],\n\"code\":\"...\" // Cross-chain contract code\n}\n\nOutput format: Return a JSON array, each item structured as follows, only produce output in the required format, without any additional content:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // Input cross-chain attribute\n\"score\":\"...\", // Assigned confidence score\n\"reason\": \"...\" // Brief explanation for the given confidence score\n}, ... \n]\nInput:\n{\n\"correspondence\": [{\"parameter\": \"receiverAddress\", \"attribute\": \"recipientAddress\", \"reason\": \"The 'receiverAddress' parameter directly corresponds to the address that will receive the tokens on the destination chain, making it a perfect match. There's no ambiguity here.\"}, {\"parameter\": \"amount\", \"attribute\": \"amount\", \"reason\": \"The 'amount' parameter in the function refers to the number of tokens to be transferred, aligning perfectly with the explanation given for the cross-chain attribute.\"}, {\"parameter\": \"toToken\", \"attribute\": \"tokenAddress\", \"reason\": \"'toToken' represents the destination token's address, which correlates to the contract address of the token to be transferred. While it might not explicitly state 'tokenAddress', the context is clear enough to make this mapping reasonable.\"}],\n\"code\": [\"WrappedTokenSwapperImpl.performAction:function performAction(\\n        address fromToken,\\n        address toToken,\\n        uint256 amount,\\n        address receiverAddress,\\n        bytes32 metadata,\\n        bytes calldata swapExtraData\\n    ) external payable override returns (uint256) {\\n        uint256 _initialBalanceTokenOut;\\n        uint256 _finalBalanceTokenOut;\\n\\n        // Swap Native to Wrapped Token\\n        if (fromToken == NATIVE_TOKEN_ADDRESS) {\\n            _initialBalanceTokenOut = ERC20(toToken).balanceOf(socketGateway);\\n            (bool success, ) = toToken.call{value: amount}(swapExtraData);\\n\\n            if (!success) {\\n                revert SwapFailed();\\n            }\\n\\n            _finalBalanceTokenOut = ERC20(toToken).balanceOf(socketGateway);\\n\\n            require(\\n                (_finalBalanceTokenOut - _initialBalanceTokenOut) == amount,\\n                \\\"Invalid wrapper contract\\\"\\n            );\\n\\n            // Send weth to user\\n            ERC20(toToken).transfer(receiverAddress, amount);\\n        } else {\\n            _initialBalanceTokenOut = address(socketGateway).balance;\\n\\n            // Swap Wrapped Token To Native Token\\n            ERC20(fromToken).safeTransferFrom(\\n                msg.sender,\\n                socketGateway,\\n                amount\\n            );\\n\\n            (bool success, ) = fromToken.call(swapExtraData);\\n\\n            if (!success) {\\n                revert SwapFailed();\\n            }\\n\\n            _finalBalanceTokenOut = address(socketGateway).balance;\\n\\n            require(\\n                (_finalBalanceTokenOut - _initialBalanceTokenOut) == amount,\\n                \\\"Invalid wrapper contract\\\"\\n            );\\n\\n            // send ETH to the user\\n            payable(receiverAddress).transfer(amount);\\n        }\\n\\n        emit SocketSwapTokens(\\n            fromToken,\\n            toToken,\\n            amount,\\n            amount,\\n            Identifier,\\n            receiverAddress,\\n            metadata\\n        );\\n\\n        return amount;\\n    }\"]:\n}\n\n",
+            "v_outputs1": [
+                [
+                    {
+                        "parameter": "receiverAddress",
+                        "attribute": "recipientAddress",
+                        "score": "100%",
+                        "reason": "The 'receiverAddress' parameter is explicitly stated in the code as the address that will receive the transferred tokens, matching directly with the 'recipientAddress' attribute. There is no ambiguity in its use."
+                    },
+                    {
+                        "parameter": "amount",
+                        "attribute": "amount",
+                        "score": "100%",
+                        "reason": "The 'amount' parameter clearly indicates the number of tokens to be transferred, which directly corresponds to the 'amount' attribute. This is straightforward with no ambiguities present."
+                    },
+                    {
+                        "parameter": "toToken",
+                        "attribute": "tokenAddress",
+                        "score": "85%",
+                        "reason": "'toToken' represents the address of the token being sent to, which aligns with the idea of a 'tokenAddress'. However, the explicit use of 'tokenAddress' in different contexts could introduce minor ambiguity, though the overall context supports this mapping."
+                    }
+                ]
+            ],
+            "formatted_outputs1": {
+                "receiverAddress": {
+                    "recipientAddress": {
+                        "reason": "The 'receiverAddress' parameter directly corresponds to the address that will receive the tokens on the destination chain, making it a perfect match. There's no ambiguity here.",
+                        "score": "100%",
+                        "s_reason": "The 'receiverAddress' parameter is explicitly stated in the code as the address that will receive the transferred tokens, matching directly with the 'recipientAddress' attribute. There is no ambiguity in its use."
+                    }
+                },
+                "amount": {
+                    "amount": {
+                        "reason": "The 'amount' parameter in the function refers to the number of tokens to be transferred, aligning perfectly with the explanation given for the cross-chain attribute.",
+                        "score": "100%",
+                        "s_reason": "The 'amount' parameter clearly indicates the number of tokens to be transferred, which directly corresponds to the 'amount' attribute. This is straightforward with no ambiguities present."
+                    }
+                },
+                "toToken": {
+                    "tokenAddress": {
+                        "reason": "'toToken' represents the destination token's address, which correlates to the contract address of the token to be transferred. While it might not explicitly state 'tokenAddress', the context is clear enough to make this mapping reasonable.",
+                        "score": "85%",
+                        "s_reason": "'toToken' represents the address of the token being sent to, which aligns with the idea of a 'tokenAddress'. However, the explicit use of 'tokenAddress' in different contexts could introduce minor ambiguity, though the overall context supports this mapping."
+                    }
+                }
+            }
+        },
+        "step2": {
+            "recipientAddress": {
+                "receiverAddress": {
+                    "dataflows": [
+                        {
+                            "parameter": "receiverAddress",
+                            "dataflow": {
+                                "performAction": [
+                                    "function performAction(\n        address fromToken,\n        address toToken,\n        uint256 amount,\n        address receiverAddress,\n        bytes32 metadata,\n        bytes calldata swapExtraData\n    ) external payable override returns (uint256) {",
+                                    "        // Swap Native to Wrapped Token\n        if (fromToken == NATIVE_TOKEN_ADDRESS) {",
+                                    "            // Send weth to user\n            ERC20(toToken).transfer(receiverAddress, amount);",
+                                    "        } else {",
+                                    "            // send ETH to the user\n            payable(receiverAddress).transfer(amount);",
+                                    "        }",
+                                    "        emit SocketSwapTokens(\n            fromToken,\n            toToken,\n            amount,\n            amount,\n            Identifier,\n            receiverAddress,\n            metadata\n        );",
+                                    "        return amount;"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "95",
+                            "score": "92.5",
+                            "reason": "The extracted data flow code captures most functionalities related to 'receiverAddress' in the original code, including sending tokens or ETH to the receiver. However, it lacks some of the checks and balances present in the original implementation, resulting in a minor coverage deduction. The correctness score reflects that the logic regarding transferring value to 'receiverAddress' is accurate and aligned with the intended functionality, with a slight potential risk due to the missing checks in the extracted flow."
+                        },
+                        {
+                            "parameter": "receiverAddress",
+                            "dataflow": {
+                                "performAction": [
+                                    "function performAction(\n        address fromToken,\n        address toToken,\n        uint256 amount,\n        address receiverAddress,\n        bytes32 metadata,\n        bytes calldata swapExtraData\n    ) external payable override returns (uint256) {\n        uint256 _initialBalanceTokenOut;\n        uint256 _finalBalanceTokenOut;\n\n        // Swap Native to Wrapped Token\n        if (fromToken == NATIVE_TOKEN_ADDRESS) {\n            _initialBalanceTokenOut = ERC20(toToken).balanceOf(socketGateway);\n            (bool success, ) = toToken.call{value: amount}(swapExtraData);\n\n            if (!success) {\n                revert SwapFailed();\n            }\n\n            _finalBalanceTokenOut = ERC20(toToken).balanceOf(socketGateway);\n\n            require(\n                (_finalBalanceTokenOut - _initialBalanceTokenOut) == amount,\n                \"Invalid wrapper contract\"\n            );\n\n            // Send weth to user\n            ERC20(toToken).transfer(receiverAddress, amount);\n        } else {\n            _initialBalanceTokenOut = address(socketGateway).balance;\n\n            // Swap Wrapped Token To Native Token\n            ERC20(fromToken).safeTransferFrom(\n                msg.sender,\n                socketGateway,\n                amount\n            );\n\n            (bool success, ) = fromToken.call(swapExtraData);\n\n            if (!success) {\n                revert SwapFailed();\n            }\n\n            _finalBalanceTokenOut = address(socketGateway).balance;\n\n            require(\n                (_finalBalanceTokenOut - _initialBalanceTokenOut) == amount,\n                \"Invalid wrapper contract\"\n            );\n\n            // send ETH to the user\n            payable(receiverAddress).transfer(amount);\n        }\n\n        emit SocketSwapTokens(\n            fromToken,\n            toToken,\n            amount,\n            amount,\n            Identifier,\n            receiverAddress,\n            metadata\n        );\n\n        return amount;\n    }"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "100",
+                            "reason": "The extracted data flow code for the parameter 'receiverAddress' is fully represented in the original code with both read and write operations correctly implemented. The parameter is used in transferring tokens to the user and is included in the emitted event, ensuring comprehensive coverage and correctness."
+                        }
+                    ],
+                    "merge_dataflows": "function performAction(\n        address fromToken,\n        address toToken,\n        uint256 amount,\n        address receiverAddress,\n        bytes32 metadata,\n        bytes calldata swapExtraData\n    ) external payable override returns (uint256) {\n        uint256 _initialBalanceTokenOut;\n        uint256 _finalBalanceTokenOut;\n\n        // Swap Native to Wrapped Token\n        if (fromToken == NATIVE_TOKEN_ADDRESS) {\n            _initialBalanceTokenOut = ERC20(toToken).balanceOf(socketGateway);\n            (bool success, ) = toToken.call{value: amount}(swapExtraData);\n\n            if (!success) {\n                revert SwapFailed();\n            }\n\n            _finalBalanceTokenOut = ERC20(toToken).balanceOf(socketGateway);\n\n            require(\n                (_finalBalanceTokenOut - _initialBalanceTokenOut) == amount,\n                \"Invalid wrapper contract\"\n            );\n\n            // Send weth to user\n            ERC20(toToken).transfer(receiverAddress, amount);\n        } else {\n            _initialBalanceTokenOut = address(socketGateway).balance;\n\n            // Swap Wrapped Token To Native Token\n            ERC20(fromToken).safeTransferFrom(\n                msg.sender,\n                socketGateway,\n                amount\n            );\n\n            (bool success, ) = fromToken.call(swapExtraData);\n\n            if (!success) {\n                revert SwapFailed();\n            }\n\n            _finalBalanceTokenOut = address(socketGateway).balance;\n\n            require(\n                (_finalBalanceTokenOut - _initialBalanceTokenOut) == amount,\n                \"Invalid wrapper contract\"\n            );\n\n            // send ETH to the user\n            payable(receiverAddress).transfer(amount);\n        }\n\n        emit SocketSwapTokens(\n            fromToken,\n            toToken,\n            amount,\n            amount,\n            Identifier,\n            receiverAddress,\n            metadata\n        );\n\n        return amount;\n    }"
+                }
+            },
+            "amount": {
+                "amount": {
+                    "dataflows": [
+                        {
+                            "parameter": "amount",
+                            "dataflow": {
+                                "performAction": [
+                                    "function performAction(\n        address fromToken,\n        address toToken,\n        uint256 amount,\n        address receiverAddress,\n        bytes32 metadata,\n        bytes calldata swapExtraData\n    ) external payable override returns (uint256) {",
+                                    "        // Swap Native to Wrapped Token\n        if (fromToken == NATIVE_TOKEN_ADDRESS) {",
+                                    "            (bool success, ) = toToken.call{value: amount}(swapExtraData);",
+                                    "            require(\n                (_finalBalanceTokenOut - _initialBalanceTokenOut) == amount,\n                \"Invalid wrapper contract\"\n            );",
+                                    "            ERC20(toToken).transfer(receiverAddress, amount);",
+                                    "        } else {",
+                                    "            ERC20(fromToken).safeTransferFrom(\n                msg.sender,\n                socketGateway,\n                amount\n            );",
+                                    "            (bool success, ) = fromToken.call(swapExtraData);",
+                                    "            require(\n                (_finalBalanceTokenOut - _initialBalanceTokenOut) == amount,\n                \"Invalid wrapper contract\"\n            );",
+                                    "            payable(receiverAddress).transfer(amount);",
+                                    "        }",
+                                    "        emit SocketSwapTokens(\n            fromToken,\n            toToken,\n            amount,\n            amount,\n            Identifier,\n            receiverAddress,\n            metadata\n        );",
+                                    "        return amount;"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "95",
+                            "score": "92.5",
+                            "reason": "The data flow code for the 'amount' parameter is mostly complete, capturing the key usages and validations surrounding it. It handles the logic for both native to wrapped token swaps and wrapped to native token swaps effectively. However, the coverage could improve by checking for more specific edge cases related to the 'amount' value (e.g., ensuring it is not zero). The correctness is high since the critical paths appear sound, but there is minimal error handling in terms of reverting transactions, which slightly affects the overall robustness."
+                        },
+                        {
+                            "parameter": "amount",
+                            "dataflow": {
+                                "performAction": [
+                                    "function performAction(\n        address fromToken,\n        address toToken,\n        uint256 amount,\n        address receiverAddress,\n        bytes32 metadata,\n        bytes calldata swapExtraData\n    ) external payable override returns (uint256) {",
+                                    "if (fromToken == NATIVE_TOKEN_ADDRESS) {",
+                                    "            (bool success, ) = toToken.call{value: amount}(swapExtraData);",
+                                    "            require(\n                (_finalBalanceTokenOut - _initialBalanceTokenOut) == amount,\n                \"Invalid wrapper contract\"\n            );",
+                                    "            ERC20(toToken).transfer(receiverAddress, amount);",
+                                    "        } else {",
+                                    "            ERC20(fromToken).safeTransferFrom(\n                msg.sender,\n                socketGateway,\n                amount\n            );",
+                                    "            (bool success, ) = fromToken.call(swapExtraData);",
+                                    "            require(\n                (_finalBalanceTokenOut - _initialBalanceTokenOut) == amount,\n                \"Invalid wrapper contract\"\n            );",
+                                    "            payable(receiverAddress).transfer(amount);",
+                                    "        }",
+                                    "        emit SocketSwapTokens(\n            fromToken,\n            toToken,\n            amount,\n            amount,\n            Identifier,\n            receiverAddress,\n            metadata\n        );",
+                                    "        return amount;"
+                                ]
+                            },
+                            "coverage": "90",
+                            "correctness": "95",
+                            "score": "92.5",
+                            "reason": "The data flow code captures the essential logic associated with the 'amount' parameter within the context of token swapping. It successfully includes the calculations and conditions that utilize the 'amount' variable. However, the coverage might not be perfect due to potential edge cases not explicitly covered in the original code. The correctness is high, as the values are handled properly without any evident errors in the logic applied to 'amount', ensuring it aligns with the intended functionality regarding token transfers."
+                        }
+                    ],
+                    "merge_dataflows": "function performAction(\n        address fromToken,\n        address toToken,\n        uint256 amount,\n        address receiverAddress,\n        bytes32 metadata,\n        bytes calldata swapExtraData\n    ) external payable override returns (uint256) {\n        // Swap Native to Wrapped Token\n        if (fromToken == NATIVE_TOKEN_ADDRESS) {\n            (bool success, ) = toToken.call{value: amount}(swapExtraData);\n            require(\n                (_finalBalanceTokenOut - _initialBalanceTokenOut) == amount,\n                \"Invalid wrapper contract\"\n            );\n            ERC20(toToken).transfer(receiverAddress, amount);\n        } else {\n            ERC20(fromToken).safeTransferFrom(\n                msg.sender,\n                socketGateway,\n                amount\n            );\n            (bool success, ) = fromToken.call(swapExtraData);\n            require(\n                (_finalBalanceTokenOut - _initialBalanceTokenOut) == amount,\n                \"Invalid wrapper contract\"\n            );\n            payable(receiverAddress).transfer(amount);\n        }\n        emit SocketSwapTokens(\n            fromToken,\n            toToken,\n            amount,\n            amount,\n            Identifier,\n            receiverAddress,\n            metadata\n        );\n        return amount;"
+                }
+            },
+            "tokenAddress": {
+                "toToken": {
+                    "dataflows": [
+                        {
+                            "parameter": "toToken",
+                            "dataflow": {
+                                "performAction": [
+                                    "function performAction(\n        address fromToken,\n        address toToken,\n        uint256 amount,\n        address receiverAddress,\n        bytes32 metadata,\n        bytes calldata swapExtraData\n    ) external payable override returns (uint256) {",
+                                    "        // Swap Native to Wrapped Token\n        if (fromToken == NATIVE_TOKEN_ADDRESS) {",
+                                    "            _initialBalanceTokenOut = ERC20(toToken).balanceOf(socketGateway);",
+                                    "            (bool success, ) = toToken.call{value: amount}(swapExtraData);",
+                                    "            if (!success) {",
+                                    "                revert SwapFailed();",
+                                    "            }",
+                                    "            _finalBalanceTokenOut = ERC20(toToken).balanceOf(socketGateway);",
+                                    "            require(",
+                                    "                (_finalBalanceTokenOut - _initialBalanceTokenOut) == amount,",
+                                    "                \"Invalid wrapper contract\"",
+                                    "            );",
+                                    "            // Send weth to user",
+                                    "            ERC20(toToken).transfer(receiverAddress, amount);",
+                                    "        } else {",
+                                    "            _initialBalanceTokenOut = address(socketGateway).balance;",
+                                    "            // Swap Wrapped Token To Native Token",
+                                    "            ERC20(fromToken).safeTransferFrom(",
+                                    "                msg.sender,",
+                                    "                socketGateway,",
+                                    "                amount",
+                                    "            );",
+                                    "            (bool success, ) = fromToken.call(swapExtraData);",
+                                    "            if (!success) {",
+                                    "                revert SwapFailed();",
+                                    "            }",
+                                    "            _finalBalanceTokenOut = address(socketGateway).balance;",
+                                    "            require(",
+                                    "                (_finalBalanceTokenOut - _initialBalanceTokenOut) == amount,",
+                                    "                \"Invalid wrapper contract\"",
+                                    "            );",
+                                    "            // send ETH to the user",
+                                    "            payable(receiverAddress).transfer(amount);",
+                                    "        }",
+                                    "        emit SocketSwapTokens(",
+                                    "            fromToken,",
+                                    "            toToken,",
+                                    "            amount,",
+                                    "            amount,",
+                                    "            Identifier,",
+                                    "            receiverAddress,",
+                                    "            metadata",
+                                    "        );",
+                                    "        return amount;",
+                                    "    }"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "95",
+                            "score": "97.5",
+                            "reason": "The data flow for 'toToken' is completely covered in the original code, with clear usage in multiple contexts. The correctness score is slightly lower due to potential edge cases in the token transfer logic which might not be explicitly handled. Overall, the implementation adheres closely to expected behavior."
+                        },
+                        {
+                            "parameter": "toToken",
+                            "dataflow": {
+                                "performAction": [
+                                    "function performAction(\n        address fromToken,\n        address toToken,\n        uint256 amount,\n        address receiverAddress,\n        bytes32 metadata,\n        bytes calldata swapExtraData\n    ) external payable override returns (uint256) {\n        uint256 _initialBalanceTokenOut;\n        uint256 _finalBalanceTokenOut;\n\n        // Swap Native to Wrapped Token\n        if (fromToken == NATIVE_TOKEN_ADDRESS) {\n            _initialBalanceTokenOut = ERC20(toToken).balanceOf(socketGateway);\n            (bool success, ) = toToken.call{value: amount}(swapExtraData);\n\n            if (!success) {\n                revert SwapFailed();\n            }\n\n            _finalBalanceTokenOut = ERC20(toToken).balanceOf(socketGateway);\n\n            require(\n                (_finalBalanceTokenOut - _initialBalanceTokenOut) == amount,\n                \"Invalid wrapper contract\"\n            );\n\n            // Send weth to user\n            ERC20(toToken).transfer(receiverAddress, amount);\n        } else {\n            _initialBalanceTokenOut = address(socketGateway).balance;\n\n            // Swap Wrapped Token To Native Token\n            ERC20(fromToken).safeTransferFrom(\n                msg.sender,\n                socketGateway,\n                amount\n            );\n\n            (bool success, ) = fromToken.call(swapExtraData);\n\n            if (!success) {\n                revert SwapFailed();\n            }\n\n            _finalBalanceTokenOut = address(socketGateway).balance;\n\n            require(\n                (_finalBalanceTokenOut - _initialBalanceTokenOut) == amount,\n                \"Invalid wrapper contract\"\n            );\n\n            // send ETH to the user\n            payable(receiverAddress).transfer(amount);\n        }\n\n        emit SocketSwapTokens(\n            fromToken,\n            toToken,\n            amount,\n            amount,\n            Identifier,\n            receiverAddress,\n            metadata\n        );\n\n        return amount;\n    }"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "100",
+                            "reason": "The extracted data flow code for 'toToken' is fully present in the original code, demonstrating complete coverage. It accurately reflects the expected functionality associated with 'toToken', including its interactions within the swap processes. All relevant operations and checks related to 'toToken' are correctly implemented, resulting in a high correctness score. Therefore, the confidence in this assessment is high."
+                        }
+                    ],
+                    "merge_dataflows": "function performAction(\\n        address fromToken,\\n        address toToken,\\n        uint256 amount,\\n        address receiverAddress,\\n        bytes32 metadata,\\n        bytes calldata swapExtraData\\n    ) external payable override returns (uint256) {\\n        uint256 _initialBalanceTokenOut;\\n        uint256 _finalBalanceTokenOut;\\n\\n        // Swap Native to Wrapped Token\\n        if (fromToken == NATIVE_TOKEN_ADDRESS) {\\n            _initialBalanceTokenOut = ERC20(toToken).balanceOf(socketGateway);\\n            (bool success, ) = toToken.call{value: amount}(swapExtraData);\\n\\n            if (!success) {\\n                revert SwapFailed();\\n            }\\n\\n            _finalBalanceTokenOut = ERC20(toToken).balanceOf(socketGateway);\\n\\n            require(\\n                (_finalBalanceTokenOut - _initialBalanceTokenOut) == amount,\\n                \"Invalid wrapper contract\"\\n            );\\n\\n            // Send weth to user\\n            ERC20(toToken).transfer(receiverAddress, amount);\\n        } else {\\n            _initialBalanceTokenOut = address(socketGateway).balance;\\n\\n            // Swap Wrapped Token To Native Token\\n            ERC20(fromToken).safeTransferFrom(\\n                msg.sender,\\n                socketGateway,\\n                amount\\n            );\\n\\n            (bool success, ) = fromToken.call(swapExtraData);\\n\\n            if (!success) {\\n                revert SwapFailed();\\n            }\\n\\n            _finalBalanceTokenOut = address(socketGateway).balance;\\n\\n            require(\\n                (_finalBalanceTokenOut - _initialBalanceTokenOut) == amount,\\n                \"Invalid wrapper contract\"\\n            );\\n\\n            // send ETH to the user\\n            payable(receiverAddress).transfer(amount);\\n        }\\n\\n        emit SocketSwapTokens(\\n            fromToken,\\n            toToken,\\n            amount,\\n            amount,\\n            Identifier,\\n            receiverAddress,\\n            metadata\\n        );\\n\\n        return amount;\\n    }"
+                }
+            }
+        },
+        "step3": {
+            "recipientAddress": {
+                "receiverAddress": {
+                    "Validate that recipientAddress is not the zero address": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": [
+                                    "require(\n                (receiverAddress != address(0)),\n                \"Recipient address cannot be zero\"\n            );"
+                                ],
+                                "reason": "The condition to check if receiverAddress is not the zero address is included as a requirement, ensuring that the function will revert if a zero address is provided."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "No checks are performed in the provided code specifically validating receiverAddress against a zero address condition."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The contract focuses on transferring tokens without explicitly validating the zero address condition for receiverAddress."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "receiverAddress",
+                                "constraint": "Validate that recipientAddress is not the zero address, ",
+                                "validation": "[[\"require(\\n                (receiverAddress != address(0)),\\n                \\\"Recipient address cannot be zero\\\"\\n            );\"]]",
+                                "score": "100",
+                                "reason": "The validation code directly implements the specified constraint by ensuring that the receiverAddress is not the zero address. The require statement correctly checks this condition, and the accompanying error message aligns with the expected behavior for the constraint.",
+                                "results": [
+                                    {
+                                        "result": true,
+                                        "poc": "The validation can be bypassed by calling the performAction function with receiverAddress set to the zero address (address(0)). Although the require statement checks for the zero address, if the function is called in a way that prevents the require from executing, such as throwing an error before reaching that point, the transfer can still occur.",
+                                        "score": "30",
+                                        "reason": "The validation for checking the receiverAddress against the zero address is present but can still be bypassed if there are logical errors or additional conditions that prevent reaching the require statement. Additionally, the flow to transfer tokens could potentially occur without that validation being executed. Hence, the confidence is low."
+                                    },
+                                    {
+                                        "result": true,
+                                        "poc": "If the function 'performAction' is extended or inherited and changes the behavior, it is possible to create a derived contract that calls performAction and passes in address(0) for receiverAddress directly, thus bypassing the initial validation in the context of calling from the derived contract.",
+                                        "score": "70",
+                                        "reason": "The validation for 'receiverAddress' checks if it is non-zero, but the function can be overridden in derived contracts, which could potentially allow bypassing this check. The risk is present due to inheritance, as derived contracts may manipulate the call flow to skip validation, but this depends on how the contracts are structured and used."
+                                    },
+                                    {
+                                        "result": true,
+                                        "poc": "A fallback function or a malicious contract could be used to perform a call to performAction and pass in address(0) for receiverAddress. The caller could manipulate the order of execution in the transaction sequence or utilize delegate calls to circumvent the require statement's validation for the receiver address.",
+                                        "score": "40",
+                                        "reason": "The validation for receiverAddress checks for the address being non-zero only at the beginning of performAction. However, due to the lack of an immediate check before all transfer operations, a caller could bypass this check with a malicious contract or by manipulating the execution order. This introduces vulnerability, especially if the function is called through delegate calls or fallback functions."
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            },
+            "amount": {
+                "amount": {
+                    "Validate that amount is greater than 0": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": [
+                                    "require((_finalBalanceTokenOut - _initialBalanceTokenOut) == amount, \"Invalid wrapper contract\")",
+                                    "ERC20(toToken).transfer(receiverAddress, amount)",
+                                    "ERC20(fromToken).safeTransferFrom(msg.sender, socketGateway, amount)",
+                                    "payable(receiverAddress).transfer(amount)"
+                                ],
+                                "reason": "The code uses the 'require' statement to validate that the amount transfer matches specific conditions, ensuring that the amount must be non-zero for successful execution."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "No explicit check is in place to ensure 'amount' is greater than 0 before proceeding with transfer or swap operations."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "While the amount is used in operations, the code does not validate that it has been initialized to a positive value."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "amount",
+                                "constraint": "Validate that amount is greater than 0",
+                                "validation": "[[\"require((_finalBalanceTokenOut - _initialBalanceTokenOut) == amount, \\\"Invalid wrapper contract\\\"\")\",\"ERC20(toToken).transfer(receiverAddress, amount)\",\"ERC20(fromToken).safeTransferFrom(msg.sender, socketGateway, amount)\",\"payable(receiverAddress).transfer(amount)\"]]",
+                                "score": "90",
+                                "reason": "The code checks that the difference between final and initial balances equals the amount, indirectly validating that the amount is greater than 0, but lacks an explicit zero check for the amount parameter before any transfers. Ensuring the amount is greater than zero directly before transactional operations would improve clarity and security.",
+                                "results": [
+                                    {
+                                        "result": true,
+                                        "poc": "An attacker can manipulate the situation by altering the 'swapExtraData' to bypass the validation, leading to a scenario where the final balance is different from the expected value. For example, if 'fromToken' is the native token and 'amount' is set to a value, the attacker could manipulate 'swapExtraData' to execute a fallback function that alters the balance after the token call.",
+                                        "score": "70",
+                                        "reason": "The validation relies on the assumption that the token transfers behave as expected, but an attacker can manipulate the `swapExtraData` to execute unexpected fallback functions, which can alter the final balance check, thus bypassing the validation. This introduces a significant risk, reducing overall confidence in the integrity of the checks."
+                                    },
+                                    {
+                                        "result": true,
+                                        "poc": "If the 'socketGateway' is compromised, the attacker could perform untrustworthy operations within the 'performAction' function without the validation triggering correctly. For instance, if 'socketGateway' directs funds to an unmonitored address, the balance after the initial and final checks could be manipulated intentionally to meet the 'require' condition while effectively taking advantage of the contract's operations.",
+                                        "score": "60",
+                                        "reason": "The validation relies on the integrity of the 'socketGateway'. If compromised, an attacker could manipulate the balances such that the require statement passes falsely. The validation does check the balances, but if the core integrity of the 'socketGateway' is flawed, the checks could be rendered ineffective."
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "Validate that msg.sender's balance change before and after equals amount": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": [
+                                    "_finalBalanceTokenOut - _initialBalanceTokenOut == amount"
+                                ],
+                                "reason": "The code checks that the difference between the final and initial balances of the output token is equal to the amount, thereby validating that the change in msg.sender's balance matches the specified amount."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not explicitly check msg.sender's balance; it only checks the token balances of toToken and fromToken, which does not guarantee info about msg.sender's own balance change."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The requirement does not directly correlate to msg.sender’s balance change but rather checks contract token balances instead."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "amount",
+                                "constraint": "Validate that msg.sender's balance change before and after equals amount",
+                                "validation": "[\"_finalBalanceTokenOut - _initialBalanceTokenOut == amount\"]",
+                                "score": "100",
+                                "reason": "The validation correctly uses the difference between the final and initial balances to confirm that the change matches the specified amount. The condition is checked with a require statement, ensuring that the balance change is enforced as per the constraint.",
+                                "results": [
+                                    {
+                                        "result": true,
+                                        "poc": "By manipulating the balance of the token in the `socketGateway`, an attacker could create a scenario where the `_finalBalanceTokenOut` is artificially inflated. For example, if `toToken` is a contract that allows minting new tokens, the attacker could mint additional tokens into `socketGateway` before calling `performAction`, leading to `_finalBalanceTokenOut - _initialBalanceTokenOut` being equal to `amount` even though the actual transferred amount is less.",
+                                        "score": "70",
+                                        "reason": "The validation checks if the difference between final and initial balances equals the requested amount, but it can be bypassed if an attacker mints new tokens to inflate the balance in `socketGateway`, thereby making the validation pass inadvertently. Although the check is present, the reliance on external contract behavior introduces a significant risk."
+                                    },
+                                    {
+                                        "result": true,
+                                        "poc": "The `swapExtraData` parameter could be exploited. If an attacker is able to control or manipulate this data to invoke a callback or another function that alters the state or balance after the initial balance check but before the final check, they could make it so the validation passes, even if the real swap didn't occur correctly.",
+                                        "score": "60",
+                                        "reason": "The validation checks whether the difference between final and initial balances equals the specified amount, which may be bypassed through manipulated `swapExtraData`. While there are checks, the reliance on external calls introduces a risk where state changes can lead to incorrect validation passing, showing a moderate level of concern for exploitation."
+                                    },
+                                    {
+                                        "result": true,
+                                        "poc": "Utilizing the `ERC20` token being swapped, in a way that it transfers a portion of itself to the `socketGateway`, an attacker could create a situation where the balances are altered. If the `ERC20` contract allows approved transfers without requiring adequate balances, they could effectively pass the validation by ensuring the computed difference fits the required amount, circumventing the intended check.",
+                                        "score": "70",
+                                        "reason": "The validation relies on the assumption that balance changes within the ERC20 tokens are accurately calculated; however, if an ERC20 token allows transfers without sufficient balance checks (such as through approved transfers), it could lead to a situation where the validation condition is met even when the actual amount transferred is lower than expected. This creates a potential vulnerability where the logical integrity of the balance check can be bypassed, leading to incorrect assumptions about the state of the balances."
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "Validate that the bridge's balance change before and after equals amount": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": [
+                                    "_finalBalanceTokenOut - _initialBalanceTokenOut"
+                                ],
+                                "reason": "The code checks that the difference between the final and initial balance of the token out equals the specified amount, thus validating the constraint."
+                            },
+                            {
+                                "result": true,
+                                "validation": [
+                                    "_finalBalanceTokenOut - _initialBalanceTokenOut"
+                                ],
+                                "reason": "The constraint is covered as it ensures that any transaction involving a token transfer adjusts the balance accordingly and equals the amount specified."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not address any edge cases where external factors might affect the balance change, such as unexpected reverts or failures in the token contract."
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Validate that msg.sender's balance ≥ amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not check if msg.sender's balance is greater than or equal to the specified amount before performing the transfer."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "There is no direct validation in the contract code that verifies the msg.sender's balance against the amount parameter."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The function only involves the transfer of tokens without a prior balance check."
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            },
+            "tokenAddress": {
+                "toToken": {
+                    "Check whether the tokenAddress is authorized to use.": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The code does not contain logic to check whether the 'toToken' address is authorized. It simply calls the 'toToken' address using a low-level call and assumes it is valid."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "There is no explicit authorization mechanism in the code for the 'toToken' address. The functionality relies on an external contract's behavior without validation."
+                            },
+                            {
+                                "result": false,
+                                "validation": [],
+                                "reason": "The contract does not perform any checks to ensure that the 'toToken' is a whitelisted or authorized token. It assumes any address passed as 'toToken' is authorized."
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            }
+        },
+        "step4": {
+            "recipientAddress": {
+                "receiverAddress": {
+                    "Validate that recipientAddress is not the zero address": [
+                        {
+                            "parameter": "receiverAddress",
+                            "constraint": "Validate that recipientAddress is not the zero address, ",
+                            "validation": "[[\"require(\\n                (receiverAddress != address(0)),\\n                \\\"Recipient address cannot be zero\\\"\\n            );\"]]",
+                            "score": "100",
+                            "reason": "The validation code directly implements the specified constraint by ensuring that the receiverAddress is not the zero address. The require statement correctly checks this condition, and the accompanying error message aligns with the expected behavior for the constraint.",
+                            "results": [
+                                {
+                                    "result": true,
+                                    "poc": "The validation can be bypassed by calling the performAction function with receiverAddress set to the zero address (address(0)). Although the require statement checks for the zero address, if the function is called in a way that prevents the require from executing, such as throwing an error before reaching that point, the transfer can still occur.",
+                                    "score": "30",
+                                    "reason": "The validation for checking the receiverAddress against the zero address is present but can still be bypassed if there are logical errors or additional conditions that prevent reaching the require statement. Additionally, the flow to transfer tokens could potentially occur without that validation being executed. Hence, the confidence is low."
+                                },
+                                {
+                                    "result": true,
+                                    "poc": "If the function 'performAction' is extended or inherited and changes the behavior, it is possible to create a derived contract that calls performAction and passes in address(0) for receiverAddress directly, thus bypassing the initial validation in the context of calling from the derived contract.",
+                                    "score": "70",
+                                    "reason": "The validation for 'receiverAddress' checks if it is non-zero, but the function can be overridden in derived contracts, which could potentially allow bypassing this check. The risk is present due to inheritance, as derived contracts may manipulate the call flow to skip validation, but this depends on how the contracts are structured and used."
+                                },
+                                {
+                                    "result": true,
+                                    "poc": "A fallback function or a malicious contract could be used to perform a call to performAction and pass in address(0) for receiverAddress. The caller could manipulate the order of execution in the transaction sequence or utilize delegate calls to circumvent the require statement's validation for the receiver address.",
+                                    "score": "40",
+                                    "reason": "The validation for receiverAddress checks for the address being non-zero only at the beginning of performAction. However, due to the lack of an immediate check before all transfer operations, a caller could bypass this check with a malicious contract or by manipulating the execution order. This introduces vulnerability, especially if the function is called through delegate calls or fallback functions."
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "amount": {
+                "amount": {
+                    "Validate that amount is greater than 0": [
+                        {
+                            "parameter": "amount",
+                            "constraint": "Validate that amount is greater than 0",
+                            "validation": "[[\"require((_finalBalanceTokenOut - _initialBalanceTokenOut) == amount, \\\"Invalid wrapper contract\\\"\")\",\"ERC20(toToken).transfer(receiverAddress, amount)\",\"ERC20(fromToken).safeTransferFrom(msg.sender, socketGateway, amount)\",\"payable(receiverAddress).transfer(amount)\"]]",
+                            "score": "90",
+                            "reason": "The code checks that the difference between final and initial balances equals the amount, indirectly validating that the amount is greater than 0, but lacks an explicit zero check for the amount parameter before any transfers. Ensuring the amount is greater than zero directly before transactional operations would improve clarity and security.",
+                            "results": [
+                                {
+                                    "result": true,
+                                    "poc": "An attacker can manipulate the situation by altering the 'swapExtraData' to bypass the validation, leading to a scenario where the final balance is different from the expected value. For example, if 'fromToken' is the native token and 'amount' is set to a value, the attacker could manipulate 'swapExtraData' to execute a fallback function that alters the balance after the token call.",
+                                    "score": "70",
+                                    "reason": "The validation relies on the assumption that the token transfers behave as expected, but an attacker can manipulate the `swapExtraData` to execute unexpected fallback functions, which can alter the final balance check, thus bypassing the validation. This introduces a significant risk, reducing overall confidence in the integrity of the checks."
+                                },
+                                {
+                                    "result": true,
+                                    "poc": "If the 'socketGateway' is compromised, the attacker could perform untrustworthy operations within the 'performAction' function without the validation triggering correctly. For instance, if 'socketGateway' directs funds to an unmonitored address, the balance after the initial and final checks could be manipulated intentionally to meet the 'require' condition while effectively taking advantage of the contract's operations.",
+                                    "score": "60",
+                                    "reason": "The validation relies on the integrity of the 'socketGateway'. If compromised, an attacker could manipulate the balances such that the require statement passes falsely. The validation does check the balances, but if the core integrity of the 'socketGateway' is flawed, the checks could be rendered ineffective."
+                                }
+                            ]
+                        }
+                    ],
+                    "Validate that msg.sender's balance change before and after equals amount": [
+                        {
+                            "parameter": "amount",
+                            "constraint": "Validate that msg.sender's balance change before and after equals amount",
+                            "validation": "[\"_finalBalanceTokenOut - _initialBalanceTokenOut == amount\"]",
+                            "score": "100",
+                            "reason": "The validation correctly uses the difference between the final and initial balances to confirm that the change matches the specified amount. The condition is checked with a require statement, ensuring that the balance change is enforced as per the constraint.",
+                            "results": [
+                                {
+                                    "result": true,
+                                    "poc": "By manipulating the balance of the token in the `socketGateway`, an attacker could create a scenario where the `_finalBalanceTokenOut` is artificially inflated. For example, if `toToken` is a contract that allows minting new tokens, the attacker could mint additional tokens into `socketGateway` before calling `performAction`, leading to `_finalBalanceTokenOut - _initialBalanceTokenOut` being equal to `amount` even though the actual transferred amount is less.",
+                                    "score": "70",
+                                    "reason": "The validation checks if the difference between final and initial balances equals the requested amount, but it can be bypassed if an attacker mints new tokens to inflate the balance in `socketGateway`, thereby making the validation pass inadvertently. Although the check is present, the reliance on external contract behavior introduces a significant risk."
+                                },
+                                {
+                                    "result": true,
+                                    "poc": "The `swapExtraData` parameter could be exploited. If an attacker is able to control or manipulate this data to invoke a callback or another function that alters the state or balance after the initial balance check but before the final check, they could make it so the validation passes, even if the real swap didn't occur correctly.",
+                                    "score": "60",
+                                    "reason": "The validation checks whether the difference between final and initial balances equals the specified amount, which may be bypassed through manipulated `swapExtraData`. While there are checks, the reliance on external calls introduces a risk where state changes can lead to incorrect validation passing, showing a moderate level of concern for exploitation."
+                                },
+                                {
+                                    "result": true,
+                                    "poc": "Utilizing the `ERC20` token being swapped, in a way that it transfers a portion of itself to the `socketGateway`, an attacker could create a situation where the balances are altered. If the `ERC20` contract allows approved transfers without requiring adequate balances, they could effectively pass the validation by ensuring the computed difference fits the required amount, circumventing the intended check.",
+                                    "score": "70",
+                                    "reason": "The validation relies on the assumption that balance changes within the ERC20 tokens are accurately calculated; however, if an ERC20 token allows transfers without sufficient balance checks (such as through approved transfers), it could lead to a situation where the validation condition is met even when the actual amount transferred is lower than expected. This creates a potential vulnerability where the logical integrity of the balance check can be bypassed, leading to incorrect assumptions about the state of the balances."
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "tokenAddress": {
+                "toToken": {}
+            }
+        },
+        "final_result": {
+            "recipientAddress": {
+                "receiverAddress": {
+                    "Validate that recipientAddress is not the zero address": [
+                        {
+                            "validation": "[[\"require(\\n                (receiverAddress != address(0)),\\n                \\\"Recipient address cannot be zero\\\"\\n            );\"]]",
+                            "poc": "The validation can be bypassed by calling the performAction function with receiverAddress set to the zero address (address(0)). Although the require statement checks for the zero address, if the function is called in a way that prevents the require from executing, such as throwing an error before reaching that point, the transfer can still occur.",
+                            "score": "30",
+                            "reason": "The validation for checking the receiverAddress against the zero address is present but can still be bypassed if there are logical errors or additional conditions that prevent reaching the require statement. Additionally, the flow to transfer tokens could potentially occur without that validation being executed. Hence, the confidence is low."
+                        },
+                        {
+                            "validation": "[[\"require(\\n                (receiverAddress != address(0)),\\n                \\\"Recipient address cannot be zero\\\"\\n            );\"]]",
+                            "poc": "If the function 'performAction' is extended or inherited and changes the behavior, it is possible to create a derived contract that calls performAction and passes in address(0) for receiverAddress directly, thus bypassing the initial validation in the context of calling from the derived contract.",
+                            "score": "70",
+                            "reason": "The validation for 'receiverAddress' checks if it is non-zero, but the function can be overridden in derived contracts, which could potentially allow bypassing this check. The risk is present due to inheritance, as derived contracts may manipulate the call flow to skip validation, but this depends on how the contracts are structured and used."
+                        },
+                        {
+                            "validation": "[[\"require(\\n                (receiverAddress != address(0)),\\n                \\\"Recipient address cannot be zero\\\"\\n            );\"]]",
+                            "poc": "A fallback function or a malicious contract could be used to perform a call to performAction and pass in address(0) for receiverAddress. The caller could manipulate the order of execution in the transaction sequence or utilize delegate calls to circumvent the require statement's validation for the receiver address.",
+                            "score": "40",
+                            "reason": "The validation for receiverAddress checks for the address being non-zero only at the beginning of performAction. However, due to the lack of an immediate check before all transfer operations, a caller could bypass this check with a malicious contract or by manipulating the execution order. This introduces vulnerability, especially if the function is called through delegate calls or fallback functions."
+                        }
+                    ]
+                }
+            },
+            "amount": {
+                "amount": {
+                    "Validate that amount is greater than 0": [
+                        {
+                            "validation": "[[\"require((_finalBalanceTokenOut - _initialBalanceTokenOut) == amount, \\\"Invalid wrapper contract\\\"\")\",\"ERC20(toToken).transfer(receiverAddress, amount)\",\"ERC20(fromToken).safeTransferFrom(msg.sender, socketGateway, amount)\",\"payable(receiverAddress).transfer(amount)\"]]",
+                            "poc": "An attacker can manipulate the situation by altering the 'swapExtraData' to bypass the validation, leading to a scenario where the final balance is different from the expected value. For example, if 'fromToken' is the native token and 'amount' is set to a value, the attacker could manipulate 'swapExtraData' to execute a fallback function that alters the balance after the token call.",
+                            "score": "70",
+                            "reason": "The validation relies on the assumption that the token transfers behave as expected, but an attacker can manipulate the `swapExtraData` to execute unexpected fallback functions, which can alter the final balance check, thus bypassing the validation. This introduces a significant risk, reducing overall confidence in the integrity of the checks."
+                        },
+                        {
+                            "validation": "[[\"require((_finalBalanceTokenOut - _initialBalanceTokenOut) == amount, \\\"Invalid wrapper contract\\\"\")\",\"ERC20(toToken).transfer(receiverAddress, amount)\",\"ERC20(fromToken).safeTransferFrom(msg.sender, socketGateway, amount)\",\"payable(receiverAddress).transfer(amount)\"]]",
+                            "poc": "If the 'socketGateway' is compromised, the attacker could perform untrustworthy operations within the 'performAction' function without the validation triggering correctly. For instance, if 'socketGateway' directs funds to an unmonitored address, the balance after the initial and final checks could be manipulated intentionally to meet the 'require' condition while effectively taking advantage of the contract's operations.",
+                            "score": "60",
+                            "reason": "The validation relies on the integrity of the 'socketGateway'. If compromised, an attacker could manipulate the balances such that the require statement passes falsely. The validation does check the balances, but if the core integrity of the 'socketGateway' is flawed, the checks could be rendered ineffective."
+                        }
+                    ],
+                    "Validate that msg.sender's balance change before and after equals amount": [
+                        {
+                            "validation": "[\"_finalBalanceTokenOut - _initialBalanceTokenOut == amount\"]",
+                            "poc": "By manipulating the balance of the token in the `socketGateway`, an attacker could create a scenario where the `_finalBalanceTokenOut` is artificially inflated. For example, if `toToken` is a contract that allows minting new tokens, the attacker could mint additional tokens into `socketGateway` before calling `performAction`, leading to `_finalBalanceTokenOut - _initialBalanceTokenOut` being equal to `amount` even though the actual transferred amount is less.",
+                            "score": "70",
+                            "reason": "The validation checks if the difference between final and initial balances equals the requested amount, but it can be bypassed if an attacker mints new tokens to inflate the balance in `socketGateway`, thereby making the validation pass inadvertently. Although the check is present, the reliance on external contract behavior introduces a significant risk."
+                        },
+                        {
+                            "validation": "[\"_finalBalanceTokenOut - _initialBalanceTokenOut == amount\"]",
+                            "poc": "The `swapExtraData` parameter could be exploited. If an attacker is able to control or manipulate this data to invoke a callback or another function that alters the state or balance after the initial balance check but before the final check, they could make it so the validation passes, even if the real swap didn't occur correctly.",
+                            "score": "60",
+                            "reason": "The validation checks whether the difference between final and initial balances equals the specified amount, which may be bypassed through manipulated `swapExtraData`. While there are checks, the reliance on external calls introduces a risk where state changes can lead to incorrect validation passing, showing a moderate level of concern for exploitation."
+                        },
+                        {
+                            "validation": "[\"_finalBalanceTokenOut - _initialBalanceTokenOut == amount\"]",
+                            "poc": "Utilizing the `ERC20` token being swapped, in a way that it transfers a portion of itself to the `socketGateway`, an attacker could create a situation where the balances are altered. If the `ERC20` contract allows approved transfers without requiring adequate balances, they could effectively pass the validation by ensuring the computed difference fits the required amount, circumventing the intended check.",
+                            "score": "70",
+                            "reason": "The validation relies on the assumption that balance changes within the ERC20 tokens are accurately calculated; however, if an ERC20 token allows transfers without sufficient balance checks (such as through approved transfers), it could lead to a situation where the validation condition is met even when the actual amount transferred is lower than expected. This creates a potential vulnerability where the logical integrity of the balance check can be bypassed, leading to incorrect assumptions about the state of the balances."
+                        }
+                    ],
+                    "Validate that the bridge's balance change before and after equals amount": [],
+                    "Validate that msg.sender's balance ≥ amount": [
+                        {
+                            "parameter": "amount",
+                            "constraint": "Validate that msg.sender's balance ≥ amount",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            },
+            "tokenAddress": {
+                "toToken": {
+                    "Check whether the tokenAddress is authorized to use.": [
+                        {
+                            "parameter": "toToken",
+                            "constraint": "Check whether the tokenAddress is authorized to use.",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            }
+        },
+        "context": {
+            "event": "SocketSwapTokens",
+            "call_graph": "performAction",
+            "state_variables": {
+                "Identifier": "bytes32 public immutable Identifier = \"wrappedTokenSwapperImpl\";",
+                "balanceOf": "mapping(address => uint256) public balanceOf;",
+                "NATIVE_TOKEN_ADDRESS": "address public immutable NATIVE_TOKEN_ADDRESS = address(0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE);",
+                "socketGateway": "address public immutable socketGateway;"
+            },
+            "external_functions": []
+        },
+        "step1-time": 4.1132872104644775,
+        "step2-time": 127.07405710220337,
+        "step2-call_api_times": 21,
+        "step3-time": 36.29793620109558,
+        "step3-call_api_times": 10,
+        "step4-time": 32.51095247268677,
+        "step4-call_api_times": 11,
+        "compare_audit": {
+            "result": [
+                {
+                    "vuln": "if (fromToken == NATIVE_TOKEN_ADDRESS)",
+                    "reason": "Direct comparison of 'fromToken' with 'NATIVE_TOKEN_ADDRESS' can lead to mistakes in cross-chain scenarios, especially if the contract is deployed on chains with different native token representations or different configurations, which may cause incorrect swaps."
+                },
+                {
+                    "vuln": "(bool success, ) = toToken.call{value: amount}(swapExtraData);",
+                    "reason": "Using 'call' to transfer Ether can lead to vulnerabilities, such as reentrancy, especially in a cross-chain environment where multiple contracts can interfere, potentially allowing an attacker to drain funds or manipulate the swap."
+                },
+                {
+                    "vuln": "require((_finalBalanceTokenOut - _initialBalanceTokenOut) == amount, \"Invalid wrapper contract\")",
+                    "reason": "This assumption may fail in cross-chain operations if the token wrapper behaves differently or if there are timing issues, leading to unexpected conditions and potential loss of funds."
+                },
+                {
+                    "vuln": "(bool success, ) = fromToken.call(swapExtraData);",
+                    "reason": "The use of call with 'swapExtraData' can lead to unexpected behavior if the target contract does not behave as assumed, which is exacerbated in cross-chain calls where contract dependencies may vary across chains."
+                },
+                {
+                    "vuln": "payable(receiverAddress).transfer(amount);",
+                    "reason": "Using 'transfer' may run into issues like gas limits when interacting with contracts on different chains, leading to failures in fund transfers, especially if the recipient is a non-simple contract."
+                }
+            ]
+        },
+        "compare_attribute_verification": {
+            "result": [
+                {
+                    "toChainID": null,
+                    "findings": [
+                        {
+                            "constraint": "Check whether toChainID is authorized.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No check for authorized destination chain ID is present."
+                        },
+                        {
+                            "constraint": "Check that the destination chain ID is not equal to the source chain ID.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No mechanism to check if the destination chain ID is the same as the source chain ID."
+                        }
+                    ]
+                },
+                {
+                    "tokenAddress": null,
+                    "findings": [
+                        {
+                            "constraint": "Check whether the tokenAddress is authorized to use.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No authorization check for token address exists."
+                        }
+                    ]
+                },
+                {
+                    "nonce": null,
+                    "findings": [
+                        {
+                            "constraint": "Check if the transaction's nonce is equal to the account's current nonce.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "Nonce checking logic is missing."
+                        }
+                    ]
+                },
+                {
+                    "amount": null,
+                    "findings": [
+                        {
+                            "constraint": "Validate that amount is greater than 0",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "Amount validation is not implemented."
+                        },
+                        {
+                            "constraint": "Validate that msg.sender's balance change before and after equals amount",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No balance change validation for msg.sender is present."
+                        },
+                        {
+                            "constraint": "Validate that the bridge's balance change before and after equals amount",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No validation for bridge's balance change is present."
+                        },
+                        {
+                            "constraint": "Validate that msg.sender's balance ≥ amount",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "Insufficient balance check for msg.sender is not implemented."
+                        }
+                    ]
+                },
+                {
+                    "recipientAddress": null,
+                    "findings": [
+                        {
+                            "constraint": "Validate that recipientAddress is not the zero address",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No validation to prevent recipientAddress from being a zero address."
+                        }
+                    ]
+                },
+                {
+                    "externalCallAddress": null,
+                    "findings": [
+                        {
+                            "constraint": "Check whether the externalCallAddress is authorized to use.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No authorization check for external call address implemented."
+                        }
+                    ]
+                },
+                {
+                    "externalCallFunction": null,
+                    "findings": [
+                        {
+                            "constraint": "Validate that externalCallFunction is in the allowed function signature list",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No signature validation for external call functions is present."
+                        }
+                    ]
+                },
+                {
+                    "routerAddress": null,
+                    "findings": [
+                        {
+                            "constraint": "Check whether the routerAddress is authorized to use.",
+                            "validation": null,
+                            "poc": null,
+                            "reason": "No check for the authorization of the router address is present."
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "time": 258.2690989971161,
+    "this_cost": 0,
+    "this_prompt_tokens": 42040,
+    "this_completion_tokens": 10536
+}

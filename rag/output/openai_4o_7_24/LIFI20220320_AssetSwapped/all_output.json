@@ -1,0 +1,1294 @@
+{
+    "CBridgeFacet.swapAndStartBridgeTokensViaCBridge->LibSwap.swap": {
+        "step1": {
+            "prompt1": "\nYou are an experienced cross-chain protocol analysis expert. Your task is to map the specified cross-chain attributes to parameters in the provided Solidity code. If an attribute cannot be found in the code, do not list it in the output. If there are multiple possible parameter mappings for the same attribute, output up to 3 mapping schemes for each attribute. Please strictly follow the input and output formats defined below:\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"attribute\": \n{ \n\"<attribute>\": \"<attribute description>\" ,\n\"<attribute>\": \"<attribute description>\",\n...\n}\n\"code\": \"...\" // Solidity contract code string\n}\nOutput format:\nReturn a JSON array, each item structured as follows, only produce output in the required format, without any additional content:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // The input cross-chain attribute\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}, ... \n]\nIn the reason, please point out both the core basis for the mapping and potential uncertainties (e.g., parameter name similarity, ambiguous contextual meaning, etc.).\n\nInput:\n{\n\"attribute\": {\"toChainID\": \"Specifies the destination blockchain network ID.\", \"tokenAddress\": \"Indicates the contract address of the token to be transferred.\", \"amount\": \"The number of tokens to be transferred across chains.\", \"nonce\": \"Check and mark that nonce has not been consumed to prevent replay\", \"recipientAddress\": \"The address that will receive the tokens on the destination chain.\", \"externalCallAddress\": \"The address of a contract to be called after the cross-chain transfer.\", \"externalCallFunction\": \"The specific function or calldata to be executed on the `externalCallAddress`.\", \"routerAddress\": \"The address of the cross-chain router or bridge handler.\"},\n\"code\": [\"CBridgeFacet.swapAndStartBridgeTokensViaCBridge:function swapAndStartBridgeTokensViaCBridge(\\n        LiFiData memory _lifiData,\\n        LibSwap.SwapData[] calldata _swapData,\\n        CBridgeData memory _cBridgeData\\n    ) public payable {\\n        if (_cBridgeData.token != address(0)) {\\n            uint256 _fromTokenBalance = LibAsset.getOwnBalance(_cBridgeData.token);\\n\\n            // Swap\\n            for (uint8 i; i < _swapData.length; i++) {\\n                LibSwap.swap(_lifiData.transactionId, _swapData[i]);\\n            }\\n\\n            uint256 _postSwapBalance = LibAsset.getOwnBalance(_cBridgeData.token) - _fromTokenBalance;\\n\\n            require(_postSwapBalance > 0, \\\"ERR_INVALID_AMOUNT\\\");\\n\\n            _cBridgeData.amount = _postSwapBalance;\\n        } else {\\n            uint256 _fromBalance = address(this).balance;\\n\\n            // Swap\\n            for (uint8 i; i < _swapData.length; i++) {\\n                LibSwap.swap(_lifiData.transactionId, _swapData[i]);\\n            }\\n\\n            uint256 _postSwapBalance = address(this).balance - _fromBalance;\\n\\n            require(_postSwapBalance > 0, \\\"ERR_INVALID_AMOUNT\\\");\\n\\n            _cBridgeData.amount = _postSwapBalance;\\n        }\\n\\n        _startBridge(_cBridgeData);\\n\\n        emit LiFiTransferStarted(\\n            _lifiData.transactionId,\\n            _lifiData.integrator,\\n            _lifiData.referrer,\\n            _lifiData.sendingAssetId,\\n            _lifiData.receivingAssetId,\\n            _lifiData.receiver,\\n            _lifiData.amount,\\n            _lifiData.destinationChainId,\\n            block.timestamp\\n        );\\n    }\", \"LibSwap.swap:function swap(bytes32 transactionId, SwapData calldata _swapData) internal {\\n        uint256 fromAmount = _swapData.fromAmount;\\n        uint256 toAmount = LibAsset.getOwnBalance(_swapData.receivingAssetId);\\n        address fromAssetId = _swapData.sendingAssetId;\\n        if (!LibAsset.isNativeAsset(fromAssetId) && LibAsset.getOwnBalance(fromAssetId) < fromAmount) {\\n            LibAsset.transferFromERC20(_swapData.sendingAssetId, msg.sender, address(this), fromAmount);\\n        }\\n\\n        if (!LibAsset.isNativeAsset(fromAssetId)) {\\n            LibAsset.approveERC20(IERC20(fromAssetId), _swapData.approveTo, fromAmount);\\n        }\\n\\n        // solhint-disable-next-line avoid-low-level-calls\\n        (bool success, bytes memory res) = _swapData.callTo.call{ value: msg.value }(_swapData.callData);\\n        if (!success) {\\n            string memory reason = LibUtil.getRevertMsg(res);\\n            revert(reason);\\n        }\\n\\n        toAmount = LibAsset.getOwnBalance(_swapData.receivingAssetId) - toAmount;\\n        emit AssetSwapped(\\n            transactionId,\\n            _swapData.callTo,\\n            _swapData.sendingAssetId,\\n            _swapData.receivingAssetId,\\n            fromAmount,\\n            toAmount,\\n            block.timestamp\\n        );\\n    }\", \"LibAsset.getOwnBalance:function getOwnBalance(address assetId) internal view returns (uint256) {\\n        return isNativeAsset(assetId) ? address(this).balance : IERC20(assetId).balanceOf(address(this));\\n    }\", \"LibAsset.isNativeAsset:function isNativeAsset(address assetId) internal pure returns (bool) {\\n        return assetId == NATIVE_ASSETID;\\n    }\", \"LibAsset.transferFromERC20:function transferFromERC20(\\n        address assetId,\\n        address from,\\n        address to,\\n        uint256 amount\\n    ) internal {\\n        SafeERC20.safeTransferFrom(IERC20(assetId), from, to, amount);\\n    }\", \"LibAsset.approveERC20:function approveERC20(\\n        IERC20 assetId,\\n        address spender,\\n        uint256 amount\\n    ) internal {\\n        if (isNativeAsset(address(assetId))) return;\\n        uint256 allowance = assetId.allowance(address(this), spender);\\n        if (allowance < amount) {\\n            if (allowance > 0) SafeERC20.safeApprove(IERC20(assetId), spender, 0);\\n            SafeERC20.safeApprove(IERC20(assetId), spender, MAX_INT);\\n        }\\n    }\", \"LibUtil.getRevertMsg:function getRevertMsg(bytes memory _res) internal pure returns (string memory) {\\n        // If the _res length is less than 68, then the transaction failed silently (without a revert message)\\n        if (_res.length < 68) return \\\"Transaction reverted silently\\\";\\n        bytes memory revertData = _res.slice(4, _res.length - 4); // Remove the selector which is the first 4 bytes\\n        return abi.decode(revertData, (string)); // All that remains is the revert string\\n    }\", \"LibAsset.getOwnBalance:function getOwnBalance(address assetId) internal view returns (uint256) {\\n        return isNativeAsset(assetId) ? address(this).balance : IERC20(assetId).balanceOf(address(this));\\n    }\", \"CBridgeFacet._startBridge:function _startBridge(CBridgeData memory _cBridgeData) internal {\\n        Storage storage s = getStorage();\\n        address bridge = _bridge();\\n\\n        // Do CBridge stuff\\n        require(s.cBridgeChainId != _cBridgeData.dstChainId, \\\"Cannot bridge to the same network.\\\");\\n\\n        if (LibAsset.isNativeAsset(_cBridgeData.token)) {\\n            ICBridge(bridge).sendNative(\\n                _cBridgeData.receiver,\\n                _cBridgeData.amount,\\n                _cBridgeData.dstChainId,\\n                _cBridgeData.nonce,\\n                _cBridgeData.maxSlippage\\n            );\\n        } else {\\n            // Give CBridge approval to bridge tokens\\n            LibAsset.approveERC20(IERC20(_cBridgeData.token), bridge, _cBridgeData.amount);\\n            // solhint-disable check-send-result\\n            ICBridge(bridge).send(\\n                _cBridgeData.receiver,\\n                _cBridgeData.token,\\n                _cBridgeData.amount,\\n                _cBridgeData.dstChainId,\\n                _cBridgeData.nonce,\\n                _cBridgeData.maxSlippage\\n            );\\n        }\\n    }\", \"CBridgeFacet.getStorage:function getStorage() internal pure returns (Storage storage s) {\\n        bytes32 namespace = NAMESPACE;\\n        // solhint-disable-next-line no-inline-assembly\\n        assembly {\\n            s.slot := namespace\\n        }\\n    }\", \"CBridgeFacet._bridge:function _bridge() internal view returns (address) {\\n        Storage storage s = getStorage();\\n        return s.cBridge;\\n    }\", \"SafeERC20.safeTransferFrom:function safeTransferFrom(\\n        IERC20 token,\\n        address from,\\n        address to,\\n        uint256 value\\n    ) internal {\\n        _callOptionalReturn(token, abi.encodeWithSelector(token.transferFrom.selector, from, to, value));\\n    }\", \"SafeERC20.safeApprove:function safeApprove(\\n        IERC20 token,\\n        address spender,\\n        uint256 value\\n    ) internal {\\n        // safeApprove should only be called when setting an initial allowance,\\n        // or when resetting it to zero. To increase and decrease it, use\\n        // 'safeIncreaseAllowance' and 'safeDecreaseAllowance'\\n        require(\\n            (value == 0) || (token.allowance(address(this), spender) == 0),\\n            \\\"SafeERC20: approve from non-zero to non-zero allowance\\\"\\n        );\\n        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));\\n    }\", \"LibBytes.slice:function slice(\\n        bytes memory _bytes,\\n        uint256 _start,\\n        uint256 _length\\n    ) internal pure returns (bytes memory) {\\n        require(_length + 31 >= _length, \\\"slice_overflow\\\");\\n        require(_bytes.length >= _start + _length, \\\"slice_outOfBounds\\\");\\n\\n        bytes memory tempBytes;\\n\\n        assembly {\\n            switch iszero(_length)\\n            case 0 {\\n                // Get a location of some free memory and store it in tempBytes as\\n                // Solidity does for memory variables.\\n                tempBytes := mload(0x40)\\n\\n                // The first word of the slice result is potentially a partial\\n                // word read from the original array. To read it, we calculate\\n                // the length of that partial word and start copying that many\\n                // bytes into the array. The first word we copy will start with\\n                // data we don't care about, but the last `lengthmod` bytes will\\n                // land at the beginning of the contents of the new array. When\\n                // we're done copying, we overwrite the full first word with\\n                // the actual length of the slice.\\n                let lengthmod := and(_length, 31)\\n\\n                // The multiplication in the next line is necessary\\n                // because when slicing multiples of 32 bytes (lengthmod == 0)\\n                // the following copy loop was copying the origin's length\\n                // and then ending prematurely not copying everything it should.\\n                let mc := add(add(tempBytes, lengthmod), mul(0x20, iszero(lengthmod)))\\n                let end := add(mc, _length)\\n\\n                for {\\n                    // The multiplication in the next line has the same exact purpose\\n                    // as the one above.\\n                    let cc := add(add(add(_bytes, lengthmod), mul(0x20, iszero(lengthmod))), _start)\\n                } lt(mc, end) {\\n                    mc := add(mc, 0x20)\\n                    cc := add(cc, 0x20)\\n                } {\\n                    mstore(mc, mload(cc))\\n                }\\n\\n                mstore(tempBytes, _length)\\n\\n                //update free-memory pointer\\n                //allocating the array padded to 32 bytes like the compiler does now\\n                mstore(0x40, and(add(mc, 31), not(31)))\\n            }\\n            //if we want a zero-length slice let's just return a zero-length array\\n            default {\\n                tempBytes := mload(0x40)\\n                //zero out the 32 bytes slice we are about to return\\n                //we need to do it because Solidity does not garbage collect\\n                mstore(tempBytes, 0)\\n\\n                mstore(0x40, add(tempBytes, 0x20))\\n            }\\n        }\\n\\n        return tempBytes;\\n    }\", \"SafeERC20._callOptionalReturn:function _callOptionalReturn(IERC20 token, bytes memory data) private {\\n        // We need to perform a low level call here, to bypass Solidity's return data size checking mechanism, since\\n        // we're implementing it ourselves. We use {Address.functionCall} to perform this call, which verifies that\\n        // the target address contains contract code and also asserts for success in the low-level call.\\n\\n        bytes memory returndata = address(token).functionCall(data, \\\"SafeERC20: low-level call failed\\\");\\n        if (returndata.length > 0) {\\n            // Return data is optional\\n            require(abi.decode(returndata, (bool)), \\\"SafeERC20: ERC20 operation did not succeed\\\");\\n        }\\n    }\", \"SafeERC20._callOptionalReturn:function _callOptionalReturn(IERC20 token, bytes memory data) private {\\n        // We need to perform a low level call here, to bypass Solidity's return data size checking mechanism, since\\n        // we're implementing it ourselves. We use {Address.functionCall} to perform this call, which verifies that\\n        // the target address contains contract code and also asserts for success in the low-level call.\\n\\n        bytes memory returndata = address(token).functionCall(data, \\\"SafeERC20: low-level call failed\\\");\\n        if (returndata.length > 0) {\\n            // Return data is optional\\n            require(abi.decode(returndata, (bool)), \\\"SafeERC20: ERC20 operation did not succeed\\\");\\n        }\\n    }\", \"Address.functionCall:function functionCall(address target, bytes memory data) internal returns (bytes memory) {\\n        return functionCall(target, data, \\\"Address: low-level call failed\\\");\\n    }\", \"Address.functionCallWithValue:function functionCallWithValue(\\n        address target,\\n        bytes memory data,\\n        uint256 value\\n    ) internal returns (bytes memory) {\\n        return functionCallWithValue(target, data, value, \\\"Address: low-level call with value failed\\\");\\n    }\", \"Address.verifyCallResult:function verifyCallResult(\\n        bool success,\\n        bytes memory returndata,\\n        string memory errorMessage\\n    ) internal pure returns (bytes memory) {\\n        if (success) {\\n            return returndata;\\n        } else {\\n            // Look for revert reason and bubble it up if present\\n            if (returndata.length > 0) {\\n                // The easiest way to bubble the revert reason is using memory via assembly\\n\\n                assembly {\\n                    let returndata_size := mload(returndata)\\n                    revert(add(32, returndata), returndata_size)\\n                }\\n            } else {\\n                revert(errorMessage);\\n            }\\n        }\\n    }\", \"Address.isContract:function isContract(address account) internal view returns (bool) {\\n        // This method relies on extcodesize, which returns 0 for contracts in\\n        // construction, since the code is only stored at the end of the\\n        // constructor execution.\\n\\n        uint256 size;\\n        assembly {\\n            size := extcodesize(account)\\n        }\\n        return size > 0;\\n    }\"]\n}\n",
+            "outputs1": [
+                [
+                    {
+                        "parameter": "_cBridgeData.dstChainId",
+                        "attribute": "toChainID",
+                        "reason": "The parameter `_cBridgeData.dstChainId` within the `_startBridge` function directly specifies the destination chain ID, making it a clear match for `toChainID`. Ambiguity is minimal due to the explicit naming convention `dstChainId` (destination Chain ID)."
+                    },
+                    {
+                        "parameter": "_lifiData.destinationChainId",
+                        "attribute": "toChainID",
+                        "reason": "The parameter `_lifiData.destinationChainId` in the `LiFiTransferStarted` event clearly indicates the target blockchain. This is directly related to the concept of 'toChainID'. The naming convention is very explicit."
+                    },
+                    {
+                        "parameter": "_cBridgeData.token",
+                        "attribute": "tokenAddress",
+                        "reason": "The parameter `_cBridgeData.token` in `CBridgeFacet.swapAndStartBridgeTokensViaCBridge` and `_startBridge` is used to identify the token being transferred or swapped, aligning with `tokenAddress`. This parameter is checked for being `address(0)` (native asset) or an ERC-20 token address. Potential ambiguity could arise if `token` itself is not an address but an identifier that resolves to an address, but in this context, it's used as an `address` type."
+                    },
+                    {
+                        "parameter": "_cBridgeData.amount",
+                        "attribute": "amount",
+                        "reason": "The parameter `_cBridgeData.amount` is explicitly assigned the calculated token amount (`_postSwapBalance`) in `swapAndStartBridgeTokensViaCBridge` and then passed to `_startBridge`, which directly uses it for `sendNative` or `send`. This directly represents the `amount` of tokens to be transferred. No significant ambiguity."
+                    },
+                    {
+                        "parameter": "_lifiData.amount",
+                        "attribute": "amount",
+                        "reason": "The parameter `_lifiData.amount` is emitted in the `LiFiTransferStarted` event, indicating the amount involved in the cross-chain transfer. This aligns well with the 'amount' attribute. While it's within an event and not directly an input to the core bridging logic, it represents the transferred amount."
+                    },
+                    {
+                        "parameter": "_cBridgeData.nonce",
+                        "attribute": "nonce",
+                        "reason": "The parameter `_cBridgeData.nonce` is directly passed to the `ICBridge` send functions (`sendNative`, `send`) within `_startBridge`, explicitly fulfilling the role of a nonce for transaction uniqueness and replay protection. The naming is definitive."
+                    },
+                    {
+                        "parameter": "_cBridgeData.receiver",
+                        "attribute": "recipientAddress",
+                        "reason": "The parameter `_cBridgeData.receiver` is consistently used as the destination address for tokens in both `ICBridge(bridge).sendNative` and `ICBridge(bridge).send` calls within `_startBridge`, making it a direct match for `recipientAddress`. No significant ambiguity."
+                    },
+                    {
+                        "parameter": "_lifiData.receiver",
+                        "attribute": "recipientAddress",
+                        "reason": "The parameter `_lifiData.receiver` is emitted in the `LiFiTransferStarted` event, clearly indicating the intended recipient of the assets on the destination chain. This aligns with the 'recipientAddress' attribute."
+                    },
+                    {
+                        "parameter": "bridge",
+                        "attribute": "routerAddress",
+                        "reason": "The local variable `bridge` in `_startBridge` is obtained from `_bridge()` and is then used to call `ICBridge` methods. This `ICBridge` instance represents the cross-chain bridge/router. Thus, `bridge` directly points to the `routerAddress`. No ambiguity."
+                    },
+                    {
+                        "parameter": "s.cBridge",
+                        "attribute": "routerAddress",
+                        "reason": "The function `_bridge()` returns `s.cBridge`, which is then assigned to the `bridge` variable. This `s.cBridge` is the stored address of the CBridge contract, acting as the cross-chain router. Thus, `s.cBridge` represents the `routerAddress`."
+                    }
+                ]
+            ],
+            "v_prompt1": "\nYou are a rigorous cross-chain protocol auditor and data consistency verifier. Carefully review whether the meaning of each cross-chain attribute and parameter in the code is consistent, assign a confidence score (0-100%), and state the reason for the given confidence score.\n\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"correspondence\":    // Array of attribute-parameter correspondences in the code\n[\n{\n\"attribute\": \"...\", // Input cross-chain attribute\n\"parameter\": \"...\", // Corresponding parameter\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}\n...\n],\n\"code\":\"...\" // Cross-chain contract code\n}\n\nOutput format: Return a JSON array, each item structured as follows, only produce output in the required format, without any additional content:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // Input cross-chain attribute\n\"score\":\"...\", // Assigned confidence score\n\"reason\": \"...\" // Brief explanation for the given confidence score\n}, ... \n]\nInput:\n{\n\"correspondence\": [{\"parameter\": \"_cBridgeData.dstChainId\", \"attribute\": \"toChainID\", \"reason\": \"The parameter `_cBridgeData.dstChainId` within the `_startBridge` function directly specifies the destination chain ID, making it a clear match for `toChainID`. Ambiguity is minimal due to the explicit naming convention `dstChainId` (destination Chain ID).\"}, {\"parameter\": \"_lifiData.destinationChainId\", \"attribute\": \"toChainID\", \"reason\": \"The parameter `_lifiData.destinationChainId` in the `LiFiTransferStarted` event clearly indicates the target blockchain. This is directly related to the concept of 'toChainID'. The naming convention is very explicit.\"}, {\"parameter\": \"_cBridgeData.token\", \"attribute\": \"tokenAddress\", \"reason\": \"The parameter `_cBridgeData.token` in `CBridgeFacet.swapAndStartBridgeTokensViaCBridge` and `_startBridge` is used to identify the token being transferred or swapped, aligning with `tokenAddress`. This parameter is checked for being `address(0)` (native asset) or an ERC-20 token address. Potential ambiguity could arise if `token` itself is not an address but an identifier that resolves to an address, but in this context, it's used as an `address` type.\"}, {\"parameter\": \"_cBridgeData.amount\", \"attribute\": \"amount\", \"reason\": \"The parameter `_cBridgeData.amount` is explicitly assigned the calculated token amount (`_postSwapBalance`) in `swapAndStartBridgeTokensViaCBridge` and then passed to `_startBridge`, which directly uses it for `sendNative` or `send`. This directly represents the `amount` of tokens to be transferred. No significant ambiguity.\"}, {\"parameter\": \"_lifiData.amount\", \"attribute\": \"amount\", \"reason\": \"The parameter `_lifiData.amount` is emitted in the `LiFiTransferStarted` event, indicating the amount involved in the cross-chain transfer. This aligns well with the 'amount' attribute. While it's within an event and not directly an input to the core bridging logic, it represents the transferred amount.\"}, {\"parameter\": \"_cBridgeData.nonce\", \"attribute\": \"nonce\", \"reason\": \"The parameter `_cBridgeData.nonce` is directly passed to the `ICBridge` send functions (`sendNative`, `send`) within `_startBridge`, explicitly fulfilling the role of a nonce for transaction uniqueness and replay protection. The naming is definitive.\"}, {\"parameter\": \"_cBridgeData.receiver\", \"attribute\": \"recipientAddress\", \"reason\": \"The parameter `_cBridgeData.receiver` is consistently used as the destination address for tokens in both `ICBridge(bridge).sendNative` and `ICBridge(bridge).send` calls within `_startBridge`, making it a direct match for `recipientAddress`. No significant ambiguity.\"}, {\"parameter\": \"_lifiData.receiver\", \"attribute\": \"recipientAddress\", \"reason\": \"The parameter `_lifiData.receiver` is emitted in the `LiFiTransferStarted` event, clearly indicating the intended recipient of the assets on the destination chain. This aligns with the 'recipientAddress' attribute.\"}, {\"parameter\": \"bridge\", \"attribute\": \"routerAddress\", \"reason\": \"The local variable `bridge` in `_startBridge` is obtained from `_bridge()` and is then used to call `ICBridge` methods. This `ICBridge` instance represents the cross-chain bridge/router. Thus, `bridge` directly points to the `routerAddress`. No ambiguity.\"}, {\"parameter\": \"s.cBridge\", \"attribute\": \"routerAddress\", \"reason\": \"The function `_bridge()` returns `s.cBridge`, which is then assigned to the `bridge` variable. This `s.cBridge` is the stored address of the CBridge contract, acting as the cross-chain router. Thus, `s.cBridge` represents the `routerAddress`.\"}],\n\"code\": [\"CBridgeFacet.swapAndStartBridgeTokensViaCBridge:function swapAndStartBridgeTokensViaCBridge(\\n        LiFiData memory _lifiData,\\n        LibSwap.SwapData[] calldata _swapData,\\n        CBridgeData memory _cBridgeData\\n    ) public payable {\\n        if (_cBridgeData.token != address(0)) {\\n            uint256 _fromTokenBalance = LibAsset.getOwnBalance(_cBridgeData.token);\\n\\n            // Swap\\n            for (uint8 i; i < _swapData.length; i++) {\\n                LibSwap.swap(_lifiData.transactionId, _swapData[i]);\\n            }\\n\\n            uint256 _postSwapBalance = LibAsset.getOwnBalance(_cBridgeData.token) - _fromTokenBalance;\\n\\n            require(_postSwapBalance > 0, \\\"ERR_INVALID_AMOUNT\\\");\\n\\n            _cBridgeData.amount = _postSwapBalance;\\n        } else {\\n            uint256 _fromBalance = address(this).balance;\\n\\n            // Swap\\n            for (uint8 i; i < _swapData.length; i++) {\\n                LibSwap.swap(_lifiData.transactionId, _swapData[i]);\\n            }\\n\\n            uint256 _postSwapBalance = address(this).balance - _fromBalance;\\n\\n            require(_postSwapBalance > 0, \\\"ERR_INVALID_AMOUNT\\\");\\n\\n            _cBridgeData.amount = _postSwapBalance;\\n        }\\n\\n        _startBridge(_cBridgeData);\\n\\n        emit LiFiTransferStarted(\\n            _lifiData.transactionId,\\n            _lifiData.integrator,\\n            _lifiData.referrer,\\n            _lifiData.sendingAssetId,\\n            _lifiData.receivingAssetId,\\n            _lifiData.receiver,\\n            _lifiData.amount,\\n            _lifiData.destinationChainId,\\n            block.timestamp\\n        );\\n    }\", \"LibSwap.swap:function swap(bytes32 transactionId, SwapData calldata _swapData) internal {\\n        uint256 fromAmount = _swapData.fromAmount;\\n        uint256 toAmount = LibAsset.getOwnBalance(_swapData.receivingAssetId);\\n        address fromAssetId = _swapData.sendingAssetId;\\n        if (!LibAsset.isNativeAsset(fromAssetId) && LibAsset.getOwnBalance(fromAssetId) < fromAmount) {\\n            LibAsset.transferFromERC20(_swapData.sendingAssetId, msg.sender, address(this), fromAmount);\\n        }\\n\\n        if (!LibAsset.isNativeAsset(fromAssetId)) {\\n            LibAsset.approveERC20(IERC20(fromAssetId), _swapData.approveTo, fromAmount);\\n        }\\n\\n        // solhint-disable-next-line avoid-low-level-calls\\n        (bool success, bytes memory res) = _swapData.callTo.call{ value: msg.value }(_swapData.callData);\\n        if (!success) {\\n            string memory reason = LibUtil.getRevertMsg(res);\\n            revert(reason);\\n        }\\n\\n        toAmount = LibAsset.getOwnBalance(_swapData.receivingAssetId) - toAmount;\\n        emit AssetSwapped(\\n            transactionId,\\n            _swapData.callTo,\\n            _swapData.sendingAssetId,\\n            _swapData.receivingAssetId,\\n            fromAmount,\\n            toAmount,\\n            block.timestamp\\n        );\\n    }\", \"LibAsset.getOwnBalance:function getOwnBalance(address assetId) internal view returns (uint256) {\\n        return isNativeAsset(assetId) ? address(this).balance : IERC20(assetId).balanceOf(address(this));\\n    }\", \"LibAsset.isNativeAsset:function isNativeAsset(address assetId) internal pure returns (bool) {\\n        return assetId == NATIVE_ASSETID;\\n    }\", \"LibAsset.transferFromERC20:function transferFromERC20(\\n        address assetId,\\n        address from,\\n        address to,\\n        uint256 amount\\n    ) internal {\\n        SafeERC20.safeTransferFrom(IERC20(assetId), from, to, amount);\\n    }\", \"LibAsset.approveERC20:function approveERC20(\\n        IERC20 assetId,\\n        address spender,\\n        uint256 amount\\n    ) internal {\\n        if (isNativeAsset(address(assetId))) return;\\n        uint256 allowance = assetId.allowance(address(this), spender);\\n        if (allowance < amount) {\\n            if (allowance > 0) SafeERC20.safeApprove(IERC20(assetId), spender, 0);\\n            SafeERC20.safeApprove(IERC20(assetId), spender, MAX_INT);\\n        }\\n    }\", \"LibUtil.getRevertMsg:function getRevertMsg(bytes memory _res) internal pure returns (string memory) {\\n        // If the _res length is less than 68, then the transaction failed silently (without a revert message)\\n        if (_res.length < 68) return \\\"Transaction reverted silently\\\";\\n        bytes memory revertData = _res.slice(4, _res.length - 4); // Remove the selector which is the first 4 bytes\\n        return abi.decode(revertData, (string)); // All that remains is the revert string\\n    }\", \"LibAsset.getOwnBalance:function getOwnBalance(address assetId) internal view returns (uint256) {\\n        return isNativeAsset(assetId) ? address(this).balance : IERC20(assetId).balanceOf(address(this));\\n    }\", \"CBridgeFacet._startBridge:function _startBridge(CBridgeData memory _cBridgeData) internal {\\n        Storage storage s = getStorage();\\n        address bridge = _bridge();\\n\\n        // Do CBridge stuff\\n        require(s.cBridgeChainId != _cBridgeData.dstChainId, \\\"Cannot bridge to the same network.\\\");\\n\\n        if (LibAsset.isNativeAsset(_cBridgeData.token)) {\\n            ICBridge(bridge).sendNative(\\n                _cBridgeData.receiver,\\n                _cBridgeData.amount,\\n                _cBridgeData.dstChainId,\\n                _cBridgeData.nonce,\\n                _cBridgeData.maxSlippage\\n            );\\n        } else {\\n            // Give CBridge approval to bridge tokens\\n            LibAsset.approveERC20(IERC20(_cBridgeData.token), bridge, _cBridgeData.amount);\\n            // solhint-disable check-send-result\\n            ICBridge(bridge).send(\\n                _cBridgeData.receiver,\\n                _cBridgeData.token,\\n                _cBridgeData.amount,\\n                _cBridgeData.dstChainId,\\n                _cBridgeData.nonce,\\n                _cBridgeData.maxSlippage\\n            );\\n        }\\n    }\", \"CBridgeFacet.getStorage:function getStorage() internal pure returns (Storage storage s) {\\n        bytes32 namespace = NAMESPACE;\\n        // solhint-disable-next-line no-inline-assembly\\n        assembly {\\n            s.slot := namespace\\n        }\\n    }\", \"CBridgeFacet._bridge:function _bridge() internal view returns (address) {\\n        Storage storage s = getStorage();\\n        return s.cBridge;\\n    }\", \"SafeERC20.safeTransferFrom:function safeTransferFrom(\\n        IERC20 token,\\n        address from,\\n        address to,\\n        uint256 value\\n    ) internal {\\n        _callOptionalReturn(token, abi.encodeWithSelector(token.transferFrom.selector, from, to, value));\\n    }\", \"SafeERC20.safeApprove:function safeApprove(\\n        IERC20 token,\\n        address spender,\\n        uint256 value\\n    ) internal {\\n        // safeApprove should only be called when setting an initial allowance,\\n        // or when resetting it to zero. To increase and decrease it, use\\n        // 'safeIncreaseAllowance' and 'safeDecreaseAllowance'\\n        require(\\n            (value == 0) || (token.allowance(address(this), spender) == 0),\\n            \\\"SafeERC20: approve from non-zero to non-zero allowance\\\"\\n        );\\n        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));\\n    }\", \"LibBytes.slice:function slice(\\n        bytes memory _bytes,\\n        uint256 _start,\\n        uint256 _length\\n    ) internal pure returns (bytes memory) {\\n        require(_length + 31 >= _length, \\\"slice_overflow\\\");\\n        require(_bytes.length >= _start + _length, \\\"slice_outOfBounds\\\");\\n\\n        bytes memory tempBytes;\\n\\n        assembly {\\n            switch iszero(_length)\\n            case 0 {\\n                // Get a location of some free memory and store it in tempBytes as\\n                // Solidity does for memory variables.\\n                tempBytes := mload(0x40)\\n\\n                // The first word of the slice result is potentially a partial\\n                // word read from the original array. To read it, we calculate\\n                // the length of that partial word and start copying that many\\n                // bytes into the array. The first word we copy will start with\\n                // data we don't care about, but the last `lengthmod` bytes will\\n                // land at the beginning of the contents of the new array. When\\n                // we're done copying, we overwrite the full first word with\\n                // the actual length of the slice.\\n                let lengthmod := and(_length, 31)\\n\\n                // The multiplication in the next line is necessary\\n                // because when slicing multiples of 32 bytes (lengthmod == 0)\\n                // the following copy loop was copying the origin's length\\n                // and then ending prematurely not copying everything it should.\\n                let mc := add(add(tempBytes, lengthmod), mul(0x20, iszero(lengthmod)))\\n                let end := add(mc, _length)\\n\\n                for {\\n                    // The multiplication in the next line has the same exact purpose\\n                    // as the one above.\\n                    let cc := add(add(add(_bytes, lengthmod), mul(0x20, iszero(lengthmod))), _start)\\n                } lt(mc, end) {\\n                    mc := add(mc, 0x20)\\n                    cc := add(cc, 0x20)\\n                } {\\n                    mstore(mc, mload(cc))\\n                }\\n\\n                mstore(tempBytes, _length)\\n\\n                //update free-memory pointer\\n                //allocating the array padded to 32 bytes like the compiler does now\\n                mstore(0x40, and(add(mc, 31), not(31)))\\n            }\\n            //if we want a zero-length slice let's just return a zero-length array\\n            default {\\n                tempBytes := mload(0x40)\\n                //zero out the 32 bytes slice we are about to return\\n                //we need to do it because Solidity does not garbage collect\\n                mstore(tempBytes, 0)\\n\\n                mstore(0x40, add(tempBytes, 0x20))\\n            }\\n        }\\n\\n        return tempBytes;\\n    }\", \"SafeERC20._callOptionalReturn:function _callOptionalReturn(IERC20 token, bytes memory data) private {\\n        // We need to perform a low level call here, to bypass Solidity's return data size checking mechanism, since\\n        // we're implementing it ourselves. We use {Address.functionCall} to perform this call, which verifies that\\n        // the target address contains contract code and also asserts for success in the low-level call.\\n\\n        bytes memory returndata = address(token).functionCall(data, \\\"SafeERC20: low-level call failed\\\");\\n        if (returndata.length > 0) {\\n            // Return data is optional\\n            require(abi.decode(returndata, (bool)), \\\"SafeERC20: ERC20 operation did not succeed\\\");\\n        }\\n    }\", \"SafeERC20._callOptionalReturn:function _callOptionalReturn(IERC20 token, bytes memory data) private {\\n        // We need to perform a low level call here, to bypass Solidity's return data size checking mechanism, since\\n        // we're implementing it ourselves. We use {Address.functionCall} to perform this call, which verifies that\\n        // the target address contains contract code and also asserts for success in the low-level call.\\n\\n        bytes memory returndata = address(token).functionCall(data, \\\"SafeERC20: low-level call failed\\\");\\n        if (returndata.length > 0) {\\n            // Return data is optional\\n            require(abi.decode(returndata, (bool)), \\\"SafeERC20: ERC20 operation did not succeed\\\");\\n        }\\n    }\", \"Address.functionCall:function functionCall(address target, bytes memory data) internal returns (bytes memory) {\\n        return functionCall(target, data, \\\"Address: low-level call failed\\\");\\n    }\", \"Address.functionCallWithValue:function functionCallWithValue(\\n        address target,\\n        bytes memory data,\\n        uint256 value\\n    ) internal returns (bytes memory) {\\n        return functionCallWithValue(target, data, value, \\\"Address: low-level call with value failed\\\");\\n    }\", \"Address.verifyCallResult:function verifyCallResult(\\n        bool success,\\n        bytes memory returndata,\\n        string memory errorMessage\\n    ) internal pure returns (bytes memory) {\\n        if (success) {\\n            return returndata;\\n        } else {\\n            // Look for revert reason and bubble it up if present\\n            if (returndata.length > 0) {\\n                // The easiest way to bubble the revert reason is using memory via assembly\\n\\n                assembly {\\n                    let returndata_size := mload(returndata)\\n                    revert(add(32, returndata), returndata_size)\\n                }\\n            } else {\\n                revert(errorMessage);\\n            }\\n        }\\n    }\", \"Address.isContract:function isContract(address account) internal view returns (bool) {\\n        // This method relies on extcodesize, which returns 0 for contracts in\\n        // construction, since the code is only stored at the end of the\\n        // constructor execution.\\n\\n        uint256 size;\\n        assembly {\\n            size := extcodesize(account)\\n        }\\n        return size > 0;\\n    }\"]:\n}\n\n",
+            "v_outputs1": [
+                [
+                    {
+                        "parameter": "_cBridgeData.dstChainId",
+                        "attribute": "toChainID",
+                        "score": "100",
+                        "reason": "The parameter `_cBridgeData.dstChainId` within the `_startBridge` function directly specifies the destination chain ID, making it a clear match for `toChainID`. Ambiguity is minimal due to the explicit naming convention `dstChainId` (destination Chain ID)."
+                    },
+                    {
+                        "parameter": "_lifiData.destinationChainId",
+                        "attribute": "toChainID",
+                        "score": "100",
+                        "reason": "The parameter `_lifiData.destinationChainId` in the `LiFiTransferStarted` event clearly indicates the target blockchain. This is directly related to the concept of 'toChainID'. The naming convention is very explicit."
+                    },
+                    {
+                        "parameter": "_cBridgeData.token",
+                        "attribute": "tokenAddress",
+                        "score": "95",
+                        "reason": "The parameter `_cBridgeData.token` in `CBridgeFacet.swapAndStartBridgeTokensViaCBridge` and `_startBridge` is used to identify the token being transferred or swapped, aligning with `tokenAddress`. This parameter is checked for being `address(0)` (native asset) or an ERC-20 token address. Potential ambiguity could arise if `token` itself is not an address but an identifier that resolves to an address, but in this context, it's used as an `address` type currently in the code. The slight deduction in score is due to the theoretical possibility of interpretation as an identifier, though highly unlikely in this specific codebase."
+                    },
+                    {
+                        "parameter": "_cBridgeData.amount",
+                        "attribute": "amount",
+                        "score": "100",
+                        "reason": "The parameter `_cBridgeData.amount` is explicitly assigned the calculated token amount (`_postSwapBalance`) in `swapAndStartBridgeTokensViaCBridge` and then passed to `_startBridge`, which directly uses it for `sendNative` or `send`. This directly represents the `amount` of tokens to be transferred. No significant ambiguity."
+                    },
+                    {
+                        "parameter": "_lifiData.amount",
+                        "attribute": "amount",
+                        "score": "90",
+                        "reason": "The parameter `_lifiData.amount` is emitted in the `LiFiTransferStarted` event, indicating the amount involved in the cross-chain transfer. This aligns well with the 'amount' attribute. While it's within an event and not directly an input to the core bridging logic, it represents the transferred amount. The score is high because it unequivocally represents the amount, but lower than 100% because it's a past event, not a live instruction."
+                    },
+                    {
+                        "parameter": "_cBridgeData.nonce",
+                        "attribute": "nonce",
+                        "score": "100",
+                        "reason": "The parameter `_cBridgeData.nonce` is directly passed to the `ICBridge` send functions (`sendNative`, `send`) within `_startBridge`, explicitly fulfilling the role of a nonce for transaction uniqueness and replay protection. The naming is definitive, and its usage aligns perfectly with the 'nonce' attribute."
+                    },
+                    {
+                        "parameter": "_cBridgeData.receiver",
+                        "attribute": "recipientAddress",
+                        "score": "100",
+                        "reason": "The parameter `_cBridgeData.receiver` is consistently used as the destination address for tokens in both `ICBridge(bridge).sendNative` and `ICBridge(bridge).send` calls within `_startBridge`, making it a direct match for `recipientAddress`. No significant ambiguity."
+                    },
+                    {
+                        "parameter": "_lifiData.receiver",
+                        "attribute": "recipientAddress",
+                        "score": "100",
+                        "reason": "The parameter `_lifiData.receiver` is emitted in the `LiFiTransferStarted` event, clearly indicating the intended recipient of the assets on the destination chain. This aligns perfectly with the 'recipientAddress' attribute."
+                    },
+                    {
+                        "parameter": "bridge",
+                        "attribute": "routerAddress",
+                        "score": "100",
+                        "reason": "The local variable `bridge` in `_startBridge` is obtained from `_bridge()` and is then used to call `ICBridge` methods. This `ICBridge` instance represents the cross-chain bridge/router. Thus, `bridge` directly points to the `routerAddress` without any ambiguity. Its function as a router is clear from `ICBridge` calls."
+                    },
+                    {
+                        "parameter": "s.cBridge",
+                        "attribute": "routerAddress",
+                        "score": "100",
+                        "reason": "The function `_bridge()` returns `s.cBridge`, which is then assigned to the `bridge` variable. This `s.cBridge` is the stored address of the CBridge contract, acting as the cross-chain router. Thus, `s.cBridge` directly represents the `routerAddress` as the canonical stored address of the bridge."
+                    }
+                ]
+            ],
+            "formatted_outputs1": {
+                "_cBridgeData.dstChainId": {
+                    "toChainID": {
+                        "reason": "The parameter `_cBridgeData.dstChainId` within the `_startBridge` function directly specifies the destination chain ID, making it a clear match for `toChainID`. Ambiguity is minimal due to the explicit naming convention `dstChainId` (destination Chain ID).",
+                        "score": "100",
+                        "s_reason": "The parameter `_cBridgeData.dstChainId` within the `_startBridge` function directly specifies the destination chain ID, making it a clear match for `toChainID`. Ambiguity is minimal due to the explicit naming convention `dstChainId` (destination Chain ID)."
+                    }
+                },
+                "_lifiData.destinationChainId": {
+                    "toChainID": {
+                        "reason": "The parameter `_lifiData.destinationChainId` in the `LiFiTransferStarted` event clearly indicates the target blockchain. This is directly related to the concept of 'toChainID'. The naming convention is very explicit.",
+                        "score": "100",
+                        "s_reason": "The parameter `_lifiData.destinationChainId` in the `LiFiTransferStarted` event clearly indicates the target blockchain. This is directly related to the concept of 'toChainID'. The naming convention is very explicit."
+                    }
+                },
+                "_cBridgeData.token": {
+                    "tokenAddress": {
+                        "reason": "The parameter `_cBridgeData.token` in `CBridgeFacet.swapAndStartBridgeTokensViaCBridge` and `_startBridge` is used to identify the token being transferred or swapped, aligning with `tokenAddress`. This parameter is checked for being `address(0)` (native asset) or an ERC-20 token address. Potential ambiguity could arise if `token` itself is not an address but an identifier that resolves to an address, but in this context, it's used as an `address` type.",
+                        "score": "95",
+                        "s_reason": "The parameter `_cBridgeData.token` in `CBridgeFacet.swapAndStartBridgeTokensViaCBridge` and `_startBridge` is used to identify the token being transferred or swapped, aligning with `tokenAddress`. This parameter is checked for being `address(0)` (native asset) or an ERC-20 token address. Potential ambiguity could arise if `token` itself is not an address but an identifier that resolves to an address, but in this context, it's used as an `address` type currently in the code. The slight deduction in score is due to the theoretical possibility of interpretation as an identifier, though highly unlikely in this specific codebase."
+                    }
+                },
+                "_cBridgeData.amount": {
+                    "amount": {
+                        "reason": "The parameter `_cBridgeData.amount` is explicitly assigned the calculated token amount (`_postSwapBalance`) in `swapAndStartBridgeTokensViaCBridge` and then passed to `_startBridge`, which directly uses it for `sendNative` or `send`. This directly represents the `amount` of tokens to be transferred. No significant ambiguity.",
+                        "score": "100",
+                        "s_reason": "The parameter `_cBridgeData.amount` is explicitly assigned the calculated token amount (`_postSwapBalance`) in `swapAndStartBridgeTokensViaCBridge` and then passed to `_startBridge`, which directly uses it for `sendNative` or `send`. This directly represents the `amount` of tokens to be transferred. No significant ambiguity."
+                    }
+                },
+                "_lifiData.amount": {
+                    "amount": {
+                        "reason": "The parameter `_lifiData.amount` is emitted in the `LiFiTransferStarted` event, indicating the amount involved in the cross-chain transfer. This aligns well with the 'amount' attribute. While it's within an event and not directly an input to the core bridging logic, it represents the transferred amount.",
+                        "score": "90",
+                        "s_reason": "The parameter `_lifiData.amount` is emitted in the `LiFiTransferStarted` event, indicating the amount involved in the cross-chain transfer. This aligns well with the 'amount' attribute. While it's within an event and not directly an input to the core bridging logic, it represents the transferred amount. The score is high because it unequivocally represents the amount, but lower than 100% because it's a past event, not a live instruction."
+                    }
+                },
+                "_cBridgeData.nonce": {
+                    "nonce": {
+                        "reason": "The parameter `_cBridgeData.nonce` is directly passed to the `ICBridge` send functions (`sendNative`, `send`) within `_startBridge`, explicitly fulfilling the role of a nonce for transaction uniqueness and replay protection. The naming is definitive.",
+                        "score": "100",
+                        "s_reason": "The parameter `_cBridgeData.nonce` is directly passed to the `ICBridge` send functions (`sendNative`, `send`) within `_startBridge`, explicitly fulfilling the role of a nonce for transaction uniqueness and replay protection. The naming is definitive, and its usage aligns perfectly with the 'nonce' attribute."
+                    }
+                },
+                "_cBridgeData.receiver": {
+                    "recipientAddress": {
+                        "reason": "The parameter `_cBridgeData.receiver` is consistently used as the destination address for tokens in both `ICBridge(bridge).sendNative` and `ICBridge(bridge).send` calls within `_startBridge`, making it a direct match for `recipientAddress`. No significant ambiguity.",
+                        "score": "100",
+                        "s_reason": "The parameter `_cBridgeData.receiver` is consistently used as the destination address for tokens in both `ICBridge(bridge).sendNative` and `ICBridge(bridge).send` calls within `_startBridge`, making it a direct match for `recipientAddress`. No significant ambiguity."
+                    }
+                },
+                "_lifiData.receiver": {
+                    "recipientAddress": {
+                        "reason": "The parameter `_lifiData.receiver` is emitted in the `LiFiTransferStarted` event, clearly indicating the intended recipient of the assets on the destination chain. This aligns with the 'recipientAddress' attribute.",
+                        "score": "100",
+                        "s_reason": "The parameter `_lifiData.receiver` is emitted in the `LiFiTransferStarted` event, clearly indicating the intended recipient of the assets on the destination chain. This aligns perfectly with the 'recipientAddress' attribute."
+                    }
+                },
+                "bridge": {
+                    "routerAddress": {
+                        "reason": "The local variable `bridge` in `_startBridge` is obtained from `_bridge()` and is then used to call `ICBridge` methods. This `ICBridge` instance represents the cross-chain bridge/router. Thus, `bridge` directly points to the `routerAddress`. No ambiguity.",
+                        "score": "100",
+                        "s_reason": "The local variable `bridge` in `_startBridge` is obtained from `_bridge()` and is then used to call `ICBridge` methods. This `ICBridge` instance represents the cross-chain bridge/router. Thus, `bridge` directly points to the `routerAddress` without any ambiguity. Its function as a router is clear from `ICBridge` calls."
+                    }
+                },
+                "s.cBridge": {
+                    "routerAddress": {
+                        "reason": "The function `_bridge()` returns `s.cBridge`, which is then assigned to the `bridge` variable. This `s.cBridge` is the stored address of the CBridge contract, acting as the cross-chain router. Thus, `s.cBridge` represents the `routerAddress`.",
+                        "score": "100",
+                        "s_reason": "The function `_bridge()` returns `s.cBridge`, which is then assigned to the `bridge` variable. This `s.cBridge` is the stored address of the CBridge contract, acting as the cross-chain router. Thus, `s.cBridge` directly represents the `routerAddress` as the canonical stored address of the bridge."
+                    }
+                }
+            }
+        },
+        "step2": {
+            "toChainID": {
+                "_cBridgeData.dstChainId": {
+                    "dataflows": [
+                        {
+                            "parameter": "_cBridgeData.dstChainId",
+                            "dataflow": {
+                                "CBridgeFacet.swapAndStartBridgeTokensViaCBridge": [
+                                    "function swapAndStartBridgeTokensViaCBridge(\n        LiFiData memory _lifiData,\n        LibSwap.SwapData[] calldata _swapData,\n        CBridgeData memory _cBridgeData\n    ) public payable {",
+                                    "        _startBridge(_cBridgeData);"
+                                ],
+                                "CBridgeFacet._startBridge": [
+                                    "function _startBridge(CBridgeData memory _cBridgeData) internal {",
+                                    "        Storage storage s = getStorage();",
+                                    "        address bridge = _bridge();",
+                                    "        require(s.cBridgeChainId != _cBridgeData.dstChainId, \"Cannot bridge to the same network.\");",
+                                    "        if (LibAsset.isNativeAsset(_cBridgeData.token)) {",
+                                    "            ICBridge(bridge).sendNative(",
+                                    "                _cBridgeData.receiver,",
+                                    "                _cBridgeData.amount,",
+                                    "                _cBridgeData.dstChainId,",
+                                    "                _cBridgeData.nonce,",
+                                    "                _cBridgeData.maxSlippage",
+                                    "            );",
+                                    "        } else {",
+                                    "            LibAsset.approveERC20(IERC20(_cBridgeData.token), bridge, _cBridgeData.amount);",
+                                    "            ICBridge(bridge).send(",
+                                    "                _cBridgeData.receiver,",
+                                    "                _cBridgeData.token,",
+                                    "                _cBridgeData.amount,",
+                                    "                _cBridgeData.dstChainId,",
+                                    "                _cBridgeData.nonce,",
+                                    "                _cBridgeData.maxSlippage",
+                                    "            );",
+                                    "        }"
+                                ],
+                                "CBridgeFacet.getStorage": [
+                                    "function getStorage() internal pure returns (Storage storage s) {\n        bytes32 namespace = NAMESPACE;\n        assembly {\n            s.slot := namespace\n        }\n    }"
+                                ],
+                                "CBridgeFacet._bridge": [
+                                    "function _bridge() internal view returns (address) {\n        Storage storage s = getStorage();\n        return s.cBridge;\n    }"
+                                ],
+                                "LibAsset.isNativeAsset": [
+                                    "function isNativeAsset(address assetId) internal pure returns (bool) {\n        return assetId == NATIVE_ASSETID;\n    }"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "95",
+                            "reason": "The dataflow correctly identifies all direct uses of `_cBridgeData.dstChainId` within the `_startBridge` function. It covers the `require` statement for checking against `cBridgeChainId` and its use in both `sendNative` and `send` calls of the `ICBridge` interface. The relevant helper functions (`getStorage`, `_bridge`, `isNativeAsset`) are also included, which contribute to understanding the full context of the `_cBridgeData` parameter, even if `dstChainId` itself isn't directly manipulated by them. The provided 'code' aligns perfectly with the 'dataflow' steps for this specific parameter's usage."
+                        },
+                        {
+                            "parameter": "_cBridgeData.dstChainId",
+                            "dataflow": {
+                                "CBridgeFacet.swapAndStartBridgeTokensViaCBridge": [
+                                    "function swapAndStartBridgeTokensViaCBridge(\n        LiFiData memory _lifiData,\n        LibSwap.SwapData[] calldata _swapData,\n        CBridgeData memory _cBridgeData\n    ) public payable {",
+                                    "        _startBridge(_cBridgeData);"
+                                ],
+                                "CBridgeFacet._startBridge": [
+                                    "function _startBridge(CBridgeData memory _cBridgeData) internal {",
+                                    "        Storage storage s = getStorage();",
+                                    "        address bridge = _bridge();",
+                                    "        require(s.cBridgeChainId != _cBridgeData.dstChainId, \"Cannot bridge to the same network.\");",
+                                    "        if (LibAsset.isNativeAsset(_cBridgeData.token)) {",
+                                    "            ICBridge(bridge).sendNative(",
+                                    "                _cBridgeData.receiver,",
+                                    "                _cBridgeData.amount,",
+                                    "                _cBridgeData.dstChainId,",
+                                    "                _cBridgeData.nonce,",
+                                    "                _cBridgeData.maxSlippage",
+                                    "            );",
+                                    "        } else {",
+                                    "            LibAsset.approveERC20(IERC20(_cBridgeData.token), bridge, _cBridgeData.amount);",
+                                    "            ICBridge(bridge).send(",
+                                    "                _cBridgeData.receiver,",
+                                    "                _cBridgeData.token,",
+                                    "                _cBridgeData.amount,",
+                                    "                _cBridgeData.dstChainId,",
+                                    "                _cBridgeData.nonce,",
+                                    "                _cBridgeData.maxSlippage",
+                                    "            );",
+                                    "        }"
+                                ],
+                                "CBridgeFacet.getStorage": [
+                                    "function getStorage() internal pure returns (Storage storage s) {",
+                                    "        bytes32 namespace = NAMESPACE;",
+                                    "        assembly {",
+                                    "            s.slot := namespace",
+                                    "        }",
+                                    "    }"
+                                ],
+                                "CBridgeFacet._bridge": [
+                                    "function _bridge() internal view returns (address) {",
+                                    "        Storage storage s = getStorage();",
+                                    "        return s.cBridge;",
+                                    "    }"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "95",
+                            "reason": "The data flow comprehensively captures all relevant steps for `_cBridgeData.dstChainId` from its initial input in `swapAndStartBridgeTokensViaCBridge` to its usage in `_startBridge`. It correctly identifies the constraint check (`require(s.cBridgeChainId != _cBridgeData.dstChainId)`) and its subsequent use in `ICBridge(bridge).sendNative` and `ICBridge(bridge).send` calls. The flow also correctly includes the helper functions `getStorage` and `_bridge` which are called within `_startBridge` and contribute to the context of `_cBridgeData.dstChainId` interaction with `s.cBridgeChainId`."
+                        }
+                    ],
+                    "merge_dataflows": "function swapAndStartBridgeTokensViaCBridge(\n        LiFiData memory _lifiData,\n        LibSwap.SwapData[] calldata _swapData,\n        CBridgeData memory _cBridgeData\n    ) public payable {\n        _startBridge(_cBridgeData);\n}\nfunction _startBridge(CBridgeData memory _cBridgeData) internal {\n        Storage storage s = getStorage();\n        address bridge = _bridge();\n        require(s.cBridgeChainId != _cBridgeData.dstChainId, \"Cannot bridge to the same network.\");\n        if (LibAsset.isNativeAsset(_cBridgeData.token)) {"
+                }
+            },
+            "tokenAddress": {
+                "_cBridgeData.token": {
+                    "dataflows": [
+                        {
+                            "parameter": "_cBridgeData.token",
+                            "dataflow": {
+                                "CBridgeFacet.swapAndStartBridgeTokensViaCBridge": [
+                                    "function swapAndStartBridgeTokensViaCBridge(\n        LiFiData memory _lifiData,\n        LibSwap.SwapData[] calldata _swapData,\n        CBridgeData memory _cBridgeData\n    ) public payable {",
+                                    "        if (_cBridgeData.token != address(0)) {",
+                                    "            uint256 _fromTokenBalance = LibAsset.getOwnBalance(_cBridgeData.token);",
+                                    "            uint256 _postSwapBalance = LibAsset.getOwnBalance(_cBridgeData.token) - _fromTokenBalance;",
+                                    "            _cBridgeData.amount = _postSwapBalance;",
+                                    "        }",
+                                    "        _startBridge(_cBridgeData);",
+                                    "}"
+                                ],
+                                "LibAsset.getOwnBalance": [
+                                    "function getOwnBalance(address assetId) internal view returns (uint256) {",
+                                    "        return isNativeAsset(assetId) ? address(this).balance : IERC20(assetId).balanceOf(address(this));",
+                                    "}"
+                                ],
+                                "LibAsset.isNativeAsset": [
+                                    "function isNativeAsset(address assetId) internal pure returns (bool) {",
+                                    "        return assetId == NATIVE_ASSETID;",
+                                    "}"
+                                ],
+                                "CBridgeFacet._startBridge": [
+                                    "function _startBridge(CBridgeData memory _cBridgeData) internal {",
+                                    "        if (LibAsset.isNativeAsset(_cBridgeData.token)) {",
+                                    "            ICBridge(bridge).sendNative(\n                _cBridgeData.receiver,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );",
+                                    "        } else {",
+                                    "            LibAsset.approveERC20(IERC20(_cBridgeData.token), bridge, _cBridgeData.amount);",
+                                    "            ICBridge(bridge).send(\n                _cBridgeData.receiver,\n                _cBridgeData.token,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );",
+                                    "        }",
+                                    "}"
+                                ],
+                                "LibAsset.approveERC20": [
+                                    "function approveERC20(\n        IERC20 assetId,\n        address spender,\n        uint256 amount\n    ) internal {",
+                                    "        if (isNativeAsset(address(assetId))) return;",
+                                    "        uint256 allowance = assetId.allowance(address(this), spender);",
+                                    "        if (allowance < amount) {",
+                                    "            if (allowance > 0) SafeERC20.safeApprove(IERC20(assetId), spender, 0);",
+                                    "            SafeERC20.safeApprove(IERC20(assetId), spender, MAX_INT);",
+                                    "        }",
+                                    "}"
+                                ],
+                                "SafeERC20.safeApprove": [
+                                    "function safeApprove(\n        IERC20 token,\n        address spender,\n        uint256 value\n    ) internal {",
+                                    "        require(\n            (value == 0) || (token.allowance(address(this), spender) == 0),\n            \"SafeERC20: approve from non-zero to non-zero allowance\"\n        );",
+                                    "        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));",
+                                    "}"
+                                ],
+                                "SafeERC20._callOptionalReturn": [
+                                    "function _callOptionalReturn(IERC20 token, bytes memory data) private {",
+                                    "        bytes memory returndata = address(token).functionCall(data, \"SafeERC20: low-level call failed\");",
+                                    "        if (returndata.length > 0) {",
+                                    "            require(abi.decode(returndata, (bool)), \"SafeERC20: ERC20 operation did not succeed\");",
+                                    "        }",
+                                    "}"
+                                ],
+                                "Address.functionCall": [
+                                    "function functionCall(address target, bytes memory data) internal returns (bytes memory) {",
+                                    "        return functionCall(target, data, \"Address: low-level call failed\");",
+                                    "}"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "95",
+                            "score": "96",
+                            "reason": "The extracted data flow covers all relevant lines where `_cBridgeData.token` is used or derived. The data flow accurately traces its usage for balance checks, native asset determination, and token approvals/transfers within the _startBridge function. While the data flow correctly shows the general execution paths, it does not explicitly capture the conditional logic in `CBridgeFacet.swapAndStartBridgeTokensViaCBridge` where `_cBridgeData.token != address(0)` dictates different balance calculation branches or the implicit `else` branch for native token handling if `_cBridgeData.token` is `address(0)`. However, the usage of LibAsset functions with `_cBridgeData.token` is correctly identified, and these internal functions handle the conditional logic for native vs. ERC20 tokens themselves. Therefore, the core flow is correct, but a very minor detail regarding the explicit conditional branching *outside* of helper functions could be added for absolute perfection."
+                        },
+                        {
+                            "parameter": "_cBridgeData.token",
+                            "dataflow": {
+                                "CBridgeFacet.swapAndStartBridgeTokensViaCBridge": [
+                                    "function swapAndStartBridgeTokensViaCBridge(\n        LiFiData memory _lifiData,\n        LibSwap.SwapData[] calldata _swapData,\n        CBridgeData memory _cBridgeData\n    ) public payable {",
+                                    "        if (_cBridgeData.token != address(0)) {",
+                                    "            uint256 _fromTokenBalance = LibAsset.getOwnBalance(_cBridgeData.token);",
+                                    "            uint256 _postSwapBalance = LibAsset.getOwnBalance(_cBridgeData.token) - _fromTokenBalance;",
+                                    "            _cBridgeData.amount = _postSwapBalance;",
+                                    "        }",
+                                    "        _startBridge(_cBridgeData);",
+                                    "    }"
+                                ],
+                                "LibAsset.getOwnBalance": [
+                                    "function getOwnBalance(address assetId) internal view returns (uint256) {",
+                                    "        return isNativeAsset(assetId) ? address(this).balance : IERC20(assetId).balanceOf(address(this));",
+                                    "    }"
+                                ],
+                                "LibAsset.isNativeAsset": [
+                                    "function isNativeAsset(address assetId) internal pure returns (bool) {",
+                                    "        return assetId == NATIVE_ASSETID;",
+                                    "    }"
+                                ],
+                                "CBridgeFacet._startBridge": [
+                                    "function _startBridge(CBridgeData memory _cBridgeData) internal {",
+                                    "        if (LibAsset.isNativeAsset(_cBridgeData.token)) {",
+                                    "            ICBridge(bridge).sendNative(\n                _cBridgeData.receiver,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );",
+                                    "        } else {",
+                                    "            LibAsset.approveERC20(IERC20(_cBridgeData.token), bridge, _cBridgeData.amount);",
+                                    "            ICBridge(bridge).send(\n                _cBridgeData.receiver,\n                _cBridgeData.token,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );",
+                                    "        }",
+                                    "    }"
+                                ],
+                                "LibAsset.approveERC20": [
+                                    "function approveERC20(\n        IERC20 assetId,\n        address spender,\n        uint256 amount\n    ) internal {",
+                                    "        if (isNativeAsset(address(assetId))) return;",
+                                    "        uint256 allowance = assetId.allowance(address(this), spender);",
+                                    "        if (allowance < amount) {",
+                                    "            if (allowance > 0) SafeERC20.safeApprove(IERC20(assetId), spender, 0);",
+                                    "            SafeERC20.safeApprove(IERC20(assetId), spender, MAX_INT);",
+                                    "        }",
+                                    "    }"
+                                ],
+                                "SafeERC20.safeApprove": [
+                                    "function safeApprove(\n        IERC20 token,\n        address spender,\n        uint256 value\n    ) internal {",
+                                    "        require(\n            (value == 0) || (token.allowance(address(this), spender) == 0),\n            \"SafeERC20: approve from non-zero to non-zero allowance\"\n        );",
+                                    "        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));",
+                                    "    }"
+                                ],
+                                "SafeERC20._callOptionalReturn": [
+                                    "function _callOptionalReturn(IERC20 token, bytes memory data) private {",
+                                    "        bytes memory returndata = address(token).functionCall(data, \"SafeERC20: low-level call failed\");",
+                                    "        if (returndata.length > 0) {",
+                                    "            require(abi.decode(returndata, (bool)), \"SafeERC20: ERC20 operation did not succeed\");",
+                                    "        }",
+                                    "    }"
+                                ],
+                                "Address.functionCall": [
+                                    "function functionCall(address target, bytes memory data) internal returns (bytes memory) {",
+                                    "        return functionCall(target, data, \"Address: low-level call failed\");",
+                                    "    }"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "95",
+                            "reason": "The extracted data flow covers all relevant paths where `_cBridgeData.token` is used, including comparisons, balance checks, and as an argument for `_startBridge` and `LibAsset.approveERC20` (which itself uses `IERC20`). The `_startBridge` function then correctly branches based on whether it's a native asset and uses `_cBridgeData.token` in `sendNative` or `send`. The `LibAsset.getOwnBalance` and `LibAsset.isNativeAsset` functions also properly utilize this parameter. The analysis accurately traces the flow from its initial declaration to its various usages and conditional logic within the provided functions."
+                        }
+                    ],
+                    "merge_dataflows": "function swapAndStartBridgeTokensViaCBridge(\n        LiFiData memory _lifiData,\n        LibSwap.SwapData[] calldata _swapData,\n        CBridgeData memory _cBridgeData\n    ) public payable {\n        if (_cBridgeData.token != address(0)) {\n            uint256 _fromTokenBalance = LibAsset.getOwnBalance(_cBridgeData.token);\n            uint256 _postSwapBalance = LibAsset.getOwnBalance(_cBridgeData.token) - _fromTokenBalance;\n            _cBridgeData.amount = _postSwapBalance;\n        }\n        _startBridge(_cBridgeData);\n    }\nfunction getOwnBalance(address assetId) internal view returns (uint256) {\n        return isNativeAsset(assetId) ? address(this).balance : IERC20(assetId).balanceOf(address(this));\n    }\nfunction isNativeAsset(address assetId) internal pure returns (bool) {\n        return assetId == NATIVE_ASSETID;\n    }\nfunction _startBridge(CBridgeData memory _cBridgeData) internal {\n        if (LibAsset.isNativeAsset(_cBridgeData.token)) {\n            ICBridge(bridge).sendNative(\n                _cBridgeData.receiver,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );\n        } else {\n            LibAsset.approveERC20(IERC20(_cBridgeData.token), bridge, _cBridgeData.amount);\n            ICBridge(bridge).send(\n                _cBridgeData.receiver,\n                _cBridgeData.token,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );\n        }\n    }\nfunction approveERC20(\n        IERC20 assetId,\n        address spender,\n        uint256 amount\n    ) internal {\n        if (isNativeAsset(address(assetId))) return;\n        uint256 allowance = assetId.allowance(address(this), spender);\n        if (allowance < amount) {\n            if (allowance > 0) SafeERC20.safeApprove(IERC20(assetId), spender, 0);\n            SafeERC20.safeApprove(IERC20(assetId), spender, MAX_INT);\n        }\n    }\nfunction safeApprove(\n        IERC20 token,\n        address spender,\n        uint256 value\n    ) internal {\n        require(\n            (value == 0) || (token.allowance(address(this), spender) == 0),\n            \"SafeERC20: approve from non-zero to non-zero allowance\"\n        );\n        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));\n    }\nfunction _callOptionalReturn(IERC20 token, bytes memory data) private {\n        bytes memory returndata = address(token).functionCall(data, \"SafeERC20: low-level call failed\");\n        if (returndata.length > 0) {\n            require(abi.decode(returndata, (bool)), \"SafeERC20: ERC20 operation did not succeed\");\n        }\n    }\nfunction functionCall(address target, bytes memory data) internal returns (bytes memory) {\n        return functionCall(target, data, \"Address: low-level call failed\");\n    }"
+                }
+            },
+            "amount": {
+                "_lifiData.amount": {
+                    "dataflows": [
+                        {
+                            "parameter": "_lifiData.amount",
+                            "dataflow": {
+                                "CBridgeFacet.swapAndStartBridgeTokensViaCBridge": [
+                                    "function swapAndStartBridgeTokensViaCBridge(\n        LiFiData memory _lifiData,\n        LibSwap.SwapData[] calldata _swapData,\n        CBridgeData memory _cBridgeData\n    ) public payable {",
+                                    "emit LiFiTransferStarted(\n            _lifiData.transactionId,\n            _lifiData.integrator,\n            _lifiData.referrer,\n            _lifiData.sendingAssetId,\n            _lifiData.receivingAssetId,\n            _lifiData.receiver,\n            _lifiData.amount,\n            _lifiData.destinationChainId,\n            block.timestamp\n        );"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "95",
+                            "reason": "The extracted data flow code precisely covers the definition and usage of `_lifiData.amount` in the `CBridgeFacet.swapAndStartBridgeTokensViaCBridge` function. It correctly identifies that `_lifiData.amount` originates from the function parameters and is subsequently used in the `emit LiFiTransferStarted` event. The crucial aspect here is that while other code branches modify `_cBridgeData.amount`, `_lifiData.amount` maintains its initial value from the function input. The data flow accurately reflects this, showing no intermediate assignments to this specific parameter before its final use in the event. This indicates a high level of correctness and full coverage of the parameter's flow within the provided context."
+                        },
+                        {
+                            "parameter": "_lifiData.amount",
+                            "dataflow": {
+                                "CBridgeFacet.swapAndStartBridgeTokensViaCBridge": [
+                                    "function swapAndStartBridgeTokensViaCBridge(\n        LiFiData memory _lifiData,\n        LibSwap.SwapData[] calldata _swapData,\n        CBridgeData memory _cBridgeData\n    ) public payable {",
+                                    "        emit LiFiTransferStarted(\n            _lifiData.transactionId,\n            _lifiData.integrator,\n            _lifiData.referrer,\n            _lifiData.sendingAssetId,\n            _lifiData.receivingAssetId,\n            _lifiData.receiver,\n            _lifiData.amount,\n            _lifiData.destinationChainId,\n            block.timestamp\n        );"
+                                ]
+                            },
+                            "coverage": "75",
+                            "correctness": "80",
+                            "score": "78",
+                            "reason": "The provided dataflow correctly identifies the `emit LiFiTransferStarted` statement which uses `_lifiData.amount`. However, it misses the initial assignment from `_lifiData.amount` to `_cBridgeData.amount` and the subsequent potential modification before it's used in the emit."
+                        }
+                    ],
+                    "merge_dataflows": "function swapAndStartBridgeTokensViaCBridge(\n        LiFiData memory _lifiData,\n        LibSwap.SwapData[] calldata _swapData,\n        CBridgeData memory _cBridgeData\n    ) public payable {\nemit LiFiTransferStarted(\n            _lifiData.transactionId,\n            _lifiData.integrator,\n            _lifiData.referrer,\n            _lifiData.sendingAssetId,\n            _lifiData.receivingAssetId,\n            _lifiData.receiver,\n            _lifiData.amount,\n            _lifiData.destinationChainId,\n            block.timestamp\n        );"
+                }
+            },
+            "nonce": {
+                "_cBridgeData.nonce": {
+                    "dataflows": [
+                        {
+                            "parameter": "_cBridgeData.nonce",
+                            "dataflow": {
+                                "CBridgeFacet.swapAndStartBridgeTokensViaCBridge": [
+                                    "function swapAndStartBridgeTokensViaCBridge(\n        LiFiData memory _lifiData,\n        LibSwap.SwapData[] calldata _swapData,\n        CBridgeData memory _cBridgeData\n    ) public payable {",
+                                    "        _startBridge(_cBridgeData);"
+                                ],
+                                "CBridgeFacet._startBridge": [
+                                    "function _startBridge(CBridgeData memory _cBridgeData) internal {",
+                                    "        ICBridge(bridge).sendNative(\n                _cBridgeData.receiver,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );",
+                                    "            ICBridge(bridge).send(\n                _cBridgeData.receiver,\n                _cBridgeData.token,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "95",
+                            "reason": "The extracted data flow correctly identifies where `_cBridgeData.nonce` is used. It traces its origin as a parameter in `swapAndStartBridgeTokensViaCBridge` and its subsequent use in `_startBridge`, which then passes it directly to `ICBridge.sendNative` or `ICBridge.send`. The data flow accurately reflects all direct usages of this parameter without missing any significant steps or including irrelevant information. The `nonce` parameter is used exactly as it enters the system, without any modifications or complex calculations. This direct propagation makes the data flow easily verifiable and highly correct."
+                        },
+                        {
+                            "parameter": "_cBridgeData.nonce",
+                            "dataflow": {
+                                "CBridgeFacet.swapAndStartBridgeTokensViaCBridge": [
+                                    "function swapAndStartBridgeTokensViaCBridge(\n        LiFiData memory _lifiData,\n        LibSwap.SwapData[] calldata _swapData,\n        CBridgeData memory _cBridgeData\n    ) public payable {",
+                                    "        _startBridge(_cBridgeData);"
+                                ],
+                                "CBridgeFacet._startBridge": [
+                                    "function _startBridge(CBridgeData memory _cBridgeData) internal {",
+                                    "        if (LibAsset.isNativeAsset(_cBridgeData.token)) {",
+                                    "            ICBridge(bridge).sendNative(\n                _cBridgeData.receiver,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );",
+                                    "        } else {",
+                                    "            ICBridge(bridge).send(\n                _cBridgeData.receiver,\n                _cBridgeData.token,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );",
+                                    "        }"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "95",
+                            "reason": "The dataflow correctly identifies that `_cBridgeData.nonce` is directly passed as an argument to `ICBridge(bridge).sendNative` and `ICBridge(bridge).send`. The extraction covers all relevant lines where this parameter is used and no irrelevant code is included, indicating high correctness and coverage."
+                        }
+                    ],
+                    "merge_dataflows": "function swapAndStartBridgeTokensViaCBridge(\n        LiFiData memory _lifiData,\n        LibSwap.SwapData[] calldata _swapData,\n        CBridgeData memory _cBridgeData\n    ) public payable {\n        _startBridge(_cBridgeData);\n}\n\nfunction _startBridge(CBridgeData memory _cBridgeData) internal {\n        if (LibAsset.isNativeAsset(_cBridgeData.token)) {\n            ICBridge(bridge).sendNative(\n                _cBridgeData.receiver,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );\n        } else {\n            ICBridge(bridge).send(\n                _cBridgeData.receiver,\n                _cBridgeData.token,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );\n        }\n}"
+                }
+            },
+            "recipientAddress": {
+                "_cBridgeData.receiver": {
+                    "dataflows": [
+                        {
+                            "parameter": "_cBridgeData.receiver",
+                            "dataflow": {
+                                "CBridgeFacet.swapAndStartBridgeTokensViaCBridge": [
+                                    "function swapAndStartBridgeTokensViaCBridge(\n        LiFiData memory _lifiData,\n        LibSwap.SwapData[] calldata _swapData,\n        CBridgeData memory _cBridgeData\n    ) public payable {",
+                                    "        _cBridgeData.amount = _postSwapBalance;",
+                                    "        _startBridge(_cBridgeData);",
+                                    "        emit LiFiTransferStarted(\n            _lifiData.transactionId,\n            _lifiData.integrator,\n            _lifiData.referrer,\n            _lifiData.sendingAssetId,\n            _lifiData.receivingAssetId,\n            _lifiData.receiver,\n            _lifiData.amount,\n            _lifiData.destinationChainId,\n            block.timestamp\n        );"
+                                ],
+                                "CBridgeFacet._startBridge": [
+                                    "function _startBridge(CBridgeData memory _cBridgeData) internal {",
+                                    "        if (LibAsset.isNativeAsset(_cBridgeData.token)) {",
+                                    "            ICBridge(bridge).sendNative(\n                _cBridgeData.receiver,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );",
+                                    "        } else {",
+                                    "            ICBridge(bridge).send(\n                _cBridgeData.receiver,\n                _cBridgeData.token,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );",
+                                    "        }"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "95",
+                            "reason": "The extracted data flow for `_cBridgeData.receiver` accurately captures its definition as a parameter in `swapAndStartBridgeTokensViaCBridge` and its subsequent direct usage as an argument in `_startBridge`. Furthermore, the data flow correctly traces its use within `_startBridge` where it's passed directly to `ICBridge(bridge).sendNative` and `ICBridge(bridge).send` functions. The data flow highlights all relevant points where the `_cBridgeData.receiver` parameter is referenced without any intermediate modifications, demonstrating complete coverage and correctness."
+                        },
+                        {
+                            "parameter": "_cBridgeData.receiver",
+                            "dataflow": {
+                                "CBridgeFacet.swapAndStartBridgeTokensViaCBridge": [
+                                    "function swapAndStartBridgeTokensViaCBridge(\n        LiFiData memory _lifiData,\n        LibSwap.SwapData[] calldata _swapData,\n        CBridgeData memory _cBridgeData\n    ) public payable {",
+                                    "        _cBridgeData.amount = _postSwapBalance;",
+                                    "        _startBridge(_cBridgeData);",
+                                    "        emit LiFiTransferStarted(\n            _lifiData.transactionId,\n            _lifiData.integrator,\n            _lifiData.referrer,\n            _lifiData.sendingAssetId,\n            _lifiData.receivingAssetId,\n            _lifiData.receiver,\n            _lifiData.amount,\n            _lifiData.destinationChainId,\n            block.timestamp\n        );"
+                                ],
+                                "CBridgeFacet._startBridge": [
+                                    "function _startBridge(CBridgeData memory _cBridgeData) internal {",
+                                    "        if (LibAsset.isNativeAsset(_cBridgeData.token)) {",
+                                    "            ICBridge(bridge).sendNative(\n                _cBridgeData.receiver,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );",
+                                    "        } else {",
+                                    "            ICBridge(bridge).send(\n                _cBridgeData.receiver,\n                _cBridgeData.token,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );",
+                                    "        }"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "95",
+                            "reason": "The entire data flow for '_cBridgeData.receiver' is captured, showing its origin as a function parameter in 'swapAndStartBridgeTokensViaCBridge' and its subsequent use in '_startBridge' where it's passed directly to 'ICBridge(bridge).sendNative' or 'ICBridge(bridge).send'. This comprehensive tracing leads to high coverage and correctness."
+                        }
+                    ],
+                    "merge_dataflows": "function swapAndStartBridgeTokensViaCBridge(\n        LiFiData memory _lifiData,\n        LibSwap.SwapData[] calldata _swapData,\n        CBridgeData memory _cBridgeData\n    ) public payable {\n        _cBridgeData.amount = _postSwapBalance;\n        _startBridge(_cBridgeData);\n        emit LiFiTransferStarted(\n            _lifiData.transactionId,\n            _lifiData.integrator,\n            _lifiData.referrer,\n            _lifiData.sendingAssetId,\n            _lifiData.receivingAssetId,\n            _lifiData.receiver,\n            _lifiData.amount,\n            _lifiData.destinationChainId,\n            block.timestamp\n        );\nfunction _startBridge(CBridgeData memory _cBridgeData) internal {\n        if (LibAsset.isNativeAsset(_cBridgeData.token)) {\n            ICBridge(bridge).sendNative(\n                _cBridgeData.receiver,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );\n        } else {\n            ICBridge(bridge).send(\n                _cBridgeData.receiver,\n                _cBridgeData.token,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );\n        }"
+                }
+            },
+            "routerAddress": {
+                "bridge": {
+                    "dataflows": [
+                        {
+                            "parameter": "bridge",
+                            "dataflow": {
+                                "CBridgeFacet._startBridge": [
+                                    "address bridge = _bridge();",
+                                    "ICBridge(bridge).sendNative(\n                _cBridgeData.receiver,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );",
+                                    "LibAsset.approveERC20(IERC20(_cBridgeData.token), bridge, _cBridgeData.amount);",
+                                    "ICBridge(bridge).send(\n                _cBridgeData.receiver,\n                _cBridgeData.token,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "95",
+                            "reason": "The data flow analysis for the 'bridge' parameter appears to be thorough and accurate. It correctly identifies the acquisition of the 'bridge' address from `_bridge()` and its subsequent usage in `ICBridge(bridge).sendNative` and `LibAsset.approveERC20` followed by `ICBridge(bridge).send`. The extraction covers all relevant lines where the 'bridge' variable is defined and used within the `_startBridge` function, which is the direct consumer of this parameter. The provided `code` array also includes the `_bridge` function which shows how the `bridge` variable gets its value from storage. All identified data flow steps correctly represent the operations involving the 'bridge' variable. The confidence score is high due to the complete and correct representation of the data flow."
+                        },
+                        {
+                            "parameter": "bridge",
+                            "dataflow": {
+                                "CBridgeFacet._startBridge": [
+                                    "function _startBridge(CBridgeData memory _cBridgeData) internal {",
+                                    "        Storage storage s = getStorage();",
+                                    "        address bridge = _bridge();",
+                                    "        require(s.cBridgeChainId != _cBridgeData.dstChainId, \"Cannot bridge to the same network.\");",
+                                    "        if (LibAsset.isNativeAsset(_cBridgeData.token)) {",
+                                    "            ICBridge(bridge).sendNative(",
+                                    "                _cBridgeData.receiver,",
+                                    "                _cBridgeData.amount,",
+                                    "                _cBridgeData.dstChainId,",
+                                    "                _cBridgeData.nonce,",
+                                    "                _cBridgeData.maxSlippage",
+                                    "            );",
+                                    "        } else {",
+                                    "            LibAsset.approveERC20(IERC20(_cBridgeData.token), bridge, _cBridgeData.amount);",
+                                    "            ICBridge(bridge).send(",
+                                    "                _cBridgeData.receiver,",
+                                    "                _cBridgeData.token,",
+                                    "                _cBridgeData.amount,",
+                                    "                _cBridgeData.dstChainId,",
+                                    "                _cBridgeData.nonce,",
+                                    "                _cBridgeData.maxSlippage",
+                                    "            );",
+                                    "        }",
+                                    "    }"
+                                ],
+                                "CBridgeFacet._bridge": [
+                                    "function _bridge() internal view returns (address) {",
+                                    "        Storage storage s = getStorage();",
+                                    "        return s.cBridge;",
+                                    "    }"
+                                ],
+                                "LibAsset.approveERC20": [
+                                    "function approveERC20(",
+                                    "        IERC20 assetId,",
+                                    "        address spender,",
+                                    "        uint256 amount",
+                                    "    ) internal {",
+                                    "        if (isNativeAsset(address(assetId))) return;",
+                                    "        uint256 allowance = assetId.allowance(address(this), spender);",
+                                    "        if (allowance < amount) {",
+                                    "            if (allowance > 0) SafeERC20.safeApprove(IERC20(assetId), spender, 0);",
+                                    "            SafeERC20.safeApprove(IERC20(assetId), spender, MAX_INT);",
+                                    "        }",
+                                    "    }"
+                                ],
+                                "SafeERC20.safeApprove": [
+                                    "function safeApprove(",
+                                    "        IERC20 token,",
+                                    "        address spender,",
+                                    "        uint256 value",
+                                    "    ) internal {",
+                                    "        require(",
+                                    "            (value == 0) || (token.allowance(address(this), spender) == 0),",
+                                    "            \"SafeERC20: approve from non-zero to non-zero allowance\"",
+                                    "        );",
+                                    "        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));",
+                                    "    }"
+                                ],
+                                "SafeERC20._callOptionalReturn": [
+                                    "function _callOptionalReturn(IERC20 token, bytes memory data) private {",
+                                    "        bytes memory returndata = address(token).functionCall(data, \"SafeERC20: low-level call failed\");",
+                                    "        if (returndata.length > 0) {",
+                                    "            require(abi.decode(returndata, (bool)), \"SafeERC20: ERC20 operation did not succeed\");",
+                                    "        }",
+                                    "    }"
+                                ],
+                                "Address.functionCall": [
+                                    "function functionCall(address target, bytes memory data) internal returns (bytes memory) {",
+                                    "        return functionCall(target, data, \"Address: low-level call failed\");",
+                                    "    }"
+                                ]
+                            },
+                            "coverage": "100",
+                            "correctness": "100",
+                            "score": "95",
+                            "reason": "The extracted data flow for the 'bridge' parameter completely and accurately traces its definition and usage. The parameter 'bridge' is clearly derived from the `_bridge()` function, which in turn retrieves the `cBridge` address from storage. This value is consistently used in `ICBridge(bridge).sendNative` and `ICBridge(bridge).send` calls, and also as the 'spender' for `LibAsset.approveERC20`. The provided data flow covers all relevant definitions and uses within the original code, and the logic is sound."
+                        }
+                    ],
+                    "merge_dataflows": "function _startBridge(CBridgeData memory _cBridgeData) internal {\n        Storage storage s = getStorage();\n        address bridge = _bridge();\n        require(s.cBridgeChainId != _cBridgeData.dstChainId, \"Cannot bridge to the same network.\");\n        if (LibAsset.isNativeAsset(_cBridgeData.token)) {\n            ICBridge(bridge).sendNative(\n                _cBridgeData.receiver,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );\n        } else {\n            LibAsset.approveERC20(IERC20(_cBridgeData.token), bridge, _cBridgeData.amount);\n            ICBridge(bridge).send(\n                _cBridgeData.receiver,\n                _cBridgeData.token,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );\n        }\n    }\nfunction _bridge() internal view returns (address) {\n        Storage storage s = getStorage();\n        return s.cBridge;\n    }\nfunction approveERC20(\n        IERC20 assetId,\n        address spender,\n        uint256 amount\n    ) internal {\n        if (isNativeAsset(address(assetId))) return;\n        uint256 allowance = assetId.allowance(address(this), spender);\n        if (allowance < amount) {\n            if (allowance > 0) SafeERC20.safeApprove(IERC20(assetId), spender, 0);\n            SafeERC20.safeApprove(IERC20(assetId), spender, MAX_INT);\n        }\n    }\nfunction safeApprove(\n        IERC20 token,\n        address spender,\n        uint256 value\n    ) internal {\n        require(\n            (value == 0) || (token.allowance(address(this), spender) == 0),\n            \"SafeERC20: approve from non-zero to non-zero allowance\"\n        );\n        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));\n    }\nfunction _callOptionalReturn(IERC20 token, bytes memory data) private {\n        bytes memory returndata = address(token).functionCall(data, \"SafeERC20: low-level call failed\");\n        if (returndata.length > 0) {\n            require(abi.decode(returndata, (bool)), \"SafeERC20: ERC20 operation did not succeed\");\n        }\n    }\nfunction functionCall(address target, bytes memory data) internal returns (bytes memory) {\n        return functionCall(target, data, \"Address: low-level call failed\");\n    }"
+                }
+            }
+        },
+        "step3": {
+            "toChainID": {
+                "_cBridgeData.dstChainId": {
+                    "Check whether toChainID is authorized.": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The provided code snippet does not include any authorization checks for `_cBridgeData.dstChainId`. The only check present is `require(s.cBridgeChainId != _cBridgeData.dstChainId, \"Cannot bridge to the same network.\");`, which prevents bridging to the same network but does not authorize specific chain IDs."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "There is no explicit mapping, array, or function call that verifies `_cBridgeData.dstChainId` against a list of authorized or whitelisted chain IDs. Without additional context or code, it's impossible to determine if an authorization mechanism exists outside this snippet."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The code primarily focuses on initiating a bridge operation and asset handling. The `_cBridgeData.dstChainId` is used in a self-check (`!_cBridgeData.dstChainId`) but not for authorization against external or internal lists of permitted chain IDs. Further logic would be needed to satisfy the authorization constraint."
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Check that the destination chain ID is not equal to the source chain ID.": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": "require(s.cBridgeChainId != _cBridgeData.dstChainId, \"Cannot bridge to the same network.\");",
+                                "reason": "The code explicitly checks that `s.cBridgeChainId` (which represents the source chain ID in the context of cBridge configuration) is not equal to `_cBridgeData.dstChainId`."
+                            },
+                            {
+                                "result": true,
+                                "validation": "require(s.cBridgeChainId != _cBridgeData.dstChainId, \"Cannot bridge to the same network.\");",
+                                "reason": "The `require` statement ensures that the `dstChainId` is different from the `s.cBridgeChainId` effectively preventing bridging to the same network."
+                            },
+                            {
+                                "result": true,
+                                "validation": "require(s.cBridgeChainId != _cBridgeData.dstChainId, \"Cannot bridge to the same network.\");",
+                                "reason": "The `require` statement `s.cBridgeChainId != _cBridgeData.dstChainId` directly implements the constraint that the destination chain ID must not be the same as the source chain ID."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "_cBridgeData.dstChainId",
+                                "constraint": "Check that the destination chain ID is not equal to the source chain ID.",
+                                "validation": "require(s.cBridgeChainId != _cBridgeData.dstChainId, \"Cannot bridge to the same network.\");",
+                                "score": "100",
+                                "reason": "The validation directly compares `s.cBridgeChainId` (source chain ID) with `_cBridgeData.dstChainId` (destination chain ID) and reverts if they are equal, precisely implementing the constraint.",
+                                "results": []
+                            }
+                        ]
+                    }
+                }
+            },
+            "tokenAddress": {
+                "_cBridgeData.token": {
+                    "Check whether the tokenAddress is authorized to use.": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": "function _startBridge(CBridgeData memory _cBridgeData) internal {\n        if (LibAsset.isNativeAsset(_cBridgeData.token)) {\n            ICBridge(bridge).sendNative(\n                _cBridgeData.receiver,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );\n        } else {\n            LibAsset.approveERC20(IERC20(_cBridgeData.token), bridge, _cBridgeData.amount);\n            ICBridge(bridge).send(\n                _cBridgeData.receiver,\n                _cBridgeData.token,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );\n        }\n    }\nfunction approveERC20(\n        IERC20 assetId,\n        address spender,\n        uint256 amount\n    ) internal {\n        if (isNativeAsset(address(assetId))) return;\n        uint256 allowance = assetId.allowance(address(this), spender);\n        if (allowance < amount) {\n            if (allowance > 0) SafeERC20.safeApprove(IERC20(assetId), spender, 0);\n            SafeERC20.safeApprove(IERC20(assetId), spender, MAX_INT);\n        }\n    }\nfunction safeApprove(\n        IERC20 token,\n        address spender,\n        uint256 value\n    ) internal {\n        require(\n            (value == 0) || (token.allowance(address(this), spender) == 0),\n            \"SafeERC20: approve from non-zero to non-zero allowance\"\n        );\n        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));\n    }",
+                                "reason": "The `_cBridgeData.token` (ERC20 token) is authorized for use by calling `LibAsset.approveERC20` before being sent via `ICBridge(bridge).send`. The `approveERC20` function handles allowance logic, ensuring the `bridge` contract has sufficient allowance to spend the token on behalf of the contract. Specifically, it calls `SafeERC20.safeApprove` which internally uses `token.approve.selector` to authorize the `spender` (which is `bridge`) to spend the `token` (which is `_cBridgeData.token`). This mechanism ensures that the token address is properly authorized for the transfer."
+                            },
+                            {
+                                "result": true,
+                                "validation": "function safeApprove(\n        IERC20 token,\n        address spender,\n        uint256 value\n    ) internal {\n        require(\n            (value == 0) || (token.allowance(address(this), spender) == 0),\n            \"SafeERC20: approve from non-zero to non-zero allowance\"\n        );\n        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));\n    }",
+                                "reason": "The `safeApprove` function, used by `approveERC20`, directly interacts with the `token.approve` function through ABI encoding (`abi.encodeWithSelector(token.approve.selector, spender, value)`). This method is how an ERC20 token explicitly grants authorization to a `spender` (in this case, the `bridge` contract) to move its tokens from the current contract's balance. The `require` statement within `safeApprove` also provides a check related to the existing allowance, ensuring that the approval process is handled safely, thereby confirming the authorization before use."
+                            },
+                            {
+                                "result": false,
+                                "validation": null,
+                                "reason": "The constraint focuses on whether the `tokenAddress` is authorized to use. While the code includes authorization mechanisms (ERC20 `approve`), it doesn't perform a direct 'check' in the sense of verifying if a token is pre-authorized by an external registry or permission system, prior to attempting an `approve` call. The authorization check is implicitly done by `token.approve` succeeding. If the `token` itself restricts who can `approve` or transfer (e.g., a pausable token), this code would still attempt the `approve` without an explicit pre-check of the token's authorization status for 'use' beyond its standard ERC20 interface."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "_cBridgeData.token",
+                                "constraint": "Check whether the tokenAddress is authorized to use.",
+                                "validation": "function _startBridge(CBridgeData memory _cBridgeData) internal {\n        if (LibAsset.isNativeAsset(_cBridgeData.token)) {\n            ICBridge(bridge).sendNative(\n                _cBridgeData.receiver,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );\n        } else {\n            LibAsset.approveERC20(IERC20(_cBridgeData.token), bridge, _cBridgeData.amount);\n            ICBridge(bridge).send(\n                _cBridgeData.receiver,\n                _cBridgeData.token,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );\n        }\n    }\nfunction approveERC20(\n        IERC20 assetId,\n        address spender,\n        uint256 amount\n    ) internal {\n        if (isNativeAsset(address(assetId))) return;\n        uint252 allowance = assetId.allowance(address(this), spender);\n        if (allowance < amount) {\n            if (allowance > 0) SafeERC20.safeApprove(IERC20(assetId), spender, 0);\n            SafeERC20.safeApprove(IERC20(assetId), spender, MAX_INT);\n        }\n    }\nfunction safeApprove(\n        IERC20 token,\n        address spender,\n        uint256 value\n    ) internal {\n        require(\n            (value == 0) || (token.allowance(address(this), spender) == 0),\n            \"SafeERC20: approve from non-zero to non-zero allowance\"\n        );\n        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));\n    }",
+                                "score": "95",
+                                "reason": "The code correctly distinguishes between native assets and ERC20 tokens. For ERC20 tokens, it calls `LibAsset.approveERC20` before sending, which in turn calls `SafeERC20.safeApprove` to set an allowance. This mechanism ensures that the bridge contract has the necessary authorization to transfer the tokens on behalf of the contract. The use of `MAX_INT` for approval is a common pattern to avoid repeated approvals for subsequent transactions, which is generally acceptable for trusted protocols. The `safeApprove` function also includes a check against approving from a non-zero to non-zero allowance, which is a good security practice to prevent front-running attacks. The only minor point is that `MAX_INT` approval is a standard practice and not necessarily a specific 'authorization check' but rather a way to delegate permission for future transfers until revoked. However, it implicitly grants authorization.",
+                                "results": [
+                                    {
+                                        "result": true,
+                                        "poc": "The validation `LibAsset.approveERC20(IERC20(_cBridgeData.token), bridge, _cBridgeData.amount);` in `CBridgeFacet._startBridge` function can be bypassed for ERC20 tokens due to the implementation of `LibAsset.approveERC20`. If the current allowance is already greater than zero, `SafeERC20.safeApprove` is called twice: first to set allowance to 0, then to `MAX_INT`. The issue arises in `SafeERC20.safeApprove` which includes the check `(value == 0) || (token.allowance(address(this), spender) == 0)`. If a token does not comply with the standard ERC20 `approve` logic by returning a non-zero allowance after the first `safeApprove(..., 0)` call, or if the `approve` call to set to `MAX_INT` fails silently, the `SafeERC20: approve from non-zero to non-zero allowance` revert can be triggered, or the `approve` call might simply fail without reverting if `_callOptionalReturn` doesn't enforce a revert. This would prevent the `ICBridge(bridge).send` function from being called, but the problem is that `safeApprove` in this case would revert, which does not bypass but rather stops the execution. However, if the token's `approve` function can be manipulated to return `true` while not actually setting the allowance to `MAX_INT` (e.g., if it's a re-entrant token or has a custom logic allowing `MAX_INT` approval to fail silently or without reverting), then the approval could be bypassed while the transaction continues.",
+                                        "score": "20",
+                                        "reason": "The POC accurately identifies a potential bypass if an ERC20 token implementation deviates from the standard, particularly by returning true for `approve` calls while not actually setting the allowance, or by allowing `approve(..., 0)` to fail silently or not clear the allowance. The `SafeERC20: approve from non-zero to non-zero allowance` revert ensures that compliant tokens would revert and not bypass. However, the `_callOptionalReturn` mechanism in `SafeERC20` could potentially allow a non-compliant token to return true even if the approval failed internally. Though `_callOptionalReturn` explicitly checks `require(abi.decode(returndata, (bool)), \"SafeERC20: ERC20 operation did not succeed\");`, if the token's approve function returns `true` even on internal failure, then the `ICBridge(bridge).send` could still be called, leading to a bridge failure due to insufficient allowance. This relies on a highly non-standard and malicious token behavior, hence the low confidence score, but it's a theoretical risk due to the reliance on `_callOptionalReturn` to propagate the success of the token's `approve` call."
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            },
+            "amount": {
+                "_lifiData.amount": {
+                    "Validate that amount is greater than 0": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The provided code snippet only emits an event with `_lifiData.amount` but does not include any explicit validation (e.g., require statement) to check if `_lifiData.amount` is greater than 0. The event emission itself doesn't enforce this constraint."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The `emit LiFiTransferStarted(...)` statement simply records the `_lifiData.amount` value. It does not perform any checks or assertions on this value to ensure it meets the 'greater than 0' constraint. Without additional code, this condition is not enforced."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "There is no `require(_lifiData.amount > 0, ...)` or similar conditional check present in the given code. The event emission is a non-validating operation in terms of program flow and state integrity regarding this constraint."
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Validate that msg.sender's balance change before and after equals amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The provided code snippet primarily focuses on emitting a `LiFiTransferStarted` event with `_lifiData.amount`. It does not contain any logic for checking or asserting the `msg.sender`'s balance before and after any operation, nor does it perform any actual token transfers or balance manipulations that would allow for such a validation."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The code only includes an event emission for `LiFiTransferStarted`. To validate the balance change, there would need to be `balanceOf` calls before and after a transfer, potentially involving `_lifiData.amount`, and an assertion that the difference matches `_lifiData.amount`. This functionality is missing in the provided code."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The snippet shows an event being emitted with the amount. Validating `msg.sender`'s balance change requires pre-transfer balance capture, a transfer operation (sending or receiving `_lifiData.amount`), and post-transfer balance capture, followed by a comparison. None of these operations are present in the given code segment."
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Validate that the bridge's balance change before and after equals amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The provided code snippet only emits a `LiFiTransferStarted` event and does not contain any logic for handling bridge balance changes or validating them against `_lifiData.amount`."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The code focuses on logging transfer initiation rather than asserting post-transfer state changes related to the bridge's balance. Full functional code analysis would be required to verify this constraint."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The snippet lacks any financial operations or asserts that would compare before and after balances of the bridge. The `_lifiData.amount` is used in an event, not in a balance check."
+                            }
+                        ],
+                        "verify_filtered": []
+                    },
+                    "Validate that msg.sender's balance ≥ amount": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The provided code snippet does not contain any explicit checks or assertions related to `msg.sender`'s balance against `_lifiData.amount`. The `payable` keyword on the function only allows the function to receive Ether, but does not inherently validate the sender's balance against any specific amount passed within `_lifiData`. The `emit LiFiTransferStarted` line is an event emission and does not perform any balance checks."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The `_lifiData.amount` is used in an event emission, but there is no code that directly compares `msg.sender.balance` or `address(this).balance` (if a pull pattern is used) with `_lifiData.amount`. Therefore, the constraint is not covered by the provided code."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The function `swapAndStartBridgeTokensViaCBridge` is marked `payable`, which means it can receive Ether. However, simply being payable does not validate that `msg.sender` has a balance greater than or equal to `_lifiData.amount`. The code only emits an event using `_lifiData.amount`, implying its use for informational purposes, not for balance validation from the sender's side in this snippet."
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            },
+            "nonce": {
+                "_cBridgeData.nonce": {
+                    "Check if the transaction's nonce is equal to the account's current nonce.": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The provided code snippets do not contain any logic that explicitly checks if '_cBridgeData.nonce' is equal to the account's current nonce. The '_cBridgeData.nonce' parameter is passed directly to the 'sendNative' or 'send' functions of the 'ICBridge' interface. There's no comparison or validation against the sender's actual transaction count or any form of on-chain nonce management within these functions or their upstream calls in the provided code."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The 'nonce' parameter in 'CBridgeData' is used in the context of the CBridge protocol, often for replay protection or ordering within that specific cross-chain bridge, rather than verifying the Ethereum account's transaction nonce. The given Solidity code does not implement a check for the sender's account nonce."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "No 'require' or 'if' statements or similar conditional logic are present in the provided code that perform a check between '_cBridgeData.nonce' and 'tx.origin.nonce' or equivalent account nonce retrieval. The parameter is simply a data point for the external bridge call."
+                            }
+                        ],
+                        "verify_filtered": []
+                    }
+                }
+            },
+            "recipientAddress": {
+                "_cBridgeData.receiver": {
+                    "Validate that recipientAddress is not the zero address": {
+                        "original": [
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The provided code snippets for `swapAndStartBridgeTokensViaCBridge` and `_startBridge` do not contain any explicit checks or require statements that validate whether `_cBridgeData.receiver` is not the zero address (0x0). The value is directly passed to the `ICBridge` send functions without prior validation within these functions or their immediate callers shown. It's possible such a check exists in the `ICBridge` contract itself, but it's not present in the provided code."
+                            },
+                            {
+                                "result": true,
+                                "validation": "ICBridge(bridge).sendNative(\n                _cBridgeData.receiver,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );\nICBridge(bridge).send(\n                _cBridgeData.receiver,\n                _cBridgeData.token,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );",
+                                "reason": "It is a common pattern for standard contracts (like ICBridge would likely be) to internally validate critical input parameters such as recipient addresses to prevent funds from being sent to the zero address. Even if not explicitly shown in the provided snippet, the `ICBridge` implementation that these functions call might inherently perform this validation. This assumes a robust external contract dependency."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "While `_cBridgeData.receiver` is used as a parameter in the `ICBridge` calls (`sendNative` and `send`), the provided code **does not contain any explicit Solidity 'require' or 'if' statements** that check if `_cBridgeData.receiver` is not the zero address. Therefore, based *solely* on the provided code, there is no direct validation. The responsibility for this validation would fall to the `ICBridge` contract, which is external to the provided snippet."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "_cBridgeData.receiver",
+                                "constraint": "Validate that recipientAddress is not the zero address,",
+                                "validation": "ICBridge(bridge).sendNative(\n                _cBridgeData.receiver,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );\nICBridge(bridge).send(\n                _cBridgeData.receiver,\n                _cBridgeData.token,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );",
+                                "score": "20",
+                                "reason": "The provided validation code snippets (`ICBridge(...).sendNative` and `ICBridge(...).send`) are the calls where `_cBridgeData.receiver` is used as a parameter. However, these snippets alone do not contain any explicit checks to validate that `_cBridgeData.receiver` is not the zero address. The constraint requires a validation to prevent the zero address, but no such validation is present in the provided code snippets. It is possible that the `ICBridge` contract itself performs this check, but without access to its code, we cannot confirm. Based solely on the provided snippets, the validation is not explicitly implemented."
+                            }
+                        ]
+                    }
+                }
+            },
+            "routerAddress": {
+                "bridge": {
+                    "Check whether the routerAddress is authorized to use.": {
+                        "original": [
+                            {
+                                "result": true,
+                                "validation": "LibAsset.approveERC20(IERC20(_cBridgeData.token), bridge, _cBridgeData.amount);\nfunction approveERC20(\n        IERC20 assetId,\n        address spender,\n        uint256 amount\n    ) internal {\n        if (isNativeAsset(address(assetId))) return;\n        uint256 allowance = assetId.allowance(address(this), spender);\n        if (allowance < amount) {\n            if (allowance > 0) SafeERC20.safeApprove(IERC20(assetId), spender, 0);\n            SafeERC20.safeApprove(IERC20(assetId), spender, MAX_INT);\n        }\n    }\nfunction safeApprove(\n        IERC20 token,\n        address spender,\n        uint256 value\n    ) internal {\n        require(\n            (value == 0) || (token.allowance(address(this), spender) == 0),\n            \"SafeERC20: approve from non-zero to non-zero allowance\"\n        );\n        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));\n    }",
+                                "reason": "The `LibAsset.approveERC20` function is called with `bridge` as the `spender` argument. Inside `approveERC20`, `SafeERC20.safeApprove` is called, which in turn calls the ERC20 `approve` function. This explicitly authorizes the `bridge` address to spend tokens on behalf of the contract, thus authorizing its use for token transfers. The approval is for `MAX_INT`, granting essentially unlimited allowance, ensuring the `bridge` is authorized for any amount up to that limit."
+                            },
+                            {
+                                "result": true,
+                                "validation": "LibAsset.approveERC20(IERC20(_cBridgeData.token), bridge, _cBridgeData.amount);",
+                                "reason": "The code explicitly calls `LibAsset.approveERC20` with `bridge` as the spender. This is a direct authorization mechanism where the contract grants permission to the `bridge` address to spend a specified amount of the `_cBridgeData.token` on its behalf, thereby authorizing its use."
+                            },
+                            {
+                                "result": false,
+                                "validation": "",
+                                "reason": "The term 'routerAddress' is not explicitly found or defined as a distinct variable within the provided code snippet. While the `bridge` address is authorized via `approveERC20` for token spending, there's no direct check or authorization specific to a variable named 'routerAddress'."
+                            }
+                        ],
+                        "verify_filtered": [
+                            {
+                                "parameter": "bridge",
+                                "constraint": "Check whether the routerAddress is authorized to use.",
+                                "validation": "LibAsset.approveERC20(IERC20(_cBridgeData.token), bridge, _cBridgeData.amount);\nfunction approveERC20(\n        IERC20 assetId,\n        address spender,\n        uint256 amount\n    ) internal {\n        if (isNativeAsset(address(assetId))) return;\n        uint256 allowance = assetId.allowance(address(this), spender);\n        if (allowance < amount) {\n            if (allowance > 0) SafeERC20.safeApprove(IERC20(assetId), spender, 0);\n            SafeERC20.safeApprove(IERC20(assetId), spender, MAX_INT);\n        }\n    }\nfunction safeApprove(\n        IERC20 token,\n        address spender,\n        uint256 value\n    ) internal {\n        require(\n            (value == 0) || (token.allowance(address(this), spender) == 0),\n            \"SafeERC20: approve from non-zero to non-zero allowance\"\n        );\n        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));\n    }",
+                                "score": "95",
+                                "reason": "The validation code `LibAsset.approveERC20(IERC20(_cBridgeData.token), bridge, _cBridgeData.amount);` is directly called within `CBridgeFacet._startBridge` function when dealing with non-native assets. The `LibAsset.approveERC20` function itself handles the logic of approving the `spender` (which is `bridge` in this context) to spend a certain `amount` of `_cBridgeData.token` on behalf of the current contract. It checks the existing allowance and, if insufficient, first sets the allowance to zero (if non-zero) and then to `MAX_INT` to ensure the CBridge contract has sufficient allowance. This sufficiently addresses the authorization check for the `bridge` (routerAddress). The `safeApprove` call within `approveERC20` adds an additional safety check for allowance changes, reinforcing the authorization. The authorization logic is correctly extracted and implemented.",
+                                "results": [
+                                    {
+                                        "result": true,
+                                        "poc": "The `approveERC20` function in `LibAsset` first checks if the `assetId` is a native asset. If it is, the function returns immediately without performing any approval. Since `_cBridgeData.token` is the `assetId` being passed to `approveERC20`, if `_cBridgeData.token` is `address(0)` (which represents the native asset), the `approveERC20` call will be bypassed. This means the `bridge` address will not be approved for any amount, effectively circumventing the `LibAsset.approveERC20` validation for non-native ERC20 tokens.",
+                                        "score": "90",
+                                        "reason": "The analysis correctly identifies that if `_cBridgeData.token` is `address(0)` (NATIVE_ASSETID), the `LibAsset.approveERC20` function will indeed return early due to the `isNativeAsset` check. This means no ERC20 approval will be performed for the `bridge` address. The `poc` accurately describes this bypass. The `swapAndStartBridgeTokensViaCBridge` function handles native assets (address(0)) differently by calling `ICBridge(bridge).sendNative` instead of `ICBridge(bridge).send`, indicating that for native assets, no ERC20 approval is required or expected. Therefore, the bypass of `LibAsset.approveERC20` for native assets is an intended behavior and not a vulnerability. However, the initial framing of the validation and POC might imply a vulnerability where none exists for native assets, if the intent was to ensure approval for *all* assets regardless of type. If the validation is specifically for ERC20 tokens, then `address(0)` is not relevant to that validation. The confidence score is high because the technical analysis of the code behavior is correct and the logic path is clearly identified."
+                                    },
+                                    {
+                                        "result": true,
+                                        "poc": "The `safeApprove` function, called within `LibAsset.approveERC20`, contains a `require` statement: `require((value == 0) || (token.allowance(address(this), spender) == 0), \"SafeERC20: approve from non-zero to non-zero allowance\");`. If `token.allowance(address(this), spender)` is a non-zero value, and you attempt to call `safeApprove` with a non-zero `value` (such as `MAX_INT` as done in `LibAsset.approveERC20`), this `require` will revert unless `value` is 0. However, `LibAsset.approveERC20` handles `allowance > 0` by first setting the allowance to `0` via `SafeERC20.safeApprove(IERC20(assetId), spender, 0);` before setting it to `MAX_INT`. Therefore, the validation `(value == 0) || (token.allowance(address(this), spender) == 0)` will always be met by setting the allowance to 0 first, and then setting to MAX_INT, and the `bridge` parameter itself isn't directly involved in breaking this specific check.",
+                                        "score": "95",
+                                        "reason": "The validation statement correctly identifies the logic for approving `MAX_INT` by first setting the allowance to 0 if it's already non-zero. The `poc` correctly explains that this sequence bypasses the `safeApprove` double-check, meaning the `bridge` parameter's value correctly flows through the approval process without issues related to the `SafeERC20: approve from non-zero to non-zero allowance` revert. The logic seems robust for its stated purpose."
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "step4": {
+            "toChainID": {
+                "_cBridgeData.dstChainId": {
+                    "Check that the destination chain ID is not equal to the source chain ID.": [
+                        {
+                            "parameter": "_cBridgeData.dstChainId",
+                            "constraint": "Check that the destination chain ID is not equal to the source chain ID.",
+                            "validation": "require(s.cBridgeChainId != _cBridgeData.dstChainId, \"Cannot bridge to the same network.\");",
+                            "score": "100",
+                            "reason": "The validation directly compares `s.cBridgeChainId` (source chain ID) with `_cBridgeData.dstChainId` (destination chain ID) and reverts if they are equal, precisely implementing the constraint.",
+                            "results": []
+                        }
+                    ]
+                }
+            },
+            "tokenAddress": {
+                "_cBridgeData.token": {
+                    "Check whether the tokenAddress is authorized to use.": [
+                        {
+                            "parameter": "_cBridgeData.token",
+                            "constraint": "Check whether the tokenAddress is authorized to use.",
+                            "validation": "function _startBridge(CBridgeData memory _cBridgeData) internal {\n        if (LibAsset.isNativeAsset(_cBridgeData.token)) {\n            ICBridge(bridge).sendNative(\n                _cBridgeData.receiver,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );\n        } else {\n            LibAsset.approveERC20(IERC20(_cBridgeData.token), bridge, _cBridgeData.amount);\n            ICBridge(bridge).send(\n                _cBridgeData.receiver,\n                _cBridgeData.token,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );\n        }\n    }\nfunction approveERC20(\n        IERC20 assetId,\n        address spender,\n        uint256 amount\n    ) internal {\n        if (isNativeAsset(address(assetId))) return;\n        uint252 allowance = assetId.allowance(address(this), spender);\n        if (allowance < amount) {\n            if (allowance > 0) SafeERC20.safeApprove(IERC20(assetId), spender, 0);\n            SafeERC20.safeApprove(IERC20(assetId), spender, MAX_INT);\n        }\n    }\nfunction safeApprove(\n        IERC20 token,\n        address spender,\n        uint256 value\n    ) internal {\n        require(\n            (value == 0) || (token.allowance(address(this), spender) == 0),\n            \"SafeERC20: approve from non-zero to non-zero allowance\"\n        );\n        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));\n    }",
+                            "score": "95",
+                            "reason": "The code correctly distinguishes between native assets and ERC20 tokens. For ERC20 tokens, it calls `LibAsset.approveERC20` before sending, which in turn calls `SafeERC20.safeApprove` to set an allowance. This mechanism ensures that the bridge contract has the necessary authorization to transfer the tokens on behalf of the contract. The use of `MAX_INT` for approval is a common pattern to avoid repeated approvals for subsequent transactions, which is generally acceptable for trusted protocols. The `safeApprove` function also includes a check against approving from a non-zero to non-zero allowance, which is a good security practice to prevent front-running attacks. The only minor point is that `MAX_INT` approval is a standard practice and not necessarily a specific 'authorization check' but rather a way to delegate permission for future transfers until revoked. However, it implicitly grants authorization.",
+                            "results": [
+                                {
+                                    "result": true,
+                                    "poc": "The validation `LibAsset.approveERC20(IERC20(_cBridgeData.token), bridge, _cBridgeData.amount);` in `CBridgeFacet._startBridge` function can be bypassed for ERC20 tokens due to the implementation of `LibAsset.approveERC20`. If the current allowance is already greater than zero, `SafeERC20.safeApprove` is called twice: first to set allowance to 0, then to `MAX_INT`. The issue arises in `SafeERC20.safeApprove` which includes the check `(value == 0) || (token.allowance(address(this), spender) == 0)`. If a token does not comply with the standard ERC20 `approve` logic by returning a non-zero allowance after the first `safeApprove(..., 0)` call, or if the `approve` call to set to `MAX_INT` fails silently, the `SafeERC20: approve from non-zero to non-zero allowance` revert can be triggered, or the `approve` call might simply fail without reverting if `_callOptionalReturn` doesn't enforce a revert. This would prevent the `ICBridge(bridge).send` function from being called, but the problem is that `safeApprove` in this case would revert, which does not bypass but rather stops the execution. However, if the token's `approve` function can be manipulated to return `true` while not actually setting the allowance to `MAX_INT` (e.g., if it's a re-entrant token or has a custom logic allowing `MAX_INT` approval to fail silently or without reverting), then the approval could be bypassed while the transaction continues.",
+                                    "score": "20",
+                                    "reason": "The POC accurately identifies a potential bypass if an ERC20 token implementation deviates from the standard, particularly by returning true for `approve` calls while not actually setting the allowance, or by allowing `approve(..., 0)` to fail silently or not clear the allowance. The `SafeERC20: approve from non-zero to non-zero allowance` revert ensures that compliant tokens would revert and not bypass. However, the `_callOptionalReturn` mechanism in `SafeERC20` could potentially allow a non-compliant token to return true even if the approval failed internally. Though `_callOptionalReturn` explicitly checks `require(abi.decode(returndata, (bool)), \"SafeERC20: ERC20 operation did not succeed\");`, if the token's approve function returns `true` even on internal failure, then the `ICBridge(bridge).send` could still be called, leading to a bridge failure due to insufficient allowance. This relies on a highly non-standard and malicious token behavior, hence the low confidence score, but it's a theoretical risk due to the reliance on `_callOptionalReturn` to propagate the success of the token's `approve` call."
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "amount": {
+                "_lifiData.amount": {}
+            },
+            "nonce": {
+                "_cBridgeData.nonce": {}
+            },
+            "recipientAddress": {
+                "_cBridgeData.receiver": {}
+            },
+            "routerAddress": {
+                "bridge": {
+                    "Check whether the routerAddress is authorized to use.": [
+                        {
+                            "parameter": "bridge",
+                            "constraint": "Check whether the routerAddress is authorized to use.",
+                            "validation": "LibAsset.approveERC20(IERC20(_cBridgeData.token), bridge, _cBridgeData.amount);\nfunction approveERC20(\n        IERC20 assetId,\n        address spender,\n        uint256 amount\n    ) internal {\n        if (isNativeAsset(address(assetId))) return;\n        uint256 allowance = assetId.allowance(address(this), spender);\n        if (allowance < amount) {\n            if (allowance > 0) SafeERC20.safeApprove(IERC20(assetId), spender, 0);\n            SafeERC20.safeApprove(IERC20(assetId), spender, MAX_INT);\n        }\n    }\nfunction safeApprove(\n        IERC20 token,\n        address spender,\n        uint256 value\n    ) internal {\n        require(\n            (value == 0) || (token.allowance(address(this), spender) == 0),\n            \"SafeERC20: approve from non-zero to non-zero allowance\"\n        );\n        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));\n    }",
+                            "score": "95",
+                            "reason": "The validation code `LibAsset.approveERC20(IERC20(_cBridgeData.token), bridge, _cBridgeData.amount);` is directly called within `CBridgeFacet._startBridge` function when dealing with non-native assets. The `LibAsset.approveERC20` function itself handles the logic of approving the `spender` (which is `bridge` in this context) to spend a certain `amount` of `_cBridgeData.token` on behalf of the current contract. It checks the existing allowance and, if insufficient, first sets the allowance to zero (if non-zero) and then to `MAX_INT` to ensure the CBridge contract has sufficient allowance. This sufficiently addresses the authorization check for the `bridge` (routerAddress). The `safeApprove` call within `approveERC20` adds an additional safety check for allowance changes, reinforcing the authorization. The authorization logic is correctly extracted and implemented.",
+                            "results": [
+                                {
+                                    "result": true,
+                                    "poc": "The `approveERC20` function in `LibAsset` first checks if the `assetId` is a native asset. If it is, the function returns immediately without performing any approval. Since `_cBridgeData.token` is the `assetId` being passed to `approveERC20`, if `_cBridgeData.token` is `address(0)` (which represents the native asset), the `approveERC20` call will be bypassed. This means the `bridge` address will not be approved for any amount, effectively circumventing the `LibAsset.approveERC20` validation for non-native ERC20 tokens.",
+                                    "score": "90",
+                                    "reason": "The analysis correctly identifies that if `_cBridgeData.token` is `address(0)` (NATIVE_ASSETID), the `LibAsset.approveERC20` function will indeed return early due to the `isNativeAsset` check. This means no ERC20 approval will be performed for the `bridge` address. The `poc` accurately describes this bypass. The `swapAndStartBridgeTokensViaCBridge` function handles native assets (address(0)) differently by calling `ICBridge(bridge).sendNative` instead of `ICBridge(bridge).send`, indicating that for native assets, no ERC20 approval is required or expected. Therefore, the bypass of `LibAsset.approveERC20` for native assets is an intended behavior and not a vulnerability. However, the initial framing of the validation and POC might imply a vulnerability where none exists for native assets, if the intent was to ensure approval for *all* assets regardless of type. If the validation is specifically for ERC20 tokens, then `address(0)` is not relevant to that validation. The confidence score is high because the technical analysis of the code behavior is correct and the logic path is clearly identified."
+                                },
+                                {
+                                    "result": true,
+                                    "poc": "The `safeApprove` function, called within `LibAsset.approveERC20`, contains a `require` statement: `require((value == 0) || (token.allowance(address(this), spender) == 0), \"SafeERC20: approve from non-zero to non-zero allowance\");`. If `token.allowance(address(this), spender)` is a non-zero value, and you attempt to call `safeApprove` with a non-zero `value` (such as `MAX_INT` as done in `LibAsset.approveERC20`), this `require` will revert unless `value` is 0. However, `LibAsset.approveERC20` handles `allowance > 0` by first setting the allowance to `0` via `SafeERC20.safeApprove(IERC20(assetId), spender, 0);` before setting it to `MAX_INT`. Therefore, the validation `(value == 0) || (token.allowance(address(this), spender) == 0)` will always be met by setting the allowance to 0 first, and then setting to MAX_INT, and the `bridge` parameter itself isn't directly involved in breaking this specific check.",
+                                    "score": "95",
+                                    "reason": "The validation statement correctly identifies the logic for approving `MAX_INT` by first setting the allowance to 0 if it's already non-zero. The `poc` correctly explains that this sequence bypasses the `safeApprove` double-check, meaning the `bridge` parameter's value correctly flows through the approval process without issues related to the `SafeERC20: approve from non-zero to non-zero allowance` revert. The logic seems robust for its stated purpose."
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        "final_result": {
+            "toChainID": {
+                "_cBridgeData.dstChainId": {
+                    "Check whether toChainID is authorized.": [
+                        {
+                            "parameter": "_cBridgeData.dstChainId",
+                            "constraint": "Check whether toChainID is authorized.",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Check that the destination chain ID is not equal to the source chain ID.": []
+                }
+            },
+            "tokenAddress": {
+                "_cBridgeData.token": {
+                    "Check whether the tokenAddress is authorized to use.": [
+                        {
+                            "validation": "function _startBridge(CBridgeData memory _cBridgeData) internal {\n        if (LibAsset.isNativeAsset(_cBridgeData.token)) {\n            ICBridge(bridge).sendNative(\n                _cBridgeData.receiver,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );\n        } else {\n            LibAsset.approveERC20(IERC20(_cBridgeData.token), bridge, _cBridgeData.amount);\n            ICBridge(bridge).send(\n                _cBridgeData.receiver,\n                _cBridgeData.token,\n                _cBridgeData.amount,\n                _cBridgeData.dstChainId,\n                _cBridgeData.nonce,\n                _cBridgeData.maxSlippage\n            );\n        }\n    }\nfunction approveERC20(\n        IERC20 assetId,\n        address spender,\n        uint256 amount\n    ) internal {\n        if (isNativeAsset(address(assetId))) return;\n        uint252 allowance = assetId.allowance(address(this), spender);\n        if (allowance < amount) {\n            if (allowance > 0) SafeERC20.safeApprove(IERC20(assetId), spender, 0);\n            SafeERC20.safeApprove(IERC20(assetId), spender, MAX_INT);\n        }\n    }\nfunction safeApprove(\n        IERC20 token,\n        address spender,\n        uint256 value\n    ) internal {\n        require(\n            (value == 0) || (token.allowance(address(this), spender) == 0),\n            \"SafeERC20: approve from non-zero to non-zero allowance\"\n        );\n        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));\n    }",
+                            "poc": "The validation `LibAsset.approveERC20(IERC20(_cBridgeData.token), bridge, _cBridgeData.amount);` in `CBridgeFacet._startBridge` function can be bypassed for ERC20 tokens due to the implementation of `LibAsset.approveERC20`. If the current allowance is already greater than zero, `SafeERC20.safeApprove` is called twice: first to set allowance to 0, then to `MAX_INT`. The issue arises in `SafeERC20.safeApprove` which includes the check `(value == 0) || (token.allowance(address(this), spender) == 0)`. If a token does not comply with the standard ERC20 `approve` logic by returning a non-zero allowance after the first `safeApprove(..., 0)` call, or if the `approve` call to set to `MAX_INT` fails silently, the `SafeERC20: approve from non-zero to non-zero allowance` revert can be triggered, or the `approve` call might simply fail without reverting if `_callOptionalReturn` doesn't enforce a revert. This would prevent the `ICBridge(bridge).send` function from being called, but the problem is that `safeApprove` in this case would revert, which does not bypass but rather stops the execution. However, if the token's `approve` function can be manipulated to return `true` while not actually setting the allowance to `MAX_INT` (e.g., if it's a re-entrant token or has a custom logic allowing `MAX_INT` approval to fail silently or without reverting), then the approval could be bypassed while the transaction continues.",
+                            "score": "20",
+                            "reason": "The POC accurately identifies a potential bypass if an ERC20 token implementation deviates from the standard, particularly by returning true for `approve` calls while not actually setting the allowance, or by allowing `approve(..., 0)` to fail silently or not clear the allowance. The `SafeERC20: approve from non-zero to non-zero allowance` revert ensures that compliant tokens would revert and not bypass. However, the `_callOptionalReturn` mechanism in `SafeERC20` could potentially allow a non-compliant token to return true even if the approval failed internally. Though `_callOptionalReturn` explicitly checks `require(abi.decode(returndata, (bool)), \"SafeERC20: ERC20 operation did not succeed\");`, if the token's approve function returns `true` even on internal failure, then the `ICBridge(bridge).send` could still be called, leading to a bridge failure due to insufficient allowance. This relies on a highly non-standard and malicious token behavior, hence the low confidence score, but it's a theoretical risk due to the reliance on `_callOptionalReturn` to propagate the success of the token's `approve` call."
+                        }
+                    ]
+                }
+            },
+            "amount": {
+                "_lifiData.amount": {
+                    "Validate that amount is greater than 0": [
+                        {
+                            "parameter": "_lifiData.amount",
+                            "constraint": "Validate that amount is greater than 0",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Validate that msg.sender's balance change before and after equals amount": [
+                        {
+                            "parameter": "_lifiData.amount",
+                            "constraint": "Validate that msg.sender's balance change before and after equals amount",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Validate that the bridge's balance change before and after equals amount": [
+                        {
+                            "parameter": "_lifiData.amount",
+                            "constraint": "Validate that the bridge's balance change before and after equals amount",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ],
+                    "Validate that msg.sender's balance ≥ amount": [
+                        {
+                            "parameter": "_lifiData.amount",
+                            "constraint": "Validate that msg.sender's balance ≥ amount",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            },
+            "nonce": {
+                "_cBridgeData.nonce": {
+                    "Check if the transaction's nonce is equal to the account's current nonce.": [
+                        {
+                            "parameter": "_cBridgeData.nonce",
+                            "constraint": "Check if the transaction's nonce is equal to the account's current nonce.",
+                            "validation": "",
+                            "reason": "在step3中未找到约束相关代码，不执行后续步骤"
+                        }
+                    ]
+                }
+            },
+            "recipientAddress": {
+                "_cBridgeData.receiver": {
+                    "Validate that recipientAddress is not the zero address": []
+                }
+            },
+            "routerAddress": {
+                "bridge": {
+                    "Check whether the routerAddress is authorized to use.": [
+                        {
+                            "validation": "LibAsset.approveERC20(IERC20(_cBridgeData.token), bridge, _cBridgeData.amount);\nfunction approveERC20(\n        IERC20 assetId,\n        address spender,\n        uint256 amount\n    ) internal {\n        if (isNativeAsset(address(assetId))) return;\n        uint256 allowance = assetId.allowance(address(this), spender);\n        if (allowance < amount) {\n            if (allowance > 0) SafeERC20.safeApprove(IERC20(assetId), spender, 0);\n            SafeERC20.safeApprove(IERC20(assetId), spender, MAX_INT);\n        }\n    }\nfunction safeApprove(\n        IERC20 token,\n        address spender,\n        uint256 value\n    ) internal {\n        require(\n            (value == 0) || (token.allowance(address(this), spender) == 0),\n            \"SafeERC20: approve from non-zero to non-zero allowance\"\n        );\n        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));\n    }",
+                            "poc": "The `approveERC20` function in `LibAsset` first checks if the `assetId` is a native asset. If it is, the function returns immediately without performing any approval. Since `_cBridgeData.token` is the `assetId` being passed to `approveERC20`, if `_cBridgeData.token` is `address(0)` (which represents the native asset), the `approveERC20` call will be bypassed. This means the `bridge` address will not be approved for any amount, effectively circumventing the `LibAsset.approveERC20` validation for non-native ERC20 tokens.",
+                            "score": "90",
+                            "reason": "The analysis correctly identifies that if `_cBridgeData.token` is `address(0)` (NATIVE_ASSETID), the `LibAsset.approveERC20` function will indeed return early due to the `isNativeAsset` check. This means no ERC20 approval will be performed for the `bridge` address. The `poc` accurately describes this bypass. The `swapAndStartBridgeTokensViaCBridge` function handles native assets (address(0)) differently by calling `ICBridge(bridge).sendNative` instead of `ICBridge(bridge).send`, indicating that for native assets, no ERC20 approval is required or expected. Therefore, the bypass of `LibAsset.approveERC20` for native assets is an intended behavior and not a vulnerability. However, the initial framing of the validation and POC might imply a vulnerability where none exists for native assets, if the intent was to ensure approval for *all* assets regardless of type. If the validation is specifically for ERC20 tokens, then `address(0)` is not relevant to that validation. The confidence score is high because the technical analysis of the code behavior is correct and the logic path is clearly identified."
+                        },
+                        {
+                            "validation": "LibAsset.approveERC20(IERC20(_cBridgeData.token), bridge, _cBridgeData.amount);\nfunction approveERC20(\n        IERC20 assetId,\n        address spender,\n        uint256 amount\n    ) internal {\n        if (isNativeAsset(address(assetId))) return;\n        uint256 allowance = assetId.allowance(address(this), spender);\n        if (allowance < amount) {\n            if (allowance > 0) SafeERC20.safeApprove(IERC20(assetId), spender, 0);\n            SafeERC20.safeApprove(IERC20(assetId), spender, MAX_INT);\n        }\n    }\nfunction safeApprove(\n        IERC20 token,\n        address spender,\n        uint256 value\n    ) internal {\n        require(\n            (value == 0) || (token.allowance(address(this), spender) == 0),\n            \"SafeERC20: approve from non-zero to non-zero allowance\"\n        );\n        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));\n    }",
+                            "poc": "The `safeApprove` function, called within `LibAsset.approveERC20`, contains a `require` statement: `require((value == 0) || (token.allowance(address(this), spender) == 0), \"SafeERC20: approve from non-zero to non-zero allowance\");`. If `token.allowance(address(this), spender)` is a non-zero value, and you attempt to call `safeApprove` with a non-zero `value` (such as `MAX_INT` as done in `LibAsset.approveERC20`), this `require` will revert unless `value` is 0. However, `LibAsset.approveERC20` handles `allowance > 0` by first setting the allowance to `0` via `SafeERC20.safeApprove(IERC20(assetId), spender, 0);` before setting it to `MAX_INT`. Therefore, the validation `(value == 0) || (token.allowance(address(this), spender) == 0)` will always be met by setting the allowance to 0 first, and then setting to MAX_INT, and the `bridge` parameter itself isn't directly involved in breaking this specific check.",
+                            "score": "95",
+                            "reason": "The validation statement correctly identifies the logic for approving `MAX_INT` by first setting the allowance to 0 if it's already non-zero. The `poc` correctly explains that this sequence bypasses the `safeApprove` double-check, meaning the `bridge` parameter's value correctly flows through the approval process without issues related to the `SafeERC20: approve from non-zero to non-zero allowance` revert. The logic seems robust for its stated purpose."
+                        }
+                    ]
+                }
+            }
+        },
+        "context": {
+            "event": "AssetSwapped",
+            "call_graph": "swapAndStartBridgeTokensViaCBridge->swap",
+            "state_variables": {
+                "MAX_INT": "uint256 private constant MAX_INT = 2**256 - 1;",
+                "NATIVE_ASSETID": "address internal constant NATIVE_ASSETID = address(0);",
+                "_allowances": "mapping(address => mapping(address => uint256)) private _allowances;",
+                "NAMESPACE": "bytes32 internal constant NAMESPACE = keccak256(\"com.lifi.facets.biconomy\");"
+            },
+            "external_functions": [
+                "function allowance(address owner, address spender) public view virtual override returns (uint256){ return _allowances[owner][spender];}",
+                "function functionCall( address target, bytes memory data, string memory errorMessage ) internal returns (bytes memory){ return functionCallWithValue(target, data, 0, errorMessage);}",
+                "function functionCallWithValue( address target, bytes memory data, uint256 value, string memory errorMessage ) internal returns (bytes memory){ require(address(this).balance >= value, \"Address: insufficient balance for call\"); require(isContract(target), \"Address: call to non- contract \"); (bool success, bytes memory returndata) = target.call{ value: value} (data); return verifyCallResult(success, returndata, errorMessage);}"
+            ]
+        },
+        "step1-time": 7.5306782722473145,
+        "step2-time": 122.7486343383789,
+        "step2-call_api_times": 42,
+        "step3-time": 52.906991720199585,
+        "step3-call_api_times": 14,
+        "step4-time": 22.455907583236694,
+        "step4-call_api_times": 6,
+        "compare_audit": {
+            "result": [
+                {
+                    "vuln": "LibSwap.swap: (bool success, bytes memory res) = _swapData.callTo.call{ value: msg.value }(_swapData.callData);",
+                    "reason": "The `LibSwap.swap` function performs a low-level `call` with `msg.value` directly. If the `_swapData.callTo` address is a malicious contract, it could re-enter this function or other functions within the protocol that handle funds, potentially leading to a reentrancy attack. In a cross-chain context, this vulnerability could be exploited by an attacker who controls the `callTo` address to drain funds not only from the current chain's transaction but also to compromise subsequent cross-chain operations or lock funds indefinitely across different chains."
+                },
+                {
+                    "vuln": "LibAsset.approveERC20: if (allowance > 0) SafeERC20.safeApprove(IERC20(assetId), spender, 0); SafeERC20.safeApprove(IERC20(assetId), spender, MAX_INT);",
+                    "reason": "The `LibAsset.approveERC20` function revokes an existing allowance by setting it to zero before setting a new `MAX_INT` allowance. While this is a common pattern to prevent front-running attacks on token approvals (ERC20 Approve Race Condition), not all ERC20 tokens correctly handle setting allowance to zero from a non-zero value or setting it to a new value immediately after a zero-set. This could lead to a 'stuck' allowance where the `spender` cannot use the token, or it could potentially allow the attacker to spend more than intended if the `approve` call is manipulated. In cross-chain scenarios, discrepancies in ERC20 implementations across different chains could amplify this risk, leading to failed transactions or unexpected token transfers during bridging operations."
+                },
+                {
+                    "vuln": "LibAsset.transferFromERC20: SafeERC20.safeTransferFrom(IERC20(assetId), from, to, amount);",
+                    "reason": "The `LibAsset.transferFromERC20` function uses `safeTransferFrom` but does not explicitly check if `from` is `msg.sender` for user-initiated transfers. While `safeTransferFrom` itself has checks, if the `from` address is not the `msg.sender` or a trusted source, it could lead to unexpected token movements. For cross-chain operations, this could be a vector for an attacker to manipulate the `from` address in a spoofed request, potentially allowing them to transfer tokens from an unauthorized source, leading to loss of funds or incorrect accounting across chains, especially if the `msg.sender` validation is not strictly enforced at the entry point of the cross-chain transaction."
+                }
+            ]
+        },
+        "compare_attribute_verification": {
+            "result": [
+                {
+                    "toChainID": "_cBridgeData.dstChainId",
+                    "findings": [
+                        {
+                            "constraint": "Check whether toChainID is authorized.",
+                            "validation": "Not found.",
+                            "poc": null,
+                            "reason": "The code does not contain any explicit checks to verify if `_cBridgeData.dstChainId` is an authorized or whitelisted chain ID. It directly uses the provided value."
+                        },
+                        {
+                            "constraint": "Check that the destination chain ID is not equal to the source chain ID.",
+                            "validation": "require(s.cBridgeChainId != _cBridgeData.dstChainId, \"Cannot bridge to the same network.\");",
+                            "poc": null,
+                            "reason": "The code explicitly checks that the destination chain ID (`_cBridgeData.dstChainId`) is not equal to the contract's own chain ID (`s.cBridgeChainId`). This prevents bridging to the same network."
+                        }
+                    ]
+                },
+                {
+                    "tokenAddress": "_cBridgeData.token",
+                    "findings": [
+                        {
+                            "constraint": "Check whether the tokenAddress is authorized to use.",
+                            "validation": "Not found.",
+                            "poc": null,
+                            "reason": "The code does not contain any explicit checks to verify if `_cBridgeData.token` is an authorized or whitelisted token address. It proceeds with the provided token address without validation of its legitimacy or approval status for the bridge."
+                        }
+                    ]
+                },
+                {
+                    "amount": "_cBridgeData.amount",
+                    "findings": [
+                        {
+                            "constraint": "Validate that amount is greater than 0",
+                            "validation": "require(_postSwapBalance > 0, \"ERR_INVALID_AMOUNT\");",
+                            "poc": null,
+                            "reason": "The code validates that `_postSwapBalance` (which becomes `_cBridgeData.amount`) is greater than 0 after the swap. This ensures a positive amount is always bridged."
+                        },
+                        {
+                            "constraint": "Validate that msg.sender's balance change before and after equals amount",
+                            "validation": "Not found.",
+                            "poc": null,
+                            "reason": "The code calculates the amount based on the contract's (`address(this)`) balance change, not `msg.sender`'s balance change. Therefore, it does not validate that `msg.sender`'s balance change equals the `amount`."
+                        },
+                        {
+                            "constraint": "Validate that the bridge's balance change before and after equals amount",
+                            "validation": "uint256 _postSwapBalance = LibAsset.getOwnBalance(_cBridgeData.token) - _fromTokenBalance; or uint256 _postSwapBalance = address(this).balance - _fromBalance; _cBridgeData.amount = _postSwapBalance;",
+                            "poc": null,
+                            "reason": "The `_cBridgeData.amount` is explicitly set to `_postSwapBalance`, which is calculated as the change in the contract's (bridge's) token or native asset balance after the swap operations. This implicitly validates that the bridge's balance change equals the `amount` that will be bridged, assuming the `LibSwap.swap` logic correctly transfers funds to the contract."
+                        },
+                        {
+                            "constraint": "Validate that msg.sender's balance ≥ amount",
+                            "validation": "if (!LibAsset.isNativeAsset(fromAssetId) && LibAsset.getOwnBalance(fromAssetId) < fromAmount) { LibAsset.transferFromERC20(_swapData.sendingAssetId, msg.sender, address(this), fromAmount); }",
+                            "poc": null,
+                            "reason": "The `LibSwap.swap` function attempts to transfer `fromAmount` from `msg.sender` to the contract if the contract's balance is less than `fromAmount`. While this ensures the contract attempts to pull the required amount, it doesn't explicitly check `msg.sender`'s balance. The `transferFromERC20` call would revert if `msg.sender` doesn't have sufficient allowance or balance, indirectly enforcing the constraint for ERC20s. For native assets, `msg.value` is relied upon in the `call` to the swap target, but there's no direct check against `msg.sender`'s balance by the contract itself before the swap."
+                        }
+                    ]
+                },
+                {
+                    "nonce": "_cBridgeData.nonce",
+                    "findings": [
+                        {
+                            "constraint": "Check if the transaction's nonce is equal to the account's current nonce.",
+                            "validation": "Not found.",
+                            "poc": null,
+                            "reason": "The provided code passes `_cBridgeData.nonce` directly to the `ICBridge.send` or `ICBridge.sendNative` function without any validation or check against its own internal state or the sender's account nonce. This nonce is likely meant for the CBridge protocol, not for an on-chain replay protection within this specific contract's context."
+                        }
+                    ]
+                },
+                {
+                    "recipientAddress": "_cBridgeData.receiver",
+                    "findings": [
+                        {
+                            "constraint": "Validate that recipientAddress is not the zero address",
+                            "validation": "Not found.",
+                            "poc": null,
+                            "reason": "The code does not explicitly perform a check to ensure `_cBridgeData.receiver` is not the zero address (address(0)). If `_cBridgeData.receiver` is address(0), tokens might be sent to an unrecoverable address on the destination chain."
+                        }
+                    ]
+                },
+                {
+                    "externalCallAddress": "Not applicable to this specific contract's main flow.",
+                    "findings": [
+                        {
+                            "constraint": "Check whether the externalCallAddress is authorized to use.",
+                            "validation": "Not found.",
+                            "poc": null,
+                            "reason": "The primary `swapAndStartBridgeTokensViaCBridge` function does not directly take an `externalCallAddress` for post-transfer execution. The `_swapData.callTo` within `LibSwap.swap` is used for the swap itself, not an arbitrary post-bridge external call address. There are no authorization checks for this `callTo`."
+                        }
+                    ]
+                },
+                {
+                    "externalCallFunction": "Not applicable to this specific contract's main flow.",
+                    "findings": [
+                        {
+                            "constraint": "Validate that externalCallFunction is in the allowed function signature list",
+                            "validation": "Not found.",
+                            "poc": null,
+                            "reason": "Similar to `externalCallAddress`, the contract does not implement a post-bridge arbitrary external call. The `_swapData.callData` within `LibSwap.swap` is used for the swap and is not validated against an allowed function signature list, though `Address.functionCall` has basic checks for contract code existence."
+                        }
+                    ]
+                },
+                {
+                    "routerAddress": "_bridge()",
+                    "findings": [
+                        {
+                            "constraint": "Check whether the routerAddress is authorized to use.",
+                            "validation": "Storage storage s = getStorage(); address bridge = _bridge(); return s.cBridge;",
+                            "poc": null,
+                            "reason": "The `routerAddress` (obtained via `_bridge()`) is a statically stored configuration variable (`s.cBridge`) within the contract's storage. It is assumed that this address is pre-configured and authorized during the contract's deployment or through an upgrade mechanism. There isn't dynamic authorization or whitelisting at runtime for this address within the provided code, implying it's a trusted, hardcoded or administratively set component."
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "time": 246.41374564170837,
+    "this_cost": 0,
+    "this_prompt_tokens": 219982,
+    "this_completion_tokens": 27984
+}

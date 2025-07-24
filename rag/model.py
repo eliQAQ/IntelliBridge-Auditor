@@ -105,6 +105,7 @@ tuple[list[str | None | Any], int, int, Any]:
         # res = client.chat.completions.create(model=model, messages=messages, temperature=temperature, max_tokens=max_tokens,
         #                            n=1, stop=stop, response_format={"type": "json_object"})
         res = client.chat.completions.create(model=model, messages=messages, max_tokens=max_tokens, n=1, stop=stop, response_format={"type": "json_object"})
+        #print(res)
         outputs.extend([choice.message.content for choice in res.choices])
         if model == "moonshotai/kimi-k2" or model == "deepseek/deepseek-r1-0528":
             for i in range(len(outputs)):

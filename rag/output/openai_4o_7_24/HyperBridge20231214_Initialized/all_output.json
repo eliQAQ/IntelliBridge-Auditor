@@ -1,0 +1,32 @@
+{
+    "L1StandardBridge.initialize": {
+        "step1": {
+            "prompt1": "\nYou are an experienced cross-chain protocol analysis expert. Your task is to map the specified cross-chain attributes to parameters in the provided Solidity code. If an attribute cannot be found in the code, do not list it in the output. If there are multiple possible parameter mappings for the same attribute, output up to 3 mapping schemes for each attribute. Please strictly follow the input and output formats defined below:\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"attribute\": \n{ \n\"<attribute>\": \"<attribute description>\" ,\n\"<attribute>\": \"<attribute description>\",\n...\n}\n\"code\": \"...\" // Solidity contract code string\n}\nOutput format:\nReturn a JSON array, each item structured as follows, only produce output in the required format, without any additional content:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // The input cross-chain attribute\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}, ... \n]\nIn the reason, please point out both the core basis for the mapping and potential uncertainties (e.g., parameter name similarity, ambiguous contextual meaning, etc.).\n\nInput:\n{\n\"attribute\": {\"toChainID\": \"Specifies the destination blockchain network ID.\", \"tokenAddress\": \"Indicates the contract address of the token to be transferred.\", \"amount\": \"The number of tokens to be transferred across chains.\", \"nonce\": \"Check and mark that nonce has not been consumed to prevent replay\", \"recipientAddress\": \"The address that will receive the tokens on the destination chain.\", \"externalCallAddress\": \"The address of a contract to be called after the cross-chain transfer.\", \"externalCallFunction\": \"The specific function or calldata to be executed on the `externalCallAddress`.\", \"routerAddress\": \"The address of the cross-chain router or bridge handler.\"},\n\"code\": [\"L1StandardBridge.initialize:function initialize(CrossDomainMessenger _messenger) public clearLegacySlot {\\n        require(!_initializing && _initialized < version, \\\"Initializable: contract is already initialized\\\");\\n        _initialized = version;\\n        _initializing = true;\\n        __StandardBridge_init({ _messenger: _messenger });\\n        _initializing = false;\\n        emit Initialized(version);\\n    }\"]\n}\n",
+            "outputs1": [
+                "_messenger"
+            ],
+            "v_prompt1": "\nYou are a rigorous cross-chain protocol auditor and data consistency verifier. Carefully review whether the meaning of each cross-chain attribute and parameter in the code is consistent, assign a confidence score (0-100%), and state the reason for the given confidence score.\n\nInput format: You will receive a JSON object as input, structured as follows:\n{\n\"correspondence\":    // Array of attribute-parameter correspondences in the code\n[\n{\n\"attribute\": \"...\", // Input cross-chain attribute\n\"parameter\": \"...\", // Corresponding parameter\n\"reason\": \"...\" // Brief explanation: why this parameter was chosen, and possible ambiguities\n}\n...\n],\n\"code\":\"...\" // Cross-chain contract code\n}\n\nOutput format: Return a JSON array, each item structured as follows, only produce output in the required format, without any additional content:\n[ \n{\n\"parameter\": \"...\", // The parameter name in the code most likely corresponding to the attribute\n\"attribute\": \"...\", // Input cross-chain attribute\n\"score\":\"...\", // Assigned confidence score\n\"reason\": \"...\" // Brief explanation for the given confidence score\n}, ... \n]\nInput:\n{\n\"correspondence\": [\"_\", \"m\", \"e\", \"s\", \"s\", \"e\", \"n\", \"g\", \"e\", \"r\"],\n\"code\": [\"L1StandardBridge.initialize:function initialize(CrossDomainMessenger _messenger) public clearLegacySlot {\\n        require(!_initializing && _initialized < version, \\\"Initializable: contract is already initialized\\\");\\n        _initialized = version;\\n        _initializing = true;\\n        __StandardBridge_init({ _messenger: _messenger });\\n        _initializing = false;\\n        emit Initialized(version);\\n    }\"]:\n}\n\n",
+            "v_outputs1": [
+                "_messenger"
+            ],
+            "formatted_outputs1": {}
+        },
+        "step2": {},
+        "step3": {},
+        "step4": {},
+        "final_result": {},
+        "context": {
+            "event": "Initialized",
+            "call_graph": "initialize",
+            "state_variables": {
+                "version": "string public constant version = \"1.3.1\";"
+            },
+            "external_functions": []
+        },
+        "step1-time": 1.5353116989135742,
+        "step2-time": 2.86102294921875e-06,
+        "step2-call_api_times": 0,
+        "step3-time": 3.337860107421875e-06,
+        "step3-call_api_times": 0
+    }
+}

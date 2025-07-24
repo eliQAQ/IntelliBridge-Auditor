@@ -2056,7 +2056,7 @@ attributes_t = {
     "toChainID": "Indicates the target blockchain network where the transaction is intended to be completed.",
     "amount": "The quantity of tokens or assets to be transferred across chains.",
     "nonce": "A unique number associated with the transaction to ensure its uniqueness and order.",
-    "proof": "A cryptographic artifact used to confirm the authenticity of the transaction data from the source chain.",
+    "proof/signature": "A cryptographic artifact used to confirm the authenticity of the transaction data from the source chain.",
     "externalCallAddress": "The address of a contract to be called after the cross-chain transfer.",
     "externalCallFunction": "The specific function or calldata to be executed on the `externalCallAddress`."
 }
@@ -2068,7 +2068,7 @@ constraints_t = {
       "Validate that the bridge's balance change before and after equals amount"
     ],
     "nonce": ["Check and mark that nonce has not been consumed to prevent replay"],
-    "proof": ["Cryptographic proof that the transaction truly occurred and was finalized on the source chain (e.g., multi-signature, MPC signature, zero-knowledge proof, or Merkle proof)"],
+    "proof/signature": ["Cryptographic proof that the transaction truly occurred and was finalized on the source chain (e.g., multi-signature, MPC signature, zero-knowledge proof, or Merkle proof)"],
     "externalCallAddress": ["Check whether the externalCallAddress is authorized to use."],
     "externalCallFunction": ["Validate that externalCallFunction is in the allowed function signature list"]
   }
@@ -2104,7 +2104,7 @@ if __name__ == "__main__":
             event_name = com[1]
             position = com[2]
             print(f"start process {com}")
-            directory_name = "output/deepseek_7_24/" + file_directory + "_" + event_name
+            directory_name = "output/openai_4o_7_24/" + file_directory + "_" + event_name
             handle_s_t = time.time()
             print("handle call chain")
             if not os.path.exists(directory_name):
@@ -2117,7 +2117,7 @@ if __name__ == "__main__":
             extractor.parse_dataset(file_directory)
             result = {}
             all_output = {}
-            model = "deepseek/deepseek-chat-v3-0324"
+            model = "google/gemini-2.5-flash"
             #model = "deepseek-ai/DeepSeek-V3"
             platform = "openai"
             #platform = "gjld"
@@ -2176,6 +2176,7 @@ if __name__ == "__main__":
                             constraints = constraints_t
                         print(f"step1")
                         outputs1, native_completion_tokens, native_prompt_tokens, messages = gpt(prompt1, model=model, platform=platform)
+                        #print(outputs1)
                         outputs1 = [json.loads(o) for o in outputs1]
 
                         all_output[relation_ship]["step1"] = {

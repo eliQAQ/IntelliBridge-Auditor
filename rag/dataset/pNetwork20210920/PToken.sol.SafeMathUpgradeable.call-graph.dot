@@ -1,0 +1,25 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_1682_SafeMathUpgradeable {
+label = "SafeMathUpgradeable"
+"1682_tryDiv" [label="tryDiv"]
+"1682_mul" [label="mul"]
+"1682_add" [label="add"]
+"1682_div" [label="div"]
+"1682_tryAdd" [label="tryAdd"]
+"1682_mod" [label="mod"]
+"1682_tryMod" [label="tryMod"]
+"1682_trySub" [label="trySub"]
+"1682_sub" [label="sub"]
+"1682_tryMul" [label="tryMul"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"1682_mod" -> "require(bool,string)"
+"1682_sub" -> "require(bool,string)"
+"1682_add" -> "require(bool,string)"
+"1682_div" -> "require(bool,string)"
+"1682_mul" -> "require(bool,string)"
+}
+}
