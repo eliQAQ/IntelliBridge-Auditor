@@ -1,0 +1,28 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_202_SafeToken {
+label = "SafeToken"
+"202_safeApprove" [label="safeApprove"]
+"202_safeTransferETH" [label="safeTransferETH"]
+"202_balanceOf" [label="balanceOf"]
+"202_safeTransfer" [label="safeTransfer"]
+"202_myBalance" [label="myBalance"]
+"202_safeTransferFrom" [label="safeTransferFrom"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"abi.decode()" 
+"abi.encodeWithSelector()" 
+"require(bool,string)" 
+"202_safeApprove" -> "abi.decode()"
+"202_safeTransfer" -> "abi.decode()"
+"202_safeTransferFrom" -> "require(bool,string)"
+"202_safeTransferETH" -> "require(bool,string)"
+"202_safeApprove" -> "abi.encodeWithSelector()"
+"202_safeTransferFrom" -> "abi.encodeWithSelector()"
+"202_safeTransfer" -> "abi.encodeWithSelector()"
+"202_safeApprove" -> "require(bool,string)"
+"202_safeTransfer" -> "require(bool,string)"
+"202_safeTransferFrom" -> "abi.decode()"
+}
+}

@@ -1,0 +1,95 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterQBridgeHandler" {
+  graph [ label = "QBridgeHandler", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "QBridgeHandler.<Receive Ether>" [ label = "<Receive Ether>", color = "blue" ];
+  "QBridgeHandler.initialize" [ label = "initialize", color = "blue" ];
+  "QBridgeHandler.onlyBridge" [ label = "onlyBridge", color = "yellow" ];
+  "QBridgeHandler.setResource" [ label = "setResource", color = "blue" ];
+  "QBridgeHandler.setBurnable" [ label = "setBurnable", color = "blue" ];
+  "QBridgeHandler.setDelegator" [ label = "setDelegator", color = "blue" ];
+  "QBridgeHandler.setWithdrawalFee" [ label = "setWithdrawalFee", color = "blue" ];
+  "QBridgeHandler.setMinDepositAmount" [ label = "setMinDepositAmount", color = "blue" ];
+  "QBridgeHandler.deposit" [ label = "deposit", color = "blue" ];
+  "QBridgeHandler.depositETH" [ label = "depositETH", color = "blue" ];
+  "QBridgeHandler.executeProposal" [ label = "executeProposal", color = "blue" ];
+  "QBridgeHandler.withdraw" [ label = "withdraw", color = "blue" ];
+  "QBridgeHandler.__Ownable_init" [ label = "__Ownable_init" ];
+  "QBridgeHandler.QBridgeToken" [ label = "QBridgeToken" ];
+  "QBridgeHandler.address" [ label = "address" ];
+  "QBridgeHandler.IQBridgeDelegator" [ label = "IQBridgeDelegator" ];
+}
+
+subgraph "clustertokenAddress" {
+  graph [ label = "tokenAddress", color = "lightgray" ];
+  "tokenAddress.safeTransferFrom" [ label = "safeTransferFrom" ];
+  "tokenAddress.safeTransfer" [ label = "safeTransfer" ];
+}
+
+subgraph "clusterSafeToken" {
+  graph [ label = "SafeToken", color = "lightgray" ];
+  "SafeToken.safeTransferETH" [ label = "safeTransferETH" ];
+}
+
+subgraph "clusteramount" {
+  graph [ label = "amount", color = "lightgray" ];
+  "amount.sub" [ label = "sub" ];
+}
+
+  "QBridgeHandler.initialize";
+  "QBridgeHandler.__Ownable_init";
+  "QBridgeHandler.deposit";
+  "QBridgeHandler.QBridgeToken";
+  "tokenAddress.safeTransferFrom";
+  "QBridgeHandler.address";
+  "QBridgeHandler.executeProposal";
+  "QBridgeHandler.IQBridgeDelegator";
+  "SafeToken.safeTransferETH";
+  "amount.sub";
+  "tokenAddress.safeTransfer";
+  "QBridgeHandler.withdraw";
+  "QBridgeHandler.initialize" -> "QBridgeHandler.__Ownable_init" [ color = "green" ];
+  "QBridgeHandler.deposit" -> "QBridgeHandler.QBridgeToken" [ color = "green" ];
+  "QBridgeHandler.deposit" -> "tokenAddress.safeTransferFrom" [ color = "orange" ];
+  "QBridgeHandler.deposit" -> "QBridgeHandler.address" [ color = "green" ];
+  "QBridgeHandler.executeProposal" -> "QBridgeHandler.address" [ color = "green" ];
+  "QBridgeHandler.executeProposal" -> "QBridgeHandler.QBridgeToken" [ color = "green" ];
+  "QBridgeHandler.executeProposal" -> "QBridgeHandler.QBridgeToken" [ color = "green" ];
+  "QBridgeHandler.executeProposal" -> "QBridgeHandler.IQBridgeDelegator" [ color = "green" ];
+  "QBridgeHandler.executeProposal" -> "SafeToken.safeTransferETH" [ color = "orange" ];
+  "QBridgeHandler.executeProposal" -> "amount.sub" [ color = "orange" ];
+  "QBridgeHandler.executeProposal" -> "tokenAddress.safeTransfer" [ color = "orange" ];
+  "QBridgeHandler.executeProposal" -> "amount.sub" [ color = "orange" ];
+  "QBridgeHandler.withdraw" -> "SafeToken.safeTransferETH" [ color = "orange" ];
+  "QBridgeHandler.withdraw" -> "tokenAddress.safeTransfer" [ color = "orange" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+
