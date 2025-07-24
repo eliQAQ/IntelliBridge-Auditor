@@ -1,0 +1,79 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_225_IUpgradableECCM {
+label = "IUpgradableECCM"
+"225_isOwner" [label="isOwner"]
+"225_unpause" [label="unpause"]
+"225_pause" [label="pause"]
+"225_paused" [label="paused"]
+"225_upgradeToNew" [label="upgradeToNew"]
+}subgraph cluster_451_Context {
+label = "Context"
+"451__msgData" [label="_msgData"]
+"451__msgSender" [label="_msgSender"]
+"451_constructor" [label="constructor"]
+}subgraph cluster_195_IEthCrossChainManagerProxy {
+label = "IEthCrossChainManagerProxy"
+"195_getEthCrossChainManager" [label="getEthCrossChainManager"]
+}subgraph cluster_424_Ownable {
+label = "Ownable"
+"424_constructor" [label="constructor"]
+"424__transferOwnership" [label="_transferOwnership"]
+"424_renounceOwnership" [label="renounceOwnership"]
+"424_owner" [label="owner"]
+"424_isOwner" [label="isOwner"]
+"424_transferOwnership" [label="transferOwnership"]
+"424_isOwner" -> "424__msgSender"
+"424_renounceOwnership" -> "424_onlyOwner"
+"424_transferOwnership" -> "424_onlyOwner"
+"424_constructor" -> "424__msgSender"
+"424_transferOwnership" -> "424__transferOwnership"
+}subgraph cluster_306_Pausable {
+label = "Pausable"
+"306__pause" [label="_pause"]
+"306_paused" [label="paused"]
+"306_constructor" [label="constructor"]
+"306__unpause" [label="_unpause"]
+"306__unpause" -> "306__msgSender"
+"306__pause" -> "306__msgSender"
+"306__pause" -> "306_whenNotPaused"
+"306__unpause" -> "306_whenPaused"
+}subgraph cluster_187_EthCrossChainManagerProxy {
+label = "EthCrossChainManagerProxy"
+"187_unpause" [label="unpause"]
+"187_pause" [label="pause"]
+"187_constructor" [label="constructor"]
+"187_unpauseEthCrossChainManager" [label="unpauseEthCrossChainManager"]
+"187_getEthCrossChainManager" [label="getEthCrossChainManager"]
+"187_pauseEthCrossChainManager" [label="pauseEthCrossChainManager"]
+"187_upgradeEthCrossChainManager" [label="upgradeEthCrossChainManager"]
+"187_unpauseEthCrossChainManager" -> "187_unpause"
+"187_unpauseEthCrossChainManager" -> "187_onlyOwner"
+"187_pauseEthCrossChainManager" -> "187_pause"
+"187_unpause" -> "187_onlyOwner"
+"187_pause" -> "187_paused"
+"187_unpauseEthCrossChainManager" -> "187_whenPaused"
+"187_upgradeEthCrossChainManager" -> "187_whenPaused"
+"187_pause" -> "187__pause"
+"187_pause" -> "187_onlyOwner"
+"187_unpause" -> "187_paused"
+"187_getEthCrossChainManager" -> "187_whenNotPaused"
+"187_unpause" -> "187__unpause"
+"187_pauseEthCrossChainManager" -> "187_whenNotPaused"
+"187_upgradeEthCrossChainManager" -> "187_onlyOwner"
+"187_pauseEthCrossChainManager" -> "187_onlyOwner"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"187_pauseEthCrossChainManager" -> "require(bool,string)"
+"187_upgradeEthCrossChainManager" -> "require(bool,string)"
+"424__transferOwnership" -> "require(bool,string)"
+"187_unpauseEthCrossChainManager" -> "require(bool,string)"
+}"187_unpauseEthCrossChainManager" -> "225_unpause"
+"187_upgradeEthCrossChainManager" -> "225_pause"
+"187_upgradeEthCrossChainManager" -> "225_upgradeToNew"
+"187_upgradeEthCrossChainManager" -> "225_isOwner"
+"187_upgradeEthCrossChainManager" -> "225_paused"
+"187_pauseEthCrossChainManager" -> "225_pause"
+}

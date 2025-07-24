@@ -1,0 +1,87 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_472_IERC20 {
+label = "IERC20"
+"472_totalSupply" [label="totalSupply"]
+"472_transferFrom" [label="transferFrom"]
+"472_transfer" [label="transfer"]
+"472_balanceOf" [label="balanceOf"]
+"472_allowance" [label="allowance"]
+"472_approve" [label="approve"]
+}subgraph cluster_403_SafeMath {
+label = "SafeMath"
+"403_div" [label="div"]
+"403_mul" [label="mul"]
+"403_sub" [label="sub"]
+"403_add" [label="add"]
+"403_mod" [label="mod"]
+"403_div" -> "403_div"
+"403_mod" -> "403_mod"
+"403_sub" -> "403_sub"
+}subgraph cluster_790_Utils {
+label = "Utils"
+"790_bytesToAddress" [label="bytesToAddress"]
+"790_uint256ToBytes" [label="uint256ToBytes"]
+"790_compressMCPubKey" [label="compressMCPubKey"]
+"790_equalStorage" [label="equalStorage"]
+"790_isContract" [label="isContract"]
+"790_bytesToBytes32" [label="bytesToBytes32"]
+"790_containMAddresses" [label="containMAddresses"]
+"790_hashLeaf" [label="hashLeaf"]
+"790_bytesToUint256" [label="bytesToUint256"]
+"790_hashChildren" [label="hashChildren"]
+"790_slice" [label="slice"]
+"790_addressToBytes" [label="addressToBytes"]
+"790_compressMCPubKey" -> "790_slice"
+}subgraph cluster_216_SafeERC20 {
+label = "SafeERC20"
+"216_safeApprove" [label="safeApprove"]
+"216_callOptionalReturn" [label="callOptionalReturn"]
+"216_safeDecreaseAllowance" [label="safeDecreaseAllowance"]
+"216_safeTransferFrom" [label="safeTransferFrom"]
+"216_safeIncreaseAllowance" [label="safeIncreaseAllowance"]
+"216_safeTransfer" [label="safeTransfer"]
+"216_safeDecreaseAllowance" -> "216_callOptionalReturn"
+"216_safeApprove" -> "216_callOptionalReturn"
+"216_safeIncreaseAllowance" -> "216_callOptionalReturn"
+"216_safeTransferFrom" -> "216_callOptionalReturn"
+"216_safeTransfer" -> "216_callOptionalReturn"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool)" 
+"abi.decode()" 
+"abi.encodeWithSelector()" 
+"require(bool,string)" 
+"sha256(bytes)" 
+"abi.encodePacked()" 
+"790_hashChildren" -> "abi.encodePacked()"
+"790_hashChildren" -> "sha256(bytes)"
+"790_hashLeaf" -> "abi.encodePacked()"
+"403_mod" -> "require(bool,string)"
+"790_bytesToUint256" -> "require(bool,string)"
+"403_add" -> "require(bool,string)"
+"790_bytesToAddress" -> "require(bool,string)"
+"216_safeApprove" -> "abi.encodeWithSelector()"
+"790_bytesToBytes32" -> "require(bool,string)"
+"216_callOptionalReturn" -> "require(bool,string)"
+"216_safeIncreaseAllowance" -> "abi.encodeWithSelector()"
+"790_compressMCPubKey" -> "require(bool,string)"
+"216_safeDecreaseAllowance" -> "abi.encodeWithSelector()"
+"403_div" -> "require(bool,string)"
+"216_callOptionalReturn" -> "abi.decode()"
+"790_hashLeaf" -> "sha256(bytes)"
+"403_mul" -> "require(bool,string)"
+"790_uint256ToBytes" -> "require(bool,string)"
+"216_safeTransferFrom" -> "abi.encodeWithSelector()"
+"216_safeApprove" -> "require(bool,string)"
+"403_sub" -> "require(bool,string)"
+"790_slice" -> "require(bool)"
+"216_safeTransfer" -> "abi.encodeWithSelector()"
+}"216_safeIncreaseAllowance" -> "403_add"
+"216_safeIncreaseAllowance" -> "472_allowance"
+"216_callOptionalReturn" -> "790_isContract"
+"216_safeApprove" -> "472_allowance"
+"216_safeDecreaseAllowance" -> "403_sub"
+"216_safeDecreaseAllowance" -> "472_allowance"
+}

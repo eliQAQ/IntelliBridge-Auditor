@@ -1,0 +1,61 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterQueueManager" {
+  graph [ label = "QueueManager", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "QueueManager.__QueueManager_initialize" [ label = "__QueueManager_initialize", color = "white" ];
+  "QueueManager.queueLength" [ label = "queueLength", color = "blue" ];
+  "QueueManager.queueContains" [ label = "queueContains", color = "blue" ];
+  "QueueManager.queueEnd" [ label = "queueEnd", color = "blue" ];
+}
+
+subgraph "clusterQueueLib.Queue" {
+  graph [ label = "QueueLib.Queue", color = "lightgray" ];
+  "QueueLib.Queue.initialize" [ label = "initialize" ];
+  "QueueLib.Queue.length" [ label = "length" ];
+  "QueueLib.Queue.contains" [ label = "contains" ];
+  "QueueLib.Queue.lastItem" [ label = "lastItem" ];
+}
+
+  "QueueManager.__QueueManager_initialize";
+  "QueueLib.Queue.initialize";
+  "QueueManager.queueLength";
+  "QueueLib.Queue.length";
+  "QueueManager.queueContains";
+  "QueueLib.Queue.contains";
+  "QueueManager.queueEnd";
+  "QueueLib.Queue.lastItem";
+  "QueueManager.__QueueManager_initialize" -> "QueueLib.Queue.initialize" [ color = "orange" ];
+  "QueueManager.queueLength" -> "QueueLib.Queue.length" [ color = "orange" ];
+  "QueueManager.queueContains" -> "QueueLib.Queue.contains" [ color = "orange" ];
+  "QueueManager.queueEnd" -> "QueueLib.Queue.lastItem" [ color = "orange" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

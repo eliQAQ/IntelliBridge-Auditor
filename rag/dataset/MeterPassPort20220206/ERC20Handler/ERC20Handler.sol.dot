@@ -1,0 +1,418 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterIDepositExecute" {
+  graph [ label = "IDepositExecute  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IDepositExecute.deposit" [ label = "deposit", color = "blue" ];
+  "IDepositExecute.executeProposal" [ label = "executeProposal", color = "blue" ];
+}
+
+subgraph "clusterIWETH" {
+  graph [ label = "IWETH  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IWETH.deposit" [ label = "deposit", color = "blue" ];
+  "IWETH.transfer" [ label = "transfer", color = "blue" ];
+  "IWETH.withdraw" [ label = "withdraw", color = "blue" ];
+}
+
+subgraph "clusterIERCHandler" {
+  graph [ label = "IERCHandler  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IERCHandler.setResource" [ label = "setResource", color = "blue" ];
+  "IERCHandler.setBurnable" [ label = "setBurnable", color = "blue" ];
+  "IERCHandler.withdraw" [ label = "withdraw", color = "blue" ];
+  "IERCHandler._wtokenAddress" [ label = "_wtokenAddress", color = "blue" ];
+  "IERCHandler.updateBridgeAddress" [ label = "updateBridgeAddress", color = "blue" ];
+}
+
+subgraph "clusterHandlerHelpers" {
+  graph [ label = "HandlerHelpers", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "HandlerHelpers.onlyBridge" [ label = "onlyBridge", color = "yellow" ];
+  "HandlerHelpers._onlyBridge" [ label = "_onlyBridge" ];
+  "HandlerHelpers.setResource" [ label = "setResource", color = "blue" ];
+  "HandlerHelpers.setBurnable" [ label = "setBurnable", color = "blue" ];
+  "HandlerHelpers.withdraw" [ label = "withdraw", color = "blue" ];
+  "HandlerHelpers._setResource" [ label = "_setResource" ];
+  "HandlerHelpers._setBurnable" [ label = "_setBurnable" ];
+  "HandlerHelpers.updateBridgeAddress" [ label = "updateBridgeAddress", color = "blue" ];
+}
+
+subgraph "clusterSafeMath" {
+  graph [ label = "SafeMath  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "SafeMath.add" [ label = "add", color = "white" ];
+  "SafeMath.sub" [ label = "sub" ];
+  "SafeMath.mul" [ label = "mul", color = "white" ];
+  "SafeMath.div" [ label = "div" ];
+  "SafeMath.mod" [ label = "mod" ];
+}
+
+subgraph "clusterIERC20" {
+  graph [ label = "IERC20  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IERC20.totalSupply" [ label = "totalSupply", color = "blue" ];
+  "IERC20.balanceOf" [ label = "balanceOf", color = "blue" ];
+  "IERC20.transfer" [ label = "transfer", color = "blue" ];
+  "IERC20.allowance" [ label = "allowance", color = "blue" ];
+  "IERC20.approve" [ label = "approve", color = "blue" ];
+  "IERC20.transferFrom" [ label = "transferFrom", color = "blue" ];
+  "IERC20.data" [ label = "data" ];
+}
+
+subgraph "clusterEnumerableSet" {
+  graph [ label = "EnumerableSet  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "EnumerableSet._add" [ label = "_add", color = "red" ];
+  "EnumerableSet._remove" [ label = "_remove" ];
+  "EnumerableSet._contains" [ label = "_contains" ];
+  "EnumerableSet._length" [ label = "_length" ];
+  "EnumerableSet._at" [ label = "_at" ];
+  "EnumerableSet.add" [ label = "add", color = "white" ];
+  "EnumerableSet.remove" [ label = "remove", color = "white" ];
+  "EnumerableSet.contains" [ label = "contains", color = "white" ];
+  "EnumerableSet.length" [ label = "length", color = "white" ];
+  "EnumerableSet.at" [ label = "at", color = "white" ];
+  "EnumerableSet.address" [ label = "address" ];
+}
+
+subgraph "clusterAddress" {
+  graph [ label = "Address  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Address.isContract" [ label = "isContract", color = "white" ];
+  "Address.sendValue" [ label = "sendValue", color = "white" ];
+  "Address.address" [ label = "address" ];
+}
+
+subgraph "clusterContext" {
+  graph [ label = "Context", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Context.<Constructor>" [ label = "<Constructor>", color = "white" ];
+  "Context._msgSender" [ label = "_msgSender", color = "white" ];
+  "Context._msgData" [ label = "_msgData", color = "white" ];
+}
+
+subgraph "clusterAccessControl" {
+  graph [ label = "AccessControl", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "AccessControl.hasRole" [ label = "hasRole" ];
+  "AccessControl.getRoleMemberCount" [ label = "getRoleMemberCount", color = "green" ];
+  "AccessControl.getRoleMember" [ label = "getRoleMember", color = "green" ];
+  "AccessControl.getRoleAdmin" [ label = "getRoleAdmin", color = "green" ];
+  "AccessControl.grantRole" [ label = "grantRole", color = "green" ];
+  "AccessControl.revokeRole" [ label = "revokeRole", color = "green" ];
+  "AccessControl.renounceRole" [ label = "renounceRole", color = "green" ];
+  "AccessControl._setupRole" [ label = "_setupRole", color = "white" ];
+  "AccessControl._setRoleAdmin" [ label = "_setRoleAdmin", color = "white" ];
+  "AccessControl._grantRole" [ label = "_grantRole" ];
+  "AccessControl._revokeRole" [ label = "_revokeRole" ];
+  "AccessControl._msgSender" [ label = "_msgSender" ];
+}
+
+subgraph "clusterERC20" {
+  graph [ label = "ERC20", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ERC20.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "ERC20.name" [ label = "name", color = "green" ];
+  "ERC20.symbol" [ label = "symbol", color = "green" ];
+  "ERC20.decimals" [ label = "decimals", color = "green" ];
+  "ERC20.totalSupply" [ label = "totalSupply", color = "green" ];
+  "ERC20.balanceOf" [ label = "balanceOf", color = "green" ];
+  "ERC20.transfer" [ label = "transfer", color = "green" ];
+  "ERC20.allowance" [ label = "allowance", color = "green" ];
+  "ERC20.approve" [ label = "approve", color = "green" ];
+  "ERC20.transferFrom" [ label = "transferFrom", color = "green" ];
+  "ERC20.increaseAllowance" [ label = "increaseAllowance", color = "green" ];
+  "ERC20.decreaseAllowance" [ label = "decreaseAllowance", color = "green" ];
+  "ERC20._transfer" [ label = "_transfer" ];
+  "ERC20._mint" [ label = "_mint", color = "white" ];
+  "ERC20._burn" [ label = "_burn", color = "white" ];
+  "ERC20._approve" [ label = "_approve" ];
+  "ERC20._setupDecimals" [ label = "_setupDecimals", color = "white" ];
+  "ERC20._beforeTokenTransfer" [ label = "_beforeTokenTransfer" ];
+  "ERC20._msgSender" [ label = "_msgSender" ];
+  "ERC20.address" [ label = "address" ];
+}
+
+subgraph "clusterERC20Burnable" {
+  graph [ label = "ERC20Burnable", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ERC20Burnable.burn" [ label = "burn", color = "green" ];
+  "ERC20Burnable.burnFrom" [ label = "burnFrom", color = "green" ];
+  "ERC20Burnable.allowance" [ label = "allowance" ];
+}
+
+subgraph "clusterPausable" {
+  graph [ label = "Pausable", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Pausable.<Constructor>" [ label = "<Constructor>", color = "white" ];
+  "Pausable.paused" [ label = "paused", color = "green" ];
+  "Pausable.whenNotPaused" [ label = "whenNotPaused", color = "yellow" ];
+  "Pausable.whenPaused" [ label = "whenPaused", color = "yellow" ];
+  "Pausable._pause" [ label = "_pause", color = "white" ];
+  "Pausable._unpause" [ label = "_unpause", color = "white" ];
+  "Pausable._msgSender" [ label = "_msgSender" ];
+}
+
+subgraph "clusterERC20Pausable" {
+  graph [ label = "ERC20Pausable", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ERC20Pausable._beforeTokenTransfer" [ label = "_beforeTokenTransfer", color = "white" ];
+  "ERC20Pausable.paused" [ label = "paused" ];
+}
+
+subgraph "clusterERC20PresetMinterPauser" {
+  graph [ label = "ERC20PresetMinterPauser", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ERC20PresetMinterPauser.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "ERC20PresetMinterPauser.mint" [ label = "mint", color = "green" ];
+  "ERC20PresetMinterPauser.pause" [ label = "pause", color = "green" ];
+  "ERC20PresetMinterPauser.unpause" [ label = "unpause", color = "green" ];
+  "ERC20PresetMinterPauser._beforeTokenTransfer" [ label = "_beforeTokenTransfer", color = "white" ];
+}
+
+subgraph "clusterERC20Safe" {
+  graph [ label = "ERC20Safe", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ERC20Safe.fundERC20" [ label = "fundERC20", color = "green" ];
+  "ERC20Safe.lockERC20" [ label = "lockERC20", color = "white" ];
+  "ERC20Safe.releaseERC20" [ label = "releaseERC20", color = "white" ];
+  "ERC20Safe.mintERC20" [ label = "mintERC20", color = "white" ];
+  "ERC20Safe.burnERC20" [ label = "burnERC20", color = "white" ];
+  "ERC20Safe._safeTransfer" [ label = "_safeTransfer" ];
+  "ERC20Safe._safeTransferFrom" [ label = "_safeTransferFrom" ];
+  "ERC20Safe._safeCall" [ label = "_safeCall" ];
+  "ERC20Safe.address" [ label = "address" ];
+}
+
+subgraph "clusterTransferHelper" {
+  graph [ label = "TransferHelper  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "TransferHelper.safeApprove" [ label = "safeApprove", color = "white" ];
+  "TransferHelper.safeTransfer" [ label = "safeTransfer", color = "white" ];
+  "TransferHelper.safeTransferFrom" [ label = "safeTransferFrom", color = "white" ];
+  "TransferHelper.safeTransferETH" [ label = "safeTransferETH" ];
+}
+
+subgraph "clusterERC20Handler" {
+  graph [ label = "ERC20Handler", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ERC20Handler.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "ERC20Handler.<Receive Ether>" [ label = "<Receive Ether>", color = "blue" ];
+  "ERC20Handler.getDepositRecord" [ label = "getDepositRecord", color = "blue" ];
+  "ERC20Handler.deposit" [ label = "deposit", color = "blue" ];
+  "ERC20Handler.executeProposal" [ label = "executeProposal", color = "blue" ];
+  "ERC20Handler.withdraw" [ label = "withdraw", color = "blue" ];
+  "ERC20Handler.updateBridgeAddress" [ label = "updateBridgeAddress", color = "blue" ];
+}
+
+subgraph "cluster_totalSupply" {
+  graph [ label = "_totalSupply", color = "lightgray" ];
+  "_totalSupply.add" [ label = "add" ];
+  "_totalSupply.sub" [ label = "sub" ];
+}
+
+subgraph "clustertoken" {
+  graph [ label = "token", color = "lightgray" ];
+  "token.call" [ label = "call" ];
+}
+
+  "HandlerHelpers.onlyBridge";
+  "HandlerHelpers._onlyBridge";
+  "HandlerHelpers.setResource";
+  "HandlerHelpers._setResource";
+  "HandlerHelpers.setBurnable";
+  "HandlerHelpers._setBurnable";
+  "SafeMath.sub";
+  "SafeMath.div";
+  "SafeMath.mod";
+  "EnumerableSet._add";
+  "EnumerableSet._contains";
+  "EnumerableSet.add";
+  "EnumerableSet.remove";
+  "EnumerableSet._remove";
+  "EnumerableSet.contains";
+  "EnumerableSet.length";
+  "EnumerableSet._length";
+  "EnumerableSet.at";
+  "EnumerableSet.address";
+  "EnumerableSet._at";
+  "Address.sendValue";
+  "Address.address";
+  "AccessControl.grantRole";
+  "AccessControl.hasRole";
+  "AccessControl._msgSender";
+  "AccessControl._grantRole";
+  "AccessControl.revokeRole";
+  "AccessControl._revokeRole";
+  "AccessControl.renounceRole";
+  "AccessControl._setupRole";
+  "ERC20.transfer";
+  "ERC20._transfer";
+  "ERC20._msgSender";
+  "ERC20.approve";
+  "ERC20._approve";
+  "ERC20.transferFrom";
+  "ERC20.increaseAllowance";
+  "ERC20.decreaseAllowance";
+  "ERC20.address";
+  "ERC20._beforeTokenTransfer";
+  "ERC20._mint";
+  "_totalSupply.add";
+  "ERC20._burn";
+  "_totalSupply.sub";
+  "ERC20Burnable.burn";
+  "ERC20Burnable.burnFrom";
+  "ERC20Burnable.allowance";
+  "Pausable._pause";
+  "Pausable._msgSender";
+  "Pausable._unpause";
+  "ERC20Pausable.paused";
+  "ERC20PresetMinterPauser.<Constructor>";
+  "ERC20PresetMinterPauser.mint";
+  "ERC20PresetMinterPauser.pause";
+  "ERC20PresetMinterPauser.unpause";
+  "ERC20Safe.fundERC20";
+  "ERC20Safe._safeTransferFrom";
+  "ERC20Safe.address";
+  "ERC20Safe.lockERC20";
+  "ERC20Safe.releaseERC20";
+  "ERC20Safe._safeTransfer";
+  "ERC20Safe.mintERC20";
+  "ERC20Safe.burnERC20";
+  "ERC20Safe._safeCall";
+  "IERC20.data";
+  "TransferHelper.safeApprove";
+  "token.call";
+  "TransferHelper.safeTransfer";
+  "TransferHelper.safeTransferFrom";
+  "ERC20Handler.<Constructor>";
+  "ERC20Handler.deposit";
+  "ERC20Handler.executeProposal";
+  "TransferHelper.safeTransferETH";
+  "ERC20Handler.withdraw";
+  "HandlerHelpers.onlyBridge" -> "HandlerHelpers._onlyBridge" [ color = "green" ];
+  "HandlerHelpers.setResource" -> "HandlerHelpers._setResource" [ color = "green" ];
+  "HandlerHelpers.setBurnable" -> "HandlerHelpers._setBurnable" [ color = "green" ];
+  "SafeMath.sub" -> "SafeMath.sub" [ color = "green" ];
+  "SafeMath.div" -> "SafeMath.div" [ color = "green" ];
+  "SafeMath.mod" -> "SafeMath.mod" [ color = "green" ];
+  "EnumerableSet._add" -> "EnumerableSet._contains" [ color = "green" ];
+  "EnumerableSet.add" -> "EnumerableSet._add" [ color = "green" ];
+  "EnumerableSet.remove" -> "EnumerableSet._remove" [ color = "green" ];
+  "EnumerableSet.contains" -> "EnumerableSet._contains" [ color = "green" ];
+  "EnumerableSet.length" -> "EnumerableSet._length" [ color = "green" ];
+  "EnumerableSet.at" -> "EnumerableSet.address" [ color = "green" ];
+  "EnumerableSet.at" -> "EnumerableSet._at" [ color = "green" ];
+  "EnumerableSet.add" -> "EnumerableSet._add" [ color = "green" ];
+  "EnumerableSet.remove" -> "EnumerableSet._remove" [ color = "green" ];
+  "EnumerableSet.contains" -> "EnumerableSet._contains" [ color = "green" ];
+  "EnumerableSet.length" -> "EnumerableSet._length" [ color = "green" ];
+  "EnumerableSet.at" -> "EnumerableSet._at" [ color = "green" ];
+  "Address.sendValue" -> "Address.address" [ color = "green" ];
+  "AccessControl.grantRole" -> "AccessControl.hasRole" [ color = "green" ];
+  "AccessControl.grantRole" -> "AccessControl._msgSender" [ color = "green" ];
+  "AccessControl.grantRole" -> "AccessControl._grantRole" [ color = "green" ];
+  "AccessControl.revokeRole" -> "AccessControl.hasRole" [ color = "green" ];
+  "AccessControl.revokeRole" -> "AccessControl._msgSender" [ color = "green" ];
+  "AccessControl.revokeRole" -> "AccessControl._revokeRole" [ color = "green" ];
+  "AccessControl.renounceRole" -> "AccessControl._msgSender" [ color = "green" ];
+  "AccessControl.renounceRole" -> "AccessControl._revokeRole" [ color = "green" ];
+  "AccessControl._setupRole" -> "AccessControl._grantRole" [ color = "green" ];
+  "AccessControl._grantRole" -> "AccessControl._msgSender" [ color = "green" ];
+  "AccessControl._revokeRole" -> "AccessControl._msgSender" [ color = "green" ];
+  "ERC20.transfer" -> "ERC20._transfer" [ color = "green" ];
+  "ERC20.transfer" -> "ERC20._msgSender" [ color = "green" ];
+  "ERC20.approve" -> "ERC20._approve" [ color = "green" ];
+  "ERC20.approve" -> "ERC20._msgSender" [ color = "green" ];
+  "ERC20.transferFrom" -> "ERC20._transfer" [ color = "green" ];
+  "ERC20.transferFrom" -> "ERC20._approve" [ color = "green" ];
+  "ERC20.transferFrom" -> "ERC20._msgSender" [ color = "green" ];
+  "ERC20.transferFrom" -> "ERC20._msgSender" [ color = "green" ];
+  "ERC20.increaseAllowance" -> "ERC20._approve" [ color = "green" ];
+  "ERC20.increaseAllowance" -> "ERC20._msgSender" [ color = "green" ];
+  "ERC20.increaseAllowance" -> "ERC20._msgSender" [ color = "green" ];
+  "ERC20.decreaseAllowance" -> "ERC20._approve" [ color = "green" ];
+  "ERC20.decreaseAllowance" -> "ERC20._msgSender" [ color = "green" ];
+  "ERC20.decreaseAllowance" -> "ERC20._msgSender" [ color = "green" ];
+  "ERC20._transfer" -> "ERC20.address" [ color = "green" ];
+  "ERC20._transfer" -> "ERC20.address" [ color = "green" ];
+  "ERC20._transfer" -> "ERC20._beforeTokenTransfer" [ color = "green" ];
+  "ERC20._mint" -> "ERC20.address" [ color = "green" ];
+  "ERC20._mint" -> "ERC20._beforeTokenTransfer" [ color = "green" ];
+  "ERC20._mint" -> "ERC20.address" [ color = "green" ];
+  "ERC20._mint" -> "_totalSupply.add" [ color = "orange" ];
+  "ERC20._mint" -> "ERC20.address" [ color = "green" ];
+  "ERC20._burn" -> "ERC20.address" [ color = "green" ];
+  "ERC20._burn" -> "ERC20._beforeTokenTransfer" [ color = "green" ];
+  "ERC20._burn" -> "ERC20.address" [ color = "green" ];
+  "ERC20._burn" -> "_totalSupply.sub" [ color = "orange" ];
+  "ERC20._burn" -> "ERC20.address" [ color = "green" ];
+  "ERC20._approve" -> "ERC20.address" [ color = "green" ];
+  "ERC20._approve" -> "ERC20.address" [ color = "green" ];
+  "ERC20Burnable.burn" -> "ERC20._burn" [ color = "green" ];
+  "ERC20Burnable.burn" -> "ERC20._msgSender" [ color = "green" ];
+  "ERC20Burnable.burnFrom" -> "ERC20Burnable.allowance" [ color = "green" ];
+  "ERC20Burnable.burnFrom" -> "ERC20._msgSender" [ color = "green" ];
+  "ERC20Burnable.burnFrom" -> "ERC20._approve" [ color = "green" ];
+  "ERC20Burnable.burnFrom" -> "ERC20._msgSender" [ color = "green" ];
+  "ERC20Burnable.burnFrom" -> "ERC20._burn" [ color = "green" ];
+  "Pausable._pause" -> "Pausable._msgSender" [ color = "green" ];
+  "Pausable._unpause" -> "Pausable._msgSender" [ color = "green" ];
+  "ERC20._beforeTokenTransfer" -> "ERC20._beforeTokenTransfer" [ color = "orange" ];
+  "ERC20._beforeTokenTransfer" -> "ERC20Pausable.paused" [ color = "green" ];
+  "ERC20PresetMinterPauser.<Constructor>" -> "AccessControl._setupRole" [ color = "green" ];
+  "ERC20PresetMinterPauser.<Constructor>" -> "Pausable._msgSender" [ color = "green" ];
+  "ERC20PresetMinterPauser.<Constructor>" -> "AccessControl._setupRole" [ color = "green" ];
+  "ERC20PresetMinterPauser.<Constructor>" -> "Pausable._msgSender" [ color = "green" ];
+  "ERC20PresetMinterPauser.<Constructor>" -> "AccessControl._setupRole" [ color = "green" ];
+  "ERC20PresetMinterPauser.<Constructor>" -> "Pausable._msgSender" [ color = "green" ];
+  "ERC20PresetMinterPauser.mint" -> "AccessControl.hasRole" [ color = "green" ];
+  "ERC20PresetMinterPauser.mint" -> "Pausable._msgSender" [ color = "green" ];
+  "ERC20PresetMinterPauser.mint" -> "ERC20._mint" [ color = "green" ];
+  "ERC20PresetMinterPauser.pause" -> "AccessControl.hasRole" [ color = "green" ];
+  "ERC20PresetMinterPauser.pause" -> "Pausable._msgSender" [ color = "green" ];
+  "ERC20PresetMinterPauser.pause" -> "Pausable._pause" [ color = "green" ];
+  "ERC20PresetMinterPauser.unpause" -> "AccessControl.hasRole" [ color = "green" ];
+  "ERC20PresetMinterPauser.unpause" -> "Pausable._msgSender" [ color = "green" ];
+  "ERC20PresetMinterPauser.unpause" -> "Pausable._unpause" [ color = "green" ];
+  "ERC20._beforeTokenTransfer" -> "ERC20._beforeTokenTransfer" [ color = "orange" ];
+  "ERC20Safe.fundERC20" -> "ERC20Safe._safeTransferFrom" [ color = "green" ];
+  "ERC20Safe.fundERC20" -> "ERC20Safe.address" [ color = "green" ];
+  "ERC20Safe.lockERC20" -> "ERC20Safe._safeTransferFrom" [ color = "green" ];
+  "ERC20Safe.releaseERC20" -> "ERC20Safe._safeTransfer" [ color = "green" ];
+  "ERC20Safe.mintERC20" -> "ERC20PresetMinterPauser.mint" [ color = "orange" ];
+  "ERC20Safe.burnERC20" -> "ERC20Burnable.burnFrom" [ color = "orange" ];
+  "ERC20Safe._safeTransfer" -> "ERC20Safe._safeCall" [ color = "green" ];
+  "ERC20Safe._safeTransferFrom" -> "ERC20Safe._safeCall" [ color = "green" ];
+  "ERC20Safe._safeCall" -> "IERC20.data" [ color = "orange" ];
+  "ERC20Safe._safeCall" -> "ERC20Safe.address" [ color = "green" ];
+  "TransferHelper.safeApprove" -> "token.call" [ color = "orange" ];
+  "TransferHelper.safeTransfer" -> "token.call" [ color = "orange" ];
+  "TransferHelper.safeTransferFrom" -> "token.call" [ color = "orange" ];
+  "ERC20Handler.<Constructor>" -> "HandlerHelpers._setResource" [ color = "green" ];
+  "ERC20Handler.<Constructor>" -> "HandlerHelpers._setBurnable" [ color = "green" ];
+  "ERC20Handler.deposit" -> "ERC20Safe.burnERC20" [ color = "green" ];
+  "ERC20Handler.deposit" -> "ERC20Safe.lockERC20" [ color = "green" ];
+  "ERC20Handler.deposit" -> "ERC20Safe.address" [ color = "green" ];
+  "ERC20Handler.executeProposal" -> "TransferHelper.safeTransferETH" [ color = "orange" ];
+  "ERC20Handler.executeProposal" -> "ERC20Safe.address" [ color = "green" ];
+  "ERC20Handler.executeProposal" -> "ERC20Safe.mintERC20" [ color = "green" ];
+  "ERC20Handler.executeProposal" -> "ERC20Safe.address" [ color = "green" ];
+  "ERC20Handler.executeProposal" -> "ERC20Safe.releaseERC20" [ color = "green" ];
+  "ERC20Handler.executeProposal" -> "ERC20Safe.address" [ color = "green" ];
+  "ERC20Handler.withdraw" -> "TransferHelper.safeTransferETH" [ color = "orange" ];
+  "ERC20Handler.withdraw" -> "ERC20Safe.releaseERC20" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

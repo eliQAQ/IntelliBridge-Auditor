@@ -1,0 +1,23 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_2570_SafeMath {
+label = "SafeMath"
+"2570_div" [label="div"]
+"2570_sub" [label="sub"]
+"2570_mul" [label="mul"]
+"2570_add" [label="add"]
+"2570_mod" [label="mod"]
+"2570_div" -> "2570_div"
+"2570_sub" -> "2570_sub"
+"2570_mod" -> "2570_mod"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"2570_add" -> "require(bool,string)"
+"2570_sub" -> "require(bool,string)"
+"2570_mod" -> "require(bool,string)"
+"2570_div" -> "require(bool,string)"
+"2570_mul" -> "require(bool,string)"
+}
+}

@@ -1,0 +1,39 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_555_ZeroCopySource {
+label = "ZeroCopySource"
+"555_NextUint64" [label="NextUint64"]
+"555_NextByte" [label="NextByte"]
+"555_NextVarUint" [label="NextVarUint"]
+"555_NextHash" [label="NextHash"]
+"555_NextUint8" [label="NextUint8"]
+"555_NextBool" [label="NextBool"]
+"555_NextUint16" [label="NextUint16"]
+"555_NextBytes20" [label="NextBytes20"]
+"555_NextUint32" [label="NextUint32"]
+"555_NextVarBytes" [label="NextVarBytes"]
+"555_NextUint255" [label="NextUint255"]
+"555_NextVarBytes" -> "555_NextVarUint"
+"555_NextVarUint" -> "555_NextUint32"
+"555_NextVarUint" -> "555_NextUint64"
+"555_NextVarUint" -> "555_NextByte"
+"555_NextVarUint" -> "555_NextUint16"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"revert(string)" 
+"555_NextUint8" -> "require(bool,string)"
+"555_NextUint255" -> "require(bool,string)"
+"555_NextUint64" -> "require(bool,string)"
+"555_NextUint16" -> "require(bool,string)"
+"555_NextByte" -> "require(bool,string)"
+"555_NextBool" -> "require(bool,string)"
+"555_NextHash" -> "require(bool,string)"
+"555_NextBool" -> "revert(string)"
+"555_NextUint32" -> "require(bool,string)"
+"555_NextBytes20" -> "require(bool,string)"
+"555_NextVarUint" -> "require(bool,string)"
+"555_NextVarBytes" -> "require(bool,string)"
+}
+}

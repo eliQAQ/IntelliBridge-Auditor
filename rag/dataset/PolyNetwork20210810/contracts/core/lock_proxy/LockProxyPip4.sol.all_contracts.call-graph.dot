@@ -1,0 +1,272 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_3040_Context {
+label = "Context"
+"3040_constructor" [label="constructor"]
+"3040__msgSender" [label="_msgSender"]
+"3040__msgData" [label="_msgData"]
+}subgraph cluster_3296_SafeMath {
+label = "SafeMath"
+"3296_div" [label="div"]
+"3296_sub" [label="sub"]
+"3296_mod" [label="mod"]
+"3296_add" [label="add"]
+"3296_mul" [label="mul"]
+"3296_mod" -> "3296_mod"
+"3296_div" -> "3296_div"
+"3296_sub" -> "3296_sub"
+}subgraph cluster_1665_ZeroCopySink {
+label = "ZeroCopySink"
+"1665_WriteUint255" [label="WriteUint255"]
+"1665_WriteByte" [label="WriteByte"]
+"1665_WriteBool" [label="WriteBool"]
+"1665_WriteUint8" [label="WriteUint8"]
+"1665_WriteUint32" [label="WriteUint32"]
+"1665_WriteUint16" [label="WriteUint16"]
+"1665_WriteVarUint" [label="WriteVarUint"]
+"1665_WriteVarBytes" [label="WriteVarBytes"]
+"1665_WriteUint64" [label="WriteUint64"]
+"1665_WriteVarUint" -> "1665_WriteByte"
+"1665_WriteVarUint" -> "1665_WriteUint8"
+"1665_WriteVarUint" -> "1665_WriteUint64"
+"1665_WriteVarUint" -> "1665_WriteUint32"
+"1665_WriteVarUint" -> "1665_WriteUint16"
+"1665_WriteVarBytes" -> "1665_WriteVarUint"
+"1665_WriteByte" -> "1665_WriteUint8"
+}subgraph cluster_1444_LockProxyPip4 {
+label = "LockProxyPip4"
+"1444_unpause" [label="unpause"]
+"1444_unlock" [label="unlock"]
+"1444__transferToContract" [label="_transferToContract"]
+"1444_withdraw" [label="withdraw"]
+"1444__transferERC20ToContract" [label="_transferERC20ToContract"]
+"1444__fromStandardDecimals" [label="_fromStandardDecimals"]
+"1444_bindLPToAssetBatch" [label="bindLPToAssetBatch"]
+"1444_lock" [label="lock"]
+"1444__toStandardDecimals" [label="_toStandardDecimals"]
+"1444__transferERC20FromContract" [label="_transferERC20FromContract"]
+"1444_setManagerProxy" [label="setManagerProxy"]
+"1444_bindLPAndAsset" [label="bindLPAndAsset"]
+"1444__deserializeTxArgs" [label="_deserializeTxArgs"]
+"1444__transferFromContract" [label="_transferFromContract"]
+"1444_deposit" [label="deposit"]
+"1444_pause" [label="pause"]
+"1444_bindLPToAsset" [label="bindLPToAsset"]
+"1444_bindProxyHash" [label="bindProxyHash"]
+"1444_bindLPAndAssetBatch" [label="bindLPAndAssetBatch"]
+"1444_bindProxyHashBatch" [label="bindProxyHashBatch"]
+"1444_getBalanceFor" [label="getBalanceFor"]
+"1444_bindAssetHash" [label="bindAssetHash"]
+"1444_bindAssetHashBatch" [label="bindAssetHashBatch"]
+"1444__serializeTxArgs" [label="_serializeTxArgs"]
+"1444_bindLPAndAssetBatch" -> "1444_onlyOwner"
+"1444_lock" -> "1444__transferToContract"
+"1444_bindLPAndAsset" -> "1444_getBalanceFor"
+"1444_withdraw" -> "1444_whenNotPaused"
+"1444_pause" -> "1444_whenNotPaused"
+"1444_lock" -> "1444__toStandardDecimals"
+"1444_unlock" -> "1444_onlyManagerContract"
+"1444_deposit" -> "1444_whenNotPaused"
+"1444_deposit" -> "1444__fromStandardDecimals"
+"1444_pause" -> "1444_onlyOwner"
+"1444_bindLPToAssetBatch" -> "1444_onlyOwner"
+"1444_unpause" -> "1444_onlyOwner"
+"1444_bindLPAndAssetBatch" -> "1444_getBalanceFor"
+"1444_bindAssetHash" -> "1444_getBalanceFor"
+"1444_unpause" -> "1444_whenPaused"
+"1444_lock" -> "1444__serializeTxArgs"
+"1444_bindLPAndAsset" -> "1444_onlyOwner"
+"1444__transferFromContract" -> "1444__transferERC20FromContract"
+"1444__transferToContract" -> "1444__transferERC20ToContract"
+"1444_setManagerProxy" -> "1444_onlyOwner"
+"1444_unlock" -> "1444__transferFromContract"
+"1444_bindAssetHashBatch" -> "1444_onlyOwner"
+"1444_withdraw" -> "1444__fromStandardDecimals"
+"1444_withdraw" -> "1444__toStandardDecimals"
+"1444_deposit" -> "1444__transferFromContract"
+"1444_deposit" -> "1444__transferToContract"
+"1444_bindAssetHash" -> "1444_onlyOwner"
+"1444_bindAssetHashBatch" -> "1444_getBalanceFor"
+"1444_bindProxyHash" -> "1444_onlyOwner"
+"1444_withdraw" -> "1444__transferFromContract"
+"1444__transferToContract" -> "1444__msgSender"
+"1444_lock" -> "1444__msgSender"
+"1444_unpause" -> "1444__unpause"
+"1444_bindLPToAsset" -> "1444_onlyOwner"
+"1444_unlock" -> "1444__fromStandardDecimals"
+"1444_unlock" -> "1444__deserializeTxArgs"
+"1444_pause" -> "1444__pause"
+"1444_deposit" -> "1444__toStandardDecimals"
+"1444_withdraw" -> "1444__transferToContract"
+"1444_bindProxyHashBatch" -> "1444_onlyOwner"
+}subgraph cluster_3109_IERC20 {
+label = "IERC20"
+"3109_approve" [label="approve"]
+"3109_balanceOf" [label="balanceOf"]
+"3109_transferFrom" [label="transferFrom"]
+"3109_allowance" [label="allowance"]
+"3109_transfer" [label="transfer"]
+"3109_totalSupply" [label="totalSupply"]
+}subgraph cluster_3013_Utils {
+label = "Utils"
+"3013_containMAddresses" [label="containMAddresses"]
+"3013_addressToBytes" [label="addressToBytes"]
+"3013_hashLeaf" [label="hashLeaf"]
+"3013_hashChildren" [label="hashChildren"]
+"3013_compressMCPubKey" [label="compressMCPubKey"]
+"3013_slice" [label="slice"]
+"3013_bytesToBytes32" [label="bytesToBytes32"]
+"3013_uint256ToBytes" [label="uint256ToBytes"]
+"3013_bytesToAddress" [label="bytesToAddress"]
+"3013_equalStorage" [label="equalStorage"]
+"3013_isContract" [label="isContract"]
+"3013_bytesToUint256" [label="bytesToUint256"]
+"3013_compressMCPubKey" -> "3013_slice"
+}subgraph cluster_2695_SafeERC20 {
+label = "SafeERC20"
+"2695_callOptionalReturn" [label="callOptionalReturn"]
+"2695_safeTransferFrom" [label="safeTransferFrom"]
+"2695_safeIncreaseAllowance" [label="safeIncreaseAllowance"]
+"2695_safeTransfer" [label="safeTransfer"]
+"2695_safeDecreaseAllowance" [label="safeDecreaseAllowance"]
+"2695_safeApprove" [label="safeApprove"]
+"2695_safeApprove" -> "2695_callOptionalReturn"
+"2695_safeDecreaseAllowance" -> "2695_callOptionalReturn"
+"2695_safeTransfer" -> "2695_callOptionalReturn"
+"2695_safeIncreaseAllowance" -> "2695_callOptionalReturn"
+"2695_safeTransferFrom" -> "2695_callOptionalReturn"
+}subgraph cluster_2221_ZeroCopySource {
+label = "ZeroCopySource"
+"2221_NextBytes20" [label="NextBytes20"]
+"2221_NextBool" [label="NextBool"]
+"2221_NextByte" [label="NextByte"]
+"2221_NextVarUint" [label="NextVarUint"]
+"2221_NextUint64" [label="NextUint64"]
+"2221_NextVarBytes" [label="NextVarBytes"]
+"2221_NextUint32" [label="NextUint32"]
+"2221_NextHash" [label="NextHash"]
+"2221_NextUint16" [label="NextUint16"]
+"2221_NextUint8" [label="NextUint8"]
+"2221_NextUint255" [label="NextUint255"]
+"2221_NextVarUint" -> "2221_NextUint16"
+"2221_NextVarUint" -> "2221_NextByte"
+"2221_NextVarUint" -> "2221_NextUint64"
+"2221_NextVarBytes" -> "2221_NextVarUint"
+"2221_NextVarUint" -> "2221_NextUint32"
+}subgraph cluster_2478_ERC20Detailed {
+label = "ERC20Detailed"
+"2478_name" [label="name"]
+"2478_symbol" [label="symbol"]
+"2478_constructor" [label="constructor"]
+"2478_decimals" [label="decimals"]
+}subgraph cluster_2420_Ownable {
+label = "Ownable"
+"2420_owner" [label="owner"]
+"2420__transferOwnership" [label="_transferOwnership"]
+"2420_renounceOwnership" [label="renounceOwnership"]
+"2420_transferOwnership" [label="transferOwnership"]
+"2420_isOwner" [label="isOwner"]
+"2420_constructor" [label="constructor"]
+"2420_constructor" -> "2420__msgSender"
+"2420_transferOwnership" -> "2420__transferOwnership"
+"2420_isOwner" -> "2420__msgSender"
+"2420_renounceOwnership" -> "2420_onlyOwner"
+"2420_transferOwnership" -> "2420_onlyOwner"
+}subgraph cluster_1460_IEthCrossChainManager {
+label = "IEthCrossChainManager"
+"1460_crossChain" [label="crossChain"]
+}subgraph cluster_1468_IEthCrossChainManagerProxy {
+label = "IEthCrossChainManagerProxy"
+"1468_getEthCrossChainManager" [label="getEthCrossChainManager"]
+}subgraph cluster_2302_Pausable {
+label = "Pausable"
+"2302__pause" [label="_pause"]
+"2302__unpause" [label="_unpause"]
+"2302_paused" [label="paused"]
+"2302_constructor" [label="constructor"]
+"2302__pause" -> "2302__msgSender"
+"2302__pause" -> "2302_whenNotPaused"
+"2302__unpause" -> "2302__msgSender"
+"2302__unpause" -> "2302_whenPaused"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"sha256(bytes)" 
+"abi.decode()" 
+"balance(address)" 
+"abi.encodeWithSelector()" 
+"require(bool)" 
+"revert(string)" 
+"abi.encodePacked()" 
+"require(bool,string)" 
+"2221_NextUint8" -> "require(bool,string)"
+"3013_bytesToBytes32" -> "require(bool,string)"
+"1444_bindLPToAssetBatch" -> "require(bool,string)"
+"1444__serializeTxArgs" -> "abi.encodePacked()"
+"2695_safeDecreaseAllowance" -> "abi.encodeWithSelector()"
+"3013_hashChildren" -> "sha256(bytes)"
+"3296_mod" -> "require(bool,string)"
+"3013_slice" -> "require(bool)"
+"3296_div" -> "require(bool,string)"
+"2221_NextUint64" -> "require(bool,string)"
+"1444_unlock" -> "require(bool,string)"
+"1444_deposit" -> "require(bool,string)"
+"2695_safeApprove" -> "require(bool,string)"
+"3013_hashLeaf" -> "sha256(bytes)"
+"1444_bindLPAndAssetBatch" -> "require(bool,string)"
+"2695_safeApprove" -> "abi.encodeWithSelector()"
+"1444_bindProxyHashBatch" -> "require(bool,string)"
+"2221_NextBytes20" -> "require(bool,string)"
+"1444_lock" -> "require(bool,string)"
+"2221_NextUint255" -> "require(bool,string)"
+"3013_hashLeaf" -> "abi.encodePacked()"
+"1444_getBalanceFor" -> "balance(address)"
+"1444__transferFromContract" -> "require(bool,string)"
+"3013_uint256ToBytes" -> "require(bool,string)"
+"1665_WriteUint255" -> "require(bool,string)"
+"2221_NextBool" -> "require(bool,string)"
+"1665_WriteVarBytes" -> "abi.encodePacked()"
+"2221_NextByte" -> "require(bool,string)"
+"2695_callOptionalReturn" -> "abi.decode()"
+"2695_safeIncreaseAllowance" -> "abi.encodeWithSelector()"
+"1665_WriteVarUint" -> "abi.encodePacked()"
+"3013_bytesToAddress" -> "require(bool,string)"
+"2221_NextVarBytes" -> "require(bool,string)"
+"3013_compressMCPubKey" -> "require(bool,string)"
+"1444__transferToContract" -> "require(bool,string)"
+"3296_mul" -> "require(bool,string)"
+"2221_NextBool" -> "revert(string)"
+"3013_bytesToUint256" -> "require(bool,string)"
+"3013_hashChildren" -> "abi.encodePacked()"
+"2221_NextVarUint" -> "require(bool,string)"
+"1444_withdraw" -> "require(bool,string)"
+"1444_bindAssetHashBatch" -> "require(bool,string)"
+"2221_NextUint32" -> "require(bool,string)"
+"2695_safeTransferFrom" -> "abi.encodeWithSelector()"
+"2221_NextHash" -> "require(bool,string)"
+"2695_safeTransfer" -> "abi.encodeWithSelector()"
+"3296_sub" -> "require(bool,string)"
+"2221_NextUint16" -> "require(bool,string)"
+"2695_callOptionalReturn" -> "require(bool,string)"
+"2420__transferOwnership" -> "require(bool,string)"
+"3296_add" -> "require(bool,string)"
+}"1444__transferERC20FromContract" -> "2695_safeTransfer"
+"2695_safeApprove" -> "3109_allowance"
+"1444__deserializeTxArgs" -> "2221_NextUint255"
+"1444__fromStandardDecimals" -> "2478_decimals"
+"1444__deserializeTxArgs" -> "2221_NextVarBytes"
+"1444_lock" -> "1468_getEthCrossChainManager"
+"1444__serializeTxArgs" -> "1665_WriteUint255"
+"1444__transferERC20ToContract" -> "2695_safeTransferFrom"
+"2695_callOptionalReturn" -> "3013_isContract"
+"2695_safeIncreaseAllowance" -> "3296_add"
+"2695_safeDecreaseAllowance" -> "3296_sub"
+"1444_unlock" -> "3013_bytesToAddress"
+"1444_lock" -> "1460_crossChain"
+"2695_safeIncreaseAllowance" -> "3109_allowance"
+"1444_unlock" -> "3013_equalStorage"
+"1444_getBalanceFor" -> "3109_balanceOf"
+"1444__serializeTxArgs" -> "1665_WriteVarBytes"
+"2695_safeDecreaseAllowance" -> "3109_allowance"
+"1444__toStandardDecimals" -> "2478_decimals"
+}

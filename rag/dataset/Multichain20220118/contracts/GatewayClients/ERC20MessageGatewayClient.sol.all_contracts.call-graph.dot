@@ -1,0 +1,20 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_18_ERC20MessageGatewayClient {
+label = "ERC20MessageGatewayClient"
+"18_constructor" [label="constructor"]
+}subgraph cluster_99_IERC20MessageGateway {
+label = "IERC20MessageGateway"
+"99_token" [label="token"]
+"99_SwapOut_and_call" [label="SwapOut_and_call"]
+}subgraph cluster_60_ERC20_Message_Gateway_Sender {
+label = "ERC20_Message_Gateway_Sender"
+"60_send" [label="send"]
+}subgraph cluster_78_IERC20_Message_Gateway_Receiver {
+label = "IERC20_Message_Gateway_Receiver"
+"78_handleMessage" [label="handleMessage"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+}"60_send" -> "99_SwapOut_and_call"
+}

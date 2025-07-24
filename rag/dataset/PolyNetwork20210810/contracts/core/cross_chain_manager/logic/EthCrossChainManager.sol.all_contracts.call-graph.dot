@@ -1,0 +1,295 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_806_IEthCrossChainData {
+label = "IEthCrossChainData"
+"806_pause" [label="pause"]
+"806_putEthTxHash" [label="putEthTxHash"]
+"806_getCurEpochConPubKeyBytes" [label="getCurEpochConPubKeyBytes"]
+"806_putCurEpochConPubKeyBytes" [label="putCurEpochConPubKeyBytes"]
+"806_getExtraData" [label="getExtraData"]
+"806_markFromChainTxExist" [label="markFromChainTxExist"]
+"806_transferOwnership" [label="transferOwnership"]
+"806_checkIfFromChainTxExist" [label="checkIfFromChainTxExist"]
+"806_paused" [label="paused"]
+"806_getCurEpochStartHeight" [label="getCurEpochStartHeight"]
+"806_unpause" [label="unpause"]
+"806_getEthTxHash" [label="getEthTxHash"]
+"806_getEthTxHashIndex" [label="getEthTxHashIndex"]
+"806_putCurEpochStartHeight" [label="putCurEpochStartHeight"]
+"806_putExtraData" [label="putExtraData"]
+}subgraph cluster_1735_ECCUtils {
+label = "ECCUtils"
+"1735__getBookKeeper" [label="_getBookKeeper"]
+"1735_serializeKeepers" [label="serializeKeepers"]
+"1735_deserializeKeepers" [label="deserializeKeepers"]
+"1735_verifySig" [label="verifySig"]
+"1735_verifyPubkey" [label="verifyPubkey"]
+"1735_getHeaderHash" [label="getHeaderHash"]
+"1735_merkleProve" [label="merkleProve"]
+"1735_deserializeMerkleValue" [label="deserializeMerkleValue"]
+"1735_deserializeHeader" [label="deserializeHeader"]
+"1735_verifyPubkey" -> "1735__getBookKeeper"
+"1735_verifySig" -> "1735_getHeaderHash"
+}subgraph cluster_1862_UpgradableECCM {
+label = "UpgradableECCM"
+"1862_constructor" [label="constructor"]
+"1862_unpause" [label="unpause"]
+"1862_upgradeToNew" [label="upgradeToNew"]
+"1862_pause" [label="pause"]
+"1862_pause" -> "1862__pause"
+"1862_constructor" -> "1862_constructor"
+"1862_pause" -> "1862_paused"
+"1862_upgradeToNew" -> "1862_onlyOwner"
+"1862_unpause" -> "1862_onlyOwner"
+"1862_upgradeToNew" -> "1862_whenPaused"
+"1862_pause" -> "1862_onlyOwner"
+"1862_unpause" -> "1862__unpause"
+"1862_unpause" -> "1862_paused"
+}subgraph cluster_2059_ZeroCopySink {
+label = "ZeroCopySink"
+"2059_WriteUint8" [label="WriteUint8"]
+"2059_WriteUint16" [label="WriteUint16"]
+"2059_WriteVarBytes" [label="WriteVarBytes"]
+"2059_WriteUint255" [label="WriteUint255"]
+"2059_WriteUint32" [label="WriteUint32"]
+"2059_WriteBool" [label="WriteBool"]
+"2059_WriteUint64" [label="WriteUint64"]
+"2059_WriteByte" [label="WriteByte"]
+"2059_WriteVarUint" [label="WriteVarUint"]
+"2059_WriteVarUint" -> "2059_WriteByte"
+"2059_WriteVarUint" -> "2059_WriteUint8"
+"2059_WriteVarUint" -> "2059_WriteUint32"
+"2059_WriteVarUint" -> "2059_WriteUint64"
+"2059_WriteVarUint" -> "2059_WriteUint16"
+"2059_WriteByte" -> "2059_WriteUint8"
+"2059_WriteVarBytes" -> "2059_WriteVarUint"
+}subgraph cluster_3150_IUpgradableECCM {
+label = "IUpgradableECCM"
+"3150_paused" [label="paused"]
+"3150_pause" [label="pause"]
+"3150_upgradeToNew" [label="upgradeToNew"]
+"3150_isOwner" [label="isOwner"]
+"3150_unpause" [label="unpause"]
+}subgraph cluster_3376_Context {
+label = "Context"
+"3376_constructor" [label="constructor"]
+"3376__msgSender" [label="_msgSender"]
+"3376__msgData" [label="_msgData"]
+}subgraph cluster_3120_Utils {
+label = "Utils"
+"3120_isContract" [label="isContract"]
+"3120_equalStorage" [label="equalStorage"]
+"3120_uint256ToBytes" [label="uint256ToBytes"]
+"3120_addressToBytes" [label="addressToBytes"]
+"3120_containMAddresses" [label="containMAddresses"]
+"3120_compressMCPubKey" [label="compressMCPubKey"]
+"3120_hashChildren" [label="hashChildren"]
+"3120_slice" [label="slice"]
+"3120_bytesToBytes32" [label="bytesToBytes32"]
+"3120_hashLeaf" [label="hashLeaf"]
+"3120_bytesToUint256" [label="bytesToUint256"]
+"3120_bytesToAddress" [label="bytesToAddress"]
+"3120_compressMCPubKey" -> "3120_slice"
+}subgraph cluster_2802_SafeMath {
+label = "SafeMath"
+"2802_sub" [label="sub"]
+"2802_div" [label="div"]
+"2802_mod" [label="mod"]
+"2802_add" [label="add"]
+"2802_mul" [label="mul"]
+"2802_mod" -> "2802_mod"
+"2802_div" -> "2802_div"
+"2802_sub" -> "2802_sub"
+}subgraph cluster_3349_Ownable {
+label = "Ownable"
+"3349_owner" [label="owner"]
+"3349_transferOwnership" [label="transferOwnership"]
+"3349_isOwner" [label="isOwner"]
+"3349_renounceOwnership" [label="renounceOwnership"]
+"3349_constructor" [label="constructor"]
+"3349__transferOwnership" [label="_transferOwnership"]
+"3349_transferOwnership" -> "3349__transferOwnership"
+"3349_transferOwnership" -> "3349_onlyOwner"
+"3349_constructor" -> "3349__msgSender"
+"3349_renounceOwnership" -> "3349_onlyOwner"
+"3349_isOwner" -> "3349__msgSender"
+}subgraph cluster_822_IEthCrossChainManager {
+label = "IEthCrossChainManager"
+"822_crossChain" [label="crossChain"]
+}subgraph cluster_2615_ZeroCopySource {
+label = "ZeroCopySource"
+"2615_NextBytes20" [label="NextBytes20"]
+"2615_NextUint64" [label="NextUint64"]
+"2615_NextBool" [label="NextBool"]
+"2615_NextHash" [label="NextHash"]
+"2615_NextVarUint" [label="NextVarUint"]
+"2615_NextUint16" [label="NextUint16"]
+"2615_NextVarBytes" [label="NextVarBytes"]
+"2615_NextUint32" [label="NextUint32"]
+"2615_NextUint8" [label="NextUint8"]
+"2615_NextUint255" [label="NextUint255"]
+"2615_NextByte" [label="NextByte"]
+"2615_NextVarUint" -> "2615_NextByte"
+"2615_NextVarUint" -> "2615_NextUint64"
+"2615_NextVarUint" -> "2615_NextUint16"
+"2615_NextVarUint" -> "2615_NextUint32"
+"2615_NextVarBytes" -> "2615_NextVarUint"
+}subgraph cluster_702_EthCrossChainManager {
+label = "EthCrossChainManager"
+"702_crossChain" [label="crossChain"]
+"702_verifyHeaderAndExecuteTx" [label="verifyHeaderAndExecuteTx"]
+"702_initGenesisBlock" [label="initGenesisBlock"]
+"702__executeCrossChainTx" [label="_executeCrossChainTx"]
+"702_changeBookKeeper" [label="changeBookKeeper"]
+"702_constructor" [label="constructor"]
+"702_constructor" -> "702_constructor"
+"702_initGenesisBlock" -> "702_whenNotPaused"
+"702_crossChain" -> "702_whenNotPaused"
+"702_verifyHeaderAndExecuteTx" -> "702_whenNotPaused"
+"702_changeBookKeeper" -> "702_whenNotPaused"
+"702_verifyHeaderAndExecuteTx" -> "702__executeCrossChainTx"
+}subgraph cluster_3231_Pausable {
+label = "Pausable"
+"3231__unpause" [label="_unpause"]
+"3231_paused" [label="paused"]
+"3231__pause" [label="_pause"]
+"3231_constructor" [label="constructor"]
+"3231__unpause" -> "3231_whenPaused"
+"3231__pause" -> "3231__msgSender"
+"3231__pause" -> "3231_whenNotPaused"
+"3231__unpause" -> "3231__msgSender"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"sha256(bytes)" 
+"keccak256(bytes)" 
+"require(bool)" 
+"abi.encode()" 
+"ripemd160(bytes)" 
+"revert(string)" 
+"ecrecover(bytes32,uint8,bytes32,bytes32)" 
+"require(bool,string)" 
+"abi.encodePacked()" 
+"2615_NextUint255" -> "require(bool,string)"
+"1735_verifySig" -> "sha256(bytes)"
+"1862_unpause" -> "require(bool,string)"
+"702_crossChain" -> "abi.encodePacked()"
+"3120_hashChildren" -> "sha256(bytes)"
+"3120_uint256ToBytes" -> "require(bool,string)"
+"2615_NextVarUint" -> "require(bool,string)"
+"2802_add" -> "require(bool,string)"
+"1735_merkleProve" -> "require(bool,string)"
+"3120_compressMCPubKey" -> "require(bool,string)"
+"1735_verifyPubkey" -> "require(bool,string)"
+"702_crossChain" -> "keccak256(bytes)"
+"1735_verifySig" -> "ecrecover(bytes32,uint8,bytes32,bytes32)"
+"2615_NextVarBytes" -> "require(bool,string)"
+"702__executeCrossChainTx" -> "abi.encodePacked()"
+"702_verifyHeaderAndExecuteTx" -> "require(bool,string)"
+"1735_getHeaderHash" -> "sha256(bytes)"
+"3120_bytesToAddress" -> "require(bool,string)"
+"2615_NextUint32" -> "require(bool,string)"
+"1735_getHeaderHash" -> "abi.encodePacked()"
+"2802_mul" -> "require(bool,string)"
+"702__executeCrossChainTx" -> "abi.encode()"
+"2615_NextBool" -> "revert(string)"
+"3120_hashChildren" -> "abi.encodePacked()"
+"2615_NextBool" -> "require(bool,string)"
+"3120_hashLeaf" -> "abi.encodePacked()"
+"1735__getBookKeeper" -> "sha256(bytes)"
+"3120_hashLeaf" -> "sha256(bytes)"
+"1735_merkleProve" -> "revert(string)"
+"702__executeCrossChainTx" -> "keccak256(bytes)"
+"2615_NextHash" -> "require(bool,string)"
+"2059_WriteVarBytes" -> "abi.encodePacked()"
+"702_crossChain" -> "sha256(bytes)"
+"2615_NextUint64" -> "require(bool,string)"
+"1735_verifySig" -> "abi.encodePacked()"
+"2802_sub" -> "require(bool,string)"
+"1735__getBookKeeper" -> "keccak256(bytes)"
+"2615_NextUint8" -> "require(bool,string)"
+"3120_slice" -> "require(bool)"
+"1735__getBookKeeper" -> "abi.encodePacked()"
+"1735__getBookKeeper" -> "ripemd160(bytes)"
+"2615_NextBytes20" -> "require(bool,string)"
+"3349__transferOwnership" -> "require(bool,string)"
+"702_crossChain" -> "require(bool,string)"
+"2802_div" -> "require(bool,string)"
+"702_changeBookKeeper" -> "require(bool,string)"
+"2615_NextByte" -> "require(bool,string)"
+"3120_bytesToUint256" -> "require(bool,string)"
+"2059_WriteUint255" -> "require(bool,string)"
+"702__executeCrossChainTx" -> "require(bool,string)"
+"3120_bytesToBytes32" -> "require(bool,string)"
+"1862_pause" -> "require(bool,string)"
+"1735_serializeKeepers" -> "abi.encodePacked()"
+"2615_NextUint16" -> "require(bool,string)"
+"2802_mod" -> "require(bool,string)"
+"2059_WriteVarUint" -> "abi.encodePacked()"
+"702_initGenesisBlock" -> "require(bool,string)"
+}"702_verifyHeaderAndExecuteTx" -> "1735_deserializeMerkleValue"
+"702__executeCrossChainTx" -> "2615_NextBool"
+"702_initGenesisBlock" -> "1735_serializeKeepers"
+"702_initGenesisBlock" -> "1735_verifyPubkey"
+"702_crossChain" -> "3120_addressToBytes"
+"702_changeBookKeeper" -> "1735_deserializeHeader"
+"1735_deserializeHeader" -> "2615_NextBytes20"
+"1862_upgradeToNew" -> "806_transferOwnership"
+"702_initGenesisBlock" -> "806_putCurEpochStartHeight"
+"1735_deserializeHeader" -> "2615_NextHash"
+"1735_verifySig" -> "3120_containMAddresses"
+"702_changeBookKeeper" -> "1735_serializeKeepers"
+"702_changeBookKeeper" -> "806_putCurEpochConPubKeyBytes"
+"702_verifyHeaderAndExecuteTx" -> "806_markFromChainTxExist"
+"1735_deserializeHeader" -> "2615_NextUint32"
+"1735_deserializeKeepers" -> "2615_NextVarBytes"
+"1862_pause" -> "806_pause"
+"1735_merkleProve" -> "2615_NextVarBytes"
+"1735_serializeKeepers" -> "2059_WriteVarBytes"
+"702_verifyHeaderAndExecuteTx" -> "1735_deserializeKeepers"
+"1735_verifySig" -> "3120_bytesToBytes32"
+"702_crossChain" -> "2059_WriteUint64"
+"1735_deserializeKeepers" -> "3120_bytesToAddress"
+"1735_merkleProve" -> "2615_NextHash"
+"1735_deserializeMerkleValue" -> "2615_NextUint64"
+"1735_deserializeMerkleValue" -> "2615_NextVarBytes"
+"702__executeCrossChainTx" -> "3120_isContract"
+"702_verifyHeaderAndExecuteTx" -> "3120_bytesToBytes32"
+"702_verifyHeaderAndExecuteTx" -> "3120_bytesToAddress"
+"702_verifyHeaderAndExecuteTx" -> "1735_deserializeHeader"
+"1735_merkleProve" -> "3120_hashChildren"
+"702_changeBookKeeper" -> "1735_verifySig"
+"702_crossChain" -> "806_putEthTxHash"
+"702_initGenesisBlock" -> "806_putCurEpochConPubKeyBytes"
+"702_crossChain" -> "3120_uint256ToBytes"
+"702_crossChain" -> "806_getEthTxHashIndex"
+"702_verifyHeaderAndExecuteTx" -> "1735_getHeaderHash"
+"1735_verifySig" -> "3120_slice"
+"1735__getBookKeeper" -> "3120_slice"
+"1735_serializeKeepers" -> "2059_WriteUint64"
+"1735_serializeKeepers" -> "3120_addressToBytes"
+"702_initGenesisBlock" -> "806_getCurEpochConPubKeyBytes"
+"702_changeBookKeeper" -> "1735_verifyPubkey"
+"702_changeBookKeeper" -> "1735_deserializeKeepers"
+"702_changeBookKeeper" -> "806_putCurEpochStartHeight"
+"702_verifyHeaderAndExecuteTx" -> "1735_verifySig"
+"1735__getBookKeeper" -> "2059_WriteVarBytes"
+"1862_pause" -> "806_paused"
+"1735_deserializeKeepers" -> "2615_NextUint64"
+"1735_merkleProve" -> "3120_hashLeaf"
+"1735_deserializeHeader" -> "2615_NextVarBytes"
+"702_verifyHeaderAndExecuteTx" -> "1735_merkleProve"
+"1735_merkleProve" -> "2615_NextByte"
+"702_verifyHeaderAndExecuteTx" -> "806_checkIfFromChainTxExist"
+"1735__getBookKeeper" -> "3120_compressMCPubKey"
+"702_initGenesisBlock" -> "1735_deserializeHeader"
+"702_crossChain" -> "2059_WriteVarBytes"
+"1862_unpause" -> "806_paused"
+"1735__getBookKeeper" -> "2059_WriteUint16"
+"702_verifyHeaderAndExecuteTx" -> "806_getCurEpochConPubKeyBytes"
+"1862_unpause" -> "806_unpause"
+"1735_deserializeHeader" -> "2615_NextUint64"
+"702_changeBookKeeper" -> "806_getCurEpochStartHeight"
+"702_changeBookKeeper" -> "806_getCurEpochConPubKeyBytes"
+"702_verifyHeaderAndExecuteTx" -> "806_getCurEpochStartHeight"
+}

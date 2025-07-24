@@ -1,0 +1,149 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterECCUtils" {
+  graph [ label = "ECCUtils  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ECCUtils.merkleProve" [ label = "merkleProve", color = "white" ];
+  "ECCUtils._getBookKeeper" [ label = "_getBookKeeper", color = "white" ];
+  "ECCUtils.verifyPubkey" [ label = "verifyPubkey", color = "white" ];
+  "ECCUtils.verifySig" [ label = "verifySig", color = "white" ];
+  "ECCUtils.serializeKeepers" [ label = "serializeKeepers", color = "white" ];
+  "ECCUtils.deserializeKeepers" [ label = "deserializeKeepers", color = "white" ];
+  "ECCUtils.deserializeMerkleValue" [ label = "deserializeMerkleValue", color = "white" ];
+  "ECCUtils.deserializeHeader" [ label = "deserializeHeader", color = "white" ];
+  "ECCUtils.getHeaderHash" [ label = "getHeaderHash" ];
+  "ECCUtils.address" [ label = "address" ];
+}
+
+subgraph "clusterZeroCopySource" {
+  graph [ label = "ZeroCopySource", color = "lightgray" ];
+  "ZeroCopySource.NextVarBytes" [ label = "NextVarBytes" ];
+  "ZeroCopySource.NextByte" [ label = "NextByte" ];
+  "ZeroCopySource.NextHash" [ label = "NextHash" ];
+  "ZeroCopySource.NextUint64" [ label = "NextUint64" ];
+  "ZeroCopySource.NextUint32" [ label = "NextUint32" ];
+  "ZeroCopySource.NextBytes20" [ label = "NextBytes20" ];
+}
+
+subgraph "clusterUtils" {
+  graph [ label = "Utils", color = "lightgray" ];
+  "Utils.hashLeaf" [ label = "hashLeaf" ];
+  "Utils.hashChildren" [ label = "hashChildren" ];
+  "Utils.slice" [ label = "slice" ];
+  "Utils.compressMCPubKey" [ label = "compressMCPubKey" ];
+  "Utils.bytesToBytes32" [ label = "bytesToBytes32" ];
+  "Utils.containMAddresses" [ label = "containMAddresses" ];
+  "Utils.addressToBytes" [ label = "addressToBytes" ];
+  "Utils.bytesToAddress" [ label = "bytesToAddress" ];
+}
+
+subgraph "clusterZeroCopySink" {
+  graph [ label = "ZeroCopySink", color = "lightgray" ];
+  "ZeroCopySink.WriteUint16" [ label = "WriteUint16" ];
+  "ZeroCopySink.WriteVarBytes" [ label = "WriteVarBytes" ];
+  "ZeroCopySink.WriteUint64" [ label = "WriteUint64" ];
+}
+
+  "ECCUtils.merkleProve";
+  "ZeroCopySource.NextVarBytes";
+  "Utils.hashLeaf";
+  "ZeroCopySource.NextByte";
+  "ZeroCopySource.NextHash";
+  "Utils.hashChildren";
+  "ECCUtils._getBookKeeper";
+  "ZeroCopySink.WriteUint16";
+  "Utils.slice";
+  "ZeroCopySink.WriteVarBytes";
+  "Utils.compressMCPubKey";
+  "ECCUtils.address";
+  "ECCUtils.verifyPubkey";
+  "ECCUtils.verifySig";
+  "ECCUtils.getHeaderHash";
+  "Utils.bytesToBytes32";
+  "Utils.containMAddresses";
+  "ECCUtils.serializeKeepers";
+  "ZeroCopySink.WriteUint64";
+  "Utils.addressToBytes";
+  "ECCUtils.deserializeKeepers";
+  "ZeroCopySource.NextUint64";
+  "Utils.bytesToAddress";
+  "ECCUtils.deserializeMerkleValue";
+  "ECCUtils.deserializeHeader";
+  "ZeroCopySource.NextUint32";
+  "ZeroCopySource.NextBytes20";
+  "ECCUtils.merkleProve" -> "ZeroCopySource.NextVarBytes" [ color = "orange" ];
+  "ECCUtils.merkleProve" -> "Utils.hashLeaf" [ color = "orange" ];
+  "ECCUtils.merkleProve" -> "ZeroCopySource.NextByte" [ color = "orange" ];
+  "ECCUtils.merkleProve" -> "ZeroCopySource.NextHash" [ color = "orange" ];
+  "ECCUtils.merkleProve" -> "Utils.hashChildren" [ color = "orange" ];
+  "ECCUtils.merkleProve" -> "Utils.hashChildren" [ color = "orange" ];
+  "ECCUtils._getBookKeeper" -> "ZeroCopySink.WriteUint16" [ color = "orange" ];
+  "ECCUtils._getBookKeeper" -> "Utils.slice" [ color = "orange" ];
+  "ECCUtils._getBookKeeper" -> "ZeroCopySink.WriteVarBytes" [ color = "orange" ];
+  "ECCUtils._getBookKeeper" -> "Utils.compressMCPubKey" [ color = "orange" ];
+  "ECCUtils._getBookKeeper" -> "Utils.slice" [ color = "orange" ];
+  "ECCUtils._getBookKeeper" -> "ECCUtils.address" [ color = "green" ];
+  "ECCUtils._getBookKeeper" -> "ZeroCopySink.WriteUint16" [ color = "orange" ];
+  "ECCUtils.verifyPubkey" -> "ECCUtils._getBookKeeper" [ color = "green" ];
+  "ECCUtils.verifySig" -> "ECCUtils.getHeaderHash" [ color = "green" ];
+  "ECCUtils.verifySig" -> "Utils.bytesToBytes32" [ color = "orange" ];
+  "ECCUtils.verifySig" -> "Utils.slice" [ color = "orange" ];
+  "ECCUtils.verifySig" -> "Utils.bytesToBytes32" [ color = "orange" ];
+  "ECCUtils.verifySig" -> "Utils.slice" [ color = "orange" ];
+  "ECCUtils.verifySig" -> "Utils.containMAddresses" [ color = "orange" ];
+  "ECCUtils.serializeKeepers" -> "ZeroCopySink.WriteUint64" [ color = "orange" ];
+  "ECCUtils.serializeKeepers" -> "ZeroCopySink.WriteVarBytes" [ color = "orange" ];
+  "ECCUtils.serializeKeepers" -> "Utils.addressToBytes" [ color = "orange" ];
+  "ECCUtils.deserializeKeepers" -> "ZeroCopySource.NextUint64" [ color = "orange" ];
+  "ECCUtils.deserializeKeepers" -> "ZeroCopySource.NextVarBytes" [ color = "orange" ];
+  "ECCUtils.deserializeKeepers" -> "Utils.bytesToAddress" [ color = "orange" ];
+  "ECCUtils.deserializeMerkleValue" -> "ZeroCopySource.NextVarBytes" [ color = "orange" ];
+  "ECCUtils.deserializeMerkleValue" -> "ZeroCopySource.NextUint64" [ color = "orange" ];
+  "ECCUtils.deserializeMerkleValue" -> "ZeroCopySource.NextVarBytes" [ color = "orange" ];
+  "ECCUtils.deserializeMerkleValue" -> "ZeroCopySource.NextVarBytes" [ color = "orange" ];
+  "ECCUtils.deserializeMerkleValue" -> "ZeroCopySource.NextVarBytes" [ color = "orange" ];
+  "ECCUtils.deserializeMerkleValue" -> "ZeroCopySource.NextUint64" [ color = "orange" ];
+  "ECCUtils.deserializeMerkleValue" -> "ZeroCopySource.NextVarBytes" [ color = "orange" ];
+  "ECCUtils.deserializeMerkleValue" -> "ZeroCopySource.NextVarBytes" [ color = "orange" ];
+  "ECCUtils.deserializeMerkleValue" -> "ZeroCopySource.NextVarBytes" [ color = "orange" ];
+  "ECCUtils.deserializeHeader" -> "ZeroCopySource.NextUint32" [ color = "orange" ];
+  "ECCUtils.deserializeHeader" -> "ZeroCopySource.NextUint64" [ color = "orange" ];
+  "ECCUtils.deserializeHeader" -> "ZeroCopySource.NextHash" [ color = "orange" ];
+  "ECCUtils.deserializeHeader" -> "ZeroCopySource.NextHash" [ color = "orange" ];
+  "ECCUtils.deserializeHeader" -> "ZeroCopySource.NextHash" [ color = "orange" ];
+  "ECCUtils.deserializeHeader" -> "ZeroCopySource.NextHash" [ color = "orange" ];
+  "ECCUtils.deserializeHeader" -> "ZeroCopySource.NextUint32" [ color = "orange" ];
+  "ECCUtils.deserializeHeader" -> "ZeroCopySource.NextUint32" [ color = "orange" ];
+  "ECCUtils.deserializeHeader" -> "ZeroCopySource.NextUint64" [ color = "orange" ];
+  "ECCUtils.deserializeHeader" -> "ZeroCopySource.NextVarBytes" [ color = "orange" ];
+  "ECCUtils.deserializeHeader" -> "ZeroCopySource.NextBytes20" [ color = "orange" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

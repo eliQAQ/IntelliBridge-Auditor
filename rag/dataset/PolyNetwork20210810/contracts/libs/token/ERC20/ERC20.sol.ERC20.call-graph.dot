@@ -1,0 +1,54 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_431_Context {
+label = "Context"
+"431__msgSender" [label="_msgSender"]
+"431__msgData" [label="_msgData"]
+"431_constructor" [label="constructor"]
+}subgraph cluster_404_ERC20 {
+label = "ERC20"
+"404_approve" [label="approve"]
+"404__transfer" [label="_transfer"]
+"404_transfer" [label="transfer"]
+"404_transferFrom" [label="transferFrom"]
+"404__burn" [label="_burn"]
+"404_allowance" [label="allowance"]
+"404__mint" [label="_mint"]
+"404_decreaseAllowance" [label="decreaseAllowance"]
+"404__burnFrom" [label="_burnFrom"]
+"404_increaseAllowance" [label="increaseAllowance"]
+"404_balanceOf" [label="balanceOf"]
+"404__approve" [label="_approve"]
+"404_totalSupply" [label="totalSupply"]
+"404__burnFrom" -> "404__burn"
+"404_approve" -> "404__msgSender"
+"404_decreaseAllowance" -> "404__approve"
+"404__burnFrom" -> "404__msgSender"
+"404_transferFrom" -> "404__msgSender"
+"404_decreaseAllowance" -> "404__msgSender"
+"404__burnFrom" -> "404__approve"
+"404_transfer" -> "404__transfer"
+"404_approve" -> "404__approve"
+"404_transferFrom" -> "404__transfer"
+"404_increaseAllowance" -> "404__msgSender"
+"404_transfer" -> "404__msgSender"
+"404_increaseAllowance" -> "404__approve"
+"404_transferFrom" -> "404__approve"
+}subgraph cluster_687_IERC20 {
+label = "IERC20"
+"687_allowance" [label="allowance"]
+"687_totalSupply" [label="totalSupply"]
+"687_approve" [label="approve"]
+"687_transfer" [label="transfer"]
+"687_transferFrom" [label="transferFrom"]
+"687_balanceOf" [label="balanceOf"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"404__approve" -> "require(bool,string)"
+"404__transfer" -> "require(bool,string)"
+"404__burn" -> "require(bool,string)"
+"404__mint" -> "require(bool,string)"
+}
+}

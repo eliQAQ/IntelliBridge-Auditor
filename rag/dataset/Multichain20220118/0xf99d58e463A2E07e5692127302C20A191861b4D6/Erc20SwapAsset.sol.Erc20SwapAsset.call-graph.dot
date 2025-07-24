@@ -1,0 +1,76 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_737_ERC20Detailed {
+label = "ERC20Detailed"
+"737_constructor" [label="constructor"]
+"737_symbol" [label="symbol"]
+"737_name" [label="name"]
+"737_decimals" [label="decimals"]
+}subgraph cluster_931_Erc20SwapAsset {
+label = "Erc20SwapAsset"
+"931_Swapin" [label="Swapin"]
+"931_owner" [label="owner"]
+"931_constructor" [label="constructor"]
+"931_Swapout" [label="Swapout"]
+"931_changeDCRMOwner" [label="changeDCRMOwner"]
+"931_changeDCRMOwner" -> "931_owner"
+"931_Swapin" -> "931__mint"
+"931_changeDCRMOwner" -> "931_onlyOwner"
+"931_Swapout" -> "931__msgSender"
+"931_Swapout" -> "931__burn"
+"931_constructor" -> "931_constructor"
+"931_Swapin" -> "931_onlyOwner"
+}subgraph cluster_681_ERC20 {
+label = "ERC20"
+"681__approve" [label="_approve"]
+"681__mint" [label="_mint"]
+"681_balanceOf" [label="balanceOf"]
+"681_approve" [label="approve"]
+"681_allowance" [label="allowance"]
+"681_totalSupply" [label="totalSupply"]
+"681_increaseAllowance" [label="increaseAllowance"]
+"681_transferFrom" [label="transferFrom"]
+"681_decreaseAllowance" [label="decreaseAllowance"]
+"681__burnFrom" [label="_burnFrom"]
+"681__burn" [label="_burn"]
+"681__transfer" [label="_transfer"]
+"681_transfer" [label="transfer"]
+"681_transferFrom" -> "681__transfer"
+"681_decreaseAllowance" -> "681__approve"
+"681_decreaseAllowance" -> "681__msgSender"
+"681_approve" -> "681__msgSender"
+"681_transferFrom" -> "681__approve"
+"681_increaseAllowance" -> "681__msgSender"
+"681__burnFrom" -> "681__burn"
+"681_increaseAllowance" -> "681__approve"
+"681__burnFrom" -> "681__approve"
+"681_transferFrom" -> "681__msgSender"
+"681_transfer" -> "681__transfer"
+"681_approve" -> "681__approve"
+"681__burnFrom" -> "681__msgSender"
+"681_transfer" -> "681__msgSender"
+}subgraph cluster_26_Context {
+label = "Context"
+"26__msgData" [label="_msgData"]
+"26_constructor" [label="constructor"]
+"26__msgSender" [label="_msgSender"]
+}subgraph cluster_94_IERC20 {
+label = "IERC20"
+"94_totalSupply" [label="totalSupply"]
+"94_approve" [label="approve"]
+"94_balanceOf" [label="balanceOf"]
+"94_transferFrom" [label="transferFrom"]
+"94_allowance" [label="allowance"]
+"94_transfer" [label="transfer"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"681__burn" -> "require(bool,string)"
+"681__approve" -> "require(bool,string)"
+"681__transfer" -> "require(bool,string)"
+"931_changeDCRMOwner" -> "require(bool,string)"
+"681__mint" -> "require(bool,string)"
+"931_Swapout" -> "require(bool,string)"
+}
+}

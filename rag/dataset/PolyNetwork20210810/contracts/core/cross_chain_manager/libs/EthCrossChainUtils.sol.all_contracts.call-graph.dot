@@ -1,0 +1,141 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_912_ECCUtils {
+label = "ECCUtils"
+"912_getHeaderHash" [label="getHeaderHash"]
+"912_deserializeHeader" [label="deserializeHeader"]
+"912_deserializeKeepers" [label="deserializeKeepers"]
+"912_merkleProve" [label="merkleProve"]
+"912_verifySig" [label="verifySig"]
+"912_deserializeMerkleValue" [label="deserializeMerkleValue"]
+"912_verifyPubkey" [label="verifyPubkey"]
+"912__getBookKeeper" [label="_getBookKeeper"]
+"912_serializeKeepers" [label="serializeKeepers"]
+"912_verifySig" -> "912_getHeaderHash"
+"912_verifyPubkey" -> "912__getBookKeeper"
+}subgraph cluster_1665_ZeroCopySource {
+label = "ZeroCopySource"
+"1665_NextBool" [label="NextBool"]
+"1665_NextByte" [label="NextByte"]
+"1665_NextUint32" [label="NextUint32"]
+"1665_NextHash" [label="NextHash"]
+"1665_NextVarBytes" [label="NextVarBytes"]
+"1665_NextUint8" [label="NextUint8"]
+"1665_NextBytes20" [label="NextBytes20"]
+"1665_NextUint16" [label="NextUint16"]
+"1665_NextUint64" [label="NextUint64"]
+"1665_NextUint255" [label="NextUint255"]
+"1665_NextVarUint" [label="NextVarUint"]
+"1665_NextVarBytes" -> "1665_NextVarUint"
+"1665_NextVarUint" -> "1665_NextUint16"
+"1665_NextVarUint" -> "1665_NextByte"
+"1665_NextVarUint" -> "1665_NextUint64"
+"1665_NextVarUint" -> "1665_NextUint32"
+}subgraph cluster_1109_ZeroCopySink {
+label = "ZeroCopySink"
+"1109_WriteUint32" [label="WriteUint32"]
+"1109_WriteVarBytes" [label="WriteVarBytes"]
+"1109_WriteByte" [label="WriteByte"]
+"1109_WriteVarUint" [label="WriteVarUint"]
+"1109_WriteUint64" [label="WriteUint64"]
+"1109_WriteBool" [label="WriteBool"]
+"1109_WriteUint255" [label="WriteUint255"]
+"1109_WriteUint16" [label="WriteUint16"]
+"1109_WriteUint8" [label="WriteUint8"]
+"1109_WriteVarBytes" -> "1109_WriteVarUint"
+"1109_WriteVarUint" -> "1109_WriteByte"
+"1109_WriteByte" -> "1109_WriteUint8"
+"1109_WriteVarUint" -> "1109_WriteUint16"
+"1109_WriteVarUint" -> "1109_WriteUint64"
+"1109_WriteVarUint" -> "1109_WriteUint32"
+"1109_WriteVarUint" -> "1109_WriteUint8"
+}subgraph cluster_1983_Utils {
+label = "Utils"
+"1983_compressMCPubKey" [label="compressMCPubKey"]
+"1983_slice" [label="slice"]
+"1983_hashLeaf" [label="hashLeaf"]
+"1983_isContract" [label="isContract"]
+"1983_containMAddresses" [label="containMAddresses"]
+"1983_hashChildren" [label="hashChildren"]
+"1983_uint256ToBytes" [label="uint256ToBytes"]
+"1983_bytesToUint256" [label="bytesToUint256"]
+"1983_bytesToBytes32" [label="bytesToBytes32"]
+"1983_equalStorage" [label="equalStorage"]
+"1983_bytesToAddress" [label="bytesToAddress"]
+"1983_addressToBytes" [label="addressToBytes"]
+"1983_compressMCPubKey" -> "1983_slice"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"ripemd160(bytes)" 
+"revert(string)" 
+"sha256(bytes)" 
+"require(bool,string)" 
+"ecrecover(bytes32,uint8,bytes32,bytes32)" 
+"abi.encodePacked()" 
+"require(bool)" 
+"keccak256(bytes)" 
+"1109_WriteVarBytes" -> "abi.encodePacked()"
+"1983_bytesToUint256" -> "require(bool,string)"
+"1665_NextUint32" -> "require(bool,string)"
+"912__getBookKeeper" -> "ripemd160(bytes)"
+"912__getBookKeeper" -> "abi.encodePacked()"
+"912_verifySig" -> "sha256(bytes)"
+"1983_compressMCPubKey" -> "require(bool,string)"
+"912__getBookKeeper" -> "keccak256(bytes)"
+"912_verifySig" -> "abi.encodePacked()"
+"1665_NextVarUint" -> "require(bool,string)"
+"1665_NextUint16" -> "require(bool,string)"
+"1665_NextVarBytes" -> "require(bool,string)"
+"1665_NextByte" -> "require(bool,string)"
+"1983_uint256ToBytes" -> "require(bool,string)"
+"1665_NextUint8" -> "require(bool,string)"
+"1665_NextBool" -> "require(bool,string)"
+"1665_NextBytes20" -> "require(bool,string)"
+"912_getHeaderHash" -> "abi.encodePacked()"
+"1665_NextHash" -> "require(bool,string)"
+"912_merkleProve" -> "require(bool,string)"
+"1983_hashChildren" -> "abi.encodePacked()"
+"1983_bytesToAddress" -> "require(bool,string)"
+"912_getHeaderHash" -> "sha256(bytes)"
+"912_verifyPubkey" -> "require(bool,string)"
+"1109_WriteVarUint" -> "abi.encodePacked()"
+"912_serializeKeepers" -> "abi.encodePacked()"
+"912_verifySig" -> "ecrecover(bytes32,uint8,bytes32,bytes32)"
+"1665_NextUint64" -> "require(bool,string)"
+"912__getBookKeeper" -> "sha256(bytes)"
+"1983_slice" -> "require(bool)"
+"1665_NextBool" -> "revert(string)"
+"1983_hashLeaf" -> "abi.encodePacked()"
+"912_merkleProve" -> "revert(string)"
+"1983_bytesToBytes32" -> "require(bool,string)"
+"1983_hashLeaf" -> "sha256(bytes)"
+"1109_WriteUint255" -> "require(bool,string)"
+"1983_hashChildren" -> "sha256(bytes)"
+"1665_NextUint255" -> "require(bool,string)"
+}"912__getBookKeeper" -> "1109_WriteVarBytes"
+"912_serializeKeepers" -> "1109_WriteVarBytes"
+"912_deserializeMerkleValue" -> "1665_NextUint64"
+"912_deserializeHeader" -> "1665_NextHash"
+"912_deserializeKeepers" -> "1665_NextVarBytes"
+"912_deserializeHeader" -> "1665_NextUint32"
+"912_merkleProve" -> "1983_hashLeaf"
+"912_deserializeKeepers" -> "1665_NextUint64"
+"912_merkleProve" -> "1665_NextByte"
+"912_verifySig" -> "1983_slice"
+"912_verifySig" -> "1983_bytesToBytes32"
+"912__getBookKeeper" -> "1983_compressMCPubKey"
+"912__getBookKeeper" -> "1109_WriteUint16"
+"912__getBookKeeper" -> "1983_slice"
+"912_deserializeHeader" -> "1665_NextVarBytes"
+"912_verifySig" -> "1983_containMAddresses"
+"912_deserializeMerkleValue" -> "1665_NextVarBytes"
+"912_deserializeKeepers" -> "1983_bytesToAddress"
+"912_deserializeHeader" -> "1665_NextBytes20"
+"912_merkleProve" -> "1665_NextVarBytes"
+"912_serializeKeepers" -> "1983_addressToBytes"
+"912_merkleProve" -> "1665_NextHash"
+"912_merkleProve" -> "1983_hashChildren"
+"912_serializeKeepers" -> "1109_WriteUint64"
+"912_deserializeHeader" -> "1665_NextUint64"
+}

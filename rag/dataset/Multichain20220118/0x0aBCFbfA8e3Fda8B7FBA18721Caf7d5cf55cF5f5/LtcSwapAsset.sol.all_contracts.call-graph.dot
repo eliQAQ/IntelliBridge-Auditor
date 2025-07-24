@@ -1,0 +1,100 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_737_ERC20Detailed {
+label = "ERC20Detailed"
+"737_symbol" [label="symbol"]
+"737_decimals" [label="decimals"]
+"737_constructor" [label="constructor"]
+"737_name" [label="name"]
+}subgraph cluster_681_ERC20 {
+label = "ERC20"
+"681__burn" [label="_burn"]
+"681__transfer" [label="_transfer"]
+"681_decreaseAllowance" [label="decreaseAllowance"]
+"681_approve" [label="approve"]
+"681_balanceOf" [label="balanceOf"]
+"681__mint" [label="_mint"]
+"681_increaseAllowance" [label="increaseAllowance"]
+"681_totalSupply" [label="totalSupply"]
+"681__approve" [label="_approve"]
+"681_allowance" [label="allowance"]
+"681_transfer" [label="transfer"]
+"681__burnFrom" [label="_burnFrom"]
+"681_transferFrom" [label="transferFrom"]
+"681__burnFrom" -> "681__msgSender"
+"681_increaseAllowance" -> "681__approve"
+"681_decreaseAllowance" -> "681__msgSender"
+"681_approve" -> "681__msgSender"
+"681_approve" -> "681__approve"
+"681_decreaseAllowance" -> "681__approve"
+"681_transfer" -> "681__transfer"
+"681__burnFrom" -> "681__approve"
+"681_transferFrom" -> "681__approve"
+"681_transfer" -> "681__msgSender"
+"681_transferFrom" -> "681__transfer"
+"681_transferFrom" -> "681__msgSender"
+"681_increaseAllowance" -> "681__msgSender"
+"681__burnFrom" -> "681__burn"
+}subgraph cluster_280_SafeMath {
+label = "SafeMath"
+"280_sub" [label="sub"]
+"280_mod" [label="mod"]
+"280_mul" [label="mul"]
+"280_div" [label="div"]
+"280_add" [label="add"]
+"280_div" -> "280_div"
+"280_sub" -> "280_sub"
+"280_mod" -> "280_mod"
+}subgraph cluster_94_IERC20 {
+label = "IERC20"
+"94_allowance" [label="allowance"]
+"94_transferFrom" [label="transferFrom"]
+"94_transfer" [label="transfer"]
+"94_balanceOf" [label="balanceOf"]
+"94_approve" [label="approve"]
+"94_totalSupply" [label="totalSupply"]
+}subgraph cluster_26_Context {
+label = "Context"
+"26__msgSender" [label="_msgSender"]
+"26__msgData" [label="_msgData"]
+"26_constructor" [label="constructor"]
+}subgraph cluster_1022_LtcSwapAsset {
+label = "LtcSwapAsset"
+"1022_changeDCRMOwner" [label="changeDCRMOwner"]
+"1022_owner" [label="owner"]
+"1022_Swapout" [label="Swapout"]
+"1022_verifyBindAddr" [label="verifyBindAddr"]
+"1022_Swapin" [label="Swapin"]
+"1022_constructor" [label="constructor"]
+"1022_Swapin" -> "1022_onlyOwner"
+"1022_Swapout" -> "1022__msgSender"
+"1022_Swapin" -> "1022__mint"
+"1022_constructor" -> "1022_constructor"
+"1022_Swapout" -> "1022__burn"
+"1022_changeDCRMOwner" -> "1022_onlyOwner"
+"1022_changeDCRMOwner" -> "1022_owner"
+"1022_Swapout" -> "1022_verifyBindAddr"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"280_sub" -> "require(bool,string)"
+"280_mul" -> "require(bool,string)"
+"681__approve" -> "require(bool,string)"
+"681__transfer" -> "require(bool,string)"
+"280_add" -> "require(bool,string)"
+"681__mint" -> "require(bool,string)"
+"681__burn" -> "require(bool,string)"
+"1022_changeDCRMOwner" -> "require(bool,string)"
+"280_mod" -> "require(bool,string)"
+"1022_verifyBindAddr" -> "require(bool,string)"
+"280_div" -> "require(bool,string)"
+}"681__burnFrom" -> "280_sub"
+"681_transferFrom" -> "280_sub"
+"681__transfer" -> "280_sub"
+"681__burn" -> "280_sub"
+"681_decreaseAllowance" -> "280_sub"
+"681_increaseAllowance" -> "280_add"
+"681__transfer" -> "280_add"
+"681__mint" -> "280_add"
+}

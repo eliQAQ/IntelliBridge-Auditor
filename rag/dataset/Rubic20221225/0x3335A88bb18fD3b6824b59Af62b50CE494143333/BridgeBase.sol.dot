@@ -1,0 +1,195 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterBridgeBase" {
+  graph [ label = "BridgeBase", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "BridgeBase.onlyAdmin" [ label = "onlyAdmin", color = "yellow" ];
+  "BridgeBase.onlyManagerOrAdmin" [ label = "onlyManagerOrAdmin", color = "yellow" ];
+  "BridgeBase.onlyEOA" [ label = "onlyEOA", color = "yellow" ];
+  "BridgeBase.__BridgeBaseInit" [ label = "__BridgeBaseInit", color = "white" ];
+  "BridgeBase.accrueFixedCryptoFee" [ label = "accrueFixedCryptoFee", color = "white" ];
+  "BridgeBase.accrueTokenFees" [ label = "accrueTokenFees", color = "white" ];
+  "BridgeBase._calculateFeeWithIntegrator" [ label = "_calculateFeeWithIntegrator", color = "white" ];
+  "BridgeBase._calculateFee" [ label = "_calculateFee" ];
+  "BridgeBase._collectIntegrator" [ label = "_collectIntegrator", color = "red" ];
+  "BridgeBase.collectIntegratorFee" [ label = "collectIntegratorFee", color = "blue" ];
+  "BridgeBase.collectRubicFee" [ label = "collectRubicFee", color = "blue" ];
+  "BridgeBase.collectRubicCryptoFee" [ label = "collectRubicCryptoFee", color = "blue" ];
+  "BridgeBase.pauseExecution" [ label = "pauseExecution", color = "blue" ];
+  "BridgeBase.unpauseExecution" [ label = "unpauseExecution", color = "blue" ];
+  "BridgeBase.setIntegratorInfo" [ label = "setIntegratorInfo", color = "blue" ];
+  "BridgeBase.setFixedCryptoFee" [ label = "setFixedCryptoFee", color = "blue" ];
+  "BridgeBase.setRubicPlatformFee" [ label = "setRubicPlatformFee", color = "blue" ];
+  "BridgeBase.setMinTokenAmount" [ label = "setMinTokenAmount", color = "blue" ];
+  "BridgeBase.setMaxTokenAmount" [ label = "setMaxTokenAmount", color = "blue" ];
+  "BridgeBase.addAvailableRouter" [ label = "addAvailableRouter", color = "blue" ];
+  "BridgeBase.removeAvailableRouter" [ label = "removeAvailableRouter", color = "blue" ];
+  "BridgeBase.transferAdmin" [ label = "transferAdmin", color = "blue" ];
+  "BridgeBase.getAvailableRouters" [ label = "getAvailableRouters", color = "blue" ];
+  "BridgeBase.checkIsManagerOrAdmin" [ label = "checkIsManagerOrAdmin" ];
+  "BridgeBase.checkIsAdmin" [ label = "checkIsAdmin" ];
+  "BridgeBase.sendToken" [ label = "sendToken" ];
+  "BridgeBase.<Receive Ether>" [ label = "<Receive Ether>", color = "blue" ];
+  "BridgeBase.<Fallback>" [ label = "<Fallback>", color = "blue" ];
+  "BridgeBase.OnlyEOA" [ label = "OnlyEOA" ];
+  "BridgeBase.__Pausable_init_unchained" [ label = "__Pausable_init_unchained" ];
+  "BridgeBase.FeeTooHigh" [ label = "FeeTooHigh" ];
+  "BridgeBase.MinMustBeLowerThanMax" [ label = "MinMustBeLowerThanMax" ];
+  "BridgeBase._setupRole" [ label = "_setupRole" ];
+  "BridgeBase.address" [ label = "address" ];
+  "BridgeBase.ZeroAmount" [ label = "ZeroAmount" ];
+  "BridgeBase._pause" [ label = "_pause" ];
+  "BridgeBase._unpause" [ label = "_unpause" ];
+  "BridgeBase.ShareTooHigh" [ label = "ShareTooHigh" ];
+  "BridgeBase.MaxMustBeBiggerThanMin" [ label = "MaxMustBeBiggerThanMin" ];
+  "BridgeBase.ZeroAddress" [ label = "ZeroAddress" ];
+  "BridgeBase._revokeRole" [ label = "_revokeRole" ];
+  "BridgeBase._grantRole" [ label = "_grantRole" ];
+  "BridgeBase.hasRole" [ label = "hasRole" ];
+  "BridgeBase.NotAManager" [ label = "NotAManager" ];
+  "BridgeBase.NotAnAdmin" [ label = "NotAnAdmin" ];
+  "BridgeBase.payable" [ label = "payable" ];
+  "BridgeBase.IERC20Upgradeable" [ label = "IERC20Upgradeable" ];
+}
+
+subgraph "clusterEnumerableSetUpgradeable.AddressSet" {
+  graph [ label = "EnumerableSetUpgradeable.AddressSet", color = "lightgray" ];
+  "EnumerableSetUpgradeable.AddressSet.add" [ label = "add" ];
+  "EnumerableSetUpgradeable.AddressSet.remove" [ label = "remove" ];
+  "EnumerableSetUpgradeable.AddressSet.values" [ label = "values" ];
+}
+
+subgraph "clusterFullMath" {
+  graph [ label = "FullMath", color = "lightgray" ];
+  "FullMath.mulDiv" [ label = "mulDiv" ];
+}
+
+subgraph "clusterAddressUpgradeable" {
+  graph [ label = "AddressUpgradeable", color = "lightgray" ];
+  "AddressUpgradeable.sendValue" [ label = "sendValue" ];
+}
+
+  "BridgeBase.onlyAdmin";
+  "BridgeBase.checkIsAdmin";
+  "BridgeBase.onlyManagerOrAdmin";
+  "BridgeBase.checkIsManagerOrAdmin";
+  "BridgeBase.onlyEOA";
+  "BridgeBase.OnlyEOA";
+  "BridgeBase.__BridgeBaseInit";
+  "BridgeBase.__Pausable_init_unchained";
+  "BridgeBase.FeeTooHigh";
+  "EnumerableSetUpgradeable.AddressSet.add";
+  "BridgeBase.MinMustBeLowerThanMax";
+  "BridgeBase._setupRole";
+  "BridgeBase.accrueTokenFees";
+  "BridgeBase._calculateFee";
+  "BridgeBase.address";
+  "BridgeBase._calculateFeeWithIntegrator";
+  "FullMath.mulDiv";
+  "BridgeBase._collectIntegrator";
+  "BridgeBase.ZeroAmount";
+  "BridgeBase.sendToken";
+  "BridgeBase.collectIntegratorFee";
+  "BridgeBase.collectRubicFee";
+  "BridgeBase.collectRubicCryptoFee";
+  "BridgeBase.pauseExecution";
+  "BridgeBase._pause";
+  "BridgeBase.unpauseExecution";
+  "BridgeBase._unpause";
+  "BridgeBase.setIntegratorInfo";
+  "BridgeBase.ShareTooHigh";
+  "BridgeBase.setRubicPlatformFee";
+  "BridgeBase.setMinTokenAmount";
+  "BridgeBase.setMaxTokenAmount";
+  "BridgeBase.MaxMustBeBiggerThanMin";
+  "BridgeBase.addAvailableRouter";
+  "BridgeBase.ZeroAddress";
+  "BridgeBase.removeAvailableRouter";
+  "EnumerableSetUpgradeable.AddressSet.remove";
+  "BridgeBase.transferAdmin";
+  "BridgeBase._revokeRole";
+  "BridgeBase._grantRole";
+  "BridgeBase.getAvailableRouters";
+  "EnumerableSetUpgradeable.AddressSet.values";
+  "BridgeBase.hasRole";
+  "BridgeBase.NotAManager";
+  "BridgeBase.NotAnAdmin";
+  "AddressUpgradeable.sendValue";
+  "BridgeBase.payable";
+  "BridgeBase.IERC20Upgradeable";
+  "BridgeBase.onlyAdmin" -> "BridgeBase.checkIsAdmin" [ color = "green" ];
+  "BridgeBase.onlyManagerOrAdmin" -> "BridgeBase.checkIsManagerOrAdmin" [ color = "green" ];
+  "BridgeBase.onlyEOA" -> "BridgeBase.OnlyEOA" [ color = "green" ];
+  "BridgeBase.__BridgeBaseInit" -> "BridgeBase.__Pausable_init_unchained" [ color = "green" ];
+  "BridgeBase.__BridgeBaseInit" -> "BridgeBase.FeeTooHigh" [ color = "green" ];
+  "BridgeBase.__BridgeBaseInit" -> "EnumerableSetUpgradeable.AddressSet.add" [ color = "orange" ];
+  "BridgeBase.__BridgeBaseInit" -> "BridgeBase.MinMustBeLowerThanMax" [ color = "green" ];
+  "BridgeBase.__BridgeBaseInit" -> "BridgeBase._setupRole" [ color = "green" ];
+  "BridgeBase.accrueTokenFees" -> "BridgeBase._calculateFee" [ color = "green" ];
+  "BridgeBase.accrueTokenFees" -> "BridgeBase.address" [ color = "green" ];
+  "BridgeBase._calculateFeeWithIntegrator" -> "FullMath.mulDiv" [ color = "orange" ];
+  "BridgeBase._calculateFeeWithIntegrator" -> "FullMath.mulDiv" [ color = "orange" ];
+  "BridgeBase._calculateFee" -> "BridgeBase._calculateFeeWithIntegrator" [ color = "green" ];
+  "BridgeBase._calculateFee" -> "FullMath.mulDiv" [ color = "orange" ];
+  "BridgeBase._collectIntegrator" -> "BridgeBase.address" [ color = "green" ];
+  "BridgeBase._collectIntegrator" -> "BridgeBase.ZeroAmount" [ color = "green" ];
+  "BridgeBase._collectIntegrator" -> "BridgeBase.sendToken" [ color = "green" ];
+  "BridgeBase.collectIntegratorFee" -> "BridgeBase._collectIntegrator" [ color = "green" ];
+  "BridgeBase.collectIntegratorFee" -> "BridgeBase._collectIntegrator" [ color = "green" ];
+  "BridgeBase.collectRubicFee" -> "BridgeBase.ZeroAmount" [ color = "green" ];
+  "BridgeBase.collectRubicFee" -> "BridgeBase.sendToken" [ color = "green" ];
+  "BridgeBase.collectRubicCryptoFee" -> "BridgeBase.sendToken" [ color = "green" ];
+  "BridgeBase.collectRubicCryptoFee" -> "BridgeBase.address" [ color = "green" ];
+  "BridgeBase.pauseExecution" -> "BridgeBase._pause" [ color = "green" ];
+  "BridgeBase.unpauseExecution" -> "BridgeBase._unpause" [ color = "green" ];
+  "BridgeBase.setIntegratorInfo" -> "BridgeBase.FeeTooHigh" [ color = "green" ];
+  "BridgeBase.setIntegratorInfo" -> "BridgeBase.ShareTooHigh" [ color = "green" ];
+  "BridgeBase.setRubicPlatformFee" -> "BridgeBase.FeeTooHigh" [ color = "green" ];
+  "BridgeBase.setMinTokenAmount" -> "BridgeBase.MinMustBeLowerThanMax" [ color = "green" ];
+  "BridgeBase.setMaxTokenAmount" -> "BridgeBase.MaxMustBeBiggerThanMin" [ color = "green" ];
+  "BridgeBase.addAvailableRouter" -> "BridgeBase.address" [ color = "green" ];
+  "BridgeBase.addAvailableRouter" -> "BridgeBase.ZeroAddress" [ color = "green" ];
+  "BridgeBase.addAvailableRouter" -> "EnumerableSetUpgradeable.AddressSet.add" [ color = "orange" ];
+  "BridgeBase.removeAvailableRouter" -> "EnumerableSetUpgradeable.AddressSet.remove" [ color = "orange" ];
+  "BridgeBase.transferAdmin" -> "BridgeBase._revokeRole" [ color = "green" ];
+  "BridgeBase.transferAdmin" -> "BridgeBase._grantRole" [ color = "green" ];
+  "BridgeBase.getAvailableRouters" -> "EnumerableSetUpgradeable.AddressSet.values" [ color = "orange" ];
+  "BridgeBase.checkIsManagerOrAdmin" -> "BridgeBase.hasRole" [ color = "green" ];
+  "BridgeBase.checkIsManagerOrAdmin" -> "BridgeBase.hasRole" [ color = "green" ];
+  "BridgeBase.checkIsManagerOrAdmin" -> "BridgeBase.NotAManager" [ color = "green" ];
+  "BridgeBase.checkIsAdmin" -> "BridgeBase.hasRole" [ color = "green" ];
+  "BridgeBase.checkIsAdmin" -> "BridgeBase.NotAnAdmin" [ color = "green" ];
+  "BridgeBase.sendToken" -> "BridgeBase.address" [ color = "green" ];
+  "BridgeBase.sendToken" -> "AddressUpgradeable.sendValue" [ color = "orange" ];
+  "BridgeBase.sendToken" -> "BridgeBase.payable" [ color = "green" ];
+  "BridgeBase.sendToken" -> "BridgeBase.IERC20Upgradeable" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

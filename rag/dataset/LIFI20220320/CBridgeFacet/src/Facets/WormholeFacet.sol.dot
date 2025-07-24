@@ -1,0 +1,99 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterWormholeFacet" {
+  graph [ label = "WormholeFacet", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "WormholeFacet.initWormhole" [ label = "initWormhole", color = "blue" ];
+  "WormholeFacet.startBridgeTokensViaWormhole" [ label = "startBridgeTokensViaWormhole", color = "green" ];
+  "WormholeFacet.swapAndStartBridgeTokensViaWormhole" [ label = "swapAndStartBridgeTokensViaWormhole", color = "green" ];
+  "WormholeFacet.changeWormholeRouter" [ label = "changeWormholeRouter", color = "blue" ];
+  "WormholeFacet._startBridge" [ label = "_startBridge" ];
+  "WormholeFacet.getStorage" [ label = "getStorage" ];
+  "WormholeFacet.address" [ label = "address" ];
+  "WormholeFacet.LiFiTransferStarted" [ label = "LiFiTransferStarted" ];
+  "WormholeFacet.IERC20" [ label = "IERC20" ];
+  "WormholeFacet.IWormholeRouter" [ label = "IWormholeRouter" ];
+}
+
+subgraph "clusterLibDiamond" {
+  graph [ label = "LibDiamond", color = "lightgray" ];
+  "LibDiamond.enforceIsContractOwner" [ label = "enforceIsContractOwner" ];
+}
+
+subgraph "clusterLibAsset" {
+  graph [ label = "LibAsset", color = "lightgray" ];
+  "LibAsset.getOwnBalance" [ label = "getOwnBalance" ];
+  "LibAsset.transferFromERC20" [ label = "transferFromERC20" ];
+  "LibAsset.approveERC20" [ label = "approveERC20" ];
+}
+
+subgraph "clusterLibSwap" {
+  graph [ label = "LibSwap", color = "lightgray" ];
+  "LibSwap.swap" [ label = "swap" ];
+}
+
+  "WormholeFacet.initWormhole";
+  "WormholeFacet.getStorage";
+  "LibDiamond.enforceIsContractOwner";
+  "WormholeFacet.startBridgeTokensViaWormhole";
+  "LibAsset.getOwnBalance";
+  "LibAsset.transferFromERC20";
+  "WormholeFacet.address";
+  "WormholeFacet._startBridge";
+  "WormholeFacet.LiFiTransferStarted";
+  "WormholeFacet.swapAndStartBridgeTokensViaWormhole";
+  "LibSwap.swap";
+  "WormholeFacet.changeWormholeRouter";
+  "LibAsset.approveERC20";
+  "WormholeFacet.IERC20";
+  "WormholeFacet.IWormholeRouter";
+  "WormholeFacet.initWormhole" -> "WormholeFacet.getStorage" [ color = "green" ];
+  "WormholeFacet.initWormhole" -> "LibDiamond.enforceIsContractOwner" [ color = "orange" ];
+  "WormholeFacet.startBridgeTokensViaWormhole" -> "LibAsset.getOwnBalance" [ color = "orange" ];
+  "WormholeFacet.startBridgeTokensViaWormhole" -> "LibAsset.transferFromERC20" [ color = "orange" ];
+  "WormholeFacet.startBridgeTokensViaWormhole" -> "WormholeFacet.address" [ color = "green" ];
+  "WormholeFacet.startBridgeTokensViaWormhole" -> "LibAsset.getOwnBalance" [ color = "orange" ];
+  "WormholeFacet.startBridgeTokensViaWormhole" -> "WormholeFacet._startBridge" [ color = "green" ];
+  "WormholeFacet.startBridgeTokensViaWormhole" -> "WormholeFacet.LiFiTransferStarted" [ color = "green" ];
+  "WormholeFacet.swapAndStartBridgeTokensViaWormhole" -> "LibAsset.getOwnBalance" [ color = "orange" ];
+  "WormholeFacet.swapAndStartBridgeTokensViaWormhole" -> "LibSwap.swap" [ color = "orange" ];
+  "WormholeFacet.swapAndStartBridgeTokensViaWormhole" -> "LibAsset.getOwnBalance" [ color = "orange" ];
+  "WormholeFacet.swapAndStartBridgeTokensViaWormhole" -> "LibAsset.getOwnBalance" [ color = "orange" ];
+  "WormholeFacet.swapAndStartBridgeTokensViaWormhole" -> "WormholeFacet._startBridge" [ color = "green" ];
+  "WormholeFacet.swapAndStartBridgeTokensViaWormhole" -> "WormholeFacet.LiFiTransferStarted" [ color = "green" ];
+  "WormholeFacet.changeWormholeRouter" -> "WormholeFacet.getStorage" [ color = "green" ];
+  "WormholeFacet.changeWormholeRouter" -> "LibDiamond.enforceIsContractOwner" [ color = "orange" ];
+  "WormholeFacet._startBridge" -> "WormholeFacet.getStorage" [ color = "green" ];
+  "WormholeFacet._startBridge" -> "LibAsset.approveERC20" [ color = "orange" ];
+  "WormholeFacet._startBridge" -> "WormholeFacet.IERC20" [ color = "green" ];
+  "WormholeFacet._startBridge" -> "WormholeFacet.IWormholeRouter" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

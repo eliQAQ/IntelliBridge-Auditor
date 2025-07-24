@@ -1,0 +1,62 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_373_LibBytes {
+label = "LibBytes"
+"373_toUint96" [label="toUint96"]
+"373_concat" [label="concat"]
+"373_toBytes32" [label="toBytes32"]
+"373_toUint32" [label="toUint32"]
+"373_equalStorage" [label="equalStorage"]
+"373_toUint128" [label="toUint128"]
+"373_concatStorage" [label="concatStorage"]
+"373_toUint256" [label="toUint256"]
+"373_toUint64" [label="toUint64"]
+"373_toUint8" [label="toUint8"]
+"373_toUint16" [label="toUint16"]
+"373_slice" [label="slice"]
+"373_equal" [label="equal"]
+"373_toAddress" [label="toAddress"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"sload(uint256)" 
+"mstore(uint256,uint256)" 
+"mload(uint256)" 
+"keccak256(uint256,uint256)" 
+"require(bool,string)" 
+"sstore(uint256,uint256)" 
+"373_toUint32" -> "mload(uint256)"
+"373_toUint96" -> "mload(uint256)"
+"373_equalStorage" -> "mload(uint256)"
+"373_equal" -> "mload(uint256)"
+"373_concatStorage" -> "mstore(uint256,uint256)"
+"373_toUint16" -> "require(bool,string)"
+"373_equalStorage" -> "mstore(uint256,uint256)"
+"373_toBytes32" -> "require(bool,string)"
+"373_slice" -> "mload(uint256)"
+"373_toAddress" -> "mload(uint256)"
+"373_toUint64" -> "mload(uint256)"
+"373_slice" -> "require(bool,string)"
+"373_concatStorage" -> "sstore(uint256,uint256)"
+"373_slice" -> "mstore(uint256,uint256)"
+"373_toUint64" -> "require(bool,string)"
+"373_toUint8" -> "require(bool,string)"
+"373_concat" -> "mload(uint256)"
+"373_concatStorage" -> "keccak256(uint256,uint256)"
+"373_toBytes32" -> "mload(uint256)"
+"373_equalStorage" -> "keccak256(uint256,uint256)"
+"373_toUint256" -> "require(bool,string)"
+"373_toUint16" -> "mload(uint256)"
+"373_toUint128" -> "mload(uint256)"
+"373_toUint96" -> "require(bool,string)"
+"373_concatStorage" -> "mload(uint256)"
+"373_toUint256" -> "mload(uint256)"
+"373_concatStorage" -> "sload(uint256)"
+"373_equalStorage" -> "sload(uint256)"
+"373_toAddress" -> "require(bool,string)"
+"373_concat" -> "mstore(uint256,uint256)"
+"373_toUint8" -> "mload(uint256)"
+"373_toUint32" -> "require(bool,string)"
+"373_toUint128" -> "require(bool,string)"
+}
+}

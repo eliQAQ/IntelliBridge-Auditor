@@ -1,0 +1,98 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterHopImplL1V2" {
+  graph [ label = "HopImplL1V2", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "HopImplL1V2.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "HopImplL1V2.bridgeAfterSwap" [ label = "bridgeAfterSwap", color = "blue" ];
+  "HopImplL1V2.swapAndBridge" [ label = "swapAndBridge", color = "blue" ];
+  "HopImplL1V2.bridgeERC20To" [ label = "bridgeERC20To", color = "blue" ];
+  "HopImplL1V2.bridgeNativeTo" [ label = "bridgeNativeTo", color = "blue" ];
+  "HopImplL1V2.bridgeERC20ToOptimised" [ label = "bridgeERC20ToOptimised", color = "blue" ];
+  "HopImplL1V2.bridgeNativeToOptimised" [ label = "bridgeNativeToOptimised", color = "blue" ];
+  "HopImplL1V2.IHopL1Bridge" [ label = "IHopL1Bridge" ];
+  "HopImplL1V2.SocketBridge" [ label = "SocketBridge" ];
+  "HopImplL1V2.ERC20" [ label = "ERC20" ];
+  "HopImplL1V2.address" [ label = "address" ];
+}
+
+subgraph "clustersocketRoute" {
+  graph [ label = "socketRoute", color = "lightgray" ];
+  "socketRoute.getRoute" [ label = "getRoute" ];
+}
+
+subgraph "clusterERC20" {
+  graph [ label = "ERC20", color = "lightgray" ];
+  "ERC20.safeTransferFrom" [ label = "safeTransferFrom" ];
+}
+
+  "HopImplL1V2.bridgeAfterSwap";
+  "HopImplL1V2.IHopL1Bridge";
+  "HopImplL1V2.SocketBridge";
+  "HopImplL1V2.swapAndBridge";
+  "socketRoute.getRoute";
+  "HopImplL1V2.bridgeERC20To";
+  "HopImplL1V2.ERC20";
+  "ERC20.safeTransferFrom";
+  "HopImplL1V2.bridgeNativeTo";
+  "HopImplL1V2.bridgeERC20ToOptimised";
+  "HopImplL1V2.address";
+  "HopImplL1V2.bridgeNativeToOptimised";
+  "HopImplL1V2.bridgeAfterSwap" -> "HopImplL1V2.IHopL1Bridge" [ color = "green" ];
+  "HopImplL1V2.bridgeAfterSwap" -> "HopImplL1V2.IHopL1Bridge" [ color = "green" ];
+  "HopImplL1V2.bridgeAfterSwap" -> "HopImplL1V2.SocketBridge" [ color = "green" ];
+  "HopImplL1V2.swapAndBridge" -> "socketRoute.getRoute" [ color = "orange" ];
+  "HopImplL1V2.swapAndBridge" -> "HopImplL1V2.IHopL1Bridge" [ color = "green" ];
+  "HopImplL1V2.swapAndBridge" -> "HopImplL1V2.IHopL1Bridge" [ color = "green" ];
+  "HopImplL1V2.swapAndBridge" -> "HopImplL1V2.SocketBridge" [ color = "green" ];
+  "HopImplL1V2.bridgeERC20To" -> "HopImplL1V2.ERC20" [ color = "green" ];
+  "HopImplL1V2.bridgeERC20To" -> "ERC20.safeTransferFrom" [ color = "orange" ];
+  "HopImplL1V2.bridgeERC20To" -> "HopImplL1V2.IHopL1Bridge" [ color = "green" ];
+  "HopImplL1V2.bridgeERC20To" -> "HopImplL1V2.SocketBridge" [ color = "green" ];
+  "HopImplL1V2.bridgeNativeTo" -> "HopImplL1V2.IHopL1Bridge" [ color = "green" ];
+  "HopImplL1V2.bridgeNativeTo" -> "HopImplL1V2.SocketBridge" [ color = "green" ];
+  "HopImplL1V2.bridgeERC20ToOptimised" -> "HopImplL1V2.ERC20" [ color = "green" ];
+  "HopImplL1V2.bridgeERC20ToOptimised" -> "HopImplL1V2.address" [ color = "green" ];
+  "HopImplL1V2.bridgeERC20ToOptimised" -> "HopImplL1V2.IHopL1Bridge" [ color = "green" ];
+  "HopImplL1V2.bridgeERC20ToOptimised" -> "HopImplL1V2.address" [ color = "green" ];
+  "HopImplL1V2.bridgeERC20ToOptimised" -> "HopImplL1V2.address" [ color = "green" ];
+  "HopImplL1V2.bridgeERC20ToOptimised" -> "HopImplL1V2.address" [ color = "green" ];
+  "HopImplL1V2.bridgeERC20ToOptimised" -> "HopImplL1V2.SocketBridge" [ color = "green" ];
+  "HopImplL1V2.bridgeERC20ToOptimised" -> "HopImplL1V2.address" [ color = "green" ];
+  "HopImplL1V2.bridgeERC20ToOptimised" -> "HopImplL1V2.address" [ color = "green" ];
+  "HopImplL1V2.bridgeNativeToOptimised" -> "HopImplL1V2.IHopL1Bridge" [ color = "green" ];
+  "HopImplL1V2.bridgeNativeToOptimised" -> "HopImplL1V2.address" [ color = "green" ];
+  "HopImplL1V2.bridgeNativeToOptimised" -> "HopImplL1V2.address" [ color = "green" ];
+  "HopImplL1V2.bridgeNativeToOptimised" -> "HopImplL1V2.address" [ color = "green" ];
+  "HopImplL1V2.bridgeNativeToOptimised" -> "HopImplL1V2.SocketBridge" [ color = "green" ];
+  "HopImplL1V2.bridgeNativeToOptimised" -> "HopImplL1V2.address" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

@@ -1,0 +1,23 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_618_SafeMath {
+label = "SafeMath"
+"618_mod" [label="mod"]
+"618_sub" [label="sub"]
+"618_div" [label="div"]
+"618_mul" [label="mul"]
+"618_add" [label="add"]
+"618_sub" -> "618_sub"
+"618_div" -> "618_div"
+"618_mod" -> "618_mod"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"618_add" -> "require(bool,string)"
+"618_sub" -> "require(bool,string)"
+"618_div" -> "require(bool,string)"
+"618_mul" -> "require(bool,string)"
+"618_mod" -> "require(bool,string)"
+}
+}

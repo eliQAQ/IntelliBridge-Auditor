@@ -1,0 +1,70 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_1763_ERC20 {
+label = "ERC20"
+"1763_transferFrom" [label="transferFrom"]
+"1763__burn" [label="_burn"]
+"1763__approve" [label="_approve"]
+"1763_decreaseAllowance" [label="decreaseAllowance"]
+"1763_balanceOf" [label="balanceOf"]
+"1763__mint" [label="_mint"]
+"1763_approve" [label="approve"]
+"1763__transfer" [label="_transfer"]
+"1763_allowance" [label="allowance"]
+"1763_increaseAllowance" [label="increaseAllowance"]
+"1763_totalSupply" [label="totalSupply"]
+"1763_transfer" [label="transfer"]
+"1763__burnFrom" [label="_burnFrom"]
+"1763_transferFrom" -> "1763__msgSender"
+"1763_transfer" -> "1763__transfer"
+"1763_decreaseAllowance" -> "1763__msgSender"
+"1763_increaseAllowance" -> "1763__approve"
+"1763_transferFrom" -> "1763__transfer"
+"1763_approve" -> "1763__msgSender"
+"1763_transfer" -> "1763__msgSender"
+"1763_transferFrom" -> "1763__approve"
+"1763__burnFrom" -> "1763__msgSender"
+"1763__burnFrom" -> "1763__approve"
+"1763_decreaseAllowance" -> "1763__approve"
+"1763__burnFrom" -> "1763__burn"
+"1763_increaseAllowance" -> "1763__msgSender"
+"1763_approve" -> "1763__approve"
+}subgraph cluster_2383_Context {
+label = "Context"
+"2383__msgSender" [label="_msgSender"]
+"2383_constructor" [label="constructor"]
+"2383__msgData" [label="_msgData"]
+}subgraph cluster_2639_IERC20 {
+label = "IERC20"
+"2639_allowance" [label="allowance"]
+"2639_totalSupply" [label="totalSupply"]
+"2639_approve" [label="approve"]
+"2639_transfer" [label="transfer"]
+"2639_balanceOf" [label="balanceOf"]
+"2639_transferFrom" [label="transferFrom"]
+}subgraph cluster_82_bridgeAsset {
+label = "bridgeAsset"
+"82_mint" [label="mint"]
+"82_burnFrom" [label="burnFrom"]
+"82_constructor" [label="constructor"]
+"82_mint" -> "82_onlyBridge"
+"82_burnFrom" -> "82__burnFrom"
+"82_constructor" -> "82_constructor"
+"82_mint" -> "82__mint"
+"82_burnFrom" -> "82_onlyBridge"
+}subgraph cluster_1821_ERC20Detailed {
+label = "ERC20Detailed"
+"1821_name" [label="name"]
+"1821_decimals" [label="decimals"]
+"1821_symbol" [label="symbol"]
+"1821_constructor" [label="constructor"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"1763__approve" -> "require(bool,string)"
+"1763__burn" -> "require(bool,string)"
+"1763__mint" -> "require(bool,string)"
+"1763__transfer" -> "require(bool,string)"
+}
+}

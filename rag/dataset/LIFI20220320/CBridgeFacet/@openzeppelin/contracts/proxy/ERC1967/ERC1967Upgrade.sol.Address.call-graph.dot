@@ -1,0 +1,41 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_655_Address {
+label = "Address"
+"655_functionCallWithValue" [label="functionCallWithValue"]
+"655_verifyCallResult" [label="verifyCallResult"]
+"655_sendValue" [label="sendValue"]
+"655_functionStaticCall" [label="functionStaticCall"]
+"655_functionCall" [label="functionCall"]
+"655_functionDelegateCall" [label="functionDelegateCall"]
+"655_isContract" [label="isContract"]
+"655_functionCallWithValue" -> "655_functionCallWithValue"
+"655_functionCall" -> "655_functionCallWithValue"
+"655_functionCallWithValue" -> "655_isContract"
+"655_functionDelegateCall" -> "655_isContract"
+"655_functionStaticCall" -> "655_verifyCallResult"
+"655_functionStaticCall" -> "655_isContract"
+"655_functionCall" -> "655_functionCall"
+"655_functionDelegateCall" -> "655_functionDelegateCall"
+"655_functionStaticCall" -> "655_functionStaticCall"
+"655_functionDelegateCall" -> "655_verifyCallResult"
+"655_functionCallWithValue" -> "655_verifyCallResult"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"mload(uint256)" 
+"revert(string)" 
+"revert(uint256,uint256)" 
+"balance(address)" 
+"require(bool,string)" 
+"655_functionCallWithValue" -> "require(bool,string)"
+"655_functionStaticCall" -> "require(bool,string)"
+"655_functionCallWithValue" -> "balance(address)"
+"655_sendValue" -> "balance(address)"
+"655_verifyCallResult" -> "revert(string)"
+"655_sendValue" -> "require(bool,string)"
+"655_verifyCallResult" -> "mload(uint256)"
+"655_functionDelegateCall" -> "require(bool,string)"
+"655_verifyCallResult" -> "revert(uint256,uint256)"
+}
+}

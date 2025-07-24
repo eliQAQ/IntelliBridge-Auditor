@@ -1,0 +1,120 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterHome" {
+  graph [ label = "Home  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Home.dispatch" [ label = "dispatch", color = "blue" ];
+}
+
+subgraph "clusterOpticsRouterFacet" {
+  graph [ label = "OpticsRouterFacet", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "OpticsRouterFacet.remoteCall" [ label = "remoteCall", color = "blue" ];
+  "OpticsRouterFacet.handle" [ label = "handle", color = "blue" ];
+  "OpticsRouterFacet.enrollRemoteRouter" [ label = "enrollRemoteRouter", color = "blue" ];
+  "OpticsRouterFacet.batchEnrollRemoteRouters" [ label = "batchEnrollRemoteRouters", color = "blue" ];
+  "OpticsRouterFacet.setRoute" [ label = "setRoute", color = "blue" ];
+  "OpticsRouterFacet.batchSetRoutes" [ label = "batchSetRoutes", color = "blue" ];
+  "OpticsRouterFacet.routeByDomain" [ label = "routeByDomain", color = "blue" ];
+  "OpticsRouterFacet.routerByDomain" [ label = "routerByDomain", color = "blue" ];
+  "OpticsRouterFacet.getStorage" [ label = "getStorage" ];
+  "OpticsRouterFacet.NoRemoteRouter" [ color = "brown2", shape =box ];
+  "OpticsRouterFacet.address" [ label = "address" ];
+  "OpticsRouterFacet.Unauthorized" [ color = "brown2", shape =box ];
+  "OpticsRouterFacet.CallError" [ color = "brown2", shape =box ];
+}
+
+subgraph "clustermessage" {
+  graph [ label = "message", color = "lightgray" ];
+  "message.toAddress" [ label = "toAddress" ];
+  "message.slice" [ label = "slice" ];
+}
+
+subgraph "clustercallee" {
+  graph [ label = "callee", color = "lightgray" ];
+  "callee.call" [ label = "call" ];
+}
+
+subgraph "clusterLibUtil" {
+  graph [ label = "LibUtil", color = "lightgray" ];
+  "LibUtil.getRevertMsg" [ label = "getRevertMsg" ];
+}
+
+subgraph "clusterLibDiamond" {
+  graph [ label = "LibDiamond", color = "lightgray" ];
+  "LibDiamond.enforceIsContractOwner" [ label = "enforceIsContractOwner" ];
+}
+
+  "OpticsRouterFacet.remoteCall";
+  "OpticsRouterFacet.getStorage";
+  "OpticsRouterFacet.NoRemoteRouter";
+  "OpticsRouterFacet.address";
+  "OpticsRouterFacet.handle";
+  "OpticsRouterFacet.Unauthorized";
+  "message.toAddress";
+  "message.slice";
+  "callee.call";
+  "LibUtil.getRevertMsg";
+  "OpticsRouterFacet.CallError";
+  "OpticsRouterFacet.enrollRemoteRouter";
+  "LibDiamond.enforceIsContractOwner";
+  "OpticsRouterFacet.batchEnrollRemoteRouters";
+  "OpticsRouterFacet.setRoute";
+  "OpticsRouterFacet.batchSetRoutes";
+  "OpticsRouterFacet.routeByDomain";
+  "OpticsRouterFacet.routerByDomain";
+  "OpticsRouterFacet.remoteCall" -> "OpticsRouterFacet.getStorage" [ color = "green" ];
+  "OpticsRouterFacet.remoteCall" -> "OpticsRouterFacet.NoRemoteRouter" [ color = "red" ];
+  "OpticsRouterFacet.remoteCall" -> "OpticsRouterFacet.address" [ color = "green" ];
+  "OpticsRouterFacet.handle" -> "OpticsRouterFacet.getStorage" [ color = "green" ];
+  "OpticsRouterFacet.handle" -> "OpticsRouterFacet.Unauthorized" [ color = "red" ];
+  "OpticsRouterFacet.handle" -> "message.toAddress" [ color = "orange" ];
+  "OpticsRouterFacet.handle" -> "message.slice" [ color = "orange" ];
+  "OpticsRouterFacet.handle" -> "OpticsRouterFacet.address" [ color = "green" ];
+  "OpticsRouterFacet.handle" -> "OpticsRouterFacet.Unauthorized" [ color = "red" ];
+  "OpticsRouterFacet.handle" -> "callee.call" [ color = "orange" ];
+  "OpticsRouterFacet.handle" -> "LibUtil.getRevertMsg" [ color = "orange" ];
+  "OpticsRouterFacet.handle" -> "OpticsRouterFacet.CallError" [ color = "red" ];
+  "OpticsRouterFacet.handle" -> "OpticsRouterFacet.address" [ color = "green" ];
+  "OpticsRouterFacet.handle" -> "OpticsRouterFacet.handle" [ color = "green" ];
+  "OpticsRouterFacet.enrollRemoteRouter" -> "LibDiamond.enforceIsContractOwner" [ color = "orange" ];
+  "OpticsRouterFacet.enrollRemoteRouter" -> "OpticsRouterFacet.getStorage" [ color = "green" ];
+  "OpticsRouterFacet.batchEnrollRemoteRouters" -> "LibDiamond.enforceIsContractOwner" [ color = "orange" ];
+  "OpticsRouterFacet.batchEnrollRemoteRouters" -> "OpticsRouterFacet.getStorage" [ color = "green" ];
+  "OpticsRouterFacet.setRoute" -> "LibDiamond.enforceIsContractOwner" [ color = "orange" ];
+  "OpticsRouterFacet.setRoute" -> "OpticsRouterFacet.getStorage" [ color = "green" ];
+  "OpticsRouterFacet.batchSetRoutes" -> "LibDiamond.enforceIsContractOwner" [ color = "orange" ];
+  "OpticsRouterFacet.batchSetRoutes" -> "OpticsRouterFacet.getStorage" [ color = "green" ];
+  "OpticsRouterFacet.routeByDomain" -> "OpticsRouterFacet.address" [ color = "green" ];
+  "OpticsRouterFacet.routeByDomain" -> "OpticsRouterFacet.getStorage" [ color = "green" ];
+  "OpticsRouterFacet.routerByDomain" -> "OpticsRouterFacet.address" [ color = "green" ];
+  "OpticsRouterFacet.routerByDomain" -> "OpticsRouterFacet.getStorage" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

@@ -1,0 +1,64 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_896_LibDiamond {
+label = "LibDiamond"
+"896_addFunction" [label="addFunction"]
+"896_diamondCut" [label="diamondCut"]
+"896_enforceIsContractOwner" [label="enforceIsContractOwner"]
+"896_addFacet" [label="addFacet"]
+"896_removeFunctions" [label="removeFunctions"]
+"896_contractOwner" [label="contractOwner"]
+"896_initializeDiamondCut" [label="initializeDiamondCut"]
+"896_setContractOwner" [label="setContractOwner"]
+"896_replaceFunctions" [label="replaceFunctions"]
+"896_diamondStorage" [label="diamondStorage"]
+"896_removeFunction" [label="removeFunction"]
+"896_addFunctions" [label="addFunctions"]
+"896_enforceHasContractCode" [label="enforceHasContractCode"]
+"896_addFunctions" -> "896_addFunction"
+"896_diamondCut" -> "896_removeFunctions"
+"896_diamondCut" -> "896_replaceFunctions"
+"896_initializeDiamondCut" -> "896_enforceHasContractCode"
+"896_removeFunctions" -> "896_removeFunction"
+"896_replaceFunctions" -> "896_addFunction"
+"896_replaceFunctions" -> "896_removeFunction"
+"896_addFunctions" -> "896_addFacet"
+"896_replaceFunctions" -> "896_addFacet"
+"896_diamondCut" -> "896_addFunctions"
+"896_addFacet" -> "896_enforceHasContractCode"
+"896_addFunctions" -> "896_diamondStorage"
+"896_contractOwner" -> "896_diamondStorage"
+"896_removeFunctions" -> "896_diamondStorage"
+"896_diamondCut" -> "896_initializeDiamondCut"
+"896_enforceIsContractOwner" -> "896_diamondStorage"
+"896_replaceFunctions" -> "896_diamondStorage"
+"896_setContractOwner" -> "896_diamondStorage"
+}subgraph cluster_62_IERC173 {
+label = "IERC173"
+"62_transferOwnership" [label="transferOwnership"]
+"62_owner" [label="owner"]
+}subgraph cluster_934_IDiamondCut {
+label = "IDiamondCut"
+"934_diamondCut" [label="diamondCut"]
+}subgraph cluster_39_OwnershipFacet {
+label = "OwnershipFacet"
+"39_owner" [label="owner"]
+"39_transferOwnership" [label="transferOwnership"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"revert(string)" 
+"896_removeFunction" -> "require(bool,string)"
+"896_initializeDiamondCut" -> "require(bool,string)"
+"896_initializeDiamondCut" -> "revert(string)"
+"896_enforceHasContractCode" -> "require(bool,string)"
+"896_removeFunctions" -> "require(bool,string)"
+"896_enforceIsContractOwner" -> "require(bool,string)"
+"896_diamondCut" -> "revert(string)"
+"896_addFunctions" -> "require(bool,string)"
+"896_replaceFunctions" -> "require(bool,string)"
+}"39_transferOwnership" -> "896_enforceIsContractOwner"
+"39_owner" -> "896_contractOwner"
+"39_transferOwnership" -> "896_setContractOwner"
+}

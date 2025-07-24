@@ -1,0 +1,186 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterBridgeMessage" {
+  graph [ label = "BridgeMessage  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "BridgeMessage.typeAssert" [ label = "typeAssert", color = "yellow" ];
+  "BridgeMessage.isValidAction" [ label = "isValidAction", color = "white" ];
+  "BridgeMessage.isValidMessageLength" [ label = "isValidMessageLength", color = "white" ];
+  "BridgeMessage.formatMessage" [ label = "formatMessage", color = "white" ];
+  "BridgeMessage.messageType" [ label = "messageType", color = "white" ];
+  "BridgeMessage.isType" [ label = "isType", color = "white" ];
+  "BridgeMessage.isTransfer" [ label = "isTransfer" ];
+  "BridgeMessage.isTransferToHook" [ label = "isTransferToHook" ];
+  "BridgeMessage.formatTransfer" [ label = "formatTransfer", color = "white" ];
+  "BridgeMessage.formatTransferToHook" [ label = "formatTransferToHook", color = "white" ];
+  "BridgeMessage.formatTokenId" [ label = "formatTokenId" ];
+  "BridgeMessage.getDetailsHash" [ label = "getDetailsHash", color = "white" ];
+  "BridgeMessage.domain" [ label = "domain", color = "white" ];
+  "BridgeMessage.id" [ label = "id", color = "white" ];
+  "BridgeMessage.evmId" [ label = "evmId", color = "white" ];
+  "BridgeMessage.msgType" [ label = "msgType", color = "white" ];
+  "BridgeMessage.actionType" [ label = "actionType" ];
+  "BridgeMessage.recipient" [ label = "recipient", color = "white" ];
+  "BridgeMessage.evmRecipient" [ label = "evmRecipient", color = "white" ];
+  "BridgeMessage.amnt" [ label = "amnt", color = "white" ];
+  "BridgeMessage.detailsHash" [ label = "detailsHash", color = "white" ];
+  "BridgeMessage.tokenId" [ label = "tokenId", color = "white" ];
+  "BridgeMessage.evmHook" [ label = "evmHook", color = "white" ];
+  "BridgeMessage.sender" [ label = "sender", color = "white" ];
+  "BridgeMessage.extraData" [ label = "extraData", color = "white" ];
+  "BridgeMessage.action" [ label = "action", color = "white" ];
+  "BridgeMessage.tryAsMessage" [ label = "tryAsMessage", color = "white" ];
+  "BridgeMessage.mustBeMessage" [ label = "mustBeMessage", color = "white" ];
+  "BridgeMessage.Types" [ label = "Types" ];
+}
+
+subgraph "cluster_view" {
+  graph [ label = "_view", color = "lightgray" ];
+  "_view.assertType" [ label = "assertType" ];
+  "_view.len" [ label = "len" ];
+  "_view.typeOf" [ label = "typeOf" ];
+}
+
+subgraph "clusterTypedMemView" {
+  graph [ label = "TypedMemView", color = "lightgray" ];
+  "TypedMemView.join" [ label = "join" ];
+  "TypedMemView.nullView" [ label = "nullView" ];
+}
+
+subgraph "cluster_tokenId" {
+  graph [ label = "_tokenId", color = "lightgray" ];
+  "_tokenId.indexUint" [ label = "indexUint" ];
+  "_tokenId.index" [ label = "index" ];
+  "_tokenId.indexAddress" [ label = "indexAddress" ];
+}
+
+subgraph "cluster_message" {
+  graph [ label = "_message", color = "lightgray" ];
+  "_message.indexUint" [ label = "indexUint" ];
+  "_message.slice" [ label = "slice" ];
+  "_message.len" [ label = "len" ];
+  "_message.castTo" [ label = "castTo" ];
+}
+
+subgraph "cluster_action" {
+  graph [ label = "_action", color = "lightgray" ];
+  "_action.indexUint" [ label = "indexUint" ];
+}
+
+subgraph "cluster_transferAction" {
+  graph [ label = "_transferAction", color = "lightgray" ];
+  "_transferAction.index" [ label = "index" ];
+  "_transferAction.indexAddress" [ label = "indexAddress" ];
+  "_transferAction.indexUint" [ label = "indexUint" ];
+  "_transferAction.slice" [ label = "slice" ];
+  "_transferAction.len" [ label = "len" ];
+}
+
+  "BridgeMessage.typeAssert";
+  "_view.assertType";
+  "BridgeMessage.isValidAction";
+  "BridgeMessage.isTransfer";
+  "BridgeMessage.isTransferToHook";
+  "BridgeMessage.isValidMessageLength";
+  "_view.len";
+  "BridgeMessage.formatMessage";
+  "TypedMemView.join";
+  "BridgeMessage.messageType";
+  "BridgeMessage.Types";
+  "_view.typeOf";
+  "BridgeMessage.isType";
+  "BridgeMessage.actionType";
+  "BridgeMessage.formatTokenId";
+  "BridgeMessage.domain";
+  "_tokenId.indexUint";
+  "BridgeMessage.id";
+  "_tokenId.index";
+  "BridgeMessage.evmId";
+  "_tokenId.indexAddress";
+  "BridgeMessage.msgType";
+  "_message.indexUint";
+  "_action.indexUint";
+  "BridgeMessage.recipient";
+  "_transferAction.index";
+  "BridgeMessage.evmRecipient";
+  "_transferAction.indexAddress";
+  "BridgeMessage.amnt";
+  "_transferAction.indexUint";
+  "BridgeMessage.detailsHash";
+  "BridgeMessage.tokenId";
+  "_message.slice";
+  "BridgeMessage.evmHook";
+  "BridgeMessage.sender";
+  "BridgeMessage.extraData";
+  "_transferAction.slice";
+  "_transferAction.len";
+  "BridgeMessage.action";
+  "_message.len";
+  "BridgeMessage.tryAsMessage";
+  "_message.castTo";
+  "TypedMemView.nullView";
+  "BridgeMessage.mustBeMessage";
+  "BridgeMessage.typeAssert" -> "_view.assertType" [ color = "orange" ];
+  "BridgeMessage.isValidAction" -> "BridgeMessage.isTransfer" [ color = "green" ];
+  "BridgeMessage.isValidAction" -> "BridgeMessage.isTransferToHook" [ color = "green" ];
+  "BridgeMessage.isValidMessageLength" -> "_view.len" [ color = "orange" ];
+  "BridgeMessage.formatMessage" -> "BridgeMessage.isValidAction" [ color = "green" ];
+  "BridgeMessage.formatMessage" -> "TypedMemView.join" [ color = "orange" ];
+  "BridgeMessage.messageType" -> "BridgeMessage.Types" [ color = "green" ];
+  "BridgeMessage.messageType" -> "_view.typeOf" [ color = "orange" ];
+  "BridgeMessage.isType" -> "BridgeMessage.actionType" [ color = "green" ];
+  "BridgeMessage.isType" -> "BridgeMessage.messageType" [ color = "green" ];
+  "BridgeMessage.isTransfer" -> "BridgeMessage.isType" [ color = "green" ];
+  "BridgeMessage.isTransferToHook" -> "BridgeMessage.isType" [ color = "green" ];
+  "BridgeMessage.formatTokenId" -> "BridgeMessage.formatTokenId" [ color = "green" ];
+  "BridgeMessage.domain" -> "_tokenId.indexUint" [ color = "orange" ];
+  "BridgeMessage.id" -> "_tokenId.index" [ color = "orange" ];
+  "BridgeMessage.evmId" -> "_tokenId.indexAddress" [ color = "orange" ];
+  "BridgeMessage.msgType" -> "_message.indexUint" [ color = "orange" ];
+  "BridgeMessage.actionType" -> "_action.indexUint" [ color = "orange" ];
+  "BridgeMessage.recipient" -> "_transferAction.index" [ color = "orange" ];
+  "BridgeMessage.evmRecipient" -> "_transferAction.indexAddress" [ color = "orange" ];
+  "BridgeMessage.amnt" -> "_transferAction.indexUint" [ color = "orange" ];
+  "BridgeMessage.detailsHash" -> "_transferAction.index" [ color = "orange" ];
+  "BridgeMessage.tokenId" -> "_message.slice" [ color = "orange" ];
+  "BridgeMessage.evmHook" -> "_transferAction.indexAddress" [ color = "orange" ];
+  "BridgeMessage.sender" -> "_transferAction.index" [ color = "orange" ];
+  "BridgeMessage.extraData" -> "_transferAction.slice" [ color = "orange" ];
+  "BridgeMessage.extraData" -> "_transferAction.len" [ color = "orange" ];
+  "BridgeMessage.action" -> "_message.len" [ color = "orange" ];
+  "BridgeMessage.action" -> "BridgeMessage.msgType" [ color = "green" ];
+  "BridgeMessage.action" -> "_message.slice" [ color = "orange" ];
+  "BridgeMessage.tryAsMessage" -> "BridgeMessage.isValidMessageLength" [ color = "green" ];
+  "BridgeMessage.tryAsMessage" -> "_message.castTo" [ color = "orange" ];
+  "BridgeMessage.tryAsMessage" -> "TypedMemView.nullView" [ color = "orange" ];
+  "BridgeMessage.mustBeMessage" -> "BridgeMessage.tryAsMessage" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

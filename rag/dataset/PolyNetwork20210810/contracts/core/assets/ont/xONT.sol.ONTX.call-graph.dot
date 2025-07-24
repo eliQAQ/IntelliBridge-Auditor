@@ -1,0 +1,65 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_773_IERC20 {
+label = "IERC20"
+"773_balanceOf" [label="balanceOf"]
+"773_approve" [label="approve"]
+"773_transferFrom" [label="transferFrom"]
+"773_totalSupply" [label="totalSupply"]
+"773_allowance" [label="allowance"]
+"773_transfer" [label="transfer"]
+}subgraph cluster_517_ERC20Detailed {
+label = "ERC20Detailed"
+"517_name" [label="name"]
+"517_constructor" [label="constructor"]
+"517_decimals" [label="decimals"]
+"517_symbol" [label="symbol"]
+}subgraph cluster_459_ERC20 {
+label = "ERC20"
+"459__approve" [label="_approve"]
+"459_allowance" [label="allowance"]
+"459_approve" [label="approve"]
+"459__transfer" [label="_transfer"]
+"459__burn" [label="_burn"]
+"459__burnFrom" [label="_burnFrom"]
+"459_transfer" [label="transfer"]
+"459_decreaseAllowance" [label="decreaseAllowance"]
+"459_balanceOf" [label="balanceOf"]
+"459__mint" [label="_mint"]
+"459_increaseAllowance" [label="increaseAllowance"]
+"459_transferFrom" [label="transferFrom"]
+"459_totalSupply" [label="totalSupply"]
+"459_decreaseAllowance" -> "459__msgSender"
+"459_transferFrom" -> "459__msgSender"
+"459_transfer" -> "459__transfer"
+"459_decreaseAllowance" -> "459__approve"
+"459__burnFrom" -> "459__approve"
+"459_increaseAllowance" -> "459__msgSender"
+"459_transferFrom" -> "459__approve"
+"459_increaseAllowance" -> "459__approve"
+"459_approve" -> "459__approve"
+"459__burnFrom" -> "459__msgSender"
+"459__burnFrom" -> "459__burn"
+"459_transferFrom" -> "459__transfer"
+"459_approve" -> "459__msgSender"
+"459_transfer" -> "459__msgSender"
+}subgraph cluster_54_Context {
+label = "Context"
+"54__msgSender" [label="_msgSender"]
+"54_constructor" [label="constructor"]
+"54__msgData" [label="_msgData"]
+}subgraph cluster_27_ONTX {
+label = "ONTX"
+"27_constructor" [label="constructor"]
+"27_constructor" -> "27__mint"
+"27_constructor" -> "27_constructor"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"459__burn" -> "require(bool,string)"
+"459__mint" -> "require(bool,string)"
+"459__approve" -> "require(bool,string)"
+"459__transfer" -> "require(bool,string)"
+}
+}

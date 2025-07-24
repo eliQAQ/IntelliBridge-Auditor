@@ -1,0 +1,126 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterGnosisNativeBridgeImpl" {
+  graph [ label = "GnosisNativeBridgeImpl", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "GnosisNativeBridgeImpl.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeERC20To" [ label = "bridgeERC20To", color = "blue" ];
+  "GnosisNativeBridgeImpl.bridgeNativeTo" [ label = "bridgeNativeTo", color = "blue" ];
+  "GnosisNativeBridgeImpl.bridgeAfterSwap" [ label = "bridgeAfterSwap", color = "blue" ];
+  "GnosisNativeBridgeImpl.swapAndBridge" [ label = "swapAndBridge", color = "blue" ];
+  "GnosisNativeBridgeImpl.IGnosisXdaiBridge" [ label = "IGnosisXdaiBridge" ];
+  "GnosisNativeBridgeImpl.IGnosisOmniBridge" [ label = "IGnosisOmniBridge" ];
+  "GnosisNativeBridgeImpl.IGnosisWethOmniBridgeHelper" [ label = "IGnosisWethOmniBridgeHelper" ];
+  "GnosisNativeBridgeImpl.ERC20" [ label = "ERC20" ];
+  "GnosisNativeBridgeImpl.address" [ label = "address" ];
+  "GnosisNativeBridgeImpl.SocketBridge" [ label = "SocketBridge" ];
+}
+
+subgraph "clusterIGnosisXdaiBridge" {
+  graph [ label = "IGnosisXdaiBridge", color = "lightgray" ];
+  "IGnosisXdaiBridge.relayTokens" [ label = "relayTokens" ];
+}
+
+subgraph "clusterIGnosisOmniBridge" {
+  graph [ label = "IGnosisOmniBridge", color = "lightgray" ];
+  "IGnosisOmniBridge.relayTokens" [ label = "relayTokens" ];
+}
+
+subgraph "clustersocketRoute" {
+  graph [ label = "socketRoute", color = "lightgray" ];
+  "socketRoute.getRoute" [ label = "getRoute" ];
+}
+
+  "GnosisNativeBridgeImpl.<Constructor>";
+  "GnosisNativeBridgeImpl.IGnosisXdaiBridge";
+  "GnosisNativeBridgeImpl.IGnosisOmniBridge";
+  "GnosisNativeBridgeImpl.IGnosisWethOmniBridgeHelper";
+  "GnosisNativeBridgeImpl.bridgeERC20To";
+  "GnosisNativeBridgeImpl.ERC20";
+  "GnosisNativeBridgeImpl.address";
+  "IGnosisXdaiBridge.relayTokens";
+  "IGnosisOmniBridge.relayTokens";
+  "GnosisNativeBridgeImpl.SocketBridge";
+  "GnosisNativeBridgeImpl.bridgeNativeTo";
+  "GnosisNativeBridgeImpl.bridgeAfterSwap";
+  "GnosisNativeBridgeImpl.swapAndBridge";
+  "socketRoute.getRoute";
+  "GnosisNativeBridgeImpl.<Constructor>" -> "GnosisNativeBridgeImpl.IGnosisXdaiBridge" [ color = "green" ];
+  "GnosisNativeBridgeImpl.<Constructor>" -> "GnosisNativeBridgeImpl.IGnosisOmniBridge" [ color = "green" ];
+  "GnosisNativeBridgeImpl.<Constructor>" -> "GnosisNativeBridgeImpl.IGnosisWethOmniBridgeHelper" [ color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeERC20To" -> "GnosisNativeBridgeImpl.ERC20" [ color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeERC20To" -> "GnosisNativeBridgeImpl.ERC20" [ color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeERC20To" -> "GnosisNativeBridgeImpl.address" [ color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeERC20To" -> "GnosisNativeBridgeImpl.address" [ color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeERC20To" -> "GnosisNativeBridgeImpl.ERC20" [ color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeERC20To" -> "GnosisNativeBridgeImpl.address" [ color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeERC20To" -> "IGnosisXdaiBridge.relayTokens" [ color = "orange" ];
+  "GnosisNativeBridgeImpl.bridgeERC20To" -> "GnosisNativeBridgeImpl.ERC20" [ color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeERC20To" -> "GnosisNativeBridgeImpl.address" [ color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeERC20To" -> "GnosisNativeBridgeImpl.address" [ color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeERC20To" -> "GnosisNativeBridgeImpl.ERC20" [ color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeERC20To" -> "GnosisNativeBridgeImpl.address" [ color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeERC20To" -> "IGnosisOmniBridge.relayTokens" [ color = "orange" ];
+  "GnosisNativeBridgeImpl.bridgeERC20To" -> "GnosisNativeBridgeImpl.SocketBridge" [ color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeNativeTo" -> "GnosisNativeBridgeImpl.SocketBridge" [ color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeAfterSwap" -> "GnosisNativeBridgeImpl.SocketBridge" [ color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeAfterSwap" -> "GnosisNativeBridgeImpl.ERC20" [ color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeAfterSwap" -> "GnosisNativeBridgeImpl.address" [ color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeAfterSwap" -> "GnosisNativeBridgeImpl.address" [ color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeAfterSwap" -> "GnosisNativeBridgeImpl.ERC20" [ color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeAfterSwap" -> "GnosisNativeBridgeImpl.address" [ color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeAfterSwap" -> "IGnosisXdaiBridge.relayTokens" [ color = "orange" ];
+  "GnosisNativeBridgeImpl.bridgeAfterSwap" -> "GnosisNativeBridgeImpl.SocketBridge" [ color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeAfterSwap" -> "GnosisNativeBridgeImpl.ERC20" [ color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeAfterSwap" -> "GnosisNativeBridgeImpl.address" [ color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeAfterSwap" -> "GnosisNativeBridgeImpl.address" [ color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeAfterSwap" -> "GnosisNativeBridgeImpl.ERC20" [ color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeAfterSwap" -> "GnosisNativeBridgeImpl.address" [ color = "green" ];
+  "GnosisNativeBridgeImpl.bridgeAfterSwap" -> "IGnosisOmniBridge.relayTokens" [ color = "orange" ];
+  "GnosisNativeBridgeImpl.bridgeAfterSwap" -> "GnosisNativeBridgeImpl.SocketBridge" [ color = "green" ];
+  "GnosisNativeBridgeImpl.swapAndBridge" -> "socketRoute.getRoute" [ color = "orange" ];
+  "GnosisNativeBridgeImpl.swapAndBridge" -> "GnosisNativeBridgeImpl.SocketBridge" [ color = "green" ];
+  "GnosisNativeBridgeImpl.swapAndBridge" -> "GnosisNativeBridgeImpl.ERC20" [ color = "green" ];
+  "GnosisNativeBridgeImpl.swapAndBridge" -> "GnosisNativeBridgeImpl.address" [ color = "green" ];
+  "GnosisNativeBridgeImpl.swapAndBridge" -> "GnosisNativeBridgeImpl.address" [ color = "green" ];
+  "GnosisNativeBridgeImpl.swapAndBridge" -> "GnosisNativeBridgeImpl.ERC20" [ color = "green" ];
+  "GnosisNativeBridgeImpl.swapAndBridge" -> "GnosisNativeBridgeImpl.address" [ color = "green" ];
+  "GnosisNativeBridgeImpl.swapAndBridge" -> "IGnosisXdaiBridge.relayTokens" [ color = "orange" ];
+  "GnosisNativeBridgeImpl.swapAndBridge" -> "GnosisNativeBridgeImpl.SocketBridge" [ color = "green" ];
+  "GnosisNativeBridgeImpl.swapAndBridge" -> "GnosisNativeBridgeImpl.ERC20" [ color = "green" ];
+  "GnosisNativeBridgeImpl.swapAndBridge" -> "GnosisNativeBridgeImpl.address" [ color = "green" ];
+  "GnosisNativeBridgeImpl.swapAndBridge" -> "GnosisNativeBridgeImpl.address" [ color = "green" ];
+  "GnosisNativeBridgeImpl.swapAndBridge" -> "GnosisNativeBridgeImpl.ERC20" [ color = "green" ];
+  "GnosisNativeBridgeImpl.swapAndBridge" -> "GnosisNativeBridgeImpl.address" [ color = "green" ];
+  "GnosisNativeBridgeImpl.swapAndBridge" -> "IGnosisOmniBridge.relayTokens" [ color = "orange" ];
+  "GnosisNativeBridgeImpl.swapAndBridge" -> "GnosisNativeBridgeImpl.SocketBridge" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

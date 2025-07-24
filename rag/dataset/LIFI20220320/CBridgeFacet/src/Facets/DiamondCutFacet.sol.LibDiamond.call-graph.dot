@@ -1,0 +1,54 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_907_LibDiamond {
+label = "LibDiamond"
+"907_addFacet" [label="addFacet"]
+"907_addFunctions" [label="addFunctions"]
+"907_diamondStorage" [label="diamondStorage"]
+"907_enforceHasContractCode" [label="enforceHasContractCode"]
+"907_addFunction" [label="addFunction"]
+"907_setContractOwner" [label="setContractOwner"]
+"907_enforceIsContractOwner" [label="enforceIsContractOwner"]
+"907_removeFunctions" [label="removeFunctions"]
+"907_replaceFunctions" [label="replaceFunctions"]
+"907_contractOwner" [label="contractOwner"]
+"907_removeFunction" [label="removeFunction"]
+"907_initializeDiamondCut" [label="initializeDiamondCut"]
+"907_slitherConstructorConstantVariables" [label="slitherConstructorConstantVariables"]
+"907_diamondCut" [label="diamondCut"]
+"907_removeFunctions" -> "907_diamondStorage"
+"907_diamondCut" -> "907_removeFunctions"
+"907_setContractOwner" -> "907_diamondStorage"
+"907_diamondCut" -> "907_initializeDiamondCut"
+"907_replaceFunctions" -> "907_diamondStorage"
+"907_replaceFunctions" -> "907_addFunction"
+"907_replaceFunctions" -> "907_addFacet"
+"907_addFacet" -> "907_enforceHasContractCode"
+"907_initializeDiamondCut" -> "907_enforceHasContractCode"
+"907_enforceIsContractOwner" -> "907_diamondStorage"
+"907_addFunctions" -> "907_diamondStorage"
+"907_addFunctions" -> "907_addFacet"
+"907_addFunctions" -> "907_addFunction"
+"907_diamondCut" -> "907_replaceFunctions"
+"907_removeFunctions" -> "907_removeFunction"
+"907_diamondCut" -> "907_addFunctions"
+"907_replaceFunctions" -> "907_removeFunction"
+"907_contractOwner" -> "907_diamondStorage"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"keccak256(bytes)" 
+"require(bool,string)" 
+"revert(string)" 
+"907_addFunctions" -> "require(bool,string)"
+"907_diamondCut" -> "revert(string)"
+"907_enforceIsContractOwner" -> "require(bool,string)"
+"907_removeFunctions" -> "require(bool,string)"
+"907_enforceHasContractCode" -> "require(bool,string)"
+"907_slitherConstructorConstantVariables" -> "keccak256(bytes)"
+"907_removeFunction" -> "require(bool,string)"
+"907_initializeDiamondCut" -> "require(bool,string)"
+"907_initializeDiamondCut" -> "revert(string)"
+"907_replaceFunctions" -> "require(bool,string)"
+}
+}

@@ -1,0 +1,100 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterAcrossImpl" {
+  graph [ label = "AcrossImpl", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "AcrossImpl.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "AcrossImpl.bridgeAfterSwap" [ label = "bridgeAfterSwap", color = "blue" ];
+  "AcrossImpl.swapAndBridge" [ label = "swapAndBridge", color = "blue" ];
+  "AcrossImpl.bridgeERC20To" [ label = "bridgeERC20To", color = "blue" ];
+  "AcrossImpl.bridgeNativeTo" [ label = "bridgeNativeTo", color = "blue" ];
+  "AcrossImpl.SpokePool" [ label = "SpokePool" ];
+  "AcrossImpl.ERC20" [ label = "ERC20" ];
+  "AcrossImpl.address" [ label = "address" ];
+  "AcrossImpl.SocketBridge" [ label = "SocketBridge" ];
+}
+
+subgraph "clusterSpokePool" {
+  graph [ label = "SpokePool", color = "lightgray" ];
+  "SpokePool.deposit" [ label = "deposit" ];
+}
+
+subgraph "clustersocketRoute" {
+  graph [ label = "socketRoute", color = "lightgray" ];
+  "socketRoute.getRoute" [ label = "getRoute" ];
+}
+
+subgraph "clusterERC20" {
+  graph [ label = "ERC20", color = "lightgray" ];
+  "ERC20.safeTransferFrom" [ label = "safeTransferFrom" ];
+}
+
+  "AcrossImpl.<Constructor>";
+  "AcrossImpl.SpokePool";
+  "AcrossImpl.bridgeAfterSwap";
+  "AcrossImpl.ERC20";
+  "AcrossImpl.address";
+  "SpokePool.deposit";
+  "AcrossImpl.SocketBridge";
+  "AcrossImpl.swapAndBridge";
+  "socketRoute.getRoute";
+  "AcrossImpl.bridgeERC20To";
+  "ERC20.safeTransferFrom";
+  "AcrossImpl.bridgeNativeTo";
+  "AcrossImpl.<Constructor>" -> "AcrossImpl.SpokePool" [ color = "green" ];
+  "AcrossImpl.bridgeAfterSwap" -> "AcrossImpl.ERC20" [ color = "green" ];
+  "AcrossImpl.bridgeAfterSwap" -> "AcrossImpl.address" [ color = "green" ];
+  "AcrossImpl.bridgeAfterSwap" -> "AcrossImpl.address" [ color = "green" ];
+  "AcrossImpl.bridgeAfterSwap" -> "AcrossImpl.ERC20" [ color = "green" ];
+  "AcrossImpl.bridgeAfterSwap" -> "AcrossImpl.address" [ color = "green" ];
+  "AcrossImpl.bridgeAfterSwap" -> "SpokePool.deposit" [ color = "orange" ];
+  "AcrossImpl.bridgeAfterSwap" -> "AcrossImpl.SocketBridge" [ color = "green" ];
+  "AcrossImpl.swapAndBridge" -> "socketRoute.getRoute" [ color = "orange" ];
+  "AcrossImpl.swapAndBridge" -> "AcrossImpl.ERC20" [ color = "green" ];
+  "AcrossImpl.swapAndBridge" -> "AcrossImpl.address" [ color = "green" ];
+  "AcrossImpl.swapAndBridge" -> "AcrossImpl.address" [ color = "green" ];
+  "AcrossImpl.swapAndBridge" -> "AcrossImpl.ERC20" [ color = "green" ];
+  "AcrossImpl.swapAndBridge" -> "AcrossImpl.address" [ color = "green" ];
+  "AcrossImpl.swapAndBridge" -> "SpokePool.deposit" [ color = "orange" ];
+  "AcrossImpl.swapAndBridge" -> "AcrossImpl.SocketBridge" [ color = "green" ];
+  "AcrossImpl.bridgeERC20To" -> "AcrossImpl.ERC20" [ color = "green" ];
+  "AcrossImpl.bridgeERC20To" -> "ERC20.safeTransferFrom" [ color = "orange" ];
+  "AcrossImpl.bridgeERC20To" -> "AcrossImpl.ERC20" [ color = "green" ];
+  "AcrossImpl.bridgeERC20To" -> "AcrossImpl.address" [ color = "green" ];
+  "AcrossImpl.bridgeERC20To" -> "AcrossImpl.address" [ color = "green" ];
+  "AcrossImpl.bridgeERC20To" -> "AcrossImpl.ERC20" [ color = "green" ];
+  "AcrossImpl.bridgeERC20To" -> "AcrossImpl.address" [ color = "green" ];
+  "AcrossImpl.bridgeERC20To" -> "SpokePool.deposit" [ color = "orange" ];
+  "AcrossImpl.bridgeERC20To" -> "AcrossImpl.address" [ color = "green" ];
+  "AcrossImpl.bridgeERC20To" -> "AcrossImpl.SocketBridge" [ color = "green" ];
+  "AcrossImpl.bridgeNativeTo" -> "AcrossImpl.SocketBridge" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

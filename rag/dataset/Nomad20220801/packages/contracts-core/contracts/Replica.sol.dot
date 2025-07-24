@@ -1,0 +1,125 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterReplica" {
+  graph [ label = "Replica", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Replica.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "Replica.initialize" [ label = "initialize", color = "green" ];
+  "Replica.update" [ label = "update", color = "blue" ];
+  "Replica.proveAndProcess" [ label = "proveAndProcess", color = "blue" ];
+  "Replica.process" [ label = "process" ];
+  "Replica.setOptimisticTimeout" [ label = "setOptimisticTimeout", color = "blue" ];
+  "Replica.setUpdater" [ label = "setUpdater", color = "blue" ];
+  "Replica.setConfirmation" [ label = "setConfirmation", color = "blue" ];
+  "Replica.acceptableRoot" [ label = "acceptableRoot" ];
+  "Replica.prove" [ label = "prove" ];
+  "Replica.homeDomainHash" [ label = "homeDomainHash", color = "green" ];
+  "Replica._setOptimisticTimeout" [ label = "_setOptimisticTimeout" ];
+  "Replica._beforeUpdate" [ label = "_beforeUpdate" ];
+  "Replica.__NomadBase_initialize" [ label = "__NomadBase_initialize" ];
+  "Replica._isUpdaterSignature" [ label = "_isUpdaterSignature" ];
+  "Replica.Update" [ label = "Update" ];
+  "Replica.IMessageRecipient" [ label = "IMessageRecipient" ];
+  "Replica._setUpdater" [ label = "_setUpdater" ];
+  "Replica._homeDomainHash" [ label = "_homeDomainHash" ];
+}
+
+subgraph "cluster_message" {
+  graph [ label = "_message", color = "lightgray" ];
+  "_message.ref" [ label = "ref" ];
+}
+
+subgraph "cluster_m" {
+  graph [ label = "_m", color = "lightgray" ];
+  "_m.destination" [ label = "destination" ];
+  "_m.keccak" [ label = "keccak" ];
+  "_m.recipientAddress" [ label = "recipientAddress" ];
+  "_m.origin" [ label = "origin" ];
+  "_m.nonce" [ label = "nonce" ];
+  "_m.sender" [ label = "sender" ];
+  "_m.body" [ label = "body" ];
+}
+
+subgraph "clusterMerkleLib" {
+  graph [ label = "MerkleLib", color = "lightgray" ];
+  "MerkleLib.branchRoot" [ label = "branchRoot" ];
+}
+
+  "Replica.initialize";
+  "Replica.__NomadBase_initialize";
+  "Replica._setOptimisticTimeout";
+  "Replica.update";
+  "Replica._isUpdaterSignature";
+  "Replica._beforeUpdate";
+  "Replica.Update";
+  "Replica.proveAndProcess";
+  "Replica.prove";
+  "Replica.process";
+  "_message.ref";
+  "_m.destination";
+  "_m.keccak";
+  "Replica.acceptableRoot";
+  "Replica.IMessageRecipient";
+  "_m.recipientAddress";
+  "_m.origin";
+  "_m.nonce";
+  "_m.sender";
+  "_m.body";
+  "Replica.setOptimisticTimeout";
+  "Replica.setUpdater";
+  "Replica._setUpdater";
+  "MerkleLib.branchRoot";
+  "Replica.homeDomainHash";
+  "Replica._homeDomainHash";
+  "Replica.initialize" -> "Replica.__NomadBase_initialize" [ color = "green" ];
+  "Replica.initialize" -> "Replica._setOptimisticTimeout" [ color = "green" ];
+  "Replica.update" -> "Replica._isUpdaterSignature" [ color = "green" ];
+  "Replica.update" -> "Replica._beforeUpdate" [ color = "green" ];
+  "Replica.update" -> "Replica.Update" [ color = "green" ];
+  "Replica.proveAndProcess" -> "Replica.prove" [ color = "green" ];
+  "Replica.proveAndProcess" -> "Replica.process" [ color = "green" ];
+  "Replica.process" -> "_message.ref" [ color = "orange" ];
+  "Replica.process" -> "_m.destination" [ color = "orange" ];
+  "Replica.process" -> "_m.keccak" [ color = "orange" ];
+  "Replica.process" -> "Replica.acceptableRoot" [ color = "green" ];
+  "Replica.process" -> "Replica.IMessageRecipient" [ color = "green" ];
+  "Replica.process" -> "_m.recipientAddress" [ color = "orange" ];
+  "Replica.process" -> "_m.origin" [ color = "orange" ];
+  "Replica.process" -> "_m.nonce" [ color = "orange" ];
+  "Replica.process" -> "_m.sender" [ color = "orange" ];
+  "Replica.process" -> "_m.body" [ color = "orange" ];
+  "Replica.setOptimisticTimeout" -> "Replica._setOptimisticTimeout" [ color = "green" ];
+  "Replica.setUpdater" -> "Replica._setUpdater" [ color = "green" ];
+  "Replica.prove" -> "MerkleLib.branchRoot" [ color = "orange" ];
+  "Replica.prove" -> "Replica.acceptableRoot" [ color = "green" ];
+  "Replica.homeDomainHash" -> "Replica._homeDomainHash" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

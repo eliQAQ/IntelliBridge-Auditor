@@ -1,0 +1,168 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterIERC20" {
+  graph [ label = "IERC20  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IERC20.totalSupply" [ label = "totalSupply", color = "blue" ];
+  "IERC20.balanceOf" [ label = "balanceOf", color = "blue" ];
+  "IERC20.transfer" [ label = "transfer", color = "blue" ];
+  "IERC20.allowance" [ label = "allowance" ];
+  "IERC20.approve" [ label = "approve", color = "blue" ];
+  "IERC20.transferFrom" [ label = "transferFrom", color = "blue" ];
+  "IERC20.isContract" [ label = "isContract" ];
+  "IERC20.data" [ label = "data" ];
+}
+
+subgraph "clusterIERC2612" {
+  graph [ label = "IERC2612  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IERC2612.permit" [ label = "permit", color = "blue" ];
+  "IERC2612.nonces" [ label = "nonces", color = "blue" ];
+}
+
+subgraph "clusterIWERC10" {
+  graph [ label = "IWERC10  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IWERC10.approveAndCall" [ label = "approveAndCall", color = "blue" ];
+  "IWERC10.transferAndCall" [ label = "transferAndCall", color = "blue" ];
+}
+
+subgraph "clusterITransferReceiver" {
+  graph [ label = "ITransferReceiver  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ITransferReceiver.onTokenTransfer" [ label = "onTokenTransfer", color = "blue" ];
+}
+
+subgraph "clusterIApprovalReceiver" {
+  graph [ label = "IApprovalReceiver  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IApprovalReceiver.onTokenApproval" [ label = "onTokenApproval", color = "blue" ];
+}
+
+subgraph "clusterAddress" {
+  graph [ label = "Address  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Address.isContract" [ label = "isContract", color = "white" ];
+}
+
+subgraph "clusterSafeERC20" {
+  graph [ label = "SafeERC20  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "SafeERC20.safeTransfer" [ label = "safeTransfer", color = "white" ];
+  "SafeERC20.safeTransferFrom" [ label = "safeTransferFrom", color = "white" ];
+  "SafeERC20.safeApprove" [ label = "safeApprove", color = "white" ];
+  "SafeERC20.callOptionalReturn" [ label = "callOptionalReturn" ];
+  "SafeERC20.address" [ label = "address" ];
+}
+
+subgraph "clusterfUSD" {
+  graph [ label = "fUSD", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "fUSD.onlyOwner" [ label = "onlyOwner", color = "yellow" ];
+  "fUSD.owner" [ label = "owner" ];
+  "fUSD.changeDCRMOwner" [ label = "changeDCRMOwner", color = "green" ];
+  "fUSD.Swapin" [ label = "Swapin", color = "green" ];
+  "fUSD.Swapout" [ label = "Swapout", color = "green" ];
+  "fUSD.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "fUSD.totalSupply" [ label = "totalSupply", color = "blue" ];
+  "fUSD._mint" [ label = "_mint" ];
+  "fUSD._burn" [ label = "_burn" ];
+  "fUSD.approve" [ label = "approve", color = "blue" ];
+  "fUSD.approveAndCall" [ label = "approveAndCall", color = "blue" ];
+  "fUSD.permit" [ label = "permit", color = "blue" ];
+  "fUSD.transferWithPermit" [ label = "transferWithPermit", color = "blue" ];
+  "fUSD.verifyEIP712" [ label = "verifyEIP712" ];
+  "fUSD.verifyPersonalSign" [ label = "verifyPersonalSign" ];
+  "fUSD.prefixed" [ label = "prefixed" ];
+  "fUSD.transfer" [ label = "transfer", color = "blue" ];
+  "fUSD.transferFrom" [ label = "transferFrom", color = "blue" ];
+  "fUSD.transferAndCall" [ label = "transferAndCall", color = "blue" ];
+  "fUSD.address" [ label = "address" ];
+  "fUSD.type" [ label = "type" ];
+}
+
+  "SafeERC20.safeTransfer";
+  "SafeERC20.callOptionalReturn";
+  "SafeERC20.safeTransferFrom";
+  "SafeERC20.safeApprove";
+  "IERC20.allowance";
+  "SafeERC20.address";
+  "IERC20.isContract";
+  "IERC20.data";
+  "fUSD.onlyOwner";
+  "fUSD.owner";
+  "fUSD.changeDCRMOwner";
+  "fUSD.address";
+  "fUSD.Swapin";
+  "fUSD._mint";
+  "fUSD.Swapout";
+  "fUSD._burn";
+  "fUSD.<Constructor>";
+  "fUSD.permit";
+  "fUSD.verifyEIP712";
+  "fUSD.verifyPersonalSign";
+  "fUSD.transferWithPermit";
+  "fUSD.prefixed";
+  "fUSD.transfer";
+  "fUSD.transferFrom";
+  "fUSD.type";
+  "fUSD.transferAndCall";
+  "SafeERC20.safeTransfer" -> "SafeERC20.callOptionalReturn" [ color = "green" ];
+  "SafeERC20.safeTransferFrom" -> "SafeERC20.callOptionalReturn" [ color = "green" ];
+  "SafeERC20.safeApprove" -> "IERC20.allowance" [ color = "orange" ];
+  "SafeERC20.safeApprove" -> "SafeERC20.address" [ color = "green" ];
+  "SafeERC20.safeApprove" -> "SafeERC20.callOptionalReturn" [ color = "green" ];
+  "SafeERC20.callOptionalReturn" -> "IERC20.isContract" [ color = "orange" ];
+  "SafeERC20.callOptionalReturn" -> "SafeERC20.address" [ color = "green" ];
+  "SafeERC20.callOptionalReturn" -> "IERC20.data" [ color = "orange" ];
+  "SafeERC20.callOptionalReturn" -> "SafeERC20.address" [ color = "green" ];
+  "fUSD.onlyOwner" -> "fUSD.owner" [ color = "green" ];
+  "fUSD.changeDCRMOwner" -> "fUSD.address" [ color = "green" ];
+  "fUSD.changeDCRMOwner" -> "fUSD.owner" [ color = "green" ];
+  "fUSD.Swapin" -> "fUSD._mint" [ color = "green" ];
+  "fUSD.Swapout" -> "fUSD.address" [ color = "green" ];
+  "fUSD.Swapout" -> "fUSD._burn" [ color = "green" ];
+  "fUSD.<Constructor>" -> "fUSD.address" [ color = "green" ];
+  "fUSD._mint" -> "fUSD.address" [ color = "green" ];
+  "fUSD._mint" -> "fUSD.address" [ color = "green" ];
+  "fUSD._burn" -> "fUSD.address" [ color = "green" ];
+  "fUSD._burn" -> "fUSD.address" [ color = "green" ];
+  "fUSD.permit" -> "fUSD.verifyEIP712" [ color = "green" ];
+  "fUSD.permit" -> "fUSD.verifyPersonalSign" [ color = "green" ];
+  "fUSD.transferWithPermit" -> "fUSD.verifyEIP712" [ color = "green" ];
+  "fUSD.transferWithPermit" -> "fUSD.verifyPersonalSign" [ color = "green" ];
+  "fUSD.transferWithPermit" -> "fUSD.address" [ color = "green" ];
+  "fUSD.transferWithPermit" -> "fUSD.address" [ color = "green" ];
+  "fUSD.verifyEIP712" -> "fUSD.address" [ color = "green" ];
+  "fUSD.verifyPersonalSign" -> "fUSD.prefixed" [ color = "green" ];
+  "fUSD.verifyPersonalSign" -> "fUSD.address" [ color = "green" ];
+  "fUSD.transfer" -> "fUSD.address" [ color = "green" ];
+  "fUSD.transfer" -> "fUSD.address" [ color = "green" ];
+  "fUSD.transferFrom" -> "fUSD.address" [ color = "green" ];
+  "fUSD.transferFrom" -> "fUSD.address" [ color = "green" ];
+  "fUSD.transferFrom" -> "fUSD.type" [ color = "green" ];
+  "fUSD.transferAndCall" -> "fUSD.address" [ color = "green" ];
+  "fUSD.transferAndCall" -> "fUSD.address" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

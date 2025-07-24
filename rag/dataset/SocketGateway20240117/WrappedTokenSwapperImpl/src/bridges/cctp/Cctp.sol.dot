@@ -1,0 +1,84 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterCctpImpl" {
+  graph [ label = "CctpImpl", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "CctpImpl.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "CctpImpl.bridgeAfterSwap" [ label = "bridgeAfterSwap", color = "blue" ];
+  "CctpImpl.swapAndBridge" [ label = "swapAndBridge", color = "blue" ];
+  "CctpImpl.bridgeERC20To" [ label = "bridgeERC20To", color = "blue" ];
+  "CctpImpl.TokenMessenger" [ label = "TokenMessenger" ];
+  "CctpImpl.ERC20" [ label = "ERC20" ];
+  "CctpImpl.SocketBridge" [ label = "SocketBridge" ];
+}
+
+subgraph "clusterTokenMessenger" {
+  graph [ label = "TokenMessenger", color = "lightgray" ];
+  "TokenMessenger.depositForBurn" [ label = "depositForBurn" ];
+}
+
+subgraph "clustersocketRoute" {
+  graph [ label = "socketRoute", color = "lightgray" ];
+  "socketRoute.getRoute" [ label = "getRoute" ];
+}
+
+subgraph "clusterERC20" {
+  graph [ label = "ERC20", color = "lightgray" ];
+  "ERC20.safeTransferFrom" [ label = "safeTransferFrom" ];
+  "ERC20.transfer" [ label = "transfer" ];
+}
+
+  "CctpImpl.<Constructor>";
+  "CctpImpl.TokenMessenger";
+  "CctpImpl.bridgeAfterSwap";
+  "CctpImpl.ERC20";
+  "TokenMessenger.depositForBurn";
+  "CctpImpl.SocketBridge";
+  "CctpImpl.swapAndBridge";
+  "socketRoute.getRoute";
+  "CctpImpl.bridgeERC20To";
+  "ERC20.safeTransferFrom";
+  "ERC20.transfer";
+  "CctpImpl.<Constructor>" -> "CctpImpl.TokenMessenger" [ color = "green" ];
+  "CctpImpl.bridgeAfterSwap" -> "CctpImpl.ERC20" [ color = "green" ];
+  "CctpImpl.bridgeAfterSwap" -> "TokenMessenger.depositForBurn" [ color = "orange" ];
+  "CctpImpl.bridgeAfterSwap" -> "CctpImpl.SocketBridge" [ color = "green" ];
+  "CctpImpl.swapAndBridge" -> "socketRoute.getRoute" [ color = "orange" ];
+  "CctpImpl.swapAndBridge" -> "CctpImpl.ERC20" [ color = "green" ];
+  "CctpImpl.swapAndBridge" -> "TokenMessenger.depositForBurn" [ color = "orange" ];
+  "CctpImpl.swapAndBridge" -> "CctpImpl.SocketBridge" [ color = "green" ];
+  "CctpImpl.bridgeERC20To" -> "CctpImpl.ERC20" [ color = "green" ];
+  "CctpImpl.bridgeERC20To" -> "ERC20.safeTransferFrom" [ color = "orange" ];
+  "CctpImpl.bridgeERC20To" -> "ERC20.transfer" [ color = "orange" ];
+  "CctpImpl.bridgeERC20To" -> "TokenMessenger.depositForBurn" [ color = "orange" ];
+  "CctpImpl.bridgeERC20To" -> "CctpImpl.SocketBridge" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

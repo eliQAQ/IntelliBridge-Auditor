@@ -1,0 +1,92 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_128_Context {
+label = "Context"
+"128_constructor" [label="constructor"]
+"128__msgData" [label="_msgData"]
+"128__msgSender" [label="_msgSender"]
+}subgraph cluster_101_OEP4Template {
+label = "OEP4Template"
+"101_constructor" [label="constructor"]
+"101_deletageToProxy" [label="deletageToProxy"]
+"101_constructor" -> "101__mint"
+"101_constructor" -> "101_constructor"
+"101_constructor" -> "101__msgSender"
+"101_deletageToProxy" -> "101_onlyOperator"
+}subgraph cluster_778_ERC20Detailed {
+label = "ERC20Detailed"
+"778_constructor" [label="constructor"]
+"778_decimals" [label="decimals"]
+"778_name" [label="name"]
+"778_symbol" [label="symbol"]
+}subgraph cluster_847_IERC20 {
+label = "IERC20"
+"847_allowance" [label="allowance"]
+"847_transferFrom" [label="transferFrom"]
+"847_approve" [label="approve"]
+"847_balanceOf" [label="balanceOf"]
+"847_transfer" [label="transfer"]
+"847_totalSupply" [label="totalSupply"]
+}subgraph cluster_720_ERC20 {
+label = "ERC20"
+"720_allowance" [label="allowance"]
+"720__burnFrom" [label="_burnFrom"]
+"720_balanceOf" [label="balanceOf"]
+"720_transferFrom" [label="transferFrom"]
+"720_transfer" [label="transfer"]
+"720__approve" [label="_approve"]
+"720_decreaseAllowance" [label="decreaseAllowance"]
+"720__burn" [label="_burn"]
+"720__mint" [label="_mint"]
+"720_approve" [label="approve"]
+"720_increaseAllowance" [label="increaseAllowance"]
+"720__transfer" [label="_transfer"]
+"720_totalSupply" [label="totalSupply"]
+"720_increaseAllowance" -> "720__msgSender"
+"720__burnFrom" -> "720__msgSender"
+"720_transfer" -> "720__msgSender"
+"720_decreaseAllowance" -> "720__approve"
+"720_increaseAllowance" -> "720__approve"
+"720_decreaseAllowance" -> "720__msgSender"
+"720__burnFrom" -> "720__burn"
+"720_transferFrom" -> "720__transfer"
+"720_approve" -> "720__msgSender"
+"720_transferFrom" -> "720__approve"
+"720_transferFrom" -> "720__msgSender"
+"720_transfer" -> "720__transfer"
+"720__burnFrom" -> "720__approve"
+"720_approve" -> "720__approve"
+}subgraph cluster_315_SafeMath {
+label = "SafeMath"
+"315_add" [label="add"]
+"315_sub" [label="sub"]
+"315_div" [label="div"]
+"315_mul" [label="mul"]
+"315_mod" [label="mod"]
+"315_sub" -> "315_sub"
+"315_div" -> "315_div"
+"315_mod" -> "315_mod"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"720__transfer" -> "require(bool,string)"
+"315_add" -> "require(bool,string)"
+"315_mod" -> "require(bool,string)"
+"720__burn" -> "require(bool,string)"
+"315_sub" -> "require(bool,string)"
+"720__mint" -> "require(bool,string)"
+"315_mul" -> "require(bool,string)"
+"101_deletageToProxy" -> "require(bool,string)"
+"315_div" -> "require(bool,string)"
+"720__approve" -> "require(bool,string)"
+}"720__mint" -> "315_add"
+"720__burn" -> "315_sub"
+"720__transfer" -> "315_add"
+"720_increaseAllowance" -> "315_add"
+"720_transferFrom" -> "315_sub"
+"720_decreaseAllowance" -> "315_sub"
+"720__burnFrom" -> "315_sub"
+"720__transfer" -> "315_sub"
+"101_deletageToProxy" -> "101_transfer"
+}

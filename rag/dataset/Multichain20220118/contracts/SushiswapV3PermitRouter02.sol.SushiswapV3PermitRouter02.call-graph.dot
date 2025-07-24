@@ -1,0 +1,66 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_3071_SushiswapV3PermitRouter02 {
+label = "SushiswapV3PermitRouter02"
+"3071_constructor" [label="constructor"]
+"3071_receive" [label="receive"]
+"3071_quote" [label="quote"]
+"3071_swapExactFTMForTokens" [label="swapExactFTMForTokens"]
+"3071_removeLiquidityFTM" [label="removeLiquidityFTM"]
+"3071_removeLiquidityFTMWithPermit" [label="removeLiquidityFTMWithPermit"]
+"3071_getAmountIn" [label="getAmountIn"]
+"3071_addLiquidityFTMWithPermit" [label="addLiquidityFTMWithPermit"]
+"3071_getAmountOut" [label="getAmountOut"]
+"3071_swapTokensForExactFTMWithPermit" [label="swapTokensForExactFTMWithPermit"]
+"3071__swap" [label="_swap"]
+"3071_removeLiquidityWithPermit" [label="removeLiquidityWithPermit"]
+"3071_swapTokensForExactTokensWithPermit" [label="swapTokensForExactTokensWithPermit"]
+"3071_getAmountsOut" [label="getAmountsOut"]
+"3071_swapFTMForExactTokens" [label="swapFTMForExactTokens"]
+"3071_addLiquidityWithPermit" [label="addLiquidityWithPermit"]
+"3071_swapExactTokensForFTM" [label="swapExactTokensForFTM"]
+"3071_removeLiquidity" [label="removeLiquidity"]
+"3071__addLiquidity" [label="_addLiquidity"]
+"3071_getAmountsIn" [label="getAmountsIn"]
+"3071_swapExactTokensForTokensWithPermit" [label="swapExactTokensForTokensWithPermit"]
+"3071_removeLiquidityFTM" -> "3071_ensure"
+"3071_removeLiquidityFTMWithPermit" -> "3071_removeLiquidityFTM"
+"3071_addLiquidityFTMWithPermit" -> "3071__addLiquidity"
+"3071_addLiquidityWithPermit" -> "3071_ensure"
+"3071_swapFTMForExactTokens" -> "3071__swap"
+"3071_swapTokensForExactTokensWithPermit" -> "3071_ensure"
+"3071_swapFTMForExactTokens" -> "3071_ensure"
+"3071_addLiquidityWithPermit" -> "3071__addLiquidity"
+"3071_swapExactFTMForTokens" -> "3071_ensure"
+"3071_removeLiquidityWithPermit" -> "3071_removeLiquidity"
+"3071_swapTokensForExactFTMWithPermit" -> "3071_ensure"
+"3071_removeLiquidity" -> "3071_ensure"
+"3071_removeLiquidityFTM" -> "3071_removeLiquidity"
+"3071_swapExactTokensForFTM" -> "3071__swap"
+"3071_addLiquidityFTMWithPermit" -> "3071_ensure"
+"3071_swapExactTokensForTokensWithPermit" -> "3071__swap"
+"3071_swapExactTokensForTokensWithPermit" -> "3071_ensure"
+"3071_swapExactFTMForTokens" -> "3071__swap"
+"3071_swapTokensForExactTokensWithPermit" -> "3071__swap"
+"3071_swapTokensForExactFTMWithPermit" -> "3071__swap"
+"3071_swapExactTokensForFTM" -> "3071_ensure"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"assert(bool)" 
+"require(bool,string)" 
+"3071_addLiquidityFTMWithPermit" -> "assert(bool)"
+"3071_swapExactTokensForFTM" -> "require(bool,string)"
+"3071_swapExactTokensForTokensWithPermit" -> "require(bool,string)"
+"3071_swapTokensForExactFTMWithPermit" -> "require(bool,string)"
+"3071_swapExactFTMForTokens" -> "assert(bool)"
+"3071__addLiquidity" -> "assert(bool)"
+"3071__addLiquidity" -> "require(bool,string)"
+"3071_receive" -> "assert(bool)"
+"3071_removeLiquidity" -> "require(bool,string)"
+"3071_swapTokensForExactTokensWithPermit" -> "require(bool,string)"
+"3071_swapFTMForExactTokens" -> "require(bool,string)"
+"3071_swapFTMForExactTokens" -> "assert(bool)"
+"3071_swapExactFTMForTokens" -> "require(bool,string)"
+}
+}

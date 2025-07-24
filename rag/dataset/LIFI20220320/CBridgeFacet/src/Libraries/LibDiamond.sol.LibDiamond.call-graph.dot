@@ -1,0 +1,54 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_833_LibDiamond {
+label = "LibDiamond"
+"833_initializeDiamondCut" [label="initializeDiamondCut"]
+"833_replaceFunctions" [label="replaceFunctions"]
+"833_enforceHasContractCode" [label="enforceHasContractCode"]
+"833_diamondStorage" [label="diamondStorage"]
+"833_contractOwner" [label="contractOwner"]
+"833_setContractOwner" [label="setContractOwner"]
+"833_removeFunction" [label="removeFunction"]
+"833_diamondCut" [label="diamondCut"]
+"833_removeFunctions" [label="removeFunctions"]
+"833_addFunctions" [label="addFunctions"]
+"833_addFunction" [label="addFunction"]
+"833_enforceIsContractOwner" [label="enforceIsContractOwner"]
+"833_slitherConstructorConstantVariables" [label="slitherConstructorConstantVariables"]
+"833_addFacet" [label="addFacet"]
+"833_diamondCut" -> "833_removeFunctions"
+"833_contractOwner" -> "833_diamondStorage"
+"833_addFunctions" -> "833_diamondStorage"
+"833_addFunctions" -> "833_addFunction"
+"833_diamondCut" -> "833_initializeDiamondCut"
+"833_replaceFunctions" -> "833_addFunction"
+"833_replaceFunctions" -> "833_removeFunction"
+"833_initializeDiamondCut" -> "833_enforceHasContractCode"
+"833_replaceFunctions" -> "833_addFacet"
+"833_addFacet" -> "833_enforceHasContractCode"
+"833_removeFunctions" -> "833_diamondStorage"
+"833_replaceFunctions" -> "833_diamondStorage"
+"833_setContractOwner" -> "833_diamondStorage"
+"833_diamondCut" -> "833_replaceFunctions"
+"833_addFunctions" -> "833_addFacet"
+"833_diamondCut" -> "833_addFunctions"
+"833_removeFunctions" -> "833_removeFunction"
+"833_enforceIsContractOwner" -> "833_diamondStorage"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"revert(string)" 
+"require(bool,string)" 
+"keccak256(bytes)" 
+"833_slitherConstructorConstantVariables" -> "keccak256(bytes)"
+"833_removeFunctions" -> "require(bool,string)"
+"833_removeFunction" -> "require(bool,string)"
+"833_initializeDiamondCut" -> "revert(string)"
+"833_initializeDiamondCut" -> "require(bool,string)"
+"833_diamondCut" -> "revert(string)"
+"833_enforceIsContractOwner" -> "require(bool,string)"
+"833_enforceHasContractCode" -> "require(bool,string)"
+"833_replaceFunctions" -> "require(bool,string)"
+"833_addFunctions" -> "require(bool,string)"
+}
+}

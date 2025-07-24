@@ -1,0 +1,124 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterNXTPFacet" {
+  graph [ label = "NXTPFacet", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "NXTPFacet.initNXTP" [ label = "initNXTP", color = "blue" ];
+  "NXTPFacet.startBridgeTokensViaNXTP" [ label = "startBridgeTokensViaNXTP", color = "green" ];
+  "NXTPFacet.swapAndStartBridgeTokensViaNXTP" [ label = "swapAndStartBridgeTokensViaNXTP", color = "green" ];
+  "NXTPFacet.completeBridgeTokensViaNXTP" [ label = "completeBridgeTokensViaNXTP", color = "green" ];
+  "NXTPFacet.swapAndCompleteBridgeTokensViaNXTP" [ label = "swapAndCompleteBridgeTokensViaNXTP", color = "green" ];
+  "NXTPFacet._startBridge" [ label = "_startBridge" ];
+  "NXTPFacet.getStorage" [ label = "getStorage" ];
+  "NXTPFacet.getNXTPTransactionManager" [ label = "getNXTPTransactionManager", color = "blue" ];
+  "NXTPFacet.address" [ label = "address" ];
+  "NXTPFacet.LiFiTransferStarted" [ label = "LiFiTransferStarted" ];
+  "NXTPFacet.payable" [ label = "payable" ];
+  "NXTPFacet.LiFiTransferCompleted" [ label = "LiFiTransferCompleted" ];
+  "NXTPFacet.IERC20" [ label = "IERC20" ];
+}
+
+subgraph "clusterLibDiamond" {
+  graph [ label = "LibDiamond", color = "lightgray" ];
+  "LibDiamond.enforceIsContractOwner" [ label = "enforceIsContractOwner" ];
+}
+
+subgraph "clusterLibAsset" {
+  graph [ label = "LibAsset", color = "lightgray" ];
+  "LibAsset.getOwnBalance" [ label = "getOwnBalance" ];
+  "LibAsset.transferFromERC20" [ label = "transferFromERC20" ];
+  "LibAsset.isNativeAsset" [ label = "isNativeAsset" ];
+  "LibAsset.transferAsset" [ label = "transferAsset" ];
+  "LibAsset.approveERC20" [ label = "approveERC20" ];
+}
+
+subgraph "clusterLibSwap" {
+  graph [ label = "LibSwap", color = "lightgray" ];
+  "LibSwap.swap" [ label = "swap" ];
+}
+
+  "NXTPFacet.initNXTP";
+  "NXTPFacet.getStorage";
+  "LibDiamond.enforceIsContractOwner";
+  "NXTPFacet.startBridgeTokensViaNXTP";
+  "NXTPFacet.address";
+  "LibAsset.getOwnBalance";
+  "LibAsset.transferFromERC20";
+  "NXTPFacet._startBridge";
+  "NXTPFacet.LiFiTransferStarted";
+  "NXTPFacet.swapAndStartBridgeTokensViaNXTP";
+  "LibSwap.swap";
+  "NXTPFacet.completeBridgeTokensViaNXTP";
+  "LibAsset.isNativeAsset";
+  "LibAsset.transferAsset";
+  "NXTPFacet.payable";
+  "NXTPFacet.LiFiTransferCompleted";
+  "NXTPFacet.swapAndCompleteBridgeTokensViaNXTP";
+  "NXTPFacet.IERC20";
+  "LibAsset.approveERC20";
+  "NXTPFacet.getNXTPTransactionManager";
+  "NXTPFacet.initNXTP" -> "NXTPFacet.getStorage" [ color = "green" ];
+  "NXTPFacet.initNXTP" -> "LibDiamond.enforceIsContractOwner" [ color = "orange" ];
+  "NXTPFacet.startBridgeTokensViaNXTP" -> "NXTPFacet.address" [ color = "green" ];
+  "NXTPFacet.startBridgeTokensViaNXTP" -> "LibAsset.getOwnBalance" [ color = "orange" ];
+  "NXTPFacet.startBridgeTokensViaNXTP" -> "LibAsset.transferFromERC20" [ color = "orange" ];
+  "NXTPFacet.startBridgeTokensViaNXTP" -> "NXTPFacet.address" [ color = "green" ];
+  "NXTPFacet.startBridgeTokensViaNXTP" -> "LibAsset.getOwnBalance" [ color = "orange" ];
+  "NXTPFacet.startBridgeTokensViaNXTP" -> "NXTPFacet._startBridge" [ color = "green" ];
+  "NXTPFacet.startBridgeTokensViaNXTP" -> "NXTPFacet.LiFiTransferStarted" [ color = "green" ];
+  "NXTPFacet.swapAndStartBridgeTokensViaNXTP" -> "LibAsset.getOwnBalance" [ color = "orange" ];
+  "NXTPFacet.swapAndStartBridgeTokensViaNXTP" -> "LibSwap.swap" [ color = "orange" ];
+  "NXTPFacet.swapAndStartBridgeTokensViaNXTP" -> "LibAsset.getOwnBalance" [ color = "orange" ];
+  "NXTPFacet.swapAndStartBridgeTokensViaNXTP" -> "NXTPFacet._startBridge" [ color = "green" ];
+  "NXTPFacet.swapAndStartBridgeTokensViaNXTP" -> "NXTPFacet.LiFiTransferStarted" [ color = "green" ];
+  "NXTPFacet.completeBridgeTokensViaNXTP" -> "LibAsset.isNativeAsset" [ color = "orange" ];
+  "NXTPFacet.completeBridgeTokensViaNXTP" -> "LibAsset.transferFromERC20" [ color = "orange" ];
+  "NXTPFacet.completeBridgeTokensViaNXTP" -> "NXTPFacet.address" [ color = "green" ];
+  "NXTPFacet.completeBridgeTokensViaNXTP" -> "LibAsset.transferAsset" [ color = "orange" ];
+  "NXTPFacet.completeBridgeTokensViaNXTP" -> "NXTPFacet.payable" [ color = "green" ];
+  "NXTPFacet.completeBridgeTokensViaNXTP" -> "NXTPFacet.LiFiTransferCompleted" [ color = "green" ];
+  "NXTPFacet.swapAndCompleteBridgeTokensViaNXTP" -> "LibAsset.getOwnBalance" [ color = "orange" ];
+  "NXTPFacet.swapAndCompleteBridgeTokensViaNXTP" -> "LibSwap.swap" [ color = "orange" ];
+  "NXTPFacet.swapAndCompleteBridgeTokensViaNXTP" -> "LibAsset.getOwnBalance" [ color = "orange" ];
+  "NXTPFacet.swapAndCompleteBridgeTokensViaNXTP" -> "LibAsset.transferAsset" [ color = "orange" ];
+  "NXTPFacet.swapAndCompleteBridgeTokensViaNXTP" -> "NXTPFacet.payable" [ color = "green" ];
+  "NXTPFacet.swapAndCompleteBridgeTokensViaNXTP" -> "NXTPFacet.LiFiTransferCompleted" [ color = "green" ];
+  "NXTPFacet._startBridge" -> "NXTPFacet.getStorage" [ color = "green" ];
+  "NXTPFacet._startBridge" -> "NXTPFacet.IERC20" [ color = "green" ];
+  "NXTPFacet._startBridge" -> "LibAsset.approveERC20" [ color = "orange" ];
+  "NXTPFacet._startBridge" -> "NXTPFacet.IERC20" [ color = "green" ];
+  "NXTPFacet._startBridge" -> "NXTPFacet.address" [ color = "green" ];
+  "NXTPFacet._startBridge" -> "LibAsset.isNativeAsset" [ color = "orange" ];
+  "NXTPFacet._startBridge" -> "NXTPFacet.address" [ color = "green" ];
+  "NXTPFacet.getNXTPTransactionManager" -> "NXTPFacet.getStorage" [ color = "green" ];
+  "NXTPFacet.getNXTPTransactionManager" -> "NXTPFacet.address" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

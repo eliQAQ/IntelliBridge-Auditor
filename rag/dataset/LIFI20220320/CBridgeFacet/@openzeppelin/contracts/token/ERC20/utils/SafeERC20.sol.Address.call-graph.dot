@@ -1,0 +1,41 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_598_Address {
+label = "Address"
+"598_verifyCallResult" [label="verifyCallResult"]
+"598_functionStaticCall" [label="functionStaticCall"]
+"598_functionCallWithValue" [label="functionCallWithValue"]
+"598_functionCall" [label="functionCall"]
+"598_functionDelegateCall" [label="functionDelegateCall"]
+"598_isContract" [label="isContract"]
+"598_sendValue" [label="sendValue"]
+"598_functionDelegateCall" -> "598_isContract"
+"598_functionStaticCall" -> "598_verifyCallResult"
+"598_functionStaticCall" -> "598_functionStaticCall"
+"598_functionCall" -> "598_functionCall"
+"598_functionCallWithValue" -> "598_functionCallWithValue"
+"598_functionCall" -> "598_functionCallWithValue"
+"598_functionCallWithValue" -> "598_verifyCallResult"
+"598_functionDelegateCall" -> "598_functionDelegateCall"
+"598_functionStaticCall" -> "598_isContract"
+"598_functionDelegateCall" -> "598_verifyCallResult"
+"598_functionCallWithValue" -> "598_isContract"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"balance(address)" 
+"mload(uint256)" 
+"require(bool,string)" 
+"revert(string)" 
+"revert(uint256,uint256)" 
+"598_functionDelegateCall" -> "require(bool,string)"
+"598_functionCallWithValue" -> "require(bool,string)"
+"598_functionStaticCall" -> "require(bool,string)"
+"598_verifyCallResult" -> "mload(uint256)"
+"598_sendValue" -> "require(bool,string)"
+"598_sendValue" -> "balance(address)"
+"598_verifyCallResult" -> "revert(string)"
+"598_functionCallWithValue" -> "balance(address)"
+"598_verifyCallResult" -> "revert(uint256,uint256)"
+}
+}

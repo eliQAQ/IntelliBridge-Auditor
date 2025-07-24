@@ -1,0 +1,56 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_736_NFTRouter {
+label = "NFTRouter"
+"736_adjustFeePerUnitInBatch" [label="adjustFeePerUnitInBatch"]
+"736__transferFee" [label="_transferFee"]
+"736_nft1155SwapIn" [label="nft1155SwapIn"]
+"736_onERC1155BatchReceived" [label="onERC1155BatchReceived"]
+"736_onERC1155Received" [label="onERC1155Received"]
+"736_nft1155BatchSwapIn" [label="nft1155BatchSwapIn"]
+"736_adjustFeePerTransaction" [label="adjustFeePerTransaction"]
+"736_nft721SwapOut" [label="nft721SwapOut"]
+"736_constructor" [label="constructor"]
+"736_nft1155BatchSwapOut" [label="nft1155BatchSwapOut"]
+"736_nft1155SwapOut" [label="nft1155SwapOut"]
+"736_nft721SwapIn" [label="nft721SwapIn"]
+"736_onERC721Received" [label="onERC721Received"]
+"736_nft721SwapOut" -> "736__transferFee"
+"736_adjustFeePerUnitInBatch" -> "736_onlyMPC"
+"736_nft1155BatchSwapIn" -> "736_onlyMPC"
+"736_adjustFeePerTransaction" -> "736_onlyMPC"
+"736_nft1155SwapOut" -> "736__transferFee"
+"736_constructor" -> "736_constructor"
+"736_nft1155SwapIn" -> "736_onlyMPC"
+"736_nft721SwapIn" -> "736_onlyMPC"
+"736_nft1155BatchSwapOut" -> "736__transferFee"
+}subgraph cluster_189_IERC1155Transfer {
+label = "IERC1155Transfer"
+"189_safeBatchTransferFrom" [label="safeBatchTransferFrom"]
+"189_safeTransferFrom" [label="safeTransferFrom"]
+}subgraph cluster_150_MPCManageable {
+label = "MPCManageable"
+"150_constructor" [label="constructor"]
+"150_applyMPC" [label="applyMPC"]
+"150_changeMPC" [label="changeMPC"]
+"150_changeMPC" -> "150_onlyMPC"
+}subgraph cluster_160_IERC721Transfer {
+label = "IERC721Transfer"
+"160_safeTransferFrom" [label="safeTransferFrom"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"chainid()" 
+"require(bool,string)" 
+"150_applyMPC" -> "require(bool,string)"
+"150_constructor" -> "require(bool,string)"
+"736_constructor" -> "chainid()"
+"150_changeMPC" -> "require(bool,string)"
+"736__transferFee" -> "require(bool,string)"
+}"736_nft721SwapOut" -> "160_safeTransferFrom"
+"736_nft721SwapIn" -> "160_safeTransferFrom"
+"736_nft1155SwapIn" -> "189_safeTransferFrom"
+"736_nft1155BatchSwapOut" -> "189_safeBatchTransferFrom"
+"736_nft1155SwapOut" -> "189_safeTransferFrom"
+"736_nft1155BatchSwapIn" -> "189_safeBatchTransferFrom"
+}

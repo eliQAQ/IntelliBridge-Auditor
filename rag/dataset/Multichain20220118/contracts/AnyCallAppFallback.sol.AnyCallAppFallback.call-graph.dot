@@ -1,0 +1,35 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_345_Administrable {
+label = "Administrable"
+"345_setAdmin" [label="setAdmin"]
+"345_acceptAdmin" [label="acceptAdmin"]
+"345_transferAdmin" [label="transferAdmin"]
+"345_transferAdmin" -> "345_onlyAdmin"
+}subgraph cluster_252_AnyCallApp {
+label = "AnyCallApp"
+"252__anyExecute" [label="_anyExecute"]
+"252__anyCall" [label="_anyCall"]
+"252_anyExecute" [label="anyExecute"]
+"252_constructor" [label="constructor"]
+"252_setPeers" [label="setPeers"]
+"252_getPeer" [label="getPeer"]
+"252_setPeers" -> "252_onlyAdmin"
+"252_anyExecute" -> "252_onlyExecutor"
+"252_anyExecute" -> "252__anyExecute"
+}subgraph cluster_46_AnyCallAppFallback {
+label = "AnyCallAppFallback"
+"46__anyFallback" [label="_anyFallback"]
+"46_anyFallback" [label="anyFallback"]
+"46_anyFallback" -> "46_onlyExecutor"
+"46_anyFallback" -> "46__anyFallback"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"require(bool)" 
+"252_anyExecute" -> "require(bool,string)"
+"345_acceptAdmin" -> "require(bool)"
+"46_anyFallback" -> "require(bool,string)"
+}
+}

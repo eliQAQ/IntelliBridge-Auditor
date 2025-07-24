@@ -1,0 +1,92 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterUtilsMock" {
+  graph [ label = "UtilsMock", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "UtilsMock.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "UtilsMock.bytesToBytes32" [ label = "bytesToBytes32", color = "green" ];
+  "UtilsMock.bytesToUint256" [ label = "bytesToUint256", color = "green" ];
+  "UtilsMock.uint256ToBytes" [ label = "uint256ToBytes", color = "green" ];
+  "UtilsMock.bytesToAddress" [ label = "bytesToAddress", color = "green" ];
+  "UtilsMock.addressToBytes" [ label = "addressToBytes", color = "green" ];
+  "UtilsMock.hashLeaf" [ label = "hashLeaf", color = "green" ];
+  "UtilsMock.hashChildren" [ label = "hashChildren", color = "green" ];
+  "UtilsMock.equalStorage" [ label = "equalStorage", color = "green" ];
+  "UtilsMock.slice" [ label = "slice", color = "green" ];
+  "UtilsMock.containMAddresses" [ label = "containMAddresses", color = "green" ];
+}
+
+subgraph "clusterUtils" {
+  graph [ label = "Utils", color = "lightgray" ];
+  "Utils.bytesToBytes32" [ label = "bytesToBytes32" ];
+  "Utils.bytesToUint256" [ label = "bytesToUint256" ];
+  "Utils.uint256ToBytes" [ label = "uint256ToBytes" ];
+  "Utils.bytesToAddress" [ label = "bytesToAddress" ];
+  "Utils.addressToBytes" [ label = "addressToBytes" ];
+  "Utils.hashLeaf" [ label = "hashLeaf" ];
+  "Utils.hashChildren" [ label = "hashChildren" ];
+  "Utils.equalStorage" [ label = "equalStorage" ];
+  "Utils.slice" [ label = "slice" ];
+  "Utils.containMAddresses" [ label = "containMAddresses" ];
+}
+
+  "UtilsMock.bytesToBytes32";
+  "Utils.bytesToBytes32";
+  "UtilsMock.bytesToUint256";
+  "Utils.bytesToUint256";
+  "UtilsMock.uint256ToBytes";
+  "Utils.uint256ToBytes";
+  "UtilsMock.bytesToAddress";
+  "Utils.bytesToAddress";
+  "UtilsMock.addressToBytes";
+  "Utils.addressToBytes";
+  "UtilsMock.hashLeaf";
+  "Utils.hashLeaf";
+  "UtilsMock.hashChildren";
+  "Utils.hashChildren";
+  "UtilsMock.equalStorage";
+  "Utils.equalStorage";
+  "UtilsMock.slice";
+  "Utils.slice";
+  "UtilsMock.containMAddresses";
+  "Utils.containMAddresses";
+  "UtilsMock.bytesToBytes32" -> "Utils.bytesToBytes32" [ color = "orange" ];
+  "UtilsMock.bytesToUint256" -> "Utils.bytesToUint256" [ color = "orange" ];
+  "UtilsMock.uint256ToBytes" -> "Utils.uint256ToBytes" [ color = "orange" ];
+  "UtilsMock.bytesToAddress" -> "Utils.bytesToAddress" [ color = "orange" ];
+  "UtilsMock.addressToBytes" -> "Utils.addressToBytes" [ color = "orange" ];
+  "UtilsMock.hashLeaf" -> "Utils.hashLeaf" [ color = "orange" ];
+  "UtilsMock.hashChildren" -> "Utils.hashChildren" [ color = "orange" ];
+  "UtilsMock.equalStorage" -> "Utils.equalStorage" [ color = "orange" ];
+  "UtilsMock.slice" -> "Utils.slice" [ color = "orange" ];
+  "UtilsMock.containMAddresses" -> "Utils.containMAddresses" [ color = "orange" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

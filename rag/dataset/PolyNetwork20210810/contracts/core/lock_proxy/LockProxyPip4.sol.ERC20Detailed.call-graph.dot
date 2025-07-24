@@ -1,0 +1,21 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_3109_IERC20 {
+label = "IERC20"
+"3109_approve" [label="approve"]
+"3109_balanceOf" [label="balanceOf"]
+"3109_transferFrom" [label="transferFrom"]
+"3109_allowance" [label="allowance"]
+"3109_transfer" [label="transfer"]
+"3109_totalSupply" [label="totalSupply"]
+}subgraph cluster_2478_ERC20Detailed {
+label = "ERC20Detailed"
+"2478_name" [label="name"]
+"2478_symbol" [label="symbol"]
+"2478_constructor" [label="constructor"]
+"2478_decimals" [label="decimals"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+}
+}

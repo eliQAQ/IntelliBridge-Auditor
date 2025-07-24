@@ -499,8 +499,8 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "Address.functionCallWithValue",
-                                        "Address.verifyCallResultFromTarget"
+                                        "Address.verifyCallResultFromTarget",
+                                        "Address.functionCallWithValue"
                                     ]
                                 },
                                 "is_payable": false,
@@ -539,8 +539,8 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "Address.functionCallWithValue",
-                                        "Address.verifyCallResultFromTarget"
+                                        "Address.verifyCallResultFromTarget",
+                                        "Address.functionCallWithValue"
                                     ]
                                 },
                                 "is_payable": false,
@@ -575,9 +575,9 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "Address.functionStaticCall",
                                         "target.staticcall",
-                                        "Address.verifyCallResultFromTarget"
+                                        "Address.verifyCallResultFromTarget",
+                                        "Address.functionStaticCall"
                                     ]
                                 },
                                 "is_payable": false,
@@ -614,9 +614,9 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "Address.functionStaticCall",
                                         "target.staticcall",
-                                        "Address.verifyCallResultFromTarget"
+                                        "Address.verifyCallResultFromTarget",
+                                        "Address.functionStaticCall"
                                     ]
                                 },
                                 "is_payable": false,
@@ -649,9 +649,9 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "target.delegatecall",
+                                        "Address.functionDelegateCall",
                                         "Address.verifyCallResultFromTarget",
-                                        "Address.functionDelegateCall"
+                                        "target.delegatecall"
                                     ]
                                 },
                                 "is_payable": false,
@@ -686,9 +686,9 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "target.delegatecall",
+                                        "Address.functionDelegateCall",
                                         "Address.verifyCallResultFromTarget",
-                                        "Address.functionDelegateCall"
+                                        "target.delegatecall"
                                     ]
                                 },
                                 "is_payable": false,
@@ -731,8 +731,8 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "Address._revert",
-                                        "Address.isContract"
+                                        "Address.isContract",
+                                        "Address._revert"
                                     ]
                                 },
                                 "is_payable": false,
@@ -1057,8 +1057,8 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "SafeERC20._callOptionalReturn",
-                                        "SafeERC20._callOptionalReturnBool"
+                                        "SafeERC20._callOptionalReturnBool",
+                                        "SafeERC20._callOptionalReturn"
                                     ]
                                 },
                                 "is_payable": false,
@@ -1110,8 +1110,8 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "IERC20Permit.permit",
-                                        "IERC20Permit.nonces"
+                                        "IERC20Permit.nonces",
+                                        "IERC20Permit.permit"
                                     ]
                                 },
                                 "is_payable": false,
@@ -3223,8 +3223,8 @@
                                     "__set__": true,
                                     "values": [
                                         "LibAsset.InsufficientBalance",
-                                        "LibAsset.NativeAssetTransferFailed",
-                                        "LibAsset.NoTransferToNullAddress"
+                                        "LibAsset.NoTransferToNullAddress",
+                                        "LibAsset.NativeAssetTransferFailed"
                                     ]
                                 },
                                 "is_payable": false,
@@ -3262,11 +3262,11 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "LibAsset.NullAddrIsNotAValidSpender",
-                                        "LibAsset.IERC20",
                                         "IERC20.allowance",
-                                        "SafeERC20.safeApprove",
-                                        "LibAsset.isNativeAsset"
+                                        "LibAsset.IERC20",
+                                        "LibAsset.isNativeAsset",
+                                        "LibAsset.NullAddrIsNotAValidSpender",
+                                        "SafeERC20.safeApprove"
                                     ]
                                 },
                                 "is_payable": false,
@@ -3304,11 +3304,11 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "LibAsset.NoTransferToNullAddress",
-                                        "LibAsset.IERC20",
                                         "LibAsset.NullAddrIsNotAnERC20Token",
-                                        "SafeERC20.safeTransfer",
                                         "LibAsset.InsufficientBalance",
+                                        "LibAsset.IERC20",
+                                        "LibAsset.NoTransferToNullAddress",
+                                        "SafeERC20.safeTransfer",
                                         "LibAsset.isNativeAsset"
                                     ]
                                 },
@@ -3351,13 +3351,13 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "SafeERC20.safeTransferFrom",
-                                        "LibAsset.NoTransferToNullAddress",
-                                        "LibAsset.InvalidAmount",
-                                        "LibAsset.IERC20",
                                         "LibAsset.NullAddrIsNotAnERC20Token",
+                                        "LibAsset.IERC20",
+                                        "LibAsset.NoTransferToNullAddress",
                                         "IERC20.balanceOf",
-                                        "LibAsset.isNativeAsset"
+                                        "SafeERC20.safeTransferFrom",
+                                        "LibAsset.isNativeAsset",
+                                        "LibAsset.InvalidAmount"
                                     ]
                                 },
                                 "is_payable": false,
@@ -3385,11 +3385,11 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "LibAsset.InvalidAmount",
-                                        "LibAsset.IERC20",
                                         "LibAsset.InsufficientBalance",
+                                        "LibAsset.IERC20",
                                         "LibAsset.transferFromERC20",
-                                        "LibAsset.isNativeAsset"
+                                        "LibAsset.isNativeAsset",
+                                        "LibAsset.InvalidAmount"
                                     ]
                                 },
                                 "is_payable": false,
@@ -3944,14 +3944,14 @@
                                     "__set__": true,
                                     "values": [
                                         "LibSwap.InsufficientBalance",
-                                        "LibAsset.isContract",
-                                        "LibSwap.InvalidContract",
+                                        "LibAsset.getOwnBalance",
                                         "LibSwap.IERC20",
                                         "LibUtil.revertWith",
-                                        "LibAsset.maxApproveERC20",
-                                        "LibAsset.getOwnBalance",
+                                        "LibAsset.isContract",
                                         "LibAsset.isNativeAsset",
-                                        "LibSwap.NoSwapFromZeroBalance"
+                                        "LibSwap.NoSwapFromZeroBalance",
+                                        "LibSwap.InvalidContract",
+                                        "LibAsset.maxApproveERC20"
                                     ]
                                 },
                                 "is_payable": false,
@@ -4168,8 +4168,8 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "LibAllowList._getStorage",
-                                        "LibAllowList._checkAddress"
+                                        "LibAllowList._checkAddress",
+                                        "LibAllowList._getStorage"
                                     ]
                                 },
                                 "is_payable": false,
@@ -4548,13 +4548,13 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "LibAsset.depositAssets",
+                                        "LibAsset.getOwnBalance",
+                                        "SwapperV2._fetchBalances",
+                                        "SwapperV2.NoSwapDataProvided",
                                         "LibAsset.isNativeAsset",
                                         "SwapperV2._executeSwaps",
-                                        "SwapperV2._fetchBalances",
                                         "SwapperV2.CumulativeSlippageTooHigh",
-                                        "LibAsset.getOwnBalance",
-                                        "SwapperV2.NoSwapDataProvided"
+                                        "LibAsset.depositAssets"
                                     ]
                                 },
                                 "is_payable": false,
@@ -4597,13 +4597,13 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "LibAsset.depositAssets",
+                                        "LibAsset.getOwnBalance",
+                                        "SwapperV2._fetchBalances",
+                                        "SwapperV2.NoSwapDataProvided",
                                         "LibAsset.isNativeAsset",
                                         "SwapperV2._executeSwaps",
-                                        "SwapperV2._fetchBalances",
                                         "SwapperV2.CumulativeSlippageTooHigh",
-                                        "LibAsset.getOwnBalance",
-                                        "SwapperV2.NoSwapDataProvided"
+                                        "LibAsset.depositAssets"
                                     ]
                                 },
                                 "is_payable": false,
@@ -4641,13 +4641,13 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "LibAllowList.selectorIsAllowed",
-                                        "LibAllowList.contractIsAllowed",
                                         "LibSwap.swap",
-                                        "SwapperV2.noLeftovers",
+                                        "LibAllowList.contractIsAllowed",
+                                        "LibAsset.isNativeAsset",
+                                        "LibAllowList.selectorIsAllowed",
                                         "SwapperV2.ContractCallNotAllowed",
-                                        "SwapperV2.noLeftoversReserve",
-                                        "LibAsset.isNativeAsset"
+                                        "SwapperV2.noLeftovers",
+                                        "SwapperV2.noLeftoversReserve"
                                     ]
                                 },
                                 "is_payable": false,
@@ -4679,13 +4679,13 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "LibAllowList.selectorIsAllowed",
-                                        "LibAllowList.contractIsAllowed",
                                         "LibSwap.swap",
-                                        "SwapperV2.noLeftovers",
+                                        "LibAllowList.contractIsAllowed",
+                                        "LibAsset.isNativeAsset",
+                                        "LibAllowList.selectorIsAllowed",
                                         "SwapperV2.ContractCallNotAllowed",
-                                        "SwapperV2.noLeftoversReserve",
-                                        "LibAsset.isNativeAsset"
+                                        "SwapperV2.noLeftovers",
+                                        "SwapperV2.noLeftoversReserve"
                                     ]
                                 },
                                 "is_payable": false,
@@ -4747,8 +4747,8 @@
                             "external_calls": {
                                 "__set__": true,
                                 "values": [
-                                    "LibAsset.getOwnBalance",
-                                    "LibAsset.transferAsset"
+                                    "LibAsset.transferAsset",
+                                    "LibAsset.getOwnBalance"
                                 ]
                             },
                             "md5": "da817093e82e82c621a47a137fdde2d0"
@@ -4778,8 +4778,8 @@
                             "external_calls": {
                                 "__set__": true,
                                 "values": [
-                                    "LibAsset.getOwnBalance",
                                     "LibAsset.transferAsset",
+                                    "LibAsset.getOwnBalance",
                                     "LibAsset.isNativeAsset"
                                 ]
                             },
@@ -4988,9 +4988,9 @@
                                 "__set__": true,
                                 "values": [
                                     "Validatable.InvalidReceiver",
+                                    "Validatable.InvalidAmount",
                                     "LibUtil.isZeroAddress",
-                                    "Validatable.CannotBridgeToSameNetwork",
-                                    "Validatable.InvalidAmount"
+                                    "Validatable.CannotBridgeToSameNetwork"
                                 ]
                             },
                             "md5": "c982dbf1de1c4474f879f81ec654c610"
@@ -5403,15 +5403,15 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "GasZipFacet.depositToGasZipNative",
-                                        "GasZipFacet.doesNotContainDestinationCalls",
-                                        "GasZipFacet.refundExcessNative",
-                                        "GasZipFacet.nonReentrant",
-                                        "GasZipFacet.InvalidCallData",
                                         "GasZipFacet.doesNotContainSourceSwaps",
                                         "GasZipFacet.LiFiTransferStarted",
+                                        "GasZipFacet.InvalidCallData",
                                         "GasZipFacet.validateBridgeData",
-                                        "LibAsset.isNativeAsset"
+                                        "LibAsset.isNativeAsset",
+                                        "GasZipFacet.nonReentrant",
+                                        "GasZipFacet.refundExcessNative",
+                                        "GasZipFacet.doesNotContainDestinationCalls",
+                                        "GasZipFacet.depositToGasZipNative"
                                     ]
                                 },
                                 "is_payable": true,
@@ -5450,16 +5450,16 @@
                                 "external_calls": {
                                     "__set__": true,
                                     "values": [
-                                        "GasZipFacet.depositToGasZipNative",
-                                        "GasZipFacet.doesNotContainDestinationCalls",
-                                        "GasZipFacet.refundExcessNative",
-                                        "GasZipFacet._depositAndSwap",
-                                        "GasZipFacet.InvalidCallData",
                                         "GasZipFacet.containsSourceSwaps",
-                                        "GasZipFacet.nonReentrant",
                                         "GasZipFacet.LiFiTransferStarted",
+                                        "GasZipFacet.InvalidCallData",
                                         "GasZipFacet.validateBridgeData",
-                                        "LibAsset.isNativeAsset"
+                                        "LibAsset.isNativeAsset",
+                                        "GasZipFacet.nonReentrant",
+                                        "GasZipFacet._depositAndSwap",
+                                        "GasZipFacet.refundExcessNative",
+                                        "GasZipFacet.doesNotContainDestinationCalls",
+                                        "GasZipFacet.depositToGasZipNative"
                                     ]
                                 },
                                 "is_payable": true,
@@ -5582,23 +5582,23 @@
     "handled_md5": {
         "__set__": true,
         "values": [
-            "b76ef513a415fc0cafbd46561661f992",
-            "3982c8fe19d0fa8ec23178ac7cfbafc8",
-            "d9796ff88e818f07072c01a0ca56e158",
-            "bd344ed074ad289d8056d68b05f091a8",
-            "36072e4c407701329d24d6c653f48e28",
-            "717cfdbafee93c75c41eb52298a28fcb",
             "e98de1da5e0db7ab62bb88dc57e00b4f",
-            "6139cc76125075177db902b8ee30914c",
-            "b9e9a80fb3f54fa889e8312f166511fc",
-            "5c804830e935cd709abdee9040234d39",
-            "fb75035c0438e433ca9174ec36da217b",
-            "68dc72edde5cd7b4ed473aa10c7bd63f",
-            "d01b2085c967281b5836449ebc3a3819",
-            "4f5a6677a0dd96ef5b9b8281c354cfc5",
-            "6ae3cb0bfea33a161b04e94f2e82c4b1",
+            "21a42839196479bf2edb54cd94617c46",
+            "bd344ed074ad289d8056d68b05f091a8",
             "81dbccc1c4c22369d5d81fff866feef4",
-            "21a42839196479bf2edb54cd94617c46"
+            "b9e9a80fb3f54fa889e8312f166511fc",
+            "4f5a6677a0dd96ef5b9b8281c354cfc5",
+            "68dc72edde5cd7b4ed473aa10c7bd63f",
+            "6ae3cb0bfea33a161b04e94f2e82c4b1",
+            "36072e4c407701329d24d6c653f48e28",
+            "6139cc76125075177db902b8ee30914c",
+            "3982c8fe19d0fa8ec23178ac7cfbafc8",
+            "fb75035c0438e433ca9174ec36da217b",
+            "d01b2085c967281b5836449ebc3a3819",
+            "5c804830e935cd709abdee9040234d39",
+            "d9796ff88e818f07072c01a0ca56e158",
+            "717cfdbafee93c75c41eb52298a28fcb",
+            "b76ef513a415fc0cafbd46561661f992"
         ]
     }
 }

@@ -1,0 +1,309 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_1731_ERC20 {
+label = "ERC20"
+"1731_increaseAllowance" [label="increaseAllowance"]
+"1731__mint" [label="_mint"]
+"1731_constructor" [label="constructor"]
+"1731_balanceOf" [label="balanceOf"]
+"1731__beforeTokenTransfer" [label="_beforeTokenTransfer"]
+"1731_transferFrom" [label="transferFrom"]
+"1731_allowance" [label="allowance"]
+"1731_decimals" [label="decimals"]
+"1731_name" [label="name"]
+"1731_decreaseAllowance" [label="decreaseAllowance"]
+"1731__setupDecimals" [label="_setupDecimals"]
+"1731__transfer" [label="_transfer"]
+"1731__burn" [label="_burn"]
+"1731_totalSupply" [label="totalSupply"]
+"1731_approve" [label="approve"]
+"1731_transfer" [label="transfer"]
+"1731_symbol" [label="symbol"]
+"1731__approve" [label="_approve"]
+"1731_transfer" -> "1731__msgSender"
+"1731_approve" -> "1731__approve"
+"1731_transferFrom" -> "1731__msgSender"
+"1731_transferFrom" -> "1731__transfer"
+"1731__burn" -> "1731__beforeTokenTransfer"
+"1731_decreaseAllowance" -> "1731__approve"
+"1731_increaseAllowance" -> "1731__msgSender"
+"1731_transferFrom" -> "1731__approve"
+"1731__transfer" -> "1731__beforeTokenTransfer"
+"1731_increaseAllowance" -> "1731__approve"
+"1731_decreaseAllowance" -> "1731__msgSender"
+"1731_approve" -> "1731__msgSender"
+"1731__mint" -> "1731__beforeTokenTransfer"
+"1731_transfer" -> "1731__transfer"
+}subgraph cluster_490_IERC20 {
+label = "IERC20"
+"490_transfer" [label="transfer"]
+"490_transferFrom" [label="transferFrom"]
+"490_allowance" [label="allowance"]
+"490_approve" [label="approve"]
+"490_totalSupply" [label="totalSupply"]
+"490_balanceOf" [label="balanceOf"]
+}subgraph cluster_970_Context {
+label = "Context"
+"970__msgData" [label="_msgData"]
+"970__msgSender" [label="_msgSender"]
+"970_constructor" [label="constructor"]
+}subgraph cluster_44_IWETH {
+label = "IWETH"
+"44_withdraw" [label="withdraw"]
+"44_transfer" [label="transfer"]
+"44_deposit" [label="deposit"]
+}subgraph cluster_2253_ERC20Safe {
+label = "ERC20Safe"
+"2253__safeTransfer" [label="_safeTransfer"]
+"2253_lockERC20" [label="lockERC20"]
+"2253_mintERC20" [label="mintERC20"]
+"2253_fundERC20" [label="fundERC20"]
+"2253__safeTransferFrom" [label="_safeTransferFrom"]
+"2253_releaseERC20" [label="releaseERC20"]
+"2253_burnERC20" [label="burnERC20"]
+"2253__safeCall" [label="_safeCall"]
+"2253__safeTransfer" -> "2253__safeCall"
+"2253_lockERC20" -> "2253__safeTransferFrom"
+"2253_releaseERC20" -> "2253__safeTransfer"
+"2253__safeTransferFrom" -> "2253__safeCall"
+"2253_fundERC20" -> "2253__safeTransferFrom"
+}subgraph cluster_1870_Pausable {
+label = "Pausable"
+"1870_paused" [label="paused"]
+"1870__unpause" [label="_unpause"]
+"1870__pause" [label="_pause"]
+"1870_constructor" [label="constructor"]
+"1870__unpause" -> "1870__msgSender"
+"1870__pause" -> "1870_whenNotPaused"
+"1870__pause" -> "1870__msgSender"
+"1870__unpause" -> "1870_whenPaused"
+}subgraph cluster_1903_ERC20Pausable {
+label = "ERC20Pausable"
+"1903__beforeTokenTransfer" [label="_beforeTokenTransfer"]
+"1903__beforeTokenTransfer" -> "1903_paused"
+"1903__beforeTokenTransfer" -> "1903__beforeTokenTransfer"
+}subgraph cluster_2447_TransferHelper {
+label = "TransferHelper"
+"2447_safeTransferFrom" [label="safeTransferFrom"]
+"2447_safeApprove" [label="safeApprove"]
+"2447_safeTransfer" [label="safeTransfer"]
+"2447_safeTransferETH" [label="safeTransferETH"]
+}subgraph cluster_81_IERCHandler {
+label = "IERCHandler"
+"81_setBurnable" [label="setBurnable"]
+"81__wtokenAddress" [label="_wtokenAddress"]
+"81_updateBridgeAddress" [label="updateBridgeAddress"]
+"81_setResource" [label="setResource"]
+"81_withdraw" [label="withdraw"]
+}subgraph cluster_1230_AccessControl {
+label = "AccessControl"
+"1230_revokeRole" [label="revokeRole"]
+"1230_getRoleMember" [label="getRoleMember"]
+"1230__setupRole" [label="_setupRole"]
+"1230__setRoleAdmin" [label="_setRoleAdmin"]
+"1230_grantRole" [label="grantRole"]
+"1230_renounceRole" [label="renounceRole"]
+"1230_getRoleMemberCount" [label="getRoleMemberCount"]
+"1230_getRoleAdmin" [label="getRoleAdmin"]
+"1230__grantRole" [label="_grantRole"]
+"1230__revokeRole" [label="_revokeRole"]
+"1230_hasRole" [label="hasRole"]
+"1230_revokeRole" -> "1230__msgSender"
+"1230__revokeRole" -> "1230__msgSender"
+"1230__setupRole" -> "1230__grantRole"
+"1230__grantRole" -> "1230__msgSender"
+"1230_grantRole" -> "1230__grantRole"
+"1230_revokeRole" -> "1230_hasRole"
+"1230_grantRole" -> "1230_hasRole"
+"1230_revokeRole" -> "1230__revokeRole"
+"1230_renounceRole" -> "1230__msgSender"
+"1230_renounceRole" -> "1230__revokeRole"
+"1230_grantRole" -> "1230__msgSender"
+}subgraph cluster_2032_ERC20PresetMinterPauser {
+label = "ERC20PresetMinterPauser"
+"2032_constructor" [label="constructor"]
+"2032_unpause" [label="unpause"]
+"2032__beforeTokenTransfer" [label="_beforeTokenTransfer"]
+"2032_mint" [label="mint"]
+"2032_pause" [label="pause"]
+"2032_mint" -> "2032__mint"
+"2032_mint" -> "2032__msgSender"
+"2032_constructor" -> "2032__msgSender"
+"2032_pause" -> "2032_hasRole"
+"2032_unpause" -> "2032_hasRole"
+"2032_unpause" -> "2032__unpause"
+"2032_pause" -> "2032__msgSender"
+"2032_constructor" -> "2032__setupRole"
+"2032_mint" -> "2032_hasRole"
+"2032_constructor" -> "2032_constructor"
+"2032_unpause" -> "2032__msgSender"
+"2032_pause" -> "2032__pause"
+"2032__beforeTokenTransfer" -> "2032__beforeTokenTransfer"
+}subgraph cluster_883_EnumerableSet {
+label = "EnumerableSet"
+"883_length" [label="length"]
+"883_remove" [label="remove"]
+"883_add" [label="add"]
+"883__remove" [label="_remove"]
+"883__contains" [label="_contains"]
+"883__add" [label="_add"]
+"883_at" [label="at"]
+"883__at" [label="_at"]
+"883_contains" [label="contains"]
+"883__length" [label="_length"]
+"883_remove" -> "883__remove"
+"883_length" -> "883__length"
+"883_at" -> "883__at"
+"883_contains" -> "883__contains"
+"883__add" -> "883__contains"
+"883_add" -> "883__add"
+}subgraph cluster_945_Address {
+label = "Address"
+"945_sendValue" [label="sendValue"]
+"945_isContract" [label="isContract"]
+}subgraph cluster_1783_ERC20Burnable {
+label = "ERC20Burnable"
+"1783_burnFrom" [label="burnFrom"]
+"1783_burn" [label="burn"]
+"1783_burnFrom" -> "1783__approve"
+"1783_burnFrom" -> "1783__burn"
+"1783_burnFrom" -> "1783__msgSender"
+"1783_burnFrom" -> "1783_allowance"
+"1783_burn" -> "1783__burn"
+"1783_burn" -> "1783__msgSender"
+}subgraph cluster_26_IDepositExecute {
+label = "IDepositExecute"
+"26_deposit" [label="deposit"]
+"26_executeProposal" [label="executeProposal"]
+}subgraph cluster_2811_ERC20Handler {
+label = "ERC20Handler"
+"2811_constructor" [label="constructor"]
+"2811_updateBridgeAddress" [label="updateBridgeAddress"]
+"2811_deposit" [label="deposit"]
+"2811_getDepositRecord" [label="getDepositRecord"]
+"2811_executeProposal" [label="executeProposal"]
+"2811_receive" [label="receive"]
+"2811_withdraw" [label="withdraw"]
+"2811_constructor" -> "2811__setResource"
+"2811_executeProposal" -> "2811_releaseERC20"
+"2811_deposit" -> "2811_onlyBridge"
+"2811_executeProposal" -> "2811_onlyBridge"
+"2811_executeProposal" -> "2811_mintERC20"
+"2811_withdraw" -> "2811_releaseERC20"
+"2811_deposit" -> "2811_lockERC20"
+"2811_deposit" -> "2811_burnERC20"
+"2811_updateBridgeAddress" -> "2811_onlyBridge"
+"2811_withdraw" -> "2811_onlyBridge"
+"2811_constructor" -> "2811__setBurnable"
+}subgraph cluster_220_HandlerHelpers {
+label = "HandlerHelpers"
+"220_withdraw" [label="withdraw"]
+"220__setResource" [label="_setResource"]
+"220_setResource" [label="setResource"]
+"220_setBurnable" [label="setBurnable"]
+"220_updateBridgeAddress" [label="updateBridgeAddress"]
+"220__setBurnable" [label="_setBurnable"]
+"220__onlyBridge" [label="_onlyBridge"]
+"220_setBurnable" -> "220_onlyBridge"
+"220_setResource" -> "220__setResource"
+"220_setResource" -> "220_onlyBridge"
+"220_setBurnable" -> "220__setBurnable"
+}subgraph cluster_414_SafeMath {
+label = "SafeMath"
+"414_mul" [label="mul"]
+"414_mod" [label="mod"]
+"414_div" [label="div"]
+"414_add" [label="add"]
+"414_sub" [label="sub"]
+"414_div" -> "414_div"
+"414_mod" -> "414_mod"
+"414_sub" -> "414_sub"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"calldatasize()" 
+"abi.decode()" 
+"calldataload(uint256)" 
+"abi.encodeWithSelector()" 
+"mstore(uint256,uint256)" 
+"keccak256(bytes)" 
+"extcodehash(uint256)" 
+"calldatacopy(uint256,uint256,uint256)" 
+"assert(bool)" 
+"mload(uint256)" 
+"require(bool,string)" 
+"balance(address)" 
+"1731__burn" -> "require(bool,string)"
+"1230_grantRole" -> "require(bool,string)"
+"2811_deposit" -> "calldataload(uint256)"
+"1903__beforeTokenTransfer" -> "require(bool,string)"
+"2447_safeTransferFrom" -> "abi.encodeWithSelector()"
+"2032_pause" -> "require(bool,string)"
+"1230_revokeRole" -> "require(bool,string)"
+"2811_receive" -> "assert(bool)"
+"2811_executeProposal" -> "require(bool,string)"
+"2811_updateBridgeAddress" -> "require(bool,string)"
+"414_mul" -> "require(bool,string)"
+"2032_unpause" -> "require(bool,string)"
+"1731__approve" -> "require(bool,string)"
+"2811_deposit" -> "calldatacopy(uint256,uint256,uint256)"
+"2811_executeProposal" -> "mload(uint256)"
+"2447_safeApprove" -> "require(bool,string)"
+"2253__safeTransferFrom" -> "abi.encodeWithSelector()"
+"2447_safeTransferFrom" -> "require(bool,string)"
+"2811_deposit" -> "calldatasize()"
+"220__setBurnable" -> "require(bool,string)"
+"2811_deposit" -> "mstore(uint256,uint256)"
+"2811_executeProposal" -> "calldatasize()"
+"2811_executeProposal" -> "calldatacopy(uint256,uint256,uint256)"
+"2447_safeTransferFrom" -> "keccak256(bytes)"
+"2253__safeCall" -> "abi.decode()"
+"220__onlyBridge" -> "require(bool,string)"
+"2253__safeCall" -> "require(bool,string)"
+"1731__mint" -> "require(bool,string)"
+"1731__transfer" -> "require(bool,string)"
+"2447_safeTransfer" -> "abi.encodeWithSelector()"
+"2032_mint" -> "require(bool,string)"
+"2811_executeProposal" -> "mstore(uint256,uint256)"
+"1230_renounceRole" -> "require(bool,string)"
+"2811_constructor" -> "require(bool,string)"
+"2811_deposit" -> "require(bool,string)"
+"2447_safeTransfer" -> "abi.decode()"
+"414_add" -> "require(bool,string)"
+"2811_executeProposal" -> "calldataload(uint256)"
+"2253__safeTransfer" -> "abi.encodeWithSelector()"
+"2811_deposit" -> "mload(uint256)"
+"414_sub" -> "require(bool,string)"
+"945_isContract" -> "extcodehash(uint256)"
+"2447_safeApprove" -> "abi.decode()"
+"2447_safeTransfer" -> "keccak256(bytes)"
+"945_sendValue" -> "balance(address)"
+"2447_safeApprove" -> "keccak256(bytes)"
+"2447_safeApprove" -> "abi.encodeWithSelector()"
+"414_div" -> "require(bool,string)"
+"2447_safeTransferETH" -> "require(bool,string)"
+"2447_safeTransferFrom" -> "abi.decode()"
+"414_mod" -> "require(bool,string)"
+"945_sendValue" -> "require(bool,string)"
+"2447_safeTransfer" -> "require(bool,string)"
+"883__at" -> "require(bool,string)"
+}"1230__grantRole" -> "883_add"
+"2811_withdraw" -> "44_withdraw"
+"1230_getRoleMemberCount" -> "883_length"
+"1731__transfer" -> "414_add"
+"2811_executeProposal" -> "2447_safeTransferETH"
+"1731_transferFrom" -> "414_sub"
+"1731_increaseAllowance" -> "414_add"
+"1783_burnFrom" -> "414_sub"
+"1230_getRoleMember" -> "883_at"
+"1731__mint" -> "414_add"
+"2253_burnERC20" -> "1783_burnFrom"
+"1731__burn" -> "414_sub"
+"2811_withdraw" -> "2447_safeTransferETH"
+"2811_executeProposal" -> "44_withdraw"
+"1731_decreaseAllowance" -> "414_sub"
+"1731__transfer" -> "414_sub"
+"1230_hasRole" -> "883_contains"
+"1230__revokeRole" -> "883_remove"
+"2253_mintERC20" -> "2032_mint"
+}

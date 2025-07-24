@@ -1,0 +1,95 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterZeroCopySinkMock" {
+  graph [ label = "ZeroCopySinkMock", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ZeroCopySinkMock.WriteBool" [ label = "WriteBool", color = "green" ];
+  "ZeroCopySinkMock.WriteByte" [ label = "WriteByte", color = "green" ];
+  "ZeroCopySinkMock.WriteUint8" [ label = "WriteUint8", color = "green" ];
+  "ZeroCopySinkMock.WriteUint16" [ label = "WriteUint16", color = "green" ];
+  "ZeroCopySinkMock.WriteUint32" [ label = "WriteUint32", color = "green" ];
+  "ZeroCopySinkMock.WriteUint64" [ label = "WriteUint64", color = "green" ];
+  "ZeroCopySinkMock.WriteUint255" [ label = "WriteUint255", color = "green" ];
+  "ZeroCopySinkMock.WriteVarBytes" [ label = "WriteVarBytes", color = "green" ];
+  "ZeroCopySinkMock.WriteVarUint" [ label = "WriteVarUint", color = "green" ];
+}
+
+subgraph "clusterZeroCopySink" {
+  graph [ label = "ZeroCopySink", color = "lightgray" ];
+  "ZeroCopySink.WriteBool" [ label = "WriteBool" ];
+  "ZeroCopySink.WriteByte" [ label = "WriteByte" ];
+  "ZeroCopySink.WriteUint8" [ label = "WriteUint8" ];
+  "ZeroCopySink.WriteUint16" [ label = "WriteUint16" ];
+  "ZeroCopySink.WriteUint32" [ label = "WriteUint32" ];
+  "ZeroCopySink.WriteUint64" [ label = "WriteUint64" ];
+  "ZeroCopySink.WriteUint255" [ label = "WriteUint255" ];
+  "ZeroCopySink.WriteVarBytes" [ label = "WriteVarBytes" ];
+  "ZeroCopySink.WriteVarUint" [ label = "WriteVarUint" ];
+}
+
+  "ZeroCopySinkMock.WriteBool";
+  "ZeroCopySink.WriteBool";
+  "ZeroCopySinkMock.WriteByte";
+  "ZeroCopySink.WriteByte";
+  "ZeroCopySinkMock.WriteUint8";
+  "ZeroCopySink.WriteUint8";
+  "ZeroCopySinkMock.WriteUint16";
+  "ZeroCopySink.WriteUint16";
+  "ZeroCopySinkMock.WriteUint32";
+  "ZeroCopySink.WriteUint32";
+  "ZeroCopySinkMock.WriteUint64";
+  "ZeroCopySink.WriteUint64";
+  "ZeroCopySinkMock.WriteUint255";
+  "ZeroCopySink.WriteUint255";
+  "ZeroCopySinkMock.WriteVarBytes";
+  "ZeroCopySink.WriteVarBytes";
+  "ZeroCopySinkMock.WriteVarUint";
+  "ZeroCopySink.WriteVarUint";
+  "ZeroCopySinkMock.WriteBool" -> "ZeroCopySink.WriteBool" [ color = "orange" ];
+  "ZeroCopySinkMock.WriteBool" -> "ZeroCopySink.WriteBool" [ color = "orange" ];
+  "ZeroCopySinkMock.WriteByte" -> "ZeroCopySink.WriteByte" [ color = "orange" ];
+  "ZeroCopySinkMock.WriteByte" -> "ZeroCopySink.WriteByte" [ color = "orange" ];
+  "ZeroCopySinkMock.WriteUint8" -> "ZeroCopySink.WriteUint8" [ color = "orange" ];
+  "ZeroCopySinkMock.WriteUint8" -> "ZeroCopySink.WriteUint8" [ color = "orange" ];
+  "ZeroCopySinkMock.WriteUint16" -> "ZeroCopySink.WriteUint16" [ color = "orange" ];
+  "ZeroCopySinkMock.WriteUint16" -> "ZeroCopySink.WriteUint16" [ color = "orange" ];
+  "ZeroCopySinkMock.WriteUint32" -> "ZeroCopySink.WriteUint32" [ color = "orange" ];
+  "ZeroCopySinkMock.WriteUint32" -> "ZeroCopySink.WriteUint32" [ color = "orange" ];
+  "ZeroCopySinkMock.WriteUint64" -> "ZeroCopySink.WriteUint64" [ color = "orange" ];
+  "ZeroCopySinkMock.WriteUint64" -> "ZeroCopySink.WriteUint64" [ color = "orange" ];
+  "ZeroCopySinkMock.WriteUint255" -> "ZeroCopySink.WriteUint255" [ color = "orange" ];
+  "ZeroCopySinkMock.WriteUint255" -> "ZeroCopySink.WriteUint255" [ color = "orange" ];
+  "ZeroCopySinkMock.WriteVarBytes" -> "ZeroCopySink.WriteVarBytes" [ color = "orange" ];
+  "ZeroCopySinkMock.WriteVarBytes" -> "ZeroCopySink.WriteVarBytes" [ color = "orange" ];
+  "ZeroCopySinkMock.WriteVarUint" -> "ZeroCopySink.WriteVarUint" [ color = "orange" ];
+  "ZeroCopySinkMock.WriteVarUint" -> "ZeroCopySink.WriteVarUint" [ color = "orange" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

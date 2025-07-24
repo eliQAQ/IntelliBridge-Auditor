@@ -1,0 +1,97 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterSocketGateway" {
+  graph [ label = "SocketGateway", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "SocketGateway.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "SocketGateway.<Receive Ether>" [ label = "<Receive Ether>", color = "blue" ];
+  "SocketGateway.executeRoute" [ label = "executeRoute", color = "blue" ];
+  "SocketGateway.swapAndMultiBridge" [ label = "swapAndMultiBridge", color = "blue" ];
+  "SocketGateway.executeRoutes" [ label = "executeRoutes", color = "blue" ];
+  "SocketGateway.executeController" [ label = "executeController", color = "blue" ];
+  "SocketGateway.executeControllers" [ label = "executeControllers", color = "blue" ];
+  "SocketGateway.addRoute" [ label = "addRoute", color = "blue" ];
+  "SocketGateway.setApprovalForRouters" [ label = "setApprovalForRouters", color = "blue" ];
+  "SocketGateway.addController" [ label = "addController", color = "blue" ];
+  "SocketGateway.disableController" [ label = "disableController", color = "green" ];
+  "SocketGateway.disableRoute" [ label = "disableRoute", color = "blue" ];
+  "SocketGateway.rescueFunds" [ label = "rescueFunds", color = "blue" ];
+  "SocketGateway.rescueEther" [ label = "rescueEther", color = "blue" ];
+  "SocketGateway.getRoute" [ label = "getRoute", color = "green" ];
+  "SocketGateway.getController" [ label = "getController", color = "green" ];
+  "SocketGateway.addressAt" [ label = "addressAt" ];
+  "SocketGateway.<Fallback>" [ label = "<Fallback>", color = "blue" ];
+  "SocketGateway.ArrayLengthMismatch" [ label = "ArrayLengthMismatch" ];
+  "SocketGateway.IncorrectBridgeRatios" [ label = "IncorrectBridgeRatios" ];
+  "SocketGateway.ERC20" [ label = "ERC20" ];
+  "SocketGateway.type" [ label = "type" ];
+  "SocketGateway.address" [ label = "address" ];
+  "SocketGateway.ZeroAddressNotAllowed" [ label = "ZeroAddressNotAllowed" ];
+}
+
+subgraph "clusteruserAddress" {
+  graph [ label = "userAddress", color = "lightgray" ];
+  "userAddress.transfer" [ label = "transfer" ];
+}
+
+  "SocketGateway.executeRoute";
+  "SocketGateway.addressAt";
+  "SocketGateway.swapAndMultiBridge";
+  "SocketGateway.ArrayLengthMismatch";
+  "SocketGateway.IncorrectBridgeRatios";
+  "SocketGateway.executeRoutes";
+  "SocketGateway.setApprovalForRouters";
+  "SocketGateway.ERC20";
+  "SocketGateway.type";
+  "SocketGateway.rescueFunds";
+  "SocketGateway.rescueEther";
+  "userAddress.transfer";
+  "SocketGateway.getRoute";
+  "SocketGateway.address";
+  "SocketGateway.ZeroAddressNotAllowed";
+  "SocketGateway.<Fallback>";
+  "SocketGateway.executeRoute" -> "SocketGateway.addressAt" [ color = "green" ];
+  "SocketGateway.swapAndMultiBridge" -> "SocketGateway.ArrayLengthMismatch" [ color = "green" ];
+  "SocketGateway.swapAndMultiBridge" -> "SocketGateway.IncorrectBridgeRatios" [ color = "green" ];
+  "SocketGateway.swapAndMultiBridge" -> "SocketGateway.addressAt" [ color = "green" ];
+  "SocketGateway.swapAndMultiBridge" -> "SocketGateway.addressAt" [ color = "green" ];
+  "SocketGateway.executeRoutes" -> "SocketGateway.ArrayLengthMismatch" [ color = "green" ];
+  "SocketGateway.executeRoutes" -> "SocketGateway.addressAt" [ color = "green" ];
+  "SocketGateway.setApprovalForRouters" -> "SocketGateway.ERC20" [ color = "green" ];
+  "SocketGateway.setApprovalForRouters" -> "SocketGateway.type" [ color = "green" ];
+  "SocketGateway.rescueFunds" -> "SocketGateway.ERC20" [ color = "green" ];
+  "SocketGateway.rescueEther" -> "userAddress.transfer" [ color = "orange" ];
+  "SocketGateway.getRoute" -> "SocketGateway.addressAt" [ color = "green" ];
+  "SocketGateway.addressAt" -> "SocketGateway.address" [ color = "green" ];
+  "SocketGateway.addressAt" -> "SocketGateway.ZeroAddressNotAllowed" [ color = "green" ];
+  "SocketGateway.<Fallback>" -> "SocketGateway.addressAt" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

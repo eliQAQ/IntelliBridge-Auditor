@@ -1,0 +1,86 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterWrappedToken" {
+  graph [ label = "WrappedToken  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "WrappedToken.withdraw" [ label = "withdraw", color = "blue" ];
+  "WrappedToken.deposit" [ label = "deposit", color = "blue" ];
+}
+
+subgraph "clusterWrappedTokenSwapperImpl" {
+  graph [ label = "WrappedTokenSwapperImpl", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "WrappedTokenSwapperImpl.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "WrappedTokenSwapperImpl.<Receive Ether>" [ label = "<Receive Ether>", color = "blue" ];
+  "WrappedTokenSwapperImpl.<Fallback>" [ label = "<Fallback>", color = "blue" ];
+  "WrappedTokenSwapperImpl.performAction" [ label = "performAction", color = "blue" ];
+  "WrappedTokenSwapperImpl.performActionWithIn" [ label = "performActionWithIn", color = "blue" ];
+  "WrappedTokenSwapperImpl.ERC20" [ label = "ERC20" ];
+  "WrappedTokenSwapperImpl.SwapFailed" [ label = "SwapFailed" ];
+  "WrappedTokenSwapperImpl.address" [ label = "address" ];
+  "WrappedTokenSwapperImpl.payable" [ label = "payable" ];
+  "WrappedTokenSwapperImpl.SocketSwapTokens" [ label = "SocketSwapTokens" ];
+}
+
+subgraph "clusterfromToken" {
+  graph [ label = "fromToken", color = "lightgray" ];
+  "fromToken.call" [ label = "call" ];
+}
+
+  "WrappedTokenSwapperImpl.performAction";
+  "WrappedTokenSwapperImpl.ERC20";
+  "WrappedTokenSwapperImpl.SwapFailed";
+  "WrappedTokenSwapperImpl.address";
+  "fromToken.call";
+  "WrappedTokenSwapperImpl.payable";
+  "WrappedTokenSwapperImpl.SocketSwapTokens";
+  "WrappedTokenSwapperImpl.performActionWithIn";
+  "WrappedTokenSwapperImpl.performAction" -> "WrappedTokenSwapperImpl.ERC20" [ color = "green" ];
+  "WrappedTokenSwapperImpl.performAction" -> "WrappedTokenSwapperImpl.SwapFailed" [ color = "green" ];
+  "WrappedTokenSwapperImpl.performAction" -> "WrappedTokenSwapperImpl.ERC20" [ color = "green" ];
+  "WrappedTokenSwapperImpl.performAction" -> "WrappedTokenSwapperImpl.ERC20" [ color = "green" ];
+  "WrappedTokenSwapperImpl.performAction" -> "WrappedTokenSwapperImpl.address" [ color = "green" ];
+  "WrappedTokenSwapperImpl.performAction" -> "WrappedTokenSwapperImpl.ERC20" [ color = "green" ];
+  "WrappedTokenSwapperImpl.performAction" -> "fromToken.call" [ color = "orange" ];
+  "WrappedTokenSwapperImpl.performAction" -> "WrappedTokenSwapperImpl.SwapFailed" [ color = "green" ];
+  "WrappedTokenSwapperImpl.performAction" -> "WrappedTokenSwapperImpl.address" [ color = "green" ];
+  "WrappedTokenSwapperImpl.performAction" -> "WrappedTokenSwapperImpl.payable" [ color = "green" ];
+  "WrappedTokenSwapperImpl.performAction" -> "WrappedTokenSwapperImpl.SocketSwapTokens" [ color = "green" ];
+  "WrappedTokenSwapperImpl.performActionWithIn" -> "WrappedTokenSwapperImpl.ERC20" [ color = "green" ];
+  "WrappedTokenSwapperImpl.performActionWithIn" -> "WrappedTokenSwapperImpl.SwapFailed" [ color = "green" ];
+  "WrappedTokenSwapperImpl.performActionWithIn" -> "WrappedTokenSwapperImpl.ERC20" [ color = "green" ];
+  "WrappedTokenSwapperImpl.performActionWithIn" -> "WrappedTokenSwapperImpl.address" [ color = "green" ];
+  "WrappedTokenSwapperImpl.performActionWithIn" -> "WrappedTokenSwapperImpl.ERC20" [ color = "green" ];
+  "WrappedTokenSwapperImpl.performActionWithIn" -> "fromToken.call" [ color = "orange" ];
+  "WrappedTokenSwapperImpl.performActionWithIn" -> "WrappedTokenSwapperImpl.SwapFailed" [ color = "green" ];
+  "WrappedTokenSwapperImpl.performActionWithIn" -> "WrappedTokenSwapperImpl.address" [ color = "green" ];
+  "WrappedTokenSwapperImpl.performActionWithIn" -> "WrappedTokenSwapperImpl.SocketSwapTokens" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

@@ -1,0 +1,74 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_224_IDiamondLoupe {
+label = "IDiamondLoupe"
+"224_facetAddresses" [label="facetAddresses"]
+"224_facetFunctionSelectors" [label="facetFunctionSelectors"]
+"224_facetAddress" [label="facetAddress"]
+"224_facets" [label="facets"]
+}subgraph cluster_235_IERC165 {
+label = "IERC165"
+"235_supportsInterface" [label="supportsInterface"]
+}subgraph cluster_1069_LibDiamond {
+label = "LibDiamond"
+"1069_enforceIsContractOwner" [label="enforceIsContractOwner"]
+"1069_diamondStorage" [label="diamondStorage"]
+"1069_initializeDiamondCut" [label="initializeDiamondCut"]
+"1069_enforceHasContractCode" [label="enforceHasContractCode"]
+"1069_diamondCut" [label="diamondCut"]
+"1069_removeFunctions" [label="removeFunctions"]
+"1069_addFunction" [label="addFunction"]
+"1069_addFacet" [label="addFacet"]
+"1069_setContractOwner" [label="setContractOwner"]
+"1069_replaceFunctions" [label="replaceFunctions"]
+"1069_addFunctions" [label="addFunctions"]
+"1069_removeFunction" [label="removeFunction"]
+"1069_contractOwner" [label="contractOwner"]
+"1069_replaceFunctions" -> "1069_addFacet"
+"1069_addFunctions" -> "1069_addFacet"
+"1069_initializeDiamondCut" -> "1069_enforceHasContractCode"
+"1069_replaceFunctions" -> "1069_removeFunction"
+"1069_setContractOwner" -> "1069_diamondStorage"
+"1069_diamondCut" -> "1069_replaceFunctions"
+"1069_diamondCut" -> "1069_removeFunctions"
+"1069_contractOwner" -> "1069_diamondStorage"
+"1069_addFunctions" -> "1069_addFunction"
+"1069_replaceFunctions" -> "1069_addFunction"
+"1069_removeFunctions" -> "1069_diamondStorage"
+"1069_removeFunctions" -> "1069_removeFunction"
+"1069_enforceIsContractOwner" -> "1069_diamondStorage"
+"1069_diamondCut" -> "1069_initializeDiamondCut"
+"1069_addFunctions" -> "1069_diamondStorage"
+"1069_diamondCut" -> "1069_addFunctions"
+"1069_addFacet" -> "1069_enforceHasContractCode"
+"1069_replaceFunctions" -> "1069_diamondStorage"
+}subgraph cluster_1107_IDiamondCut {
+label = "IDiamondCut"
+"1107_diamondCut" [label="diamondCut"]
+}subgraph cluster_183_DiamondLoupeFacet {
+label = "DiamondLoupeFacet"
+"183_facetAddress" [label="facetAddress"]
+"183_facetFunctionSelectors" [label="facetFunctionSelectors"]
+"183_supportsInterface" [label="supportsInterface"]
+"183_facets" [label="facets"]
+"183_facetAddresses" [label="facetAddresses"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"revert(string)" 
+"require(bool,string)" 
+"1069_enforceIsContractOwner" -> "require(bool,string)"
+"1069_initializeDiamondCut" -> "require(bool,string)"
+"1069_enforceHasContractCode" -> "require(bool,string)"
+"1069_removeFunctions" -> "require(bool,string)"
+"1069_addFunctions" -> "require(bool,string)"
+"1069_replaceFunctions" -> "require(bool,string)"
+"1069_initializeDiamondCut" -> "revert(string)"
+"1069_diamondCut" -> "revert(string)"
+"1069_removeFunction" -> "require(bool,string)"
+}"183_supportsInterface" -> "1069_diamondStorage"
+"183_facets" -> "1069_diamondStorage"
+"183_facetFunctionSelectors" -> "1069_diamondStorage"
+"183_facetAddress" -> "1069_diamondStorage"
+"183_facetAddresses" -> "1069_diamondStorage"
+}

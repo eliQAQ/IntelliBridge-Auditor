@@ -1,0 +1,97 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterSocketGatewayTemplate" {
+  graph [ label = "SocketGatewayTemplate", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "SocketGatewayTemplate.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "SocketGatewayTemplate.<Receive Ether>" [ label = "<Receive Ether>", color = "blue" ];
+  "SocketGatewayTemplate.executeRoute" [ label = "executeRoute", color = "blue" ];
+  "SocketGatewayTemplate.swapAndMultiBridge" [ label = "swapAndMultiBridge", color = "blue" ];
+  "SocketGatewayTemplate.executeRoutes" [ label = "executeRoutes", color = "blue" ];
+  "SocketGatewayTemplate.executeController" [ label = "executeController", color = "blue" ];
+  "SocketGatewayTemplate.executeControllers" [ label = "executeControllers", color = "blue" ];
+  "SocketGatewayTemplate.addRoute" [ label = "addRoute", color = "blue" ];
+  "SocketGatewayTemplate.setApprovalForRouters" [ label = "setApprovalForRouters", color = "blue" ];
+  "SocketGatewayTemplate.addController" [ label = "addController", color = "blue" ];
+  "SocketGatewayTemplate.disableController" [ label = "disableController", color = "green" ];
+  "SocketGatewayTemplate.disableRoute" [ label = "disableRoute", color = "blue" ];
+  "SocketGatewayTemplate.rescueFunds" [ label = "rescueFunds", color = "blue" ];
+  "SocketGatewayTemplate.rescueEther" [ label = "rescueEther", color = "blue" ];
+  "SocketGatewayTemplate.getRoute" [ label = "getRoute", color = "green" ];
+  "SocketGatewayTemplate.getController" [ label = "getController", color = "green" ];
+  "SocketGatewayTemplate.addressAt" [ label = "addressAt" ];
+  "SocketGatewayTemplate.<Fallback>" [ label = "<Fallback>", color = "blue" ];
+  "SocketGatewayTemplate.ArrayLengthMismatch" [ label = "ArrayLengthMismatch" ];
+  "SocketGatewayTemplate.IncorrectBridgeRatios" [ label = "IncorrectBridgeRatios" ];
+  "SocketGatewayTemplate.ERC20" [ label = "ERC20" ];
+  "SocketGatewayTemplate.type" [ label = "type" ];
+  "SocketGatewayTemplate.address" [ label = "address" ];
+  "SocketGatewayTemplate.ZeroAddressNotAllowed" [ label = "ZeroAddressNotAllowed" ];
+}
+
+subgraph "clusteruserAddress" {
+  graph [ label = "userAddress", color = "lightgray" ];
+  "userAddress.transfer" [ label = "transfer" ];
+}
+
+  "SocketGatewayTemplate.executeRoute";
+  "SocketGatewayTemplate.addressAt";
+  "SocketGatewayTemplate.swapAndMultiBridge";
+  "SocketGatewayTemplate.ArrayLengthMismatch";
+  "SocketGatewayTemplate.IncorrectBridgeRatios";
+  "SocketGatewayTemplate.executeRoutes";
+  "SocketGatewayTemplate.setApprovalForRouters";
+  "SocketGatewayTemplate.ERC20";
+  "SocketGatewayTemplate.type";
+  "SocketGatewayTemplate.rescueFunds";
+  "SocketGatewayTemplate.rescueEther";
+  "userAddress.transfer";
+  "SocketGatewayTemplate.getRoute";
+  "SocketGatewayTemplate.address";
+  "SocketGatewayTemplate.ZeroAddressNotAllowed";
+  "SocketGatewayTemplate.<Fallback>";
+  "SocketGatewayTemplate.executeRoute" -> "SocketGatewayTemplate.addressAt" [ color = "green" ];
+  "SocketGatewayTemplate.swapAndMultiBridge" -> "SocketGatewayTemplate.ArrayLengthMismatch" [ color = "green" ];
+  "SocketGatewayTemplate.swapAndMultiBridge" -> "SocketGatewayTemplate.IncorrectBridgeRatios" [ color = "green" ];
+  "SocketGatewayTemplate.swapAndMultiBridge" -> "SocketGatewayTemplate.addressAt" [ color = "green" ];
+  "SocketGatewayTemplate.swapAndMultiBridge" -> "SocketGatewayTemplate.addressAt" [ color = "green" ];
+  "SocketGatewayTemplate.executeRoutes" -> "SocketGatewayTemplate.ArrayLengthMismatch" [ color = "green" ];
+  "SocketGatewayTemplate.executeRoutes" -> "SocketGatewayTemplate.addressAt" [ color = "green" ];
+  "SocketGatewayTemplate.setApprovalForRouters" -> "SocketGatewayTemplate.ERC20" [ color = "green" ];
+  "SocketGatewayTemplate.setApprovalForRouters" -> "SocketGatewayTemplate.type" [ color = "green" ];
+  "SocketGatewayTemplate.rescueFunds" -> "SocketGatewayTemplate.ERC20" [ color = "green" ];
+  "SocketGatewayTemplate.rescueEther" -> "userAddress.transfer" [ color = "orange" ];
+  "SocketGatewayTemplate.getRoute" -> "SocketGatewayTemplate.addressAt" [ color = "green" ];
+  "SocketGatewayTemplate.addressAt" -> "SocketGatewayTemplate.address" [ color = "green" ];
+  "SocketGatewayTemplate.addressAt" -> "SocketGatewayTemplate.ZeroAddressNotAllowed" [ color = "green" ];
+  "SocketGatewayTemplate.<Fallback>" -> "SocketGatewayTemplate.addressAt" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

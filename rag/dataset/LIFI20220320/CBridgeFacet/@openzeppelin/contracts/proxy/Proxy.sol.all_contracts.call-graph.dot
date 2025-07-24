@@ -1,0 +1,36 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_51_Proxy {
+label = "Proxy"
+"51__delegate" [label="_delegate"]
+"51_receive" [label="receive"]
+"51_fallback" [label="fallback"]
+"51__beforeFallback" [label="_beforeFallback"]
+"51__implementation" [label="_implementation"]
+"51__fallback" [label="_fallback"]
+"51_fallback" -> "51__fallback"
+"51_receive" -> "51__fallback"
+"51__fallback" -> "51__delegate"
+"51__fallback" -> "51__beforeFallback"
+"51__fallback" -> "51__implementation"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"returndatasize()" 
+"gas()" 
+"returndatacopy(uint256,uint256,uint256)" 
+"revert(uint256,uint256)" 
+"return(uint256,uint256)" 
+"delegatecall(uint256,uint256,uint256,uint256,uint256,uint256)" 
+"calldatasize()" 
+"calldatacopy(uint256,uint256,uint256)" 
+"51__delegate" -> "return(uint256,uint256)"
+"51__delegate" -> "calldatacopy(uint256,uint256,uint256)"
+"51__delegate" -> "revert(uint256,uint256)"
+"51__delegate" -> "returndatacopy(uint256,uint256,uint256)"
+"51__delegate" -> "returndatasize()"
+"51__delegate" -> "calldatasize()"
+"51__delegate" -> "delegatecall(uint256,uint256,uint256,uint256,uint256,uint256)"
+"51__delegate" -> "gas()"
+}
+}

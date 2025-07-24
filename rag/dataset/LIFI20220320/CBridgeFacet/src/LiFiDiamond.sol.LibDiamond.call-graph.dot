@@ -1,0 +1,54 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_988_LibDiamond {
+label = "LibDiamond"
+"988_removeFunctions" [label="removeFunctions"]
+"988_addFacet" [label="addFacet"]
+"988_diamondStorage" [label="diamondStorage"]
+"988_enforceHasContractCode" [label="enforceHasContractCode"]
+"988_enforceIsContractOwner" [label="enforceIsContractOwner"]
+"988_initializeDiamondCut" [label="initializeDiamondCut"]
+"988_slitherConstructorConstantVariables" [label="slitherConstructorConstantVariables"]
+"988_removeFunction" [label="removeFunction"]
+"988_contractOwner" [label="contractOwner"]
+"988_replaceFunctions" [label="replaceFunctions"]
+"988_addFunction" [label="addFunction"]
+"988_addFunctions" [label="addFunctions"]
+"988_diamondCut" [label="diamondCut"]
+"988_setContractOwner" [label="setContractOwner"]
+"988_setContractOwner" -> "988_diamondStorage"
+"988_addFunctions" -> "988_addFacet"
+"988_replaceFunctions" -> "988_diamondStorage"
+"988_addFunctions" -> "988_addFunction"
+"988_replaceFunctions" -> "988_addFunction"
+"988_removeFunctions" -> "988_removeFunction"
+"988_removeFunctions" -> "988_diamondStorage"
+"988_diamondCut" -> "988_replaceFunctions"
+"988_addFunctions" -> "988_diamondStorage"
+"988_initializeDiamondCut" -> "988_enforceHasContractCode"
+"988_diamondCut" -> "988_initializeDiamondCut"
+"988_diamondCut" -> "988_addFunctions"
+"988_replaceFunctions" -> "988_removeFunction"
+"988_contractOwner" -> "988_diamondStorage"
+"988_addFacet" -> "988_enforceHasContractCode"
+"988_enforceIsContractOwner" -> "988_diamondStorage"
+"988_replaceFunctions" -> "988_addFacet"
+"988_diamondCut" -> "988_removeFunctions"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"revert(string)" 
+"keccak256(bytes)" 
+"988_initializeDiamondCut" -> "require(bool,string)"
+"988_replaceFunctions" -> "require(bool,string)"
+"988_removeFunctions" -> "require(bool,string)"
+"988_enforceIsContractOwner" -> "require(bool,string)"
+"988_enforceHasContractCode" -> "require(bool,string)"
+"988_diamondCut" -> "revert(string)"
+"988_removeFunction" -> "require(bool,string)"
+"988_addFunctions" -> "require(bool,string)"
+"988_slitherConstructorConstantVariables" -> "keccak256(bytes)"
+"988_initializeDiamondCut" -> "revert(string)"
+}
+}

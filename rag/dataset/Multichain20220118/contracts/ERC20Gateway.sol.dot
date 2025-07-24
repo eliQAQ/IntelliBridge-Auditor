@@ -1,0 +1,69 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterERC20Gateway" {
+  graph [ label = "ERC20Gateway", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ERC20Gateway.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "ERC20Gateway._swapout" [ label = "_swapout" ];
+  "ERC20Gateway._swapin" [ label = "_swapin" ];
+  "ERC20Gateway.setDecimals" [ label = "setDecimals", color = "blue" ];
+  "ERC20Gateway.decimal" [ label = "decimal", color = "blue" ];
+  "ERC20Gateway.convertDecimal" [ label = "convertDecimal", color = "green" ];
+  "ERC20Gateway.Swapout_no_fallback" [ label = "Swapout_no_fallback", color = "blue" ];
+  "ERC20Gateway._anyExecute" [ label = "_anyExecute", color = "white" ];
+  "ERC20Gateway.setAdmin" [ label = "setAdmin" ];
+  "ERC20Gateway.IDecimal" [ label = "IDecimal" ];
+  "ERC20Gateway._anyCall" [ label = "_anyCall" ];
+  "ERC20Gateway.address" [ label = "address" ];
+}
+
+  "ERC20Gateway.<Constructor>";
+  "ERC20Gateway.setAdmin";
+  "ERC20Gateway.decimal";
+  "ERC20Gateway.IDecimal";
+  "ERC20Gateway.convertDecimal";
+  "ERC20Gateway.Swapout_no_fallback";
+  "ERC20Gateway._swapout";
+  "ERC20Gateway._anyCall";
+  "ERC20Gateway.address";
+  "ERC20Gateway._anyExecute";
+  "ERC20Gateway._swapin";
+  "ERC20Gateway.<Constructor>" -> "ERC20Gateway.setAdmin" [ color = "green" ];
+  "ERC20Gateway.decimal" -> "ERC20Gateway.IDecimal" [ color = "green" ];
+  "ERC20Gateway.convertDecimal" -> "ERC20Gateway.decimal" [ color = "green" ];
+  "ERC20Gateway.convertDecimal" -> "ERC20Gateway.IDecimal" [ color = "green" ];
+  "ERC20Gateway.Swapout_no_fallback" -> "ERC20Gateway._swapout" [ color = "green" ];
+  "ERC20Gateway.Swapout_no_fallback" -> "ERC20Gateway._anyCall" [ color = "green" ];
+  "ERC20Gateway.Swapout_no_fallback" -> "ERC20Gateway.address" [ color = "green" ];
+  "ERC20Gateway._anyExecute" -> "ERC20Gateway.convertDecimal" [ color = "green" ];
+  "ERC20Gateway._anyExecute" -> "ERC20Gateway._swapin" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

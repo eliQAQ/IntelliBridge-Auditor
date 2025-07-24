@@ -1,0 +1,159 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterSafeMath" {
+  graph [ label = "SafeMath  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "SafeMath.mul" [ label = "mul", color = "white" ];
+  "SafeMath.div" [ label = "div", color = "white" ];
+  "SafeMath.sub" [ label = "sub", color = "white" ];
+  "SafeMath.add" [ label = "add", color = "white" ];
+}
+
+subgraph "clusterOwnable" {
+  graph [ label = "Ownable", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Ownable.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "Ownable.onlyOwner" [ label = "onlyOwner", color = "yellow" ];
+  "Ownable.transferOwnership" [ label = "transferOwnership", color = "green" ];
+  "Ownable.address" [ label = "address" ];
+}
+
+subgraph "clusterERC20Basic" {
+  graph [ label = "ERC20Basic", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ERC20Basic.totalSupply" [ label = "totalSupply", color = "green" ];
+  "ERC20Basic.balanceOf" [ label = "balanceOf", color = "green" ];
+  "ERC20Basic.transfer" [ label = "transfer", color = "green" ];
+}
+
+subgraph "clusterERC20" {
+  graph [ label = "ERC20", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ERC20.allowance" [ label = "allowance", color = "green" ];
+  "ERC20.transferFrom" [ label = "transferFrom", color = "green" ];
+  "ERC20.approve" [ label = "approve", color = "green" ];
+}
+
+subgraph "clusterBasicToken" {
+  graph [ label = "BasicToken", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "BasicToken.onlyPayloadSize" [ label = "onlyPayloadSize", color = "yellow" ];
+  "BasicToken.transfer" [ label = "transfer", color = "green" ];
+  "BasicToken.balanceOf" [ label = "balanceOf", color = "green" ];
+}
+
+subgraph "clusterStandardToken" {
+  graph [ label = "StandardToken", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "StandardToken.transferFrom" [ label = "transferFrom", color = "green" ];
+  "StandardToken.approve" [ label = "approve", color = "green" ];
+  "StandardToken.allowance" [ label = "allowance", color = "green" ];
+}
+
+subgraph "clusterPausable" {
+  graph [ label = "Pausable", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Pausable.whenNotPaused" [ label = "whenNotPaused", color = "yellow" ];
+  "Pausable.whenPaused" [ label = "whenPaused", color = "yellow" ];
+  "Pausable.pause" [ label = "pause", color = "green" ];
+  "Pausable.unpause" [ label = "unpause", color = "green" ];
+}
+
+subgraph "clusterBlackList" {
+  graph [ label = "BlackList", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "BlackList.getBlackListStatus" [ label = "getBlackListStatus", color = "blue" ];
+  "BlackList.getOwner" [ label = "getOwner", color = "blue" ];
+  "BlackList.addBlackList" [ label = "addBlackList", color = "green" ];
+  "BlackList.removeBlackList" [ label = "removeBlackList", color = "green" ];
+  "BlackList.destroyBlackFunds" [ label = "destroyBlackFunds", color = "green" ];
+  "BlackList.balanceOf" [ label = "balanceOf" ];
+}
+
+subgraph "clusterUpgradedStandardToken" {
+  graph [ label = "UpgradedStandardToken", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "UpgradedStandardToken.transferByLegacy" [ label = "transferByLegacy", color = "green" ];
+  "UpgradedStandardToken.transferFromByLegacy" [ label = "transferFromByLegacy", color = "green" ];
+  "UpgradedStandardToken.approveByLegacy" [ label = "approveByLegacy", color = "green" ];
+}
+
+subgraph "clusterTetherToken" {
+  graph [ label = "TetherToken", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "TetherToken.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "TetherToken.transfer" [ label = "transfer", color = "green" ];
+  "TetherToken.transferFrom" [ label = "transferFrom", color = "green" ];
+  "TetherToken.balanceOf" [ label = "balanceOf", color = "green" ];
+  "TetherToken.approve" [ label = "approve" ];
+  "TetherToken.allowance" [ label = "allowance" ];
+  "TetherToken.deprecate" [ label = "deprecate", color = "green" ];
+  "TetherToken.totalSupply" [ label = "totalSupply", color = "green" ];
+  "TetherToken.issue" [ label = "issue", color = "green" ];
+  "TetherToken.redeem" [ label = "redeem", color = "green" ];
+  "TetherToken.setParams" [ label = "setParams", color = "green" ];
+}
+
+subgraph "cluster_value" {
+  graph [ label = "_value", color = "lightgray" ];
+  "_value.mul" [ label = "mul" ];
+  "_value.sub" [ label = "sub" ];
+}
+
+subgraph "cluster_allowance" {
+  graph [ label = "_allowance", color = "lightgray" ];
+  "_allowance.sub" [ label = "sub" ];
+}
+
+subgraph "clusternewMaxFee" {
+  graph [ label = "newMaxFee", color = "lightgray" ];
+  "newMaxFee.mul" [ label = "mul" ];
+}
+
+  "Ownable.transferOwnership";
+  "Ownable.address";
+  "BasicToken.transfer";
+  "_value.mul";
+  "_value.sub";
+  "StandardToken.transferFrom";
+  "_allowance.sub";
+  "BlackList.destroyBlackFunds";
+  "BlackList.balanceOf";
+  "TetherToken.approve";
+  "TetherToken.allowance";
+  "TetherToken.setParams";
+  "newMaxFee.mul";
+  "Ownable.transferOwnership" -> "Ownable.address" [ color = "green" ];
+  "BasicToken.transfer" -> "_value.mul" [ color = "orange" ];
+  "BasicToken.transfer" -> "_value.sub" [ color = "orange" ];
+  "StandardToken.transferFrom" -> "_value.mul" [ color = "orange" ];
+  "StandardToken.transferFrom" -> "_allowance.sub" [ color = "orange" ];
+  "StandardToken.transferFrom" -> "_value.sub" [ color = "orange" ];
+  "BlackList.destroyBlackFunds" -> "BlackList.balanceOf" [ color = "green" ];
+  "BasicToken.transfer" -> "BasicToken.transfer" [ color = "orange" ];
+  "StandardToken.transferFrom" -> "StandardToken.transferFrom" [ color = "orange" ];
+  "BlackList.balanceOf" -> "BlackList.balanceOf" [ color = "orange" ];
+  "TetherToken.approve" -> "TetherToken.approve" [ color = "orange" ];
+  "TetherToken.allowance" -> "TetherToken.allowance" [ color = "orange" ];
+  "TetherToken.setParams" -> "newMaxFee.mul" [ color = "orange" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

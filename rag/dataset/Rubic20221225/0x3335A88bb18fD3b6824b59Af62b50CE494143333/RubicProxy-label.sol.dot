@@ -1,0 +1,108 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterRubicProxy" {
+  graph [ label = "RubicProxy", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "RubicProxy.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "RubicProxy.initialize" [ label = "initialize" ];
+  "RubicProxy.routerCall" [ label = "routerCall", color = "blue" ];
+  "RubicProxy.routerCallNative" [ label = "routerCallNative", color = "blue" ];
+  "RubicProxy.sweepTokens" [ label = "sweepTokens", color = "blue" ];
+  "RubicProxy.__OnlySourceFunctionalityInit" [ label = "__OnlySourceFunctionalityInit" ];
+  "RubicProxy.RouterNotAvailable" [ color = "brown2", shape =box ];
+  "RubicProxy.IERC20Upgradeable" [ label = "IERC20Upgradeable" ];
+  "RubicProxy.address" [ label = "address" ];
+  "RubicProxy.accrueTokenFees" [ label = "accrueTokenFees" ];
+  "RubicProxy.accrueFixedCryptoFee" [ label = "accrueFixedCryptoFee" ];
+  "RubicProxy.DifferentAmountSpent" [ color = "brown2", shape =box ];
+  "RubicProxy.RequestSent" [ label = "RequestSent" ];
+  "RubicProxy.sendToken" [ label = "sendToken" ];
+}
+
+subgraph "clusteravailableRouters" {
+  graph [ label = "availableRouters", color = "lightgray" ];
+  "availableRouters.contains" [ label = "contains" ];
+}
+
+subgraph "clusterSmartApprove" {
+  graph [ label = "SmartApprove", color = "lightgray" ];
+  "SmartApprove.smartApprove" [ label = "smartApprove" ];
+}
+
+subgraph "clusterAddressUpgradeable" {
+  graph [ label = "AddressUpgradeable", color = "lightgray" ];
+  "AddressUpgradeable.functionCallWithValue" [ label = "functionCallWithValue" ];
+}
+
+  "RubicProxy.<Constructor>";
+  "RubicProxy.initialize";
+  "RubicProxy.__OnlySourceFunctionalityInit";
+  "RubicProxy.routerCall";
+  "availableRouters.contains";
+  "RubicProxy.RouterNotAvailable";
+  "RubicProxy.IERC20Upgradeable";
+  "RubicProxy.address";
+  "RubicProxy.accrueTokenFees";
+  "SmartApprove.smartApprove";
+  "AddressUpgradeable.functionCallWithValue";
+  "RubicProxy.accrueFixedCryptoFee";
+  "RubicProxy.DifferentAmountSpent";
+  "RubicProxy.RequestSent";
+  "RubicProxy.routerCallNative";
+  "RubicProxy.sweepTokens";
+  "RubicProxy.sendToken";
+  "RubicProxy.<Constructor>" -> "RubicProxy.initialize" [ color = "green" ];
+  "RubicProxy.initialize" -> "RubicProxy.__OnlySourceFunctionalityInit" [ color = "green" ];
+  "RubicProxy.routerCall" -> "availableRouters.contains" [ color = "orange" ];
+  "RubicProxy.routerCall" -> "availableRouters.contains" [ color = "orange" ];
+  "RubicProxy.routerCall" -> "RubicProxy.RouterNotAvailable" [ color = "red" ];
+  "RubicProxy.routerCall" -> "RubicProxy.IERC20Upgradeable" [ color = "green" ];
+  "RubicProxy.routerCall" -> "RubicProxy.address" [ color = "green" ];
+  "RubicProxy.routerCall" -> "RubicProxy.accrueTokenFees" [ color = "green" ];
+  "RubicProxy.routerCall" -> "SmartApprove.smartApprove" [ color = "orange" ];
+  "RubicProxy.routerCall" -> "RubicProxy.IERC20Upgradeable" [ color = "green" ];
+  "RubicProxy.routerCall" -> "RubicProxy.address" [ color = "green" ];
+  "RubicProxy.routerCall" -> "AddressUpgradeable.functionCallWithValue" [ color = "orange" ];
+  "RubicProxy.routerCall" -> "RubicProxy.accrueFixedCryptoFee" [ color = "green" ];
+  "RubicProxy.routerCall" -> "RubicProxy.IERC20Upgradeable" [ color = "green" ];
+  "RubicProxy.routerCall" -> "RubicProxy.address" [ color = "green" ];
+  "RubicProxy.routerCall" -> "RubicProxy.DifferentAmountSpent" [ color = "red" ];
+  "RubicProxy.routerCall" -> "RubicProxy.RequestSent" [ color = "green" ];
+  "RubicProxy.routerCallNative" -> "availableRouters.contains" [ color = "orange" ];
+  "RubicProxy.routerCallNative" -> "RubicProxy.RouterNotAvailable" [ color = "red" ];
+  "RubicProxy.routerCallNative" -> "RubicProxy.accrueTokenFees" [ color = "green" ];
+  "RubicProxy.routerCallNative" -> "RubicProxy.accrueFixedCryptoFee" [ color = "green" ];
+  "RubicProxy.routerCallNative" -> "RubicProxy.address" [ color = "green" ];
+  "RubicProxy.routerCallNative" -> "AddressUpgradeable.functionCallWithValue" [ color = "orange" ];
+  "RubicProxy.routerCallNative" -> "RubicProxy.RequestSent" [ color = "green" ];
+  "RubicProxy.sweepTokens" -> "RubicProxy.sendToken" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

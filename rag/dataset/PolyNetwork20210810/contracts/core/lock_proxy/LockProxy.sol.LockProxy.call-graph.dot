@@ -1,0 +1,62 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_1556_Ownable {
+label = "Ownable"
+"1556_owner" [label="owner"]
+"1556_transferOwnership" [label="transferOwnership"]
+"1556_constructor" [label="constructor"]
+"1556__transferOwnership" [label="_transferOwnership"]
+"1556_renounceOwnership" [label="renounceOwnership"]
+"1556_isOwner" [label="isOwner"]
+"1556_transferOwnership" -> "1556_onlyOwner"
+"1556_transferOwnership" -> "1556__transferOwnership"
+"1556_constructor" -> "1556__msgSender"
+"1556_isOwner" -> "1556__msgSender"
+"1556_renounceOwnership" -> "1556_onlyOwner"
+}subgraph cluster_661_LockProxy {
+label = "LockProxy"
+"661_bindAssetHash" [label="bindAssetHash"]
+"661_lock" [label="lock"]
+"661_setManagerProxy" [label="setManagerProxy"]
+"661__deserializeTxArgs" [label="_deserializeTxArgs"]
+"661__transferERC20ToContract" [label="_transferERC20ToContract"]
+"661_unlock" [label="unlock"]
+"661_getBalanceFor" [label="getBalanceFor"]
+"661__transferERC20FromContract" [label="_transferERC20FromContract"]
+"661__transferFromContract" [label="_transferFromContract"]
+"661_bindProxyHash" [label="bindProxyHash"]
+"661__transferToContract" [label="_transferToContract"]
+"661__serializeTxArgs" [label="_serializeTxArgs"]
+"661_lock" -> "661__msgSender"
+"661__transferToContract" -> "661__msgSender"
+"661_unlock" -> "661__deserializeTxArgs"
+"661_lock" -> "661__serializeTxArgs"
+"661__transferToContract" -> "661__transferERC20ToContract"
+"661__transferFromContract" -> "661__transferERC20FromContract"
+"661_bindAssetHash" -> "661_getBalanceFor"
+"661_lock" -> "661__transferToContract"
+"661_bindProxyHash" -> "661_onlyOwner"
+"661_setManagerProxy" -> "661_onlyOwner"
+"661_unlock" -> "661_onlyManagerContract"
+"661_unlock" -> "661__transferFromContract"
+"661_bindAssetHash" -> "661_onlyOwner"
+}subgraph cluster_2118_Context {
+label = "Context"
+"2118_constructor" [label="constructor"]
+"2118__msgData" [label="_msgData"]
+"2118__msgSender" [label="_msgSender"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"balance(address)" 
+"require(bool,string)" 
+"abi.encodePacked()" 
+"661__transferToContract" -> "require(bool,string)"
+"661_getBalanceFor" -> "balance(address)"
+"1556__transferOwnership" -> "require(bool,string)"
+"661_lock" -> "require(bool,string)"
+"661__transferFromContract" -> "require(bool,string)"
+"661_unlock" -> "require(bool,string)"
+"661__serializeTxArgs" -> "abi.encodePacked()"
+}
+}

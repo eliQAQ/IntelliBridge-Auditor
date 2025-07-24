@@ -1,0 +1,41 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_50_IRouterMintBurn {
+label = "IRouterMintBurn"
+"50_token" [label="token"]
+"50_mint" [label="mint"]
+"50_burn" [label="burn"]
+"50_tokenType" [label="tokenType"]
+}subgraph cluster_332_RouterMintBurnWrapper {
+label = "RouterMintBurnWrapper"
+"332_burn" [label="burn"]
+"332_constructor" [label="constructor"]
+"332_slitherConstructorConstantVariables" [label="slitherConstructorConstantVariables"]
+"332_mint" [label="mint"]
+"332_mint" -> "332_onlyAuth"
+"332_burn" -> "332_onlyAuth"
+"332_constructor" -> "332_constructor"
+}subgraph cluster_229_RoleControl {
+label = "RoleControl"
+"229_constructor" [label="constructor"]
+"229_addMinter" [label="addMinter"]
+"229_revokeMinter" [label="revokeMinter"]
+"229_getAllMinters" [label="getAllMinters"]
+"229_changeVault" [label="changeVault"]
+"229_changeVault" -> "229_onlyVault"
+"229_revokeMinter" -> "229_onlyVault"
+"229_addMinter" -> "229_onlyVault"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"assert(bool)" 
+"229_addMinter" -> "require(bool,string)"
+"229_changeVault" -> "require(bool,string)"
+"229_constructor" -> "require(bool,string)"
+"332_mint" -> "assert(bool)"
+"332_burn" -> "assert(bool)"
+"229_revokeMinter" -> "require(bool,string)"
+"332_constructor" -> "require(bool,string)"
+}
+}

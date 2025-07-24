@@ -1,0 +1,109 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_2805_Context {
+label = "Context"
+"2805_constructor" [label="constructor"]
+"2805__msgSender" [label="_msgSender"]
+"2805__msgData" [label="_msgData"]
+}subgraph cluster_2243_Ownable {
+label = "Ownable"
+"2243_transferOwnership" [label="transferOwnership"]
+"2243_isOwner" [label="isOwner"]
+"2243_renounceOwnership" [label="renounceOwnership"]
+"2243_constructor" [label="constructor"]
+"2243__transferOwnership" [label="_transferOwnership"]
+"2243_owner" [label="owner"]
+"2243_isOwner" -> "2243__msgSender"
+"2243_constructor" -> "2243__msgSender"
+"2243_transferOwnership" -> "2243__transferOwnership"
+"2243_transferOwnership" -> "2243_onlyOwner"
+"2243_renounceOwnership" -> "2243_onlyOwner"
+}subgraph cluster_2125_Pausable {
+label = "Pausable"
+"2125__pause" [label="_pause"]
+"2125__unpause" [label="_unpause"]
+"2125_constructor" [label="constructor"]
+"2125_paused" [label="paused"]
+"2125__unpause" -> "2125__msgSender"
+"2125__pause" -> "2125__msgSender"
+"2125__unpause" -> "2125_whenPaused"
+"2125__pause" -> "2125_whenNotPaused"
+}subgraph cluster_1267_LockProxyWithLP {
+label = "LockProxyWithLP"
+"1267_bindLPAndAssetBatch" [label="bindLPAndAssetBatch"]
+"1267__transferERC20ToContract" [label="_transferERC20ToContract"]
+"1267_getBalanceFor" [label="getBalanceFor"]
+"1267_deposit" [label="deposit"]
+"1267__deserializeTxArgs" [label="_deserializeTxArgs"]
+"1267_bindLPToAsset" [label="bindLPToAsset"]
+"1267__transferERC20FromContract" [label="_transferERC20FromContract"]
+"1267__transferFromContract" [label="_transferFromContract"]
+"1267_bindProxyHashBatch" [label="bindProxyHashBatch"]
+"1267_withdraw" [label="withdraw"]
+"1267__transferToContract" [label="_transferToContract"]
+"1267_bindProxyHash" [label="bindProxyHash"]
+"1267__serializeTxArgs" [label="_serializeTxArgs"]
+"1267_unlock" [label="unlock"]
+"1267_bindAssetHash" [label="bindAssetHash"]
+"1267_bindAssetHashBatch" [label="bindAssetHashBatch"]
+"1267_setManagerProxy" [label="setManagerProxy"]
+"1267_bindLPToAssetBatch" [label="bindLPToAssetBatch"]
+"1267_pause" [label="pause"]
+"1267_lock" [label="lock"]
+"1267_bindLPAndAsset" [label="bindLPAndAsset"]
+"1267_unpause" [label="unpause"]
+"1267__transferToContract" -> "1267__msgSender"
+"1267_withdraw" -> "1267__transferToContract"
+"1267_bindAssetHash" -> "1267_getBalanceFor"
+"1267_unlock" -> "1267__deserializeTxArgs"
+"1267_deposit" -> "1267_whenNotPaused"
+"1267_pause" -> "1267_onlyOwner"
+"1267_bindProxyHashBatch" -> "1267_onlyOwner"
+"1267_withdraw" -> "1267_whenNotPaused"
+"1267_withdraw" -> "1267__transferFromContract"
+"1267_bindLPAndAssetBatch" -> "1267_onlyOwner"
+"1267_bindLPAndAsset" -> "1267_onlyOwner"
+"1267_setManagerProxy" -> "1267_onlyOwner"
+"1267_lock" -> "1267__msgSender"
+"1267__transferFromContract" -> "1267__transferERC20FromContract"
+"1267_bindLPToAssetBatch" -> "1267_onlyOwner"
+"1267_pause" -> "1267__pause"
+"1267_unpause" -> "1267_whenPaused"
+"1267_unlock" -> "1267_onlyManagerContract"
+"1267_bindAssetHashBatch" -> "1267_onlyOwner"
+"1267_deposit" -> "1267__transferToContract"
+"1267_unpause" -> "1267_onlyOwner"
+"1267_lock" -> "1267__serializeTxArgs"
+"1267__transferToContract" -> "1267__transferERC20ToContract"
+"1267_bindAssetHash" -> "1267_onlyOwner"
+"1267_unpause" -> "1267__unpause"
+"1267_bindLPToAsset" -> "1267_onlyOwner"
+"1267_unlock" -> "1267__transferFromContract"
+"1267_lock" -> "1267__transferToContract"
+"1267_bindAssetHashBatch" -> "1267_getBalanceFor"
+"1267_bindLPAndAsset" -> "1267_getBalanceFor"
+"1267_bindLPAndAssetBatch" -> "1267_getBalanceFor"
+"1267_deposit" -> "1267__transferFromContract"
+"1267_bindProxyHash" -> "1267_onlyOwner"
+"1267_pause" -> "1267_whenNotPaused"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"balance(address)" 
+"require(bool,string)" 
+"abi.encodePacked()" 
+"1267_bindProxyHashBatch" -> "require(bool,string)"
+"1267_withdraw" -> "require(bool,string)"
+"1267_bindLPAndAssetBatch" -> "require(bool,string)"
+"1267_deposit" -> "require(bool,string)"
+"1267_getBalanceFor" -> "balance(address)"
+"2243__transferOwnership" -> "require(bool,string)"
+"1267_bindLPToAssetBatch" -> "require(bool,string)"
+"1267_lock" -> "require(bool,string)"
+"1267__transferToContract" -> "require(bool,string)"
+"1267__transferFromContract" -> "require(bool,string)"
+"1267_bindAssetHashBatch" -> "require(bool,string)"
+"1267__serializeTxArgs" -> "abi.encodePacked()"
+"1267_unlock" -> "require(bool,string)"
+}
+}

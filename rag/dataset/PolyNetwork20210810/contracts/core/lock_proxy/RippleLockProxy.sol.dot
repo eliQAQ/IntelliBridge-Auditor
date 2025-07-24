@@ -1,0 +1,139 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterbridgeAsset" {
+  graph [ label = "bridgeAsset", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "bridgeAsset.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "bridgeAsset.onlyBridge" [ label = "onlyBridge", color = "yellow" ];
+  "bridgeAsset.mint" [ label = "mint", color = "green" ];
+  "bridgeAsset.burnFrom" [ label = "burnFrom", color = "green" ];
+  "bridgeAsset._msgSender" [ label = "_msgSender" ];
+  "bridgeAsset._mint" [ label = "_mint" ];
+  "bridgeAsset._burnFrom" [ label = "_burnFrom" ];
+}
+
+subgraph "clusterRippleLockProxy" {
+  graph [ label = "RippleLockProxy", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "RippleLockProxy.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "RippleLockProxy.onlyManagerContract" [ label = "onlyManagerContract", color = "yellow" ];
+  "RippleLockProxy.setManagerProxy" [ label = "setManagerProxy", color = "green" ];
+  "RippleLockProxy.bindProxyHash" [ label = "bindProxyHash", color = "green" ];
+  "RippleLockProxy.rippleSetup" [ label = "rippleSetup", color = "blue" ];
+  "RippleLockProxy.lock" [ label = "lock", color = "green" ];
+  "RippleLockProxy.unlock" [ label = "unlock", color = "green" ];
+  "RippleLockProxy._rippleCheck" [ label = "_rippleCheck" ];
+  "RippleLockProxy._serializeTxArgs" [ label = "_serializeTxArgs" ];
+  "RippleLockProxy._deserializeTxArgs" [ label = "_deserializeTxArgs" ];
+  "RippleLockProxy.address" [ label = "address" ];
+  "RippleLockProxy.IEthCrossChainManagerProxy" [ label = "IEthCrossChainManagerProxy" ];
+  "RippleLockProxy._msgSender" [ label = "_msgSender" ];
+  "RippleLockProxy.IEthCrossChainManager" [ label = "IEthCrossChainManager" ];
+}
+
+subgraph "clusterIEthCrossChainManagerProxy" {
+  graph [ label = "IEthCrossChainManagerProxy", color = "lightgray" ];
+  "IEthCrossChainManagerProxy.getEthCrossChainManager" [ label = "getEthCrossChainManager" ];
+}
+
+subgraph "clusterIEthCrossChainManager" {
+  graph [ label = "IEthCrossChainManager", color = "lightgray" ];
+  "IEthCrossChainManager.crossChain" [ label = "crossChain" ];
+}
+
+subgraph "clusterUtils" {
+  graph [ label = "Utils", color = "lightgray" ];
+  "Utils.equalStorage" [ label = "equalStorage" ];
+  "Utils.bytesToAddress" [ label = "bytesToAddress" ];
+}
+
+subgraph "clusterZeroCopySink" {
+  graph [ label = "ZeroCopySink", color = "lightgray" ];
+  "ZeroCopySink.WriteVarBytes" [ label = "WriteVarBytes" ];
+  "ZeroCopySink.WriteUint255" [ label = "WriteUint255" ];
+}
+
+subgraph "clusterZeroCopySource" {
+  graph [ label = "ZeroCopySource", color = "lightgray" ];
+  "ZeroCopySource.NextVarBytes" [ label = "NextVarBytes" ];
+  "ZeroCopySource.NextUint255" [ label = "NextUint255" ];
+}
+
+  "bridgeAsset.onlyBridge";
+  "bridgeAsset._msgSender";
+  "bridgeAsset.mint";
+  "bridgeAsset._mint";
+  "bridgeAsset.burnFrom";
+  "bridgeAsset._burnFrom";
+  "RippleLockProxy.<Constructor>";
+  "RippleLockProxy.address";
+  "RippleLockProxy.onlyManagerContract";
+  "RippleLockProxy.IEthCrossChainManagerProxy";
+  "RippleLockProxy._msgSender";
+  "IEthCrossChainManagerProxy.getEthCrossChainManager";
+  "RippleLockProxy.lock";
+  "RippleLockProxy._rippleCheck";
+  "RippleLockProxy._serializeTxArgs";
+  "RippleLockProxy.IEthCrossChainManager";
+  "IEthCrossChainManager.crossChain";
+  "RippleLockProxy.unlock";
+  "RippleLockProxy._deserializeTxArgs";
+  "Utils.equalStorage";
+  "Utils.bytesToAddress";
+  "ZeroCopySink.WriteVarBytes";
+  "ZeroCopySink.WriteUint255";
+  "ZeroCopySource.NextVarBytes";
+  "ZeroCopySource.NextUint255";
+  "bridgeAsset.onlyBridge" -> "bridgeAsset._msgSender" [ color = "green" ];
+  "bridgeAsset.mint" -> "bridgeAsset._mint" [ color = "green" ];
+  "bridgeAsset.burnFrom" -> "bridgeAsset._burnFrom" [ color = "green" ];
+  "RippleLockProxy.<Constructor>" -> "RippleLockProxy.address" [ color = "green" ];
+  "RippleLockProxy.onlyManagerContract" -> "RippleLockProxy.IEthCrossChainManagerProxy" [ color = "green" ];
+  "RippleLockProxy.onlyManagerContract" -> "RippleLockProxy._msgSender" [ color = "green" ];
+  "RippleLockProxy.onlyManagerContract" -> "IEthCrossChainManagerProxy.getEthCrossChainManager" [ color = "orange" ];
+  "RippleLockProxy.lock" -> "RippleLockProxy._rippleCheck" [ color = "green" ];
+  "RippleLockProxy.lock" -> "RippleLockProxy._msgSender" [ color = "green" ];
+  "RippleLockProxy.lock" -> "RippleLockProxy._serializeTxArgs" [ color = "green" ];
+  "RippleLockProxy.lock" -> "RippleLockProxy.IEthCrossChainManagerProxy" [ color = "green" ];
+  "RippleLockProxy.lock" -> "IEthCrossChainManagerProxy.getEthCrossChainManager" [ color = "orange" ];
+  "RippleLockProxy.lock" -> "RippleLockProxy.IEthCrossChainManager" [ color = "green" ];
+  "RippleLockProxy.lock" -> "IEthCrossChainManager.crossChain" [ color = "orange" ];
+  "RippleLockProxy.lock" -> "RippleLockProxy.address" [ color = "green" ];
+  "RippleLockProxy.lock" -> "RippleLockProxy._msgSender" [ color = "green" ];
+  "RippleLockProxy.unlock" -> "RippleLockProxy._deserializeTxArgs" [ color = "green" ];
+  "RippleLockProxy.unlock" -> "Utils.equalStorage" [ color = "orange" ];
+  "RippleLockProxy.unlock" -> "Utils.bytesToAddress" [ color = "orange" ];
+  "RippleLockProxy.unlock" -> "RippleLockProxy.address" [ color = "green" ];
+  "RippleLockProxy._serializeTxArgs" -> "ZeroCopySink.WriteVarBytes" [ color = "orange" ];
+  "RippleLockProxy._serializeTxArgs" -> "ZeroCopySink.WriteUint255" [ color = "orange" ];
+  "RippleLockProxy._deserializeTxArgs" -> "ZeroCopySource.NextVarBytes" [ color = "orange" ];
+  "RippleLockProxy._deserializeTxArgs" -> "ZeroCopySource.NextUint255" [ color = "orange" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

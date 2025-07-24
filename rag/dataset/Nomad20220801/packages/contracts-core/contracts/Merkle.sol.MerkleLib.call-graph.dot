@@ -1,0 +1,29 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_592_MerkleLib {
+label = "MerkleLib"
+"592_zeroHashes" [label="zeroHashes"]
+"592_slitherConstructorConstantVariables" [label="slitherConstructorConstantVariables"]
+"592_branchRoot" [label="branchRoot"]
+"592_insert" [label="insert"]
+"592_root" [label="root"]
+"592_rootWithCtx" [label="rootWithCtx"]
+"592_root" -> "592_rootWithCtx"
+"592_root" -> "592_zeroHashes"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"abi.encodePacked()" 
+"require(bool,string)" 
+"assert(bool)" 
+"keccak256(bytes)" 
+"592_insert" -> "require(bool,string)"
+"592_branchRoot" -> "abi.encodePacked()"
+"592_rootWithCtx" -> "abi.encodePacked()"
+"592_insert" -> "assert(bool)"
+"592_branchRoot" -> "keccak256(bytes)"
+"592_rootWithCtx" -> "keccak256(bytes)"
+"592_insert" -> "keccak256(bytes)"
+"592_insert" -> "abi.encodePacked()"
+}
+}

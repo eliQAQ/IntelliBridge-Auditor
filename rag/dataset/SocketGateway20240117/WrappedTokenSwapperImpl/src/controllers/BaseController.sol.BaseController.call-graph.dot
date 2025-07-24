@@ -1,0 +1,18 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_84_BaseController {
+label = "BaseController"
+"84_slitherConstructorVariables" [label="slitherConstructorVariables"]
+"84_constructor" [label="constructor"]
+"84__executeRoute" [label="_executeRoute"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"revert(uint256,uint256)" 
+"keccak256(bytes)" 
+"mload(uint256)" 
+"84__executeRoute" -> "revert(uint256,uint256)"
+"84__executeRoute" -> "mload(uint256)"
+"84_slitherConstructorVariables" -> "keccak256(bytes)"
+}
+}

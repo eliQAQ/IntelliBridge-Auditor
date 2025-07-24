@@ -1,0 +1,30 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_1338_ZeroCopySink {
+label = "ZeroCopySink"
+"1338_WriteBool" [label="WriteBool"]
+"1338_WriteVarUint" [label="WriteVarUint"]
+"1338_WriteUint255" [label="WriteUint255"]
+"1338_WriteUint32" [label="WriteUint32"]
+"1338_WriteUint64" [label="WriteUint64"]
+"1338_WriteUint16" [label="WriteUint16"]
+"1338_WriteUint8" [label="WriteUint8"]
+"1338_WriteByte" [label="WriteByte"]
+"1338_WriteVarBytes" [label="WriteVarBytes"]
+"1338_WriteVarUint" -> "1338_WriteUint32"
+"1338_WriteVarUint" -> "1338_WriteUint16"
+"1338_WriteVarUint" -> "1338_WriteUint64"
+"1338_WriteVarUint" -> "1338_WriteUint8"
+"1338_WriteVarBytes" -> "1338_WriteVarUint"
+"1338_WriteVarUint" -> "1338_WriteByte"
+"1338_WriteByte" -> "1338_WriteUint8"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"abi.encodePacked()" 
+"require(bool,string)" 
+"1338_WriteUint255" -> "require(bool,string)"
+"1338_WriteVarUint" -> "abi.encodePacked()"
+"1338_WriteVarBytes" -> "abi.encodePacked()"
+}
+}

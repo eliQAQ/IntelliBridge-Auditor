@@ -1,0 +1,77 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterHopImplL2" {
+  graph [ label = "HopImplL2", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "HopImplL2.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "HopImplL2.bridgeAfterSwap" [ label = "bridgeAfterSwap", color = "blue" ];
+  "HopImplL2.swapAndBridge" [ label = "swapAndBridge", color = "blue" ];
+  "HopImplL2.bridgeERC20To" [ label = "bridgeERC20To", color = "blue" ];
+  "HopImplL2.bridgeNativeTo" [ label = "bridgeNativeTo", color = "blue" ];
+  "HopImplL2.HopAMM" [ label = "HopAMM" ];
+  "HopImplL2.SocketBridge" [ label = "SocketBridge" ];
+  "HopImplL2.ERC20" [ label = "ERC20" ];
+}
+
+subgraph "clustersocketRoute" {
+  graph [ label = "socketRoute", color = "lightgray" ];
+  "socketRoute.getRoute" [ label = "getRoute" ];
+}
+
+subgraph "clusterERC20" {
+  graph [ label = "ERC20", color = "lightgray" ];
+  "ERC20.safeTransferFrom" [ label = "safeTransferFrom" ];
+}
+
+  "HopImplL2.bridgeAfterSwap";
+  "HopImplL2.HopAMM";
+  "HopImplL2.SocketBridge";
+  "HopImplL2.swapAndBridge";
+  "socketRoute.getRoute";
+  "HopImplL2.bridgeERC20To";
+  "HopImplL2.ERC20";
+  "ERC20.safeTransferFrom";
+  "HopImplL2.bridgeNativeTo";
+  "HopImplL2.bridgeAfterSwap" -> "HopImplL2.HopAMM" [ color = "green" ];
+  "HopImplL2.bridgeAfterSwap" -> "HopImplL2.HopAMM" [ color = "green" ];
+  "HopImplL2.bridgeAfterSwap" -> "HopImplL2.SocketBridge" [ color = "green" ];
+  "HopImplL2.swapAndBridge" -> "socketRoute.getRoute" [ color = "orange" ];
+  "HopImplL2.swapAndBridge" -> "HopImplL2.HopAMM" [ color = "green" ];
+  "HopImplL2.swapAndBridge" -> "HopImplL2.HopAMM" [ color = "green" ];
+  "HopImplL2.swapAndBridge" -> "HopImplL2.SocketBridge" [ color = "green" ];
+  "HopImplL2.bridgeERC20To" -> "HopImplL2.ERC20" [ color = "green" ];
+  "HopImplL2.bridgeERC20To" -> "ERC20.safeTransferFrom" [ color = "orange" ];
+  "HopImplL2.bridgeERC20To" -> "HopImplL2.HopAMM" [ color = "green" ];
+  "HopImplL2.bridgeERC20To" -> "HopImplL2.SocketBridge" [ color = "green" ];
+  "HopImplL2.bridgeNativeTo" -> "HopImplL2.HopAMM" [ color = "green" ];
+  "HopImplL2.bridgeNativeTo" -> "HopImplL2.SocketBridge" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

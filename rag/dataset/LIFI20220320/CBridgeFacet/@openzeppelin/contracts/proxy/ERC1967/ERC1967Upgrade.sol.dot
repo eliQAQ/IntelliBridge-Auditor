@@ -1,0 +1,105 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterERC1967Upgrade" {
+  graph [ label = "ERC1967Upgrade", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ERC1967Upgrade._getImplementation" [ label = "_getImplementation", color = "white" ];
+  "ERC1967Upgrade._setImplementation" [ label = "_setImplementation", color = "red" ];
+  "ERC1967Upgrade._upgradeTo" [ label = "_upgradeTo", color = "white" ];
+  "ERC1967Upgrade._upgradeToAndCall" [ label = "_upgradeToAndCall", color = "white" ];
+  "ERC1967Upgrade._upgradeToAndCallSecure" [ label = "_upgradeToAndCallSecure", color = "white" ];
+  "ERC1967Upgrade._getAdmin" [ label = "_getAdmin", color = "white" ];
+  "ERC1967Upgrade._setAdmin" [ label = "_setAdmin", color = "red" ];
+  "ERC1967Upgrade._changeAdmin" [ label = "_changeAdmin", color = "white" ];
+  "ERC1967Upgrade._getBeacon" [ label = "_getBeacon", color = "white" ];
+  "ERC1967Upgrade._setBeacon" [ label = "_setBeacon", color = "red" ];
+  "ERC1967Upgrade._upgradeBeaconToAndCall" [ label = "_upgradeBeaconToAndCall", color = "white" ];
+  "ERC1967Upgrade.address" [ label = "address" ];
+  "ERC1967Upgrade.IBeacon" [ label = "IBeacon" ];
+}
+
+subgraph "clusterStorageSlot" {
+  graph [ label = "StorageSlot", color = "lightgray" ];
+  "StorageSlot.getAddressSlot" [ label = "getAddressSlot" ];
+  "StorageSlot.getBooleanSlot" [ label = "getBooleanSlot" ];
+}
+
+subgraph "clusterAddress" {
+  graph [ label = "Address", color = "lightgray" ];
+  "Address.isContract" [ label = "isContract" ];
+  "Address.functionDelegateCall" [ label = "functionDelegateCall" ];
+}
+
+  "ERC1967Upgrade._getImplementation";
+  "StorageSlot.getAddressSlot";
+  "ERC1967Upgrade._setImplementation";
+  "Address.isContract";
+  "ERC1967Upgrade._upgradeTo";
+  "ERC1967Upgrade._upgradeToAndCall";
+  "Address.functionDelegateCall";
+  "ERC1967Upgrade._upgradeToAndCallSecure";
+  "StorageSlot.getBooleanSlot";
+  "ERC1967Upgrade._getAdmin";
+  "ERC1967Upgrade._setAdmin";
+  "ERC1967Upgrade.address";
+  "ERC1967Upgrade._changeAdmin";
+  "ERC1967Upgrade._getBeacon";
+  "ERC1967Upgrade._setBeacon";
+  "ERC1967Upgrade.IBeacon";
+  "ERC1967Upgrade._upgradeBeaconToAndCall";
+  "ERC1967Upgrade._getImplementation" -> "StorageSlot.getAddressSlot" [ color = "orange" ];
+  "ERC1967Upgrade._setImplementation" -> "Address.isContract" [ color = "orange" ];
+  "ERC1967Upgrade._setImplementation" -> "StorageSlot.getAddressSlot" [ color = "orange" ];
+  "ERC1967Upgrade._upgradeTo" -> "ERC1967Upgrade._setImplementation" [ color = "green" ];
+  "ERC1967Upgrade._upgradeToAndCall" -> "ERC1967Upgrade._upgradeTo" [ color = "green" ];
+  "ERC1967Upgrade._upgradeToAndCall" -> "Address.functionDelegateCall" [ color = "orange" ];
+  "ERC1967Upgrade._upgradeToAndCallSecure" -> "ERC1967Upgrade._getImplementation" [ color = "green" ];
+  "ERC1967Upgrade._upgradeToAndCallSecure" -> "ERC1967Upgrade._setImplementation" [ color = "green" ];
+  "ERC1967Upgrade._upgradeToAndCallSecure" -> "Address.functionDelegateCall" [ color = "orange" ];
+  "ERC1967Upgrade._upgradeToAndCallSecure" -> "StorageSlot.getBooleanSlot" [ color = "orange" ];
+  "ERC1967Upgrade._upgradeToAndCallSecure" -> "Address.functionDelegateCall" [ color = "orange" ];
+  "ERC1967Upgrade._upgradeToAndCallSecure" -> "ERC1967Upgrade._getImplementation" [ color = "green" ];
+  "ERC1967Upgrade._upgradeToAndCallSecure" -> "ERC1967Upgrade._upgradeTo" [ color = "green" ];
+  "ERC1967Upgrade._getAdmin" -> "StorageSlot.getAddressSlot" [ color = "orange" ];
+  "ERC1967Upgrade._setAdmin" -> "ERC1967Upgrade.address" [ color = "green" ];
+  "ERC1967Upgrade._setAdmin" -> "StorageSlot.getAddressSlot" [ color = "orange" ];
+  "ERC1967Upgrade._changeAdmin" -> "ERC1967Upgrade._getAdmin" [ color = "green" ];
+  "ERC1967Upgrade._changeAdmin" -> "ERC1967Upgrade._setAdmin" [ color = "green" ];
+  "ERC1967Upgrade._getBeacon" -> "StorageSlot.getAddressSlot" [ color = "orange" ];
+  "ERC1967Upgrade._setBeacon" -> "Address.isContract" [ color = "orange" ];
+  "ERC1967Upgrade._setBeacon" -> "Address.isContract" [ color = "orange" ];
+  "ERC1967Upgrade._setBeacon" -> "ERC1967Upgrade.IBeacon" [ color = "green" ];
+  "ERC1967Upgrade._setBeacon" -> "StorageSlot.getAddressSlot" [ color = "orange" ];
+  "ERC1967Upgrade._upgradeBeaconToAndCall" -> "ERC1967Upgrade._setBeacon" [ color = "green" ];
+  "ERC1967Upgrade._upgradeBeaconToAndCall" -> "Address.functionDelegateCall" [ color = "orange" ];
+  "ERC1967Upgrade._upgradeBeaconToAndCall" -> "ERC1967Upgrade.IBeacon" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

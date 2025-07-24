@@ -1,0 +1,23 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_224_IDiamondLoupe {
+label = "IDiamondLoupe"
+"224_facets" [label="facets"]
+"224_facetFunctionSelectors" [label="facetFunctionSelectors"]
+"224_facetAddresses" [label="facetAddresses"]
+"224_facetAddress" [label="facetAddress"]
+}subgraph cluster_235_IERC165 {
+label = "IERC165"
+"235_supportsInterface" [label="supportsInterface"]
+}subgraph cluster_183_DiamondLoupeFacet {
+label = "DiamondLoupeFacet"
+"183_facetAddress" [label="facetAddress"]
+"183_facetFunctionSelectors" [label="facetFunctionSelectors"]
+"183_supportsInterface" [label="supportsInterface"]
+"183_facets" [label="facets"]
+"183_facetAddresses" [label="facetAddresses"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+}
+}

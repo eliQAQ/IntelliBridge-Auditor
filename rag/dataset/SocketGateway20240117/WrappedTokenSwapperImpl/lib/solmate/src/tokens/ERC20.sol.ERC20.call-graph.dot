@@ -1,0 +1,33 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_387_ERC20 {
+label = "ERC20"
+"387__mint" [label="_mint"]
+"387_DOMAIN_SEPARATOR" [label="DOMAIN_SEPARATOR"]
+"387_transfer" [label="transfer"]
+"387_permit" [label="permit"]
+"387_approve" [label="approve"]
+"387_constructor" [label="constructor"]
+"387_computeDomainSeparator" [label="computeDomainSeparator"]
+"387__burn" [label="_burn"]
+"387_transferFrom" [label="transferFrom"]
+"387_permit" -> "387_DOMAIN_SEPARATOR"
+"387_constructor" -> "387_computeDomainSeparator"
+"387_DOMAIN_SEPARATOR" -> "387_computeDomainSeparator"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"ecrecover(bytes32,uint8,bytes32,bytes32)" 
+"require(bool,string)" 
+"abi.encode()" 
+"keccak256(bytes)" 
+"abi.encodePacked()" 
+"387_permit" -> "abi.encodePacked()"
+"387_permit" -> "abi.encode()"
+"387_permit" -> "ecrecover(bytes32,uint8,bytes32,bytes32)"
+"387_permit" -> "keccak256(bytes)"
+"387_computeDomainSeparator" -> "abi.encode()"
+"387_permit" -> "require(bool,string)"
+"387_computeDomainSeparator" -> "keccak256(bytes)"
+}
+}

@@ -1,0 +1,118 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_3040_Context {
+label = "Context"
+"3040_constructor" [label="constructor"]
+"3040__msgSender" [label="_msgSender"]
+"3040__msgData" [label="_msgData"]
+}subgraph cluster_1444_LockProxyPip4 {
+label = "LockProxyPip4"
+"1444_unpause" [label="unpause"]
+"1444_slitherConstructorConstantVariables" [label="slitherConstructorConstantVariables"]
+"1444_unlock" [label="unlock"]
+"1444__transferToContract" [label="_transferToContract"]
+"1444_withdraw" [label="withdraw"]
+"1444__transferERC20ToContract" [label="_transferERC20ToContract"]
+"1444__fromStandardDecimals" [label="_fromStandardDecimals"]
+"1444_bindLPToAssetBatch" [label="bindLPToAssetBatch"]
+"1444_lock" [label="lock"]
+"1444__toStandardDecimals" [label="_toStandardDecimals"]
+"1444__transferERC20FromContract" [label="_transferERC20FromContract"]
+"1444_setManagerProxy" [label="setManagerProxy"]
+"1444_bindLPAndAsset" [label="bindLPAndAsset"]
+"1444__deserializeTxArgs" [label="_deserializeTxArgs"]
+"1444__transferFromContract" [label="_transferFromContract"]
+"1444_deposit" [label="deposit"]
+"1444_pause" [label="pause"]
+"1444_bindLPToAsset" [label="bindLPToAsset"]
+"1444_bindProxyHash" [label="bindProxyHash"]
+"1444_bindLPAndAssetBatch" [label="bindLPAndAssetBatch"]
+"1444_bindProxyHashBatch" [label="bindProxyHashBatch"]
+"1444_getBalanceFor" [label="getBalanceFor"]
+"1444_bindAssetHash" [label="bindAssetHash"]
+"1444_bindAssetHashBatch" [label="bindAssetHashBatch"]
+"1444__serializeTxArgs" [label="_serializeTxArgs"]
+"1444_bindLPAndAssetBatch" -> "1444_onlyOwner"
+"1444_lock" -> "1444__transferToContract"
+"1444_bindLPAndAsset" -> "1444_getBalanceFor"
+"1444_withdraw" -> "1444_whenNotPaused"
+"1444_pause" -> "1444_whenNotPaused"
+"1444_lock" -> "1444__toStandardDecimals"
+"1444_unlock" -> "1444_onlyManagerContract"
+"1444_deposit" -> "1444_whenNotPaused"
+"1444_deposit" -> "1444__fromStandardDecimals"
+"1444_pause" -> "1444_onlyOwner"
+"1444_bindLPToAssetBatch" -> "1444_onlyOwner"
+"1444_unpause" -> "1444_onlyOwner"
+"1444_bindLPAndAssetBatch" -> "1444_getBalanceFor"
+"1444_bindAssetHash" -> "1444_getBalanceFor"
+"1444_unpause" -> "1444_whenPaused"
+"1444_lock" -> "1444__serializeTxArgs"
+"1444_bindLPAndAsset" -> "1444_onlyOwner"
+"1444__transferFromContract" -> "1444__transferERC20FromContract"
+"1444__transferToContract" -> "1444__transferERC20ToContract"
+"1444_setManagerProxy" -> "1444_onlyOwner"
+"1444_unlock" -> "1444__transferFromContract"
+"1444_bindAssetHashBatch" -> "1444_onlyOwner"
+"1444_withdraw" -> "1444__fromStandardDecimals"
+"1444_withdraw" -> "1444__toStandardDecimals"
+"1444_deposit" -> "1444__transferFromContract"
+"1444_deposit" -> "1444__transferToContract"
+"1444_bindAssetHash" -> "1444_onlyOwner"
+"1444_bindAssetHashBatch" -> "1444_getBalanceFor"
+"1444_bindProxyHash" -> "1444_onlyOwner"
+"1444_withdraw" -> "1444__transferFromContract"
+"1444__transferToContract" -> "1444__msgSender"
+"1444_lock" -> "1444__msgSender"
+"1444_unpause" -> "1444__unpause"
+"1444_bindLPToAsset" -> "1444_onlyOwner"
+"1444_unlock" -> "1444__fromStandardDecimals"
+"1444_unlock" -> "1444__deserializeTxArgs"
+"1444_pause" -> "1444__pause"
+"1444_deposit" -> "1444__toStandardDecimals"
+"1444_withdraw" -> "1444__transferToContract"
+"1444_bindProxyHashBatch" -> "1444_onlyOwner"
+}subgraph cluster_2420_Ownable {
+label = "Ownable"
+"2420_owner" [label="owner"]
+"2420__transferOwnership" [label="_transferOwnership"]
+"2420_renounceOwnership" [label="renounceOwnership"]
+"2420_transferOwnership" [label="transferOwnership"]
+"2420_isOwner" [label="isOwner"]
+"2420_constructor" [label="constructor"]
+"2420_constructor" -> "2420__msgSender"
+"2420_transferOwnership" -> "2420__transferOwnership"
+"2420_isOwner" -> "2420__msgSender"
+"2420_renounceOwnership" -> "2420_onlyOwner"
+"2420_transferOwnership" -> "2420_onlyOwner"
+}subgraph cluster_2302_Pausable {
+label = "Pausable"
+"2302__pause" [label="_pause"]
+"2302__unpause" [label="_unpause"]
+"2302_paused" [label="paused"]
+"2302_constructor" [label="constructor"]
+"2302__pause" -> "2302__msgSender"
+"2302__pause" -> "2302_whenNotPaused"
+"2302__unpause" -> "2302__msgSender"
+"2302__unpause" -> "2302_whenPaused"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"abi.encodePacked()" 
+"require(bool,string)" 
+"balance(address)" 
+"1444__transferToContract" -> "require(bool,string)"
+"1444_unlock" -> "require(bool,string)"
+"1444_deposit" -> "require(bool,string)"
+"1444__serializeTxArgs" -> "abi.encodePacked()"
+"1444_withdraw" -> "require(bool,string)"
+"1444_getBalanceFor" -> "balance(address)"
+"1444_bindAssetHashBatch" -> "require(bool,string)"
+"1444__transferFromContract" -> "require(bool,string)"
+"1444_bindLPAndAssetBatch" -> "require(bool,string)"
+"1444_bindLPToAssetBatch" -> "require(bool,string)"
+"1444_bindProxyHashBatch" -> "require(bool,string)"
+"2420__transferOwnership" -> "require(bool,string)"
+"1444_lock" -> "require(bool,string)"
+}
+}

@@ -1,0 +1,3045 @@
+{
+    "solidity_file": {
+        "C:\\Users\\wy\\Desktop\\rag\\dataset\\Multichain20230215\\contracts\\Anyswaprouterv4.sol": {
+            "filepath": "C:\\Users\\wy\\Desktop\\rag\\dataset\\Multichain20230215\\contracts\\Anyswaprouterv4.sol",
+            "filename": "Anyswaprouterv4.sol",
+            "imported_contracts": {},
+            "contracts": {
+                "ISushiswapV2Pair": {
+                    "type": {
+                        "__CT__": true,
+                        "value": 3
+                    },
+                    "is_abstract": false,
+                    "inherits": [],
+                    "state_variables": {},
+                    "functions": {
+                        "factory": [
+                            {
+                                "visibility": "external",
+                                "content": "function factory() external view returns (address);",
+                                "modifiers": [
+                                    "view"
+                                ],
+                                "parameters": [],
+                                "returns": [
+                                    {
+                                        "type": "address",
+                                        "name": null
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "eae461b6d0ef6d1c8bb92d34e74a880d"
+                            }
+                        ],
+                        "token0": [
+                            {
+                                "visibility": "external",
+                                "content": "function token0() external view returns (address);",
+                                "modifiers": [
+                                    "view"
+                                ],
+                                "parameters": [],
+                                "returns": [
+                                    {
+                                        "type": "address",
+                                        "name": null
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "6dbeae51296a5fa298e59b6ce26a07ef"
+                            }
+                        ],
+                        "token1": [
+                            {
+                                "visibility": "external",
+                                "content": "function token1() external view returns (address);",
+                                "modifiers": [
+                                    "view"
+                                ],
+                                "parameters": [],
+                                "returns": [
+                                    {
+                                        "type": "address",
+                                        "name": null
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "19164606c7e09dcc0de5c859221b6cf5"
+                            }
+                        ],
+                        "getReserves": [
+                            {
+                                "visibility": "external",
+                                "content": "function getReserves() external view returns (uint112 reserve0, uint112 reserve1, uint32 blockTimestampLast);",
+                                "modifiers": [
+                                    "view"
+                                ],
+                                "parameters": [],
+                                "returns": [
+                                    {
+                                        "type": "uint112",
+                                        "name": "reserve0"
+                                    },
+                                    {
+                                        "type": "uint112",
+                                        "name": "reserve1"
+                                    },
+                                    {
+                                        "type": "uint32",
+                                        "name": "blockTimestampLast"
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "a8ad5739cac88103083915986561f88c"
+                            }
+                        ],
+                        "swap": [
+                            {
+                                "visibility": "external",
+                                "content": "function swap(uint amount0Out, uint amount1Out, address to, bytes calldata data) external;",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "uint",
+                                        "name": "amount0Out"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amount1Out"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "bytes calldata",
+                                        "name": "data"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "2a7b7c36bbb6565de0e79bffef9b920f"
+                            }
+                        ]
+                    },
+                    "modifiers": {},
+                    "structs": {},
+                    "events": {},
+                    "enums": {},
+                    "errors": {},
+                    "custom_types": {},
+                    "using_directives": {},
+                    "implement": []
+                },
+                "SafeMathSushiswap": {
+                    "type": {
+                        "__CT__": true,
+                        "value": 2
+                    },
+                    "is_abstract": false,
+                    "inherits": [],
+                    "state_variables": {},
+                    "functions": {
+                        "add": [
+                            {
+                                "visibility": "internal",
+                                "content": "function add(uint x, uint y) internal pure returns (uint z){ require((z = x + y) >= x, 'ds-math-add-overflow');}",
+                                "modifiers": [
+                                    "pure"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "uint",
+                                        "name": "x"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "y"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "uint",
+                                        "name": "z"
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "e076653475ff64c2999d30ec870291e4"
+                            }
+                        ],
+                        "sub": [
+                            {
+                                "visibility": "internal",
+                                "content": "function sub(uint x, uint y) internal pure returns (uint z){ require((z = x - y) <= x, 'ds-math-sub-underflow');}",
+                                "modifiers": [
+                                    "pure"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "uint",
+                                        "name": "x"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "y"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "uint",
+                                        "name": "z"
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "50fc788cc62b3aabc5d934ec2ad1c67f"
+                            }
+                        ],
+                        "mul": [
+                            {
+                                "visibility": "internal",
+                                "content": "function mul(uint x, uint y) internal pure returns (uint z){ require(y == 0 || (z = x * y) / y == x, 'ds-math-mul-overflow');}",
+                                "modifiers": [
+                                    "pure"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "uint",
+                                        "name": "x"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "y"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "uint",
+                                        "name": "z"
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "17723186ccd020779d6c078c1da61e4b"
+                            }
+                        ]
+                    },
+                    "modifiers": {},
+                    "structs": {},
+                    "events": {},
+                    "enums": {},
+                    "errors": {},
+                    "custom_types": {},
+                    "using_directives": {}
+                },
+                "SushiswapV2Library": {
+                    "type": {
+                        "__CT__": true,
+                        "value": 2
+                    },
+                    "is_abstract": false,
+                    "inherits": [],
+                    "state_variables": {},
+                    "functions": {
+                        "sortTokens": [
+                            {
+                                "visibility": "internal",
+                                "content": "function sortTokens(address tokenA, address tokenB) internal pure returns (address token0, address token1){ require(tokenA != tokenB, 'SushiswapV2Library: IDENTICAL_ADDRESSES'); (token0, token1) = tokenA < tokenB ? (tokenA, tokenB) : (tokenB, tokenA); require(token0 != address(0), 'SushiswapV2Library: ZERO_ADDRESS');}",
+                                "modifiers": [
+                                    "pure"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "tokenA"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "tokenB"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "address",
+                                        "name": "token0"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "token1"
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "53553004d7c40a8043fec91809e5eb82"
+                            }
+                        ],
+                        "pairFor": [
+                            {
+                                "visibility": "internal",
+                                "content": "function pairFor(address factory, address tokenA, address tokenB) internal pure returns (address pair){ (address token0, address token1) = sortTokens(tokenA, tokenB); pair = address(uint160(uint256(keccak256(abi.encodePacked( hex'ff', factory, keccak256(abi.encodePacked(token0, token1)), hex'e18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303' )))));}",
+                                "modifiers": [
+                                    "pure"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "factory"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "tokenA"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "tokenB"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "address",
+                                        "name": "pair"
+                                    }
+                                ],
+                                "reads": [
+                                    [
+                                        "factory",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ]
+                                ],
+                                "writes": [
+                                    [
+                                        "factory",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ]
+                                ],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "SushiswapV2Library.sortTokens"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "0966039bc6d80270f06e5d9760ee5973"
+                            }
+                        ],
+                        "getReserves": [
+                            {
+                                "visibility": "internal",
+                                "content": "function getReserves(address factory, address tokenA, address tokenB) internal view returns (uint reserveA, uint reserveB){ (address token0, ) = sortTokens(tokenA, tokenB); (uint reserve0, uint reserve1, ) = ISushiswapV2Pair(pairFor(factory, tokenA, tokenB)).getReserves(); (reserveA, reserveB) = tokenA == token0 ? (reserve0, reserve1) : (reserve1, reserve0);}",
+                                "modifiers": [
+                                    "view"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "factory"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "tokenA"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "tokenB"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "uint",
+                                        "name": "reserveA"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "reserveB"
+                                    }
+                                ],
+                                "reads": [
+                                    [
+                                        "factory",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ]
+                                ],
+                                "writes": [
+                                    [
+                                        "factory",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ]
+                                ],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "SushiswapV2Library.pairFor",
+                                        "SushiswapV2Library.sortTokens"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "e12c8e854eb992f08c30e88b3e078522"
+                            }
+                        ],
+                        "quote": [
+                            {
+                                "visibility": "internal",
+                                "content": "function quote(uint amountA, uint reserveA, uint reserveB) internal pure returns (uint amountB){ require(amountA > 0, 'SushiswapV2Library: INSUFFICIENT_AMOUNT'); require(reserveA > 0 && reserveB > 0, 'SushiswapV2Library: INSUFFICIENT_LIQUIDITY'); amountB = amountA.mul(reserveB) / reserveA;}",
+                                "modifiers": [
+                                    "pure"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "uint",
+                                        "name": "amountA"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "reserveA"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "reserveB"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "uint",
+                                        "name": "amountB"
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "amountA.mul"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "814d0103910bb8adeb7a6e1b665e2d9a"
+                            }
+                        ],
+                        "getAmountOut": [
+                            {
+                                "visibility": "internal",
+                                "content": "function getAmountOut(uint amountIn, uint reserveIn, uint reserveOut) internal pure returns (uint amountOut){ require(amountIn > 0, 'SushiswapV2Library: INSUFFICIENT_INPUT_AMOUNT'); require(reserveIn > 0 && reserveOut > 0, 'SushiswapV2Library: INSUFFICIENT_LIQUIDITY'); uint amountInWithFee = amountIn.mul(997); uint numerator = amountInWithFee.mul(reserveOut); uint denominator = reserveIn.mul(1000).add(amountInWithFee); amountOut = numerator / denominator;}",
+                                "modifiers": [
+                                    "pure"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "uint",
+                                        "name": "amountIn"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "reserveIn"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "reserveOut"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "uint",
+                                        "name": "amountOut"
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "amountInWithFee.mul",
+                                        "reserveIn.mul",
+                                        "amountIn.mul"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "de9a0b4fe347557aa85f1beddb841fcb"
+                            }
+                        ],
+                        "getAmountIn": [
+                            {
+                                "visibility": "internal",
+                                "content": "function getAmountIn(uint amountOut, uint reserveIn, uint reserveOut) internal pure returns (uint amountIn){ require(amountOut > 0, 'SushiswapV2Library: INSUFFICIENT_OUTPUT_AMOUNT'); require(reserveIn > 0 && reserveOut > 0, 'SushiswapV2Library: INSUFFICIENT_LIQUIDITY'); uint numerator = reserveIn.mul(amountOut).mul(1000); uint denominator = reserveOut.sub(amountOut).mul(997); amountIn = (numerator / denominator).add(1);}",
+                                "modifiers": [
+                                    "pure"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "uint",
+                                        "name": "amountOut"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "reserveIn"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "reserveOut"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "uint",
+                                        "name": "amountIn"
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "reserveIn.mul",
+                                        "reserveOut.sub"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "719310c4a8954494b502bb60f325d986"
+                            }
+                        ],
+                        "getAmountsOut": [
+                            {
+                                "visibility": "internal",
+                                "content": "function getAmountsOut(address factory, uint amountIn, address[] memory path) internal view returns (uint[] memory amounts){ require(path.length >= 2, 'SushiswapV2Library: INVALID_PATH'); amounts = new uint[](path.length); amounts[0] = amountIn; for (uint i; i < path.length - 1; i++){ (uint reserveIn, uint reserveOut) = getReserves(factory, path[i], path[i + 1]); amounts[i + 1] = getAmountOut(amounts[i], reserveIn, reserveOut);}}",
+                                "modifiers": [
+                                    "view"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "factory"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amountIn"
+                                    },
+                                    {
+                                        "type": "address[] memory",
+                                        "name": "path"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "uint[] memory",
+                                        "name": "amounts"
+                                    }
+                                ],
+                                "reads": [
+                                    [
+                                        "factory",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ]
+                                ],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "SushiswapV2Library.getAmountOut",
+                                        "SushiswapV2Library.getReserves"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "fd145cd614d3cfb20b6182a54e4853a0"
+                            }
+                        ],
+                        "getAmountsIn": [
+                            {
+                                "visibility": "internal",
+                                "content": "function getAmountsIn(address factory, uint amountOut, address[] memory path) internal view returns (uint[] memory amounts){ require(path.length >= 2, 'SushiswapV2Library: INVALID_PATH'); amounts = new uint[](path.length); amounts[amounts.length - 1] = amountOut; for (uint i = path.length - 1; i > 0; i--){ (uint reserveIn, uint reserveOut) = getReserves(factory, path[i - 1], path[i]); amounts[i - 1] = getAmountIn(amounts[i], reserveIn, reserveOut);}}",
+                                "modifiers": [
+                                    "view"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "factory"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amountOut"
+                                    },
+                                    {
+                                        "type": "address[] memory",
+                                        "name": "path"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "uint[] memory",
+                                        "name": "amounts"
+                                    }
+                                ],
+                                "reads": [
+                                    [
+                                        "factory",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ]
+                                ],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "SushiswapV2Library.getAmountIn",
+                                        "SushiswapV2Library.getReserves"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "6409030ef935ed2148ebd6f3a0220b44"
+                            }
+                        ]
+                    },
+                    "modifiers": {},
+                    "structs": {},
+                    "events": {},
+                    "enums": {},
+                    "errors": {},
+                    "custom_types": {},
+                    "using_directives": {
+                        "uint": "SafeMathSushiswap"
+                    }
+                },
+                "TransferHelper": {
+                    "type": {
+                        "__CT__": true,
+                        "value": 2
+                    },
+                    "is_abstract": false,
+                    "inherits": [],
+                    "state_variables": {},
+                    "functions": {
+                        "safeApprove": [
+                            {
+                                "visibility": "internal",
+                                "content": "function safeApprove(address token, address to, uint value) internal{ (bool success, bytes memory data) = token.call(abi.encodeWithSelector(0x095ea7b3, to, value)); require(success && (data.length == 0 || abi.decode(data, (bool))), 'TransferHelper: APPROVE_FAILED');}",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "token"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "value"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "token.call"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "d9c6640cfca902b76e445a1510fab047"
+                            }
+                        ],
+                        "safeTransfer": [
+                            {
+                                "visibility": "internal",
+                                "content": "function safeTransfer(address token, address to, uint value) internal{ (bool success, bytes memory data) = token.call(abi.encodeWithSelector(0xa9059cbb, to, value)); require(success && (data.length == 0 || abi.decode(data, (bool))), 'TransferHelper: TRANSFER_FAILED');}",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "token"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "value"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "token.call"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "3f5488f5b132ce36f3d9090a02d85295"
+                            }
+                        ],
+                        "safeTransferFrom": [
+                            {
+                                "visibility": "internal",
+                                "content": "function safeTransferFrom(address token, address from, address to, uint value) internal{ (bool success, bytes memory data) = token.call(abi.encodeWithSelector(0x23b872dd, from, to, value)); require(success && (data.length == 0 || abi.decode(data, (bool))), 'TransferHelper: TRANSFER_FROM_FAILED');}",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "token"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "from"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "value"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "token.call"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "cb78f5eeced7c4ba60c419cbe210487c"
+                            }
+                        ],
+                        "safeTransferNative": [
+                            {
+                                "visibility": "internal",
+                                "content": "function safeTransferNative(address to, uint value) internal{ (bool success, ) = to.call{ value:value} (new bytes(0)); require(success, 'TransferHelper: NATIVE_TRANSFER_FAILED');}",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "value"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "a335433fd57a5f0afeeef0aefa9cdf29"
+                            }
+                        ]
+                    },
+                    "modifiers": {},
+                    "structs": {},
+                    "events": {},
+                    "enums": {},
+                    "errors": {},
+                    "custom_types": {},
+                    "using_directives": {}
+                },
+                "IwNATIVE": {
+                    "type": {
+                        "__CT__": true,
+                        "value": 3
+                    },
+                    "is_abstract": false,
+                    "inherits": [],
+                    "state_variables": {},
+                    "functions": {
+                        "deposit": [
+                            {
+                                "visibility": "external",
+                                "content": "function deposit() external payable;",
+                                "modifiers": [
+                                    "payable"
+                                ],
+                                "parameters": [],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": true,
+                                "md5": "4f2eec90abd519258d97a4283a54e2f1"
+                            }
+                        ],
+                        "transfer": [
+                            {
+                                "visibility": "external",
+                                "content": "function transfer(address to, uint value) external returns (bool);",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "value"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "bool",
+                                        "name": null
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "0587b6354cf0d3773c8593eb4103d819"
+                            }
+                        ],
+                        "withdraw": [
+                            {
+                                "visibility": "external",
+                                "content": "function withdraw(uint) external;",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "uint",
+                                        "name": null
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "b3e698980247640e9fe99c060e4921fc"
+                            }
+                        ]
+                    },
+                    "modifiers": {},
+                    "structs": {},
+                    "events": {},
+                    "enums": {},
+                    "errors": {},
+                    "custom_types": {},
+                    "using_directives": {},
+                    "implement": []
+                },
+                "AnyswapV1ERC20": {
+                    "type": {
+                        "__CT__": true,
+                        "value": 3
+                    },
+                    "is_abstract": false,
+                    "inherits": [],
+                    "state_variables": {},
+                    "functions": {
+                        "mint": [
+                            {
+                                "visibility": "external",
+                                "content": "function mint(address to, uint256 amount) external returns (bool);",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint256",
+                                        "name": "amount"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "bool",
+                                        "name": null
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "54fcc18fc5af6f55053554dd926d02c5"
+                            }
+                        ],
+                        "burn": [
+                            {
+                                "visibility": "external",
+                                "content": "function burn(address from, uint256 amount) external returns (bool);",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "from"
+                                    },
+                                    {
+                                        "type": "uint256",
+                                        "name": "amount"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "bool",
+                                        "name": null
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "3b8d1a75aa40d4fec00a0d273d36f6da"
+                            }
+                        ],
+                        "changeVault": [
+                            {
+                                "visibility": "external",
+                                "content": "function changeVault(address newVault) external returns (bool);",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "newVault"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "bool",
+                                        "name": null
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "6bc2dba1a1fe83dd749a9b3e6aefb013"
+                            }
+                        ],
+                        "depositVault": [
+                            {
+                                "visibility": "external",
+                                "content": "function depositVault(uint amount, address to) external returns (uint);",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "uint",
+                                        "name": "amount"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "uint",
+                                        "name": null
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "c36ee7b9d27c9a670490ec8a73ff7fc6"
+                            }
+                        ],
+                        "withdrawVault": [
+                            {
+                                "visibility": "external",
+                                "content": "function withdrawVault(address from, uint amount, address to) external returns (uint);",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "from"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amount"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "uint",
+                                        "name": null
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "d7e3a13249332b58de63af9851184b51"
+                            }
+                        ],
+                        "underlying": [
+                            {
+                                "visibility": "external",
+                                "content": "function underlying() external view returns (address);",
+                                "modifiers": [
+                                    "view"
+                                ],
+                                "parameters": [],
+                                "returns": [
+                                    {
+                                        "type": "address",
+                                        "name": null
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "79a36cf7455e5210675c01a0880c01eb"
+                            }
+                        ]
+                    },
+                    "modifiers": {},
+                    "structs": {},
+                    "events": {},
+                    "enums": {},
+                    "errors": {},
+                    "custom_types": {},
+                    "using_directives": {},
+                    "implement": []
+                },
+                "IERC20": {
+                    "type": {
+                        "__CT__": true,
+                        "value": 3
+                    },
+                    "is_abstract": false,
+                    "inherits": [],
+                    "state_variables": {},
+                    "functions": {
+                        "totalSupply": [
+                            {
+                                "visibility": "external",
+                                "content": "function totalSupply() external view returns (uint256);",
+                                "modifiers": [
+                                    "view"
+                                ],
+                                "parameters": [],
+                                "returns": [
+                                    {
+                                        "type": "uint256",
+                                        "name": null
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "5e1d12e61f4bf4b37161d9b684742570"
+                            }
+                        ],
+                        "balanceOf": [
+                            {
+                                "visibility": "external",
+                                "content": "function balanceOf(address account) external view returns (uint256);",
+                                "modifiers": [
+                                    "view"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "account"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "uint256",
+                                        "name": null
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "3ac17e7782366957c960d337a4a648cd"
+                            }
+                        ],
+                        "transfer": [
+                            {
+                                "visibility": "external",
+                                "content": "function transfer(address recipient, uint256 amount) external returns (bool);",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "recipient"
+                                    },
+                                    {
+                                        "type": "uint256",
+                                        "name": "amount"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "bool",
+                                        "name": null
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "98b540da9047ee99bce7fadde65d04b7"
+                            }
+                        ],
+                        "allowance": [
+                            {
+                                "visibility": "external",
+                                "content": "function allowance(address owner, address spender) external view returns (uint256);",
+                                "modifiers": [
+                                    "view"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "owner"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "spender"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "uint256",
+                                        "name": null
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "c93791d09d789aed33b9725d482af442"
+                            }
+                        ],
+                        "approve": [
+                            {
+                                "visibility": "external",
+                                "content": "function approve(address spender, uint256 amount) external returns (bool);",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "spender"
+                                    },
+                                    {
+                                        "type": "uint256",
+                                        "name": "amount"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "bool",
+                                        "name": null
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "7c80d707df648dc123a10c69a1150edc"
+                            }
+                        ],
+                        "permit": [
+                            {
+                                "visibility": "external",
+                                "content": "function permit(address target, address spender, uint256 value, uint256 deadline, uint8 v, bytes32 r, bytes32 s) external;",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "target"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "spender"
+                                    },
+                                    {
+                                        "type": "uint256",
+                                        "name": "value"
+                                    },
+                                    {
+                                        "type": "uint256",
+                                        "name": "deadline"
+                                    },
+                                    {
+                                        "type": "uint8",
+                                        "name": "v"
+                                    },
+                                    {
+                                        "type": "bytes32",
+                                        "name": "r"
+                                    },
+                                    {
+                                        "type": "bytes32",
+                                        "name": "s"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "865781e39f9ebb7f41df993418bdaa02"
+                            }
+                        ],
+                        "transferFrom": [
+                            {
+                                "visibility": "external",
+                                "content": "function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "sender"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "recipient"
+                                    },
+                                    {
+                                        "type": "uint256",
+                                        "name": "amount"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "bool",
+                                        "name": null
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "c134d67e13a988b449de71dd226682ab"
+                            }
+                        ],
+                        "transferWithPermit": [
+                            {
+                                "visibility": "external",
+                                "content": "function transferWithPermit(address target, address to, uint256 value, uint256 deadline, uint8 v, bytes32 r, bytes32 s) external returns (bool);",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "target"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint256",
+                                        "name": "value"
+                                    },
+                                    {
+                                        "type": "uint256",
+                                        "name": "deadline"
+                                    },
+                                    {
+                                        "type": "uint8",
+                                        "name": "v"
+                                    },
+                                    {
+                                        "type": "bytes32",
+                                        "name": "r"
+                                    },
+                                    {
+                                        "type": "bytes32",
+                                        "name": "s"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "bool",
+                                        "name": null
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "936174799796d3ebd0f9d8d968cbd4d0"
+                            }
+                        ]
+                    },
+                    "modifiers": {},
+                    "structs": {},
+                    "events": {
+                        "Transfer": {
+                            "event": "Transfer",
+                            "content": "Transfer(address indexed from, address indexed to, uint256 value)"
+                        },
+                        "Approval": {
+                            "event": "Approval",
+                            "content": "Approval(address indexed owner, address indexed spender, uint256 value)"
+                        }
+                    },
+                    "enums": {},
+                    "errors": {},
+                    "custom_types": {},
+                    "using_directives": {},
+                    "implement": []
+                },
+                "AnyswapV4Router": {
+                    "type": {
+                        "__CT__": true,
+                        "value": 1
+                    },
+                    "is_abstract": false,
+                    "inherits": [],
+                    "state_variables": {
+                        "factory": {
+                            "type": "address",
+                            "visibility": "public",
+                            "is_constant": false,
+                            "is_immutable": true,
+                            "is_override": false,
+                            "initial_value": null,
+                            "content": "address public immutable factory;"
+                        },
+                        "wNATIVE": {
+                            "type": "address",
+                            "visibility": "public",
+                            "is_constant": false,
+                            "is_immutable": true,
+                            "is_override": false,
+                            "initial_value": null,
+                            "content": "address public immutable wNATIVE;"
+                        },
+                        "_oldMPC": {
+                            "type": "address",
+                            "visibility": "private",
+                            "is_constant": false,
+                            "is_immutable": false,
+                            "is_override": false,
+                            "initial_value": null,
+                            "content": "address private _oldMPC;"
+                        },
+                        "_newMPC": {
+                            "type": "address",
+                            "visibility": "private",
+                            "is_constant": false,
+                            "is_immutable": false,
+                            "is_override": false,
+                            "initial_value": null,
+                            "content": "address private _newMPC;"
+                        },
+                        "_newMPCEffectiveTime": {
+                            "type": "uint256",
+                            "visibility": "private",
+                            "is_constant": false,
+                            "is_immutable": false,
+                            "is_override": false,
+                            "initial_value": null,
+                            "content": "uint256 private _newMPCEffectiveTime;"
+                        }
+                    },
+                    "functions": {
+                        "constructor": [
+                            {
+                                "visibility": "public",
+                                "content": "constructor (address _factory, address _wNATIVE, address _mpc){ _newMPC = _mpc; _newMPCEffectiveTime = block.timestamp; factory = _factory; wNATIVE = _wNATIVE;}",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "_factory"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "_wNATIVE"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "_mpc"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [
+                                    [
+                                        "factory",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ],
+                                    [
+                                        "wNATIVE",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ],
+                                    [
+                                        "_newMPC",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ],
+                                    [
+                                        "_newMPCEffectiveTime",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ]
+                                ],
+                                "writes": [
+                                    [
+                                        "factory",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ],
+                                    [
+                                        "wNATIVE",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ],
+                                    [
+                                        "_newMPC",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ],
+                                    [
+                                        "_newMPCEffectiveTime",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ]
+                                ],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "50810f50f1d3cb83b51dd3d92b0428cd"
+                            }
+                        ],
+                        "mpc": [
+                            {
+                                "visibility": "public",
+                                "content": "function mpc() public view returns (address){ if (block.timestamp >= _newMPCEffectiveTime){ return _newMPC;} return _oldMPC;}",
+                                "modifiers": [
+                                    "view"
+                                ],
+                                "parameters": [],
+                                "returns": [
+                                    {
+                                        "type": "address",
+                                        "name": null
+                                    }
+                                ],
+                                "reads": [
+                                    [
+                                        "_oldMPC",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ],
+                                    [
+                                        "_newMPC",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ],
+                                    [
+                                        "_newMPCEffectiveTime",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ]
+                                ],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "cdfc83ed07486e348642e29a0b3c6348"
+                            }
+                        ],
+                        "cID": [
+                            {
+                                "visibility": "public",
+                                "content": "function cID() public view returns (uint id){ assembly{ id := chainid()}}",
+                                "modifiers": [
+                                    "view"
+                                ],
+                                "parameters": [],
+                                "returns": [
+                                    {
+                                        "type": "uint",
+                                        "name": "id"
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "3b476bdf3c0c6f59c7a2679df1573c5e"
+                            }
+                        ],
+                        "changeMPC": [
+                            {
+                                "visibility": "public",
+                                "content": "function changeMPC(address newMPC) public onlyMPC returns (bool){ require(newMPC != address(0), \"AnyswapV3Router: address(0x0)\"); _oldMPC = mpc(); _newMPC = newMPC; _newMPCEffectiveTime = block.timestamp + 2*24*3600; emit LogChangeMPC(_oldMPC, _newMPC, _newMPCEffectiveTime, cID()); return true;}",
+                                "modifiers": [
+                                    "onlyMPC"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "newMPC"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "bool",
+                                        "name": null
+                                    }
+                                ],
+                                "reads": [
+                                    [
+                                        "_oldMPC",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ],
+                                    [
+                                        "_newMPC",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ],
+                                    [
+                                        "_newMPCEffectiveTime",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ]
+                                ],
+                                "writes": [
+                                    [
+                                        "_oldMPC",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ],
+                                    [
+                                        "_newMPC",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ],
+                                    [
+                                        "_newMPCEffectiveTime",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ]
+                                ],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "AnyswapV4Router.onlyMPC",
+                                        "AnyswapV4Router.mpc",
+                                        "AnyswapV4Router.cID"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "d51677553259dd3a2561dc5c5d57f506"
+                            }
+                        ],
+                        "changeVault": [
+                            {
+                                "visibility": "public",
+                                "content": "function changeVault(address token, address newVault) public onlyMPC returns (bool){ require(newVault != address(0), \"AnyswapV3Router: address(0x0)\"); return AnyswapV1ERC20(token).changeVault(newVault);}",
+                                "modifiers": [
+                                    "onlyMPC"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "token"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "newVault"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "bool",
+                                        "name": null
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "AnyswapV4Router.onlyMPC"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "356a220d78d853c93d9bc1ec5c4f108a"
+                            }
+                        ],
+                        "_anySwapOut": [
+                            {
+                                "visibility": "internal",
+                                "content": "function _anySwapOut(address from, address token, address to, uint amount, uint toChainID) internal{ AnyswapV1ERC20(token).burn(from, amount); emit LogAnySwapOut(token, from, to, amount, cID(), toChainID);}",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "from"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "token"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amount"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "toChainID"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "AnyswapV4Router.cID"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "e4e8e12324334ff907b0cb998e752f67"
+                            }
+                        ],
+                        "anySwapOut": [
+                            {
+                                "visibility": "external",
+                                "content": "function anySwapOut(address token, address to, uint amount, uint toChainID) external{ _anySwapOut(msg.sender, token, to, amount, toChainID);}",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "token"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amount"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "toChainID"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "AnyswapV4Router._anySwapOut"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "1c1f7304aae24ab7052fcf4a7a3dee45"
+                            },
+                            {
+                                "visibility": "external",
+                                "content": "function anySwapOut(address[] calldata tokens, address[] calldata to, uint[] calldata amounts, uint[] calldata toChainIDs) external{ for (uint i = 0; i < tokens.length; i++){ _anySwapOut(msg.sender, tokens[i], to[i], amounts[i], toChainIDs[i]);}}",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address[] calldata",
+                                        "name": "tokens"
+                                    },
+                                    {
+                                        "type": "address[] calldata",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint[] calldata",
+                                        "name": "amounts"
+                                    },
+                                    {
+                                        "type": "uint[] calldata",
+                                        "name": "toChainIDs"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "AnyswapV4Router._anySwapOut"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "b94570b7ffc9f68a1ca18d6beb98e8dd"
+                            }
+                        ],
+                        "anySwapOutUnderlying": [
+                            {
+                                "visibility": "external",
+                                "content": "function anySwapOutUnderlying(address token, address to, uint amount, uint toChainID) external{ TransferHelper.safeTransferFrom(AnyswapV1ERC20(token).underlying(), msg.sender, token, amount); AnyswapV1ERC20(token).depositVault(amount, msg.sender); _anySwapOut(msg.sender, token, to, amount, toChainID);}",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "token"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amount"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "toChainID"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "TransferHelper.safeTransferFrom",
+                                        "AnyswapV4Router._anySwapOut"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "09724419b7849f1ff0347ad0f6f2b3c4"
+                            }
+                        ],
+                        "anySwapOutUnderlyingWithPermit": [
+                            {
+                                "visibility": "external",
+                                "content": "function anySwapOutUnderlyingWithPermit( address from, address token, address to, uint amount, uint deadline, uint8 v, bytes32 r, bytes32 s, uint toChainID ) external{ address _underlying = AnyswapV1ERC20(token).underlying(); IERC20(_underlying).permit(from, address(this), amount, deadline, v, r, s); TransferHelper.safeTransferFrom(_underlying, from, token, amount); AnyswapV1ERC20(token).depositVault(amount, from); _anySwapOut(from, token, to, amount, toChainID);}",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "from"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "token"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amount"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "deadline"
+                                    },
+                                    {
+                                        "type": "uint8",
+                                        "name": "v"
+                                    },
+                                    {
+                                        "type": "bytes32",
+                                        "name": "r"
+                                    },
+                                    {
+                                        "type": "bytes32",
+                                        "name": "s"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "toChainID"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "TransferHelper.safeTransferFrom",
+                                        "AnyswapV4Router._anySwapOut"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "4331909528b573d1475d67d7e21cfe8b"
+                            }
+                        ],
+                        "anySwapOutUnderlyingWithTransferPermit": [
+                            {
+                                "visibility": "external",
+                                "content": "function anySwapOutUnderlyingWithTransferPermit( address from, address token, address to, uint amount, uint deadline, uint8 v, bytes32 r, bytes32 s, uint toChainID ) external{ IERC20(AnyswapV1ERC20(token).underlying()).transferWithPermit(from, token, amount, deadline, v, r, s); AnyswapV1ERC20(token).depositVault(amount, from); _anySwapOut(from, token, to, amount, toChainID);}",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "from"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "token"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amount"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "deadline"
+                                    },
+                                    {
+                                        "type": "uint8",
+                                        "name": "v"
+                                    },
+                                    {
+                                        "type": "bytes32",
+                                        "name": "r"
+                                    },
+                                    {
+                                        "type": "bytes32",
+                                        "name": "s"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "toChainID"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "AnyswapV4Router._anySwapOut"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "e56da9218dd31aa549ffe99616e51080"
+                            }
+                        ],
+                        "_anySwapIn": [
+                            {
+                                "visibility": "internal",
+                                "content": "function _anySwapIn(bytes32 txs, address token, address to, uint amount, uint fromChainID) internal{ AnyswapV1ERC20(token).mint(to, amount); emit LogAnySwapIn(txs, token, to, amount, fromChainID, cID());}",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "bytes32",
+                                        "name": "txs"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "token"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amount"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "fromChainID"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "AnyswapV4Router.cID"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "4bbfd89bd4ff065fd57f8ec4b230f2ab"
+                            }
+                        ],
+                        "anySwapIn": [
+                            {
+                                "visibility": "external",
+                                "content": "function anySwapIn(bytes32 txs, address token, address to, uint amount, uint fromChainID) external onlyMPC{ _anySwapIn(txs, token, to, amount, fromChainID);}",
+                                "modifiers": [
+                                    "onlyMPC"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "bytes32",
+                                        "name": "txs"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "token"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amount"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "fromChainID"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "AnyswapV4Router._anySwapIn",
+                                        "AnyswapV4Router.onlyMPC"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "1cc907ea76af4a1e9ea921a12c0096b8"
+                            },
+                            {
+                                "visibility": "external",
+                                "content": "function anySwapIn(bytes32[] calldata txs, address[] calldata tokens, address[] calldata to, uint256[] calldata amounts, uint[] calldata fromChainIDs) external onlyMPC{ for (uint i = 0; i < tokens.length; i++){ _anySwapIn(txs[i], tokens[i], to[i], amounts[i], fromChainIDs[i]);}}",
+                                "modifiers": [
+                                    "onlyMPC"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "bytes32[] calldata",
+                                        "name": "txs"
+                                    },
+                                    {
+                                        "type": "address[] calldata",
+                                        "name": "tokens"
+                                    },
+                                    {
+                                        "type": "address[] calldata",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint256[] calldata",
+                                        "name": "amounts"
+                                    },
+                                    {
+                                        "type": "uint[] calldata",
+                                        "name": "fromChainIDs"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "AnyswapV4Router._anySwapIn",
+                                        "AnyswapV4Router.onlyMPC"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "97daf37082120bc93fcc46ceddfed7ef"
+                            }
+                        ],
+                        "anySwapInUnderlying": [
+                            {
+                                "visibility": "external",
+                                "content": "function anySwapInUnderlying(bytes32 txs, address token, address to, uint amount, uint fromChainID) external onlyMPC{ _anySwapIn(txs, token, to, amount, fromChainID); AnyswapV1ERC20(token).withdrawVault(to, amount, to);}",
+                                "modifiers": [
+                                    "onlyMPC"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "bytes32",
+                                        "name": "txs"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "token"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amount"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "fromChainID"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "AnyswapV4Router._anySwapIn",
+                                        "AnyswapV4Router.onlyMPC"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "358fc23ced8480bb80ca2f8cdf8209a5"
+                            }
+                        ],
+                        "anySwapInAuto": [
+                            {
+                                "visibility": "external",
+                                "content": "function anySwapInAuto(bytes32 txs, address token, address to, uint amount, uint fromChainID) external onlyMPC{ _anySwapIn(txs, token, to, amount, fromChainID); AnyswapV1ERC20 _anyToken = AnyswapV1ERC20(token); address _underlying = _anyToken.underlying(); if (_underlying != address(0) && IERC20(_underlying).balanceOf(token) >= amount){ _anyToken.withdrawVault(to, amount, to);}}",
+                                "modifiers": [
+                                    "onlyMPC"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "bytes32",
+                                        "name": "txs"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "token"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amount"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "fromChainID"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "AnyswapV4Router._anySwapIn",
+                                        "AnyswapV1ERC20.underlying",
+                                        "AnyswapV1ERC20.withdrawVault",
+                                        "AnyswapV4Router.onlyMPC"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "7e80a081d66b6b44fb0a19c21ee49d8d"
+                            }
+                        ],
+                        "anySwapFeeTo": [
+                            {
+                                "visibility": "external",
+                                "content": "function anySwapFeeTo(address token, uint amount) external onlyMPC{ address _mpc = mpc(); AnyswapV1ERC20(token).mint(_mpc, amount); AnyswapV1ERC20(token).withdrawVault(_mpc, amount, _mpc);}",
+                                "modifiers": [
+                                    "onlyMPC"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "token"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amount"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "AnyswapV4Router.onlyMPC",
+                                        "AnyswapV4Router.mpc"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "65827b8e3e4d02e36245848cdf9830a8"
+                            }
+                        ],
+                        "_swap": [
+                            {
+                                "visibility": "internal",
+                                "content": "function _swap(uint[] memory amounts, address[] memory path, address _to) internal virtual{ for (uint i; i < path.length - 1; i++){ (address input, address output) = (path[i], path[i + 1]); (address token0, ) = SushiswapV2Library.sortTokens(input, output); uint amountOut = amounts[i + 1]; (uint amount0Out, uint amount1Out) = input == token0 ? (uint(0), amountOut) : (amountOut, uint(0)); address to = i < path.length - 2 ? SushiswapV2Library.pairFor(factory, output, path[i + 2]) : _to; ISushiswapV2Pair(SushiswapV2Library.pairFor(factory, input, output)).swap( amount0Out, amount1Out, to, new bytes(0) );}}",
+                                "modifiers": [
+                                    "virtual"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "uint[] memory",
+                                        "name": "amounts"
+                                    },
+                                    {
+                                        "type": "address[] memory",
+                                        "name": "path"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "_to"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [
+                                    [
+                                        "factory",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ]
+                                ],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "SushiswapV2Library.pairFor",
+                                        "SushiswapV2Library.sortTokens"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "e52d6f74aab575776fd40f2a8fec3ab3"
+                            }
+                        ],
+                        "anySwapOutExactTokensForTokens": [
+                            {
+                                "visibility": "external",
+                                "content": "function anySwapOutExactTokensForTokens( uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline, uint toChainID ) external virtual ensure(deadline){ AnyswapV1ERC20(path[0]).burn(msg.sender, amountIn); emit LogAnySwapTradeTokensForTokens(path, msg.sender, to, amountIn, amountOutMin, cID(), toChainID);}",
+                                "modifiers": [
+                                    "virtual",
+                                    "ensure(deadline)"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "uint",
+                                        "name": "amountIn"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amountOutMin"
+                                    },
+                                    {
+                                        "type": "address[] calldata",
+                                        "name": "path"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "deadline"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "toChainID"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "AnyswapV4Router.cID",
+                                        "AnyswapV4Router.ensure"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "0c6a5c06fb574ae7d2cebfc6380d53e3"
+                            }
+                        ],
+                        "anySwapOutExactTokensForTokensUnderlying": [
+                            {
+                                "visibility": "external",
+                                "content": "function anySwapOutExactTokensForTokensUnderlying( uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline, uint toChainID ) external virtual ensure(deadline){ TransferHelper.safeTransferFrom(AnyswapV1ERC20(path[0]).underlying(), msg.sender, path[0], amountIn); AnyswapV1ERC20(path[0]).depositVault(amountIn, msg.sender); AnyswapV1ERC20(path[0]).burn(msg.sender, amountIn); emit LogAnySwapTradeTokensForTokens(path, msg.sender, to, amountIn, amountOutMin, cID(), toChainID);}",
+                                "modifiers": [
+                                    "virtual",
+                                    "ensure(deadline)"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "uint",
+                                        "name": "amountIn"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amountOutMin"
+                                    },
+                                    {
+                                        "type": "address[] calldata",
+                                        "name": "path"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "deadline"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "toChainID"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "TransferHelper.safeTransferFrom",
+                                        "AnyswapV4Router.cID",
+                                        "AnyswapV4Router.ensure"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "239acd3dca7d4675a518132b1f27a9ce"
+                            }
+                        ],
+                        "anySwapOutExactTokensForTokensUnderlyingWithPermit": [
+                            {
+                                "visibility": "external",
+                                "content": "function anySwapOutExactTokensForTokensUnderlyingWithPermit( address from, uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline, uint8 v, bytes32 r, bytes32 s, uint toChainID ) external virtual ensure(deadline){ address _underlying = AnyswapV1ERC20(path[0]).underlying(); IERC20(_underlying).permit(from, address(this), amountIn, deadline, v, r, s); TransferHelper.safeTransferFrom(_underlying, from, path[0], amountIn); AnyswapV1ERC20(path[0]).depositVault(amountIn, from); AnyswapV1ERC20(path[0]).burn(from, amountIn);{ address[] memory _path = path; address _from = from; address _to = to; uint _amountIn = amountIn; uint _amountOutMin = amountOutMin; uint _cID = cID(); uint _toChainID = toChainID; emit LogAnySwapTradeTokensForTokens(_path, _from, _to, _amountIn, _amountOutMin, _cID, _toChainID);}}",
+                                "modifiers": [
+                                    "virtual",
+                                    "ensure(deadline)"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "from"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amountIn"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amountOutMin"
+                                    },
+                                    {
+                                        "type": "address[] calldata",
+                                        "name": "path"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "deadline"
+                                    },
+                                    {
+                                        "type": "uint8",
+                                        "name": "v"
+                                    },
+                                    {
+                                        "type": "bytes32",
+                                        "name": "r"
+                                    },
+                                    {
+                                        "type": "bytes32",
+                                        "name": "s"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "toChainID"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "TransferHelper.safeTransferFrom",
+                                        "AnyswapV4Router.cID",
+                                        "AnyswapV4Router.ensure"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "2143b6387f72af4b4ef0b88533eff01b"
+                            }
+                        ],
+                        "anySwapOutExactTokensForTokensUnderlyingWithTransferPermit": [
+                            {
+                                "visibility": "external",
+                                "content": "function anySwapOutExactTokensForTokensUnderlyingWithTransferPermit( address from, uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline, uint8 v, bytes32 r, bytes32 s, uint toChainID ) external virtual ensure(deadline){ IERC20(AnyswapV1ERC20(path[0]).underlying()).transferWithPermit(from, path[0], amountIn, deadline, v, r, s); AnyswapV1ERC20(path[0]).depositVault(amountIn, from); AnyswapV1ERC20(path[0]).burn(from, amountIn); emit LogAnySwapTradeTokensForTokens(path, from, to, amountIn, amountOutMin, cID(), toChainID);}",
+                                "modifiers": [
+                                    "virtual",
+                                    "ensure(deadline)"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "from"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amountIn"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amountOutMin"
+                                    },
+                                    {
+                                        "type": "address[] calldata",
+                                        "name": "path"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "deadline"
+                                    },
+                                    {
+                                        "type": "uint8",
+                                        "name": "v"
+                                    },
+                                    {
+                                        "type": "bytes32",
+                                        "name": "r"
+                                    },
+                                    {
+                                        "type": "bytes32",
+                                        "name": "s"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "toChainID"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "AnyswapV4Router.cID",
+                                        "AnyswapV4Router.ensure"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "1f6f063b82dddd8f853f73ba33e4c08f"
+                            }
+                        ],
+                        "anySwapInExactTokensForTokens": [
+                            {
+                                "visibility": "external",
+                                "content": "function anySwapInExactTokensForTokens( bytes32 txs, uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline, uint fromChainID ) external onlyMPC virtual ensure(deadline) returns (uint[] memory amounts){ amounts = SushiswapV2Library.getAmountsOut(factory, amountIn, path); require(amounts[amounts.length - 1] >= amountOutMin, 'SushiswapV2Router: INSUFFICIENT_OUTPUT_AMOUNT'); _anySwapIn(txs, path[0], SushiswapV2Library.pairFor(factory, path[0], path[1]), amounts[0], fromChainID); _swap(amounts, path, to);}",
+                                "modifiers": [
+                                    "onlyMPC",
+                                    "virtual",
+                                    "ensure(deadline)"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "bytes32",
+                                        "name": "txs"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amountIn"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amountOutMin"
+                                    },
+                                    {
+                                        "type": "address[] calldata",
+                                        "name": "path"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "deadline"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "fromChainID"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "uint[] memory",
+                                        "name": "amounts"
+                                    }
+                                ],
+                                "reads": [
+                                    [
+                                        "factory",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ]
+                                ],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "SushiswapV2Library.getAmountsOut",
+                                        "AnyswapV4Router._swap",
+                                        "AnyswapV4Router.onlyMPC",
+                                        "AnyswapV4Router._anySwapIn",
+                                        "AnyswapV4Router.ensure",
+                                        "SushiswapV2Library.pairFor"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "6afac8a8f520c5a56949a003c089b542"
+                            }
+                        ],
+                        "anySwapOutExactTokensForNative": [
+                            {
+                                "visibility": "external",
+                                "content": "function anySwapOutExactTokensForNative( uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline, uint toChainID ) external virtual ensure(deadline){ AnyswapV1ERC20(path[0]).burn(msg.sender, amountIn); emit LogAnySwapTradeTokensForNative(path, msg.sender, to, amountIn, amountOutMin, cID(), toChainID);}",
+                                "modifiers": [
+                                    "virtual",
+                                    "ensure(deadline)"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "uint",
+                                        "name": "amountIn"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amountOutMin"
+                                    },
+                                    {
+                                        "type": "address[] calldata",
+                                        "name": "path"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "deadline"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "toChainID"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "AnyswapV4Router.cID",
+                                        "AnyswapV4Router.ensure"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "8b2fac81138ef1fdd5628a6ff4b99cde"
+                            }
+                        ],
+                        "anySwapOutExactTokensForNativeUnderlying": [
+                            {
+                                "visibility": "external",
+                                "content": "function anySwapOutExactTokensForNativeUnderlying( uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline, uint toChainID ) external virtual ensure(deadline){ TransferHelper.safeTransferFrom(AnyswapV1ERC20(path[0]).underlying(), msg.sender, path[0], amountIn); AnyswapV1ERC20(path[0]).depositVault(amountIn, msg.sender); AnyswapV1ERC20(path[0]).burn(msg.sender, amountIn); emit LogAnySwapTradeTokensForNative(path, msg.sender, to, amountIn, amountOutMin, cID(), toChainID);}",
+                                "modifiers": [
+                                    "virtual",
+                                    "ensure(deadline)"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "uint",
+                                        "name": "amountIn"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amountOutMin"
+                                    },
+                                    {
+                                        "type": "address[] calldata",
+                                        "name": "path"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "deadline"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "toChainID"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "TransferHelper.safeTransferFrom",
+                                        "AnyswapV4Router.cID",
+                                        "AnyswapV4Router.ensure"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "ffe85e61d04944b785bea5476e7c8c5a"
+                            }
+                        ],
+                        "anySwapOutExactTokensForNativeUnderlyingWithPermit": [
+                            {
+                                "visibility": "external",
+                                "content": "function anySwapOutExactTokensForNativeUnderlyingWithPermit( address from, uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline, uint8 v, bytes32 r, bytes32 s, uint toChainID ) external virtual ensure(deadline){ address _underlying = AnyswapV1ERC20(path[0]).underlying(); IERC20(_underlying).permit(from, address(this), amountIn, deadline, v, r, s); TransferHelper.safeTransferFrom(_underlying, from, path[0], amountIn); AnyswapV1ERC20(path[0]).depositVault(amountIn, from); AnyswapV1ERC20(path[0]).burn(from, amountIn);{ address[] memory _path = path; address _from = from; address _to = to; uint _amountIn = amountIn; uint _amountOutMin = amountOutMin; uint _cID = cID(); uint _toChainID = toChainID; emit LogAnySwapTradeTokensForNative(_path, _from, _to, _amountIn, _amountOutMin, _cID, _toChainID);}}",
+                                "modifiers": [
+                                    "virtual",
+                                    "ensure(deadline)"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "from"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amountIn"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amountOutMin"
+                                    },
+                                    {
+                                        "type": "address[] calldata",
+                                        "name": "path"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "deadline"
+                                    },
+                                    {
+                                        "type": "uint8",
+                                        "name": "v"
+                                    },
+                                    {
+                                        "type": "bytes32",
+                                        "name": "r"
+                                    },
+                                    {
+                                        "type": "bytes32",
+                                        "name": "s"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "toChainID"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "TransferHelper.safeTransferFrom",
+                                        "AnyswapV4Router.cID",
+                                        "AnyswapV4Router.ensure"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "47d04f6c1c7681c44c388551996c8638"
+                            }
+                        ],
+                        "anySwapOutExactTokensForNativeUnderlyingWithTransferPermit": [
+                            {
+                                "visibility": "external",
+                                "content": "function anySwapOutExactTokensForNativeUnderlyingWithTransferPermit( address from, uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline, uint8 v, bytes32 r, bytes32 s, uint toChainID ) external virtual ensure(deadline){ IERC20(AnyswapV1ERC20(path[0]).underlying()).transferWithPermit(from, path[0], amountIn, deadline, v, r, s); AnyswapV1ERC20(path[0]).depositVault(amountIn, from); AnyswapV1ERC20(path[0]).burn(from, amountIn); emit LogAnySwapTradeTokensForNative(path, from, to, amountIn, amountOutMin, cID(), toChainID);}",
+                                "modifiers": [
+                                    "virtual",
+                                    "ensure(deadline)"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "from"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amountIn"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amountOutMin"
+                                    },
+                                    {
+                                        "type": "address[] calldata",
+                                        "name": "path"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "deadline"
+                                    },
+                                    {
+                                        "type": "uint8",
+                                        "name": "v"
+                                    },
+                                    {
+                                        "type": "bytes32",
+                                        "name": "r"
+                                    },
+                                    {
+                                        "type": "bytes32",
+                                        "name": "s"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "toChainID"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "AnyswapV4Router.cID",
+                                        "AnyswapV4Router.ensure"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "56b87d801027f384e07699b5e2e055e0"
+                            }
+                        ],
+                        "anySwapInExactTokensForNative": [
+                            {
+                                "visibility": "external",
+                                "content": "function anySwapInExactTokensForNative( bytes32 txs, uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline, uint fromChainID ) external onlyMPC virtual ensure(deadline) returns (uint[] memory amounts){ require(path[path.length - 1] == wNATIVE, 'AnyswapV3Router: INVALID_PATH'); amounts = SushiswapV2Library.getAmountsOut(factory, amountIn, path); require(amounts[amounts.length - 1] >= amountOutMin, 'AnyswapV3Router: INSUFFICIENT_OUTPUT_AMOUNT'); _anySwapIn(txs, path[0], SushiswapV2Library.pairFor(factory, path[0], path[1]), amounts[0], fromChainID); _swap(amounts, path, address(this)); IwNATIVE(wNATIVE).withdraw(amounts[amounts.length - 1]); TransferHelper.safeTransferNative(to, amounts[amounts.length - 1]);}",
+                                "modifiers": [
+                                    "onlyMPC",
+                                    "virtual",
+                                    "ensure(deadline)"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "bytes32",
+                                        "name": "txs"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amountIn"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amountOutMin"
+                                    },
+                                    {
+                                        "type": "address[] calldata",
+                                        "name": "path"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "deadline"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "fromChainID"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "uint[] memory",
+                                        "name": "amounts"
+                                    }
+                                ],
+                                "reads": [
+                                    [
+                                        "factory",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ],
+                                    [
+                                        "wNATIVE",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ]
+                                ],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "SushiswapV2Library.getAmountsOut",
+                                        "AnyswapV4Router._swap",
+                                        "AnyswapV4Router.onlyMPC",
+                                        "TransferHelper.safeTransferNative",
+                                        "AnyswapV4Router._anySwapIn",
+                                        "AnyswapV4Router.ensure",
+                                        "SushiswapV2Library.pairFor"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "c6c66a39f8c7bac5734b719b3461127c"
+                            }
+                        ],
+                        "quote": [
+                            {
+                                "visibility": "public",
+                                "content": "function quote(uint amountA, uint reserveA, uint reserveB) public pure virtual returns (uint amountB){ return SushiswapV2Library.quote(amountA, reserveA, reserveB);}",
+                                "modifiers": [
+                                    "pure",
+                                    "virtual"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "uint",
+                                        "name": "amountA"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "reserveA"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "reserveB"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "uint",
+                                        "name": "amountB"
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "SushiswapV2Library.quote"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "f5c694a9d663caca8bb3243f52b730fb"
+                            }
+                        ],
+                        "getAmountOut": [
+                            {
+                                "visibility": "public",
+                                "content": "function getAmountOut(uint amountIn, uint reserveIn, uint reserveOut) public pure virtual returns (uint amountOut){ return SushiswapV2Library.getAmountOut(amountIn, reserveIn, reserveOut);}",
+                                "modifiers": [
+                                    "pure",
+                                    "virtual"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "uint",
+                                        "name": "amountIn"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "reserveIn"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "reserveOut"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "uint",
+                                        "name": "amountOut"
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "SushiswapV2Library.getAmountOut"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "95db587290ccd5acf1faaed7e76ae45a"
+                            }
+                        ],
+                        "getAmountIn": [
+                            {
+                                "visibility": "public",
+                                "content": "function getAmountIn(uint amountOut, uint reserveIn, uint reserveOut) public pure virtual returns (uint amountIn){ return SushiswapV2Library.getAmountIn(amountOut, reserveIn, reserveOut);}",
+                                "modifiers": [
+                                    "pure",
+                                    "virtual"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "uint",
+                                        "name": "amountOut"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "reserveIn"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "reserveOut"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "uint",
+                                        "name": "amountIn"
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "SushiswapV2Library.getAmountIn"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "c1822bcc0b1d1c63b5b30e19b7d3df6a"
+                            }
+                        ],
+                        "getAmountsOut": [
+                            {
+                                "visibility": "public",
+                                "content": "function getAmountsOut(uint amountIn, address[] memory path) public view virtual returns (uint[] memory amounts){ return SushiswapV2Library.getAmountsOut(factory, amountIn, path);}",
+                                "modifiers": [
+                                    "view",
+                                    "virtual"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "uint",
+                                        "name": "amountIn"
+                                    },
+                                    {
+                                        "type": "address[] memory",
+                                        "name": "path"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "uint[] memory",
+                                        "name": "amounts"
+                                    }
+                                ],
+                                "reads": [
+                                    [
+                                        "factory",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ]
+                                ],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "SushiswapV2Library.getAmountsOut"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "63a1ef2cc53b6abf15a234b4d326849f"
+                            }
+                        ],
+                        "getAmountsIn": [
+                            {
+                                "visibility": "public",
+                                "content": "function getAmountsIn(uint amountOut, address[] memory path) public view virtual returns (uint[] memory amounts){ return SushiswapV2Library.getAmountsIn(factory, amountOut, path);}",
+                                "modifiers": [
+                                    "view",
+                                    "virtual"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "uint",
+                                        "name": "amountOut"
+                                    },
+                                    {
+                                        "type": "address[] memory",
+                                        "name": "path"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "uint[] memory",
+                                        "name": "amounts"
+                                    }
+                                ],
+                                "reads": [
+                                    [
+                                        "factory",
+                                        "",
+                                        "AnyswapV4Router"
+                                    ]
+                                ],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "SushiswapV2Library.getAmountsIn"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "8ec022812beaa2bed86c98abceaa515f"
+                            }
+                        ]
+                    },
+                    "modifiers": {
+                        "ensure": {
+                            "parameters": [
+                                {
+                                    "type": "uint",
+                                    "name": "deadline"
+                                }
+                            ],
+                            "content": "modifier ensure(uint deadline){ require(deadline >= block.timestamp, 'AnyswapV3Router: EXPIRED'); _;}",
+                            "reads": [],
+                            "writes": [],
+                            "external_calls": [],
+                            "md5": "c90cb781f5a6e1f1d99699b253c3fca0"
+                        },
+                        "onlyMPC": {
+                            "parameters": [],
+                            "content": "modifier onlyMPC(){ require(msg.sender == mpc(), \"AnyswapV3Router: FORBIDDEN\"); _;}",
+                            "reads": [],
+                            "writes": [],
+                            "external_calls": {
+                                "__set__": true,
+                                "values": [
+                                    "AnyswapV4Router.mpc"
+                                ]
+                            },
+                            "md5": "a75c2415279a7702a610088c11b61697"
+                        }
+                    },
+                    "structs": {},
+                    "events": {
+                        "LogChangeMPC": {
+                            "event": "LogChangeMPC",
+                            "content": "LogChangeMPC(address indexed oldMPC, address indexed newMPC, uint indexed effectiveTime, uint chainID)"
+                        },
+                        "LogChangeRouter": {
+                            "event": "LogChangeRouter",
+                            "content": "LogChangeRouter(address indexed oldRouter, address indexed newRouter, uint chainID)"
+                        },
+                        "LogAnySwapIn": {
+                            "event": "LogAnySwapIn",
+                            "content": "LogAnySwapIn(bytes32 indexed txhash, address indexed token, address indexed to, uint amount, uint fromChainID, uint toChainID)"
+                        },
+                        "LogAnySwapOut": {
+                            "event": "LogAnySwapOut",
+                            "content": "LogAnySwapOut(address indexed token, address indexed from, address indexed to, uint amount, uint fromChainID, uint toChainID)"
+                        },
+                        "LogAnySwapTradeTokensForTokens": {
+                            "event": "LogAnySwapTradeTokensForTokens",
+                            "content": "LogAnySwapTradeTokensForTokens(address[] path, address indexed from, address indexed to, uint amountIn, uint amountOutMin, uint fromChainID, uint toChainID)"
+                        },
+                        "LogAnySwapTradeTokensForNative": {
+                            "event": "LogAnySwapTradeTokensForNative",
+                            "content": "LogAnySwapTradeTokensForNative(address[] path, address indexed from, address indexed to, uint amountIn, uint amountOutMin, uint fromChainID, uint toChainID)"
+                        }
+                    },
+                    "enums": {},
+                    "errors": {},
+                    "custom_types": {},
+                    "using_directives": {
+                        "uint": "SafeMathSushiswap"
+                    }
+                }
+            },
+            "state_variables": {},
+            "functions": {},
+            "modifiers": {},
+            "structs": {},
+            "events": {},
+            "enums": {},
+            "errors": {},
+            "custom_types": {},
+            "using_directives": {},
+            "external_functions": {
+                "SushiswapV2Library.sortTokens": "53553004d7c40a8043fec91809e5eb82",
+                "SushiswapV2Library.pairFor": "0966039bc6d80270f06e5d9760ee5973",
+                "SushiswapV2Library.getAmountOut": "de9a0b4fe347557aa85f1beddb841fcb",
+                "SushiswapV2Library.getReserves": "e12c8e854eb992f08c30e88b3e078522",
+                "SushiswapV2Library.getAmountIn": "719310c4a8954494b502bb60f325d986",
+                "AnyswapV4Router.mpc": "cdfc83ed07486e348642e29a0b3c6348",
+                "AnyswapV4Router.onlyMPC": "a75c2415279a7702a610088c11b61697",
+                "AnyswapV4Router.cID": "3b476bdf3c0c6f59c7a2679df1573c5e",
+                "AnyswapV4Router._anySwapOut": "e4e8e12324334ff907b0cb998e752f67",
+                "TransferHelper.safeTransferFrom": "cb78f5eeced7c4ba60c419cbe210487c",
+                "AnyswapV4Router._anySwapIn": "4bbfd89bd4ff065fd57f8ec4b230f2ab",
+                "AnyswapV1ERC20.underlying": "79a36cf7455e5210675c01a0880c01eb",
+                "AnyswapV1ERC20.withdrawVault": "d7e3a13249332b58de63af9851184b51",
+                "AnyswapV4Router.ensure": "c90cb781f5a6e1f1d99699b253c3fca0",
+                "SushiswapV2Library.getAmountsOut": "fd145cd614d3cfb20b6182a54e4853a0",
+                "AnyswapV4Router._swap": "e52d6f74aab575776fd40f2a8fec3ab3",
+                "TransferHelper.safeTransferNative": "a335433fd57a5f0afeeef0aefa9cdf29",
+                "SushiswapV2Library.quote": "814d0103910bb8adeb7a6e1b665e2d9a",
+                "SushiswapV2Library.getAmountsIn": "6409030ef935ed2148ebd6f3a0220b44"
+            },
+            "md5": "9558e6b539134e509321c14ac02913b8"
+        }
+    },
+    "handled_md5": {
+        "__set__": true,
+        "values": [
+            "9558e6b539134e509321c14ac02913b8"
+        ]
+    }
+}

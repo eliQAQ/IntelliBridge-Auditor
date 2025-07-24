@@ -1,0 +1,121 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterERC721" {
+  graph [ label = "ERC721", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ERC721.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "ERC721.balanceOf" [ label = "balanceOf", color = "green" ];
+  "ERC721.ownerOf" [ label = "ownerOf", color = "green" ];
+  "ERC721.name" [ label = "name", color = "green" ];
+  "ERC721.symbol" [ label = "symbol", color = "green" ];
+  "ERC721.approve" [ label = "approve", color = "green" ];
+  "ERC721.getApproved" [ label = "getApproved", color = "green" ];
+  "ERC721.setApprovalForAll" [ label = "setApprovalForAll", color = "green" ];
+  "ERC721.isApprovedForAll" [ label = "isApprovedForAll" ];
+  "ERC721.transferFrom" [ label = "transferFrom", color = "green" ];
+  "ERC721.safeTransferFrom" [ label = "safeTransferFrom" ];
+  "ERC721._safeTransfer" [ label = "_safeTransfer" ];
+  "ERC721._exists" [ label = "_exists", color = "white" ];
+  "ERC721._isApprovedOrOwner" [ label = "_isApprovedOrOwner" ];
+  "ERC721._safeMint" [ label = "_safeMint" ];
+  "ERC721._mint" [ label = "_mint" ];
+  "ERC721._burn" [ label = "_burn", color = "white" ];
+  "ERC721._transfer" [ label = "_transfer" ];
+  "ERC721._approve" [ label = "_approve" ];
+  "ERC721._setApprovalForAll" [ label = "_setApprovalForAll" ];
+  "ERC721._requireMinted" [ label = "_requireMinted" ];
+  "ERC721.address" [ label = "address" ];
+  "ERC721.Transfer" [ label = "Transfer" ];
+  "ERC721.Approval" [ label = "Approval" ];
+  "ERC721.ApprovalForAll" [ label = "ApprovalForAll" ];
+}
+
+  "ERC721.balanceOf";
+  "ERC721.address";
+  "ERC721.ownerOf";
+  "ERC721.approve";
+  "ERC721.isApprovedForAll";
+  "ERC721._approve";
+  "ERC721.getApproved";
+  "ERC721._requireMinted";
+  "ERC721.setApprovalForAll";
+  "ERC721._setApprovalForAll";
+  "ERC721.transferFrom";
+  "ERC721._isApprovedOrOwner";
+  "ERC721._transfer";
+  "ERC721.safeTransferFrom";
+  "ERC721._safeTransfer";
+  "ERC721._exists";
+  "ERC721._safeMint";
+  "ERC721._mint";
+  "ERC721.Transfer";
+  "ERC721._burn";
+  "ERC721.Approval";
+  "ERC721.ApprovalForAll";
+  "ERC721.balanceOf" -> "ERC721.address" [ color = "green" ];
+  "ERC721.ownerOf" -> "ERC721.address" [ color = "green" ];
+  "ERC721.approve" -> "ERC721.ownerOf" [ color = "orange" ];
+  "ERC721.approve" -> "ERC721.isApprovedForAll" [ color = "green" ];
+  "ERC721.approve" -> "ERC721._approve" [ color = "green" ];
+  "ERC721.getApproved" -> "ERC721._requireMinted" [ color = "green" ];
+  "ERC721.setApprovalForAll" -> "ERC721._setApprovalForAll" [ color = "green" ];
+  "ERC721.transferFrom" -> "ERC721._isApprovedOrOwner" [ color = "green" ];
+  "ERC721.transferFrom" -> "ERC721._transfer" [ color = "green" ];
+  "ERC721.safeTransferFrom" -> "ERC721.safeTransferFrom" [ color = "green" ];
+  "ERC721.safeTransferFrom" -> "ERC721._isApprovedOrOwner" [ color = "green" ];
+  "ERC721.safeTransferFrom" -> "ERC721._safeTransfer" [ color = "green" ];
+  "ERC721._safeTransfer" -> "ERC721._transfer" [ color = "green" ];
+  "ERC721._exists" -> "ERC721.address" [ color = "green" ];
+  "ERC721._isApprovedOrOwner" -> "ERC721.ownerOf" [ color = "orange" ];
+  "ERC721._isApprovedOrOwner" -> "ERC721.isApprovedForAll" [ color = "green" ];
+  "ERC721._isApprovedOrOwner" -> "ERC721.getApproved" [ color = "green" ];
+  "ERC721._safeMint" -> "ERC721._safeMint" [ color = "green" ];
+  "ERC721._safeMint" -> "ERC721._mint" [ color = "green" ];
+  "ERC721._mint" -> "ERC721.address" [ color = "green" ];
+  "ERC721._mint" -> "ERC721._exists" [ color = "green" ];
+  "ERC721._mint" -> "ERC721.Transfer" [ color = "green" ];
+  "ERC721._mint" -> "ERC721.address" [ color = "green" ];
+  "ERC721._burn" -> "ERC721.ownerOf" [ color = "orange" ];
+  "ERC721._burn" -> "ERC721._approve" [ color = "green" ];
+  "ERC721._burn" -> "ERC721.address" [ color = "green" ];
+  "ERC721._burn" -> "ERC721.Transfer" [ color = "green" ];
+  "ERC721._burn" -> "ERC721.address" [ color = "green" ];
+  "ERC721._transfer" -> "ERC721.ownerOf" [ color = "orange" ];
+  "ERC721._transfer" -> "ERC721.address" [ color = "green" ];
+  "ERC721._transfer" -> "ERC721._approve" [ color = "green" ];
+  "ERC721._transfer" -> "ERC721.address" [ color = "green" ];
+  "ERC721._transfer" -> "ERC721.Transfer" [ color = "green" ];
+  "ERC721._approve" -> "ERC721.Approval" [ color = "green" ];
+  "ERC721._approve" -> "ERC721.ownerOf" [ color = "orange" ];
+  "ERC721._setApprovalForAll" -> "ERC721.ApprovalForAll" [ color = "green" ];
+  "ERC721._requireMinted" -> "ERC721._exists" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

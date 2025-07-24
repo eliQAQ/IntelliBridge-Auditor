@@ -1,0 +1,196 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterLockProxyWithLP" {
+  graph [ label = "LockProxyWithLP", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "LockProxyWithLP.onlyManagerContract" [ label = "onlyManagerContract", color = "yellow" ];
+  "LockProxyWithLP.pause" [ label = "pause", color = "green" ];
+  "LockProxyWithLP.unpause" [ label = "unpause", color = "green" ];
+  "LockProxyWithLP.setManagerProxy" [ label = "setManagerProxy", color = "green" ];
+  "LockProxyWithLP.bindProxyHash" [ label = "bindProxyHash", color = "green" ];
+  "LockProxyWithLP.bindAssetHash" [ label = "bindAssetHash", color = "green" ];
+  "LockProxyWithLP.bindLPToAsset" [ label = "bindLPToAsset", color = "green" ];
+  "LockProxyWithLP.bindLPAndAsset" [ label = "bindLPAndAsset", color = "green" ];
+  "LockProxyWithLP.bindProxyHashBatch" [ label = "bindProxyHashBatch", color = "green" ];
+  "LockProxyWithLP.bindAssetHashBatch" [ label = "bindAssetHashBatch", color = "green" ];
+  "LockProxyWithLP.bindLPToAssetBatch" [ label = "bindLPToAssetBatch", color = "green" ];
+  "LockProxyWithLP.bindLPAndAssetBatch" [ label = "bindLPAndAssetBatch", color = "green" ];
+  "LockProxyWithLP.lock" [ label = "lock", color = "green" ];
+  "LockProxyWithLP.unlock" [ label = "unlock", color = "green" ];
+  "LockProxyWithLP.deposit" [ label = "deposit", color = "green" ];
+  "LockProxyWithLP.withdraw" [ label = "withdraw", color = "green" ];
+  "LockProxyWithLP.getBalanceFor" [ label = "getBalanceFor" ];
+  "LockProxyWithLP._transferToContract" [ label = "_transferToContract" ];
+  "LockProxyWithLP._transferFromContract" [ label = "_transferFromContract" ];
+  "LockProxyWithLP._transferERC20ToContract" [ label = "_transferERC20ToContract" ];
+  "LockProxyWithLP._transferERC20FromContract" [ label = "_transferERC20FromContract" ];
+  "LockProxyWithLP._serializeTxArgs" [ label = "_serializeTxArgs" ];
+  "LockProxyWithLP._deserializeTxArgs" [ label = "_deserializeTxArgs" ];
+  "LockProxyWithLP.IEthCrossChainManagerProxy" [ label = "IEthCrossChainManagerProxy" ];
+  "LockProxyWithLP._msgSender" [ label = "_msgSender" ];
+  "LockProxyWithLP._pause" [ label = "_pause" ];
+  "LockProxyWithLP._unpause" [ label = "_unpause" ];
+  "LockProxyWithLP.IEthCrossChainManager" [ label = "IEthCrossChainManager" ];
+  "LockProxyWithLP.address" [ label = "address" ];
+  "LockProxyWithLP.IERC20" [ label = "IERC20" ];
+}
+
+subgraph "clusterIEthCrossChainManagerProxy" {
+  graph [ label = "IEthCrossChainManagerProxy", color = "lightgray" ];
+  "IEthCrossChainManagerProxy.getEthCrossChainManager" [ label = "getEthCrossChainManager" ];
+}
+
+subgraph "clusterIEthCrossChainManager" {
+  graph [ label = "IEthCrossChainManager", color = "lightgray" ];
+  "IEthCrossChainManager.crossChain" [ label = "crossChain" ];
+}
+
+subgraph "clusterUtils" {
+  graph [ label = "Utils", color = "lightgray" ];
+  "Utils.equalStorage" [ label = "equalStorage" ];
+  "Utils.bytesToAddress" [ label = "bytesToAddress" ];
+}
+
+subgraph "clusterIERC20" {
+  graph [ label = "IERC20", color = "lightgray" ];
+  "IERC20.balanceOf" [ label = "balanceOf" ];
+  "IERC20.safeTransferFrom" [ label = "safeTransferFrom" ];
+  "IERC20.safeTransfer" [ label = "safeTransfer" ];
+}
+
+subgraph "clusteruint160(toAddress)" {
+  graph [ label = "uint160(toAddress)", color = "lightgray" ];
+  "uint160(toAddress).transfer" [ label = "transfer" ];
+}
+
+subgraph "clusterZeroCopySink" {
+  graph [ label = "ZeroCopySink", color = "lightgray" ];
+  "ZeroCopySink.WriteVarBytes" [ label = "WriteVarBytes" ];
+  "ZeroCopySink.WriteUint255" [ label = "WriteUint255" ];
+}
+
+subgraph "clusterZeroCopySource" {
+  graph [ label = "ZeroCopySource", color = "lightgray" ];
+  "ZeroCopySource.NextVarBytes" [ label = "NextVarBytes" ];
+  "ZeroCopySource.NextUint255" [ label = "NextUint255" ];
+}
+
+  "LockProxyWithLP.onlyManagerContract";
+  "LockProxyWithLP.IEthCrossChainManagerProxy";
+  "LockProxyWithLP._msgSender";
+  "IEthCrossChainManagerProxy.getEthCrossChainManager";
+  "LockProxyWithLP.pause";
+  "LockProxyWithLP._pause";
+  "LockProxyWithLP.unpause";
+  "LockProxyWithLP._unpause";
+  "LockProxyWithLP.bindAssetHash";
+  "LockProxyWithLP.getBalanceFor";
+  "LockProxyWithLP.bindLPAndAsset";
+  "LockProxyWithLP.bindAssetHashBatch";
+  "LockProxyWithLP.bindLPAndAssetBatch";
+  "LockProxyWithLP.lock";
+  "LockProxyWithLP._transferToContract";
+  "LockProxyWithLP._serializeTxArgs";
+  "LockProxyWithLP.IEthCrossChainManager";
+  "IEthCrossChainManager.crossChain";
+  "LockProxyWithLP.unlock";
+  "LockProxyWithLP._deserializeTxArgs";
+  "Utils.equalStorage";
+  "Utils.bytesToAddress";
+  "LockProxyWithLP._transferFromContract";
+  "LockProxyWithLP.deposit";
+  "LockProxyWithLP.address";
+  "LockProxyWithLP.withdraw";
+  "LockProxyWithLP.IERC20";
+  "IERC20.balanceOf";
+  "LockProxyWithLP._transferERC20ToContract";
+  "uint160(toAddress).transfer";
+  "LockProxyWithLP._transferERC20FromContract";
+  "IERC20.safeTransferFrom";
+  "IERC20.safeTransfer";
+  "ZeroCopySink.WriteVarBytes";
+  "ZeroCopySink.WriteUint255";
+  "ZeroCopySource.NextVarBytes";
+  "ZeroCopySource.NextUint255";
+  "LockProxyWithLP.onlyManagerContract" -> "LockProxyWithLP.IEthCrossChainManagerProxy" [ color = "green" ];
+  "LockProxyWithLP.onlyManagerContract" -> "LockProxyWithLP._msgSender" [ color = "green" ];
+  "LockProxyWithLP.onlyManagerContract" -> "IEthCrossChainManagerProxy.getEthCrossChainManager" [ color = "orange" ];
+  "LockProxyWithLP.pause" -> "LockProxyWithLP._pause" [ color = "green" ];
+  "LockProxyWithLP.unpause" -> "LockProxyWithLP._unpause" [ color = "green" ];
+  "LockProxyWithLP.bindAssetHash" -> "LockProxyWithLP.getBalanceFor" [ color = "green" ];
+  "LockProxyWithLP.bindLPAndAsset" -> "LockProxyWithLP.getBalanceFor" [ color = "green" ];
+  "LockProxyWithLP.bindLPAndAsset" -> "LockProxyWithLP.getBalanceFor" [ color = "green" ];
+  "LockProxyWithLP.bindAssetHashBatch" -> "LockProxyWithLP.getBalanceFor" [ color = "green" ];
+  "LockProxyWithLP.bindLPAndAssetBatch" -> "LockProxyWithLP.getBalanceFor" [ color = "green" ];
+  "LockProxyWithLP.bindLPAndAssetBatch" -> "LockProxyWithLP.getBalanceFor" [ color = "green" ];
+  "LockProxyWithLP.lock" -> "LockProxyWithLP._transferToContract" [ color = "green" ];
+  "LockProxyWithLP.lock" -> "LockProxyWithLP._serializeTxArgs" [ color = "green" ];
+  "LockProxyWithLP.lock" -> "LockProxyWithLP.IEthCrossChainManagerProxy" [ color = "green" ];
+  "LockProxyWithLP.lock" -> "IEthCrossChainManagerProxy.getEthCrossChainManager" [ color = "orange" ];
+  "LockProxyWithLP.lock" -> "LockProxyWithLP.IEthCrossChainManager" [ color = "green" ];
+  "LockProxyWithLP.lock" -> "IEthCrossChainManager.crossChain" [ color = "orange" ];
+  "LockProxyWithLP.lock" -> "LockProxyWithLP._msgSender" [ color = "green" ];
+  "LockProxyWithLP.unlock" -> "LockProxyWithLP._deserializeTxArgs" [ color = "green" ];
+  "LockProxyWithLP.unlock" -> "Utils.equalStorage" [ color = "orange" ];
+  "LockProxyWithLP.unlock" -> "Utils.bytesToAddress" [ color = "orange" ];
+  "LockProxyWithLP.unlock" -> "Utils.bytesToAddress" [ color = "orange" ];
+  "LockProxyWithLP.unlock" -> "LockProxyWithLP._transferFromContract" [ color = "green" ];
+  "LockProxyWithLP.deposit" -> "LockProxyWithLP._transferToContract" [ color = "green" ];
+  "LockProxyWithLP.deposit" -> "LockProxyWithLP.address" [ color = "green" ];
+  "LockProxyWithLP.deposit" -> "LockProxyWithLP._transferFromContract" [ color = "green" ];
+  "LockProxyWithLP.withdraw" -> "LockProxyWithLP.address" [ color = "green" ];
+  "LockProxyWithLP.withdraw" -> "LockProxyWithLP._transferToContract" [ color = "green" ];
+  "LockProxyWithLP.withdraw" -> "LockProxyWithLP._transferFromContract" [ color = "green" ];
+  "LockProxyWithLP.getBalanceFor" -> "LockProxyWithLP.address" [ color = "green" ];
+  "LockProxyWithLP.getBalanceFor" -> "LockProxyWithLP.address" [ color = "green" ];
+  "LockProxyWithLP.getBalanceFor" -> "LockProxyWithLP.IERC20" [ color = "green" ];
+  "LockProxyWithLP.getBalanceFor" -> "IERC20.balanceOf" [ color = "orange" ];
+  "LockProxyWithLP.getBalanceFor" -> "LockProxyWithLP.address" [ color = "green" ];
+  "LockProxyWithLP._transferToContract" -> "LockProxyWithLP.address" [ color = "green" ];
+  "LockProxyWithLP._transferToContract" -> "LockProxyWithLP._transferERC20ToContract" [ color = "green" ];
+  "LockProxyWithLP._transferToContract" -> "LockProxyWithLP._msgSender" [ color = "green" ];
+  "LockProxyWithLP._transferToContract" -> "LockProxyWithLP.address" [ color = "green" ];
+  "LockProxyWithLP._transferFromContract" -> "LockProxyWithLP.address" [ color = "green" ];
+  "LockProxyWithLP._transferFromContract" -> "uint160(toAddress).transfer" [ color = "orange" ];
+  "LockProxyWithLP._transferFromContract" -> "LockProxyWithLP.address" [ color = "green" ];
+  "LockProxyWithLP._transferFromContract" -> "LockProxyWithLP._transferERC20FromContract" [ color = "green" ];
+  "LockProxyWithLP._transferERC20ToContract" -> "LockProxyWithLP.IERC20" [ color = "green" ];
+  "LockProxyWithLP._transferERC20ToContract" -> "IERC20.safeTransferFrom" [ color = "orange" ];
+  "LockProxyWithLP._transferERC20FromContract" -> "LockProxyWithLP.IERC20" [ color = "green" ];
+  "LockProxyWithLP._transferERC20FromContract" -> "IERC20.safeTransfer" [ color = "orange" ];
+  "LockProxyWithLP._serializeTxArgs" -> "ZeroCopySink.WriteVarBytes" [ color = "orange" ];
+  "LockProxyWithLP._serializeTxArgs" -> "ZeroCopySink.WriteVarBytes" [ color = "orange" ];
+  "LockProxyWithLP._serializeTxArgs" -> "ZeroCopySink.WriteUint255" [ color = "orange" ];
+  "LockProxyWithLP._deserializeTxArgs" -> "ZeroCopySource.NextVarBytes" [ color = "orange" ];
+  "LockProxyWithLP._deserializeTxArgs" -> "ZeroCopySource.NextVarBytes" [ color = "orange" ];
+  "LockProxyWithLP._deserializeTxArgs" -> "ZeroCopySource.NextUint255" [ color = "orange" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

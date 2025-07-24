@@ -1,0 +1,14 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_168_Initializable {
+label = "Initializable"
+"168__disableInitializers" [label="_disableInitializers"]
+"168__isInitializing" [label="_isInitializing"]
+"168__getInitializedVersion" [label="_getInitializedVersion"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"168__disableInitializers" -> "require(bool,string)"
+}
+}

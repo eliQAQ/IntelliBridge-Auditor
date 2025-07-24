@@ -1,0 +1,93 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_1862_UpgradableECCM {
+label = "UpgradableECCM"
+"1862_constructor" [label="constructor"]
+"1862_unpause" [label="unpause"]
+"1862_upgradeToNew" [label="upgradeToNew"]
+"1862_pause" [label="pause"]
+"1862_constructor" -> "1862_constructor"
+"1862_pause" -> "1862_paused"
+"1862_unpause" -> "1862__unpause"
+"1862_upgradeToNew" -> "1862_onlyOwner"
+"1862_unpause" -> "1862_onlyOwner"
+"1862_upgradeToNew" -> "1862_whenPaused"
+"1862_pause" -> "1862_onlyOwner"
+"1862_pause" -> "1862__pause"
+"1862_unpause" -> "1862_paused"
+}subgraph cluster_3150_IUpgradableECCM {
+label = "IUpgradableECCM"
+"3150_paused" [label="paused"]
+"3150_upgradeToNew" [label="upgradeToNew"]
+"3150_pause" [label="pause"]
+"3150_isOwner" [label="isOwner"]
+"3150_unpause" [label="unpause"]
+}subgraph cluster_3376_Context {
+label = "Context"
+"3376_constructor" [label="constructor"]
+"3376__msgSender" [label="_msgSender"]
+"3376__msgData" [label="_msgData"]
+}subgraph cluster_3349_Ownable {
+label = "Ownable"
+"3349_owner" [label="owner"]
+"3349_transferOwnership" [label="transferOwnership"]
+"3349_isOwner" [label="isOwner"]
+"3349_renounceOwnership" [label="renounceOwnership"]
+"3349_constructor" [label="constructor"]
+"3349__transferOwnership" [label="_transferOwnership"]
+"3349_transferOwnership" -> "3349__transferOwnership"
+"3349_transferOwnership" -> "3349_onlyOwner"
+"3349_constructor" -> "3349__msgSender"
+"3349_renounceOwnership" -> "3349_onlyOwner"
+"3349_isOwner" -> "3349__msgSender"
+}subgraph cluster_822_IEthCrossChainManager {
+label = "IEthCrossChainManager"
+"822_crossChain" [label="crossChain"]
+}subgraph cluster_702_EthCrossChainManager {
+label = "EthCrossChainManager"
+"702_crossChain" [label="crossChain"]
+"702_verifyHeaderAndExecuteTx" [label="verifyHeaderAndExecuteTx"]
+"702_initGenesisBlock" [label="initGenesisBlock"]
+"702__executeCrossChainTx" [label="_executeCrossChainTx"]
+"702_changeBookKeeper" [label="changeBookKeeper"]
+"702_constructor" [label="constructor"]
+"702_constructor" -> "702_constructor"
+"702_initGenesisBlock" -> "702_whenNotPaused"
+"702_crossChain" -> "702_whenNotPaused"
+"702_verifyHeaderAndExecuteTx" -> "702_whenNotPaused"
+"702_changeBookKeeper" -> "702_whenNotPaused"
+"702_verifyHeaderAndExecuteTx" -> "702__executeCrossChainTx"
+}subgraph cluster_3231_Pausable {
+label = "Pausable"
+"3231_constructor" [label="constructor"]
+"3231_paused" [label="paused"]
+"3231__pause" [label="_pause"]
+"3231__unpause" [label="_unpause"]
+"3231__unpause" -> "3231_whenPaused"
+"3231__pause" -> "3231__msgSender"
+"3231__pause" -> "3231_whenNotPaused"
+"3231__unpause" -> "3231__msgSender"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"sha256(bytes)" 
+"keccak256(bytes)" 
+"abi.encode()" 
+"require(bool,string)" 
+"abi.encodePacked()" 
+"702__executeCrossChainTx" -> "keccak256(bytes)"
+"1862_unpause" -> "require(bool,string)"
+"702_changeBookKeeper" -> "require(bool,string)"
+"702__executeCrossChainTx" -> "abi.encodePacked()"
+"702_crossChain" -> "abi.encodePacked()"
+"702_verifyHeaderAndExecuteTx" -> "require(bool,string)"
+"702_crossChain" -> "sha256(bytes)"
+"702__executeCrossChainTx" -> "require(bool,string)"
+"1862_pause" -> "require(bool,string)"
+"702__executeCrossChainTx" -> "abi.encode()"
+"702_crossChain" -> "keccak256(bytes)"
+"3349__transferOwnership" -> "require(bool,string)"
+"702_crossChain" -> "require(bool,string)"
+"702_initGenesisBlock" -> "require(bool,string)"
+}
+}

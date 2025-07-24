@@ -1,0 +1,33 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_472_ERC20 {
+label = "ERC20"
+"472__mint" [label="_mint"]
+"472_computeDomainSeparator" [label="computeDomainSeparator"]
+"472_DOMAIN_SEPARATOR" [label="DOMAIN_SEPARATOR"]
+"472_constructor" [label="constructor"]
+"472_permit" [label="permit"]
+"472_transferFrom" [label="transferFrom"]
+"472__burn" [label="_burn"]
+"472_transfer" [label="transfer"]
+"472_approve" [label="approve"]
+"472_constructor" -> "472_computeDomainSeparator"
+"472_DOMAIN_SEPARATOR" -> "472_computeDomainSeparator"
+"472_permit" -> "472_DOMAIN_SEPARATOR"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"abi.encodePacked()" 
+"ecrecover(bytes32,uint8,bytes32,bytes32)" 
+"abi.encode()" 
+"keccak256(bytes)" 
+"require(bool,string)" 
+"472_permit" -> "keccak256(bytes)"
+"472_permit" -> "abi.encodePacked()"
+"472_permit" -> "require(bool,string)"
+"472_computeDomainSeparator" -> "keccak256(bytes)"
+"472_permit" -> "abi.encode()"
+"472_permit" -> "ecrecover(bytes32,uint8,bytes32,bytes32)"
+"472_computeDomainSeparator" -> "abi.encode()"
+}
+}

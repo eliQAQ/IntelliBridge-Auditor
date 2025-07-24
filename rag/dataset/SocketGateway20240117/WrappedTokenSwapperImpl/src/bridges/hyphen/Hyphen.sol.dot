@@ -1,0 +1,82 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterHyphenImpl" {
+  graph [ label = "HyphenImpl", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "HyphenImpl.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "HyphenImpl.bridgeAfterSwap" [ label = "bridgeAfterSwap", color = "blue" ];
+  "HyphenImpl.swapAndBridge" [ label = "swapAndBridge", color = "blue" ];
+  "HyphenImpl.bridgeERC20To" [ label = "bridgeERC20To", color = "blue" ];
+  "HyphenImpl.bridgeNativeTo" [ label = "bridgeNativeTo", color = "blue" ];
+  "HyphenImpl.HyphenLiquidityPoolManager" [ label = "HyphenLiquidityPoolManager" ];
+  "HyphenImpl.SocketBridge" [ label = "SocketBridge" ];
+  "HyphenImpl.ERC20" [ label = "ERC20" ];
+}
+
+subgraph "clusterHyphenLiquidityPoolManager" {
+  graph [ label = "HyphenLiquidityPoolManager", color = "lightgray" ];
+  "HyphenLiquidityPoolManager.depositErc20" [ label = "depositErc20" ];
+}
+
+subgraph "clustersocketRoute" {
+  graph [ label = "socketRoute", color = "lightgray" ];
+  "socketRoute.getRoute" [ label = "getRoute" ];
+}
+
+subgraph "clusterERC20" {
+  graph [ label = "ERC20", color = "lightgray" ];
+  "ERC20.safeTransferFrom" [ label = "safeTransferFrom" ];
+}
+
+  "HyphenImpl.<Constructor>";
+  "HyphenImpl.HyphenLiquidityPoolManager";
+  "HyphenImpl.bridgeAfterSwap";
+  "HyphenLiquidityPoolManager.depositErc20";
+  "HyphenImpl.SocketBridge";
+  "HyphenImpl.swapAndBridge";
+  "socketRoute.getRoute";
+  "HyphenImpl.bridgeERC20To";
+  "HyphenImpl.ERC20";
+  "ERC20.safeTransferFrom";
+  "HyphenImpl.bridgeNativeTo";
+  "HyphenImpl.<Constructor>" -> "HyphenImpl.HyphenLiquidityPoolManager" [ color = "green" ];
+  "HyphenImpl.bridgeAfterSwap" -> "HyphenLiquidityPoolManager.depositErc20" [ color = "orange" ];
+  "HyphenImpl.bridgeAfterSwap" -> "HyphenImpl.SocketBridge" [ color = "green" ];
+  "HyphenImpl.swapAndBridge" -> "socketRoute.getRoute" [ color = "orange" ];
+  "HyphenImpl.swapAndBridge" -> "HyphenLiquidityPoolManager.depositErc20" [ color = "orange" ];
+  "HyphenImpl.swapAndBridge" -> "HyphenImpl.SocketBridge" [ color = "green" ];
+  "HyphenImpl.bridgeERC20To" -> "HyphenImpl.ERC20" [ color = "green" ];
+  "HyphenImpl.bridgeERC20To" -> "ERC20.safeTransferFrom" [ color = "orange" ];
+  "HyphenImpl.bridgeERC20To" -> "HyphenLiquidityPoolManager.depositErc20" [ color = "orange" ];
+  "HyphenImpl.bridgeERC20To" -> "HyphenImpl.SocketBridge" [ color = "green" ];
+  "HyphenImpl.bridgeNativeTo" -> "HyphenImpl.SocketBridge" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

@@ -1,0 +1,39 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_1438_ZeroCopySource {
+label = "ZeroCopySource"
+"1438_NextUint64" [label="NextUint64"]
+"1438_NextBytes20" [label="NextBytes20"]
+"1438_NextUint16" [label="NextUint16"]
+"1438_NextUint8" [label="NextUint8"]
+"1438_NextByte" [label="NextByte"]
+"1438_NextUint32" [label="NextUint32"]
+"1438_NextBool" [label="NextBool"]
+"1438_NextVarBytes" [label="NextVarBytes"]
+"1438_NextHash" [label="NextHash"]
+"1438_NextUint255" [label="NextUint255"]
+"1438_NextVarUint" [label="NextVarUint"]
+"1438_NextVarUint" -> "1438_NextUint16"
+"1438_NextVarUint" -> "1438_NextUint64"
+"1438_NextVarUint" -> "1438_NextUint32"
+"1438_NextVarUint" -> "1438_NextByte"
+"1438_NextVarBytes" -> "1438_NextVarUint"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"revert(string)" 
+"require(bool,string)" 
+"1438_NextUint16" -> "require(bool,string)"
+"1438_NextVarUint" -> "require(bool,string)"
+"1438_NextUint32" -> "require(bool,string)"
+"1438_NextUint64" -> "require(bool,string)"
+"1438_NextBytes20" -> "require(bool,string)"
+"1438_NextUint255" -> "require(bool,string)"
+"1438_NextBool" -> "require(bool,string)"
+"1438_NextUint8" -> "require(bool,string)"
+"1438_NextVarBytes" -> "require(bool,string)"
+"1438_NextByte" -> "require(bool,string)"
+"1438_NextHash" -> "require(bool,string)"
+"1438_NextBool" -> "revert(string)"
+}
+}

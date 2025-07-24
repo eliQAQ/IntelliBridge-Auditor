@@ -1,0 +1,68 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_1090_LockProxyPip1 {
+label = "LockProxyPip1"
+"1090__deserializeTxArgs" [label="_deserializeTxArgs"]
+"1090_delegateAsset" [label="delegateAsset"]
+"1090__serializeTxArgs" [label="_serializeTxArgs"]
+"1090__balanceFor" [label="_balanceFor"]
+"1090__transferERC20ToContract" [label="_transferERC20ToContract"]
+"1090_unlock" [label="unlock"]
+"1090__transferToContract" [label="_transferToContract"]
+"1090__deserializeRegisterAssetTxArgs" [label="_deserializeRegisterAssetTxArgs"]
+"1090_constructor" [label="constructor"]
+"1090__getRegistryKey" [label="_getRegistryKey"]
+"1090_registerAsset" [label="registerAsset"]
+"1090__getEccm" [label="_getEccm"]
+"1090_lock" [label="lock"]
+"1090__transferFromContract" [label="_transferFromContract"]
+"1090__serializeRegisterAssetTxArgs" [label="_serializeRegisterAssetTxArgs"]
+"1090__transferERC20FromContract" [label="_transferERC20FromContract"]
+"1090_lock" -> "1090__transferFromContract"
+"1090_lock" -> "1090__getRegistryKey"
+"1090_lock" -> "1090__serializeTxArgs"
+"1090_registerAsset" -> "1090__deserializeRegisterAssetTxArgs"
+"1090_lock" -> "1090__msgSender"
+"1090_delegateAsset" -> "1090__balanceFor"
+"1090_unlock" -> "1090_onlyManagerContract"
+"1090__transferFromContract" -> "1090__transferERC20FromContract"
+"1090_delegateAsset" -> "1090__serializeRegisterAssetTxArgs"
+"1090_delegateAsset" -> "1090__msgSender"
+"1090__transferToContract" -> "1090__transferERC20ToContract"
+"1090_lock" -> "1090__getEccm"
+"1090_registerAsset" -> "1090__getRegistryKey"
+"1090_unlock" -> "1090__getRegistryKey"
+"1090_delegateAsset" -> "1090__getRegistryKey"
+"1090__transferToContract" -> "1090__msgSender"
+"1090_unlock" -> "1090__deserializeTxArgs"
+"1090_lock" -> "1090__transferToContract"
+"1090_unlock" -> "1090__transferFromContract"
+"1090_registerAsset" -> "1090_onlyManagerContract"
+"1090_delegateAsset" -> "1090__getEccm"
+}subgraph cluster_1141_Context {
+label = "Context"
+"1141__msgData" [label="_msgData"]
+"1141_constructor" [label="constructor"]
+"1141__msgSender" [label="_msgSender"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"abi.encodePacked()" 
+"balance(address)" 
+"require(bool,string)" 
+"keccak256(bytes)" 
+"1090__transferERC20FromContract" -> "require(bool,string)"
+"1090__serializeTxArgs" -> "abi.encodePacked()"
+"1090__transferFromContract" -> "require(bool,string)"
+"1090_delegateAsset" -> "require(bool,string)"
+"1090__transferToContract" -> "require(bool,string)"
+"1090__getRegistryKey" -> "keccak256(bytes)"
+"1090_registerAsset" -> "require(bool,string)"
+"1090__serializeRegisterAssetTxArgs" -> "abi.encodePacked()"
+"1090__transferERC20ToContract" -> "require(bool,string)"
+"1090_lock" -> "require(bool,string)"
+"1090_unlock" -> "require(bool,string)"
+"1090__getRegistryKey" -> "abi.encodePacked()"
+"1090__balanceFor" -> "balance(address)"
+}
+}

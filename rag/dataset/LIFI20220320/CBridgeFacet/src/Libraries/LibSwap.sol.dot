@@ -1,0 +1,71 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterLibSwap" {
+  graph [ label = "LibSwap  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "LibSwap.swap" [ label = "swap", color = "white" ];
+  "LibSwap.address" [ label = "address" ];
+  "LibSwap.IERC20" [ label = "IERC20" ];
+}
+
+subgraph "clusterLibAsset" {
+  graph [ label = "LibAsset", color = "lightgray" ];
+  "LibAsset.getOwnBalance" [ label = "getOwnBalance" ];
+  "LibAsset.isNativeAsset" [ label = "isNativeAsset" ];
+  "LibAsset.transferFromERC20" [ label = "transferFromERC20" ];
+  "LibAsset.approveERC20" [ label = "approveERC20" ];
+}
+
+subgraph "clusterLibUtil" {
+  graph [ label = "LibUtil", color = "lightgray" ];
+  "LibUtil.getRevertMsg" [ label = "getRevertMsg" ];
+}
+
+  "LibSwap.swap";
+  "LibAsset.getOwnBalance";
+  "LibAsset.isNativeAsset";
+  "LibAsset.transferFromERC20";
+  "LibSwap.address";
+  "LibAsset.approveERC20";
+  "LibSwap.IERC20";
+  "LibUtil.getRevertMsg";
+  "LibSwap.swap" -> "LibAsset.getOwnBalance" [ color = "orange" ];
+  "LibSwap.swap" -> "LibAsset.isNativeAsset" [ color = "orange" ];
+  "LibSwap.swap" -> "LibAsset.getOwnBalance" [ color = "orange" ];
+  "LibSwap.swap" -> "LibAsset.transferFromERC20" [ color = "orange" ];
+  "LibSwap.swap" -> "LibSwap.address" [ color = "green" ];
+  "LibSwap.swap" -> "LibAsset.isNativeAsset" [ color = "orange" ];
+  "LibSwap.swap" -> "LibAsset.approveERC20" [ color = "orange" ];
+  "LibSwap.swap" -> "LibSwap.IERC20" [ color = "green" ];
+  "LibSwap.swap" -> "LibUtil.getRevertMsg" [ color = "orange" ];
+  "LibSwap.swap" -> "LibAsset.getOwnBalance" [ color = "orange" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

@@ -1,0 +1,101 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterNativePolygonImpl" {
+  graph [ label = "NativePolygonImpl", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "NativePolygonImpl.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "NativePolygonImpl.bridgeAfterSwap" [ label = "bridgeAfterSwap", color = "blue" ];
+  "NativePolygonImpl.swapAndBridge" [ label = "swapAndBridge", color = "blue" ];
+  "NativePolygonImpl.bridgeERC20To" [ label = "bridgeERC20To", color = "blue" ];
+  "NativePolygonImpl.bridgeNativeTo" [ label = "bridgeNativeTo", color = "blue" ];
+  "NativePolygonImpl.setApprovalForRouters" [ label = "setApprovalForRouters", color = "blue" ];
+  "NativePolygonImpl.IRootChainManager" [ label = "IRootChainManager" ];
+  "NativePolygonImpl.ERC20" [ label = "ERC20" ];
+  "NativePolygonImpl.address" [ label = "address" ];
+  "NativePolygonImpl.SocketBridge" [ label = "SocketBridge" ];
+  "NativePolygonImpl.type" [ label = "type" ];
+}
+
+subgraph "clustersocketRoute" {
+  graph [ label = "socketRoute", color = "lightgray" ];
+  "socketRoute.getRoute" [ label = "getRoute" ];
+}
+
+subgraph "clusterERC20" {
+  graph [ label = "ERC20", color = "lightgray" ];
+  "ERC20.safeTransferFrom" [ label = "safeTransferFrom" ];
+}
+
+subgraph "clusterIRootChainManager" {
+  graph [ label = "IRootChainManager", color = "lightgray" ];
+  "IRootChainManager.depositFor" [ label = "depositFor" ];
+}
+
+  "NativePolygonImpl.<Constructor>";
+  "NativePolygonImpl.IRootChainManager";
+  "NativePolygonImpl.bridgeAfterSwap";
+  "NativePolygonImpl.ERC20";
+  "NativePolygonImpl.address";
+  "NativePolygonImpl.SocketBridge";
+  "NativePolygonImpl.swapAndBridge";
+  "socketRoute.getRoute";
+  "NativePolygonImpl.bridgeERC20To";
+  "ERC20.safeTransferFrom";
+  "IRootChainManager.depositFor";
+  "NativePolygonImpl.bridgeNativeTo";
+  "NativePolygonImpl.setApprovalForRouters";
+  "NativePolygonImpl.type";
+  "NativePolygonImpl.<Constructor>" -> "NativePolygonImpl.IRootChainManager" [ color = "green" ];
+  "NativePolygonImpl.bridgeAfterSwap" -> "NativePolygonImpl.IRootChainManager" [ color = "green" ];
+  "NativePolygonImpl.bridgeAfterSwap" -> "NativePolygonImpl.ERC20" [ color = "green" ];
+  "NativePolygonImpl.bridgeAfterSwap" -> "NativePolygonImpl.address" [ color = "green" ];
+  "NativePolygonImpl.bridgeAfterSwap" -> "NativePolygonImpl.ERC20" [ color = "green" ];
+  "NativePolygonImpl.bridgeAfterSwap" -> "NativePolygonImpl.IRootChainManager" [ color = "green" ];
+  "NativePolygonImpl.bridgeAfterSwap" -> "NativePolygonImpl.SocketBridge" [ color = "green" ];
+  "NativePolygonImpl.swapAndBridge" -> "socketRoute.getRoute" [ color = "orange" ];
+  "NativePolygonImpl.swapAndBridge" -> "NativePolygonImpl.IRootChainManager" [ color = "green" ];
+  "NativePolygonImpl.swapAndBridge" -> "NativePolygonImpl.ERC20" [ color = "green" ];
+  "NativePolygonImpl.swapAndBridge" -> "NativePolygonImpl.address" [ color = "green" ];
+  "NativePolygonImpl.swapAndBridge" -> "NativePolygonImpl.ERC20" [ color = "green" ];
+  "NativePolygonImpl.swapAndBridge" -> "NativePolygonImpl.IRootChainManager" [ color = "green" ];
+  "NativePolygonImpl.swapAndBridge" -> "NativePolygonImpl.SocketBridge" [ color = "green" ];
+  "NativePolygonImpl.bridgeERC20To" -> "NativePolygonImpl.ERC20" [ color = "green" ];
+  "NativePolygonImpl.bridgeERC20To" -> "ERC20.safeTransferFrom" [ color = "orange" ];
+  "NativePolygonImpl.bridgeERC20To" -> "NativePolygonImpl.ERC20" [ color = "green" ];
+  "NativePolygonImpl.bridgeERC20To" -> "NativePolygonImpl.address" [ color = "green" ];
+  "NativePolygonImpl.bridgeERC20To" -> "NativePolygonImpl.ERC20" [ color = "green" ];
+  "NativePolygonImpl.bridgeERC20To" -> "IRootChainManager.depositFor" [ color = "orange" ];
+  "NativePolygonImpl.bridgeERC20To" -> "NativePolygonImpl.SocketBridge" [ color = "green" ];
+  "NativePolygonImpl.bridgeNativeTo" -> "NativePolygonImpl.SocketBridge" [ color = "green" ];
+  "NativePolygonImpl.setApprovalForRouters" -> "NativePolygonImpl.ERC20" [ color = "green" ];
+  "NativePolygonImpl.setApprovalForRouters" -> "NativePolygonImpl.type" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

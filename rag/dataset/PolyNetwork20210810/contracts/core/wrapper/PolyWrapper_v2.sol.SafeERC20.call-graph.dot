@@ -1,0 +1,31 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_1198_SafeERC20 {
+label = "SafeERC20"
+"1198_safeIncreaseAllowance" [label="safeIncreaseAllowance"]
+"1198_safeTransferFrom" [label="safeTransferFrom"]
+"1198_callOptionalReturn" [label="callOptionalReturn"]
+"1198_safeTransfer" [label="safeTransfer"]
+"1198_safeApprove" [label="safeApprove"]
+"1198_safeDecreaseAllowance" [label="safeDecreaseAllowance"]
+"1198_safeTransfer" -> "1198_callOptionalReturn"
+"1198_safeDecreaseAllowance" -> "1198_callOptionalReturn"
+"1198_safeIncreaseAllowance" -> "1198_callOptionalReturn"
+"1198_safeApprove" -> "1198_callOptionalReturn"
+"1198_safeTransferFrom" -> "1198_callOptionalReturn"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"abi.decode()" 
+"require(bool,string)" 
+"abi.encodeWithSelector()" 
+"1198_safeTransferFrom" -> "abi.encodeWithSelector()"
+"1198_safeDecreaseAllowance" -> "abi.encodeWithSelector()"
+"1198_callOptionalReturn" -> "require(bool,string)"
+"1198_safeApprove" -> "abi.encodeWithSelector()"
+"1198_safeApprove" -> "require(bool,string)"
+"1198_safeIncreaseAllowance" -> "abi.encodeWithSelector()"
+"1198_safeTransfer" -> "abi.encodeWithSelector()"
+"1198_callOptionalReturn" -> "abi.decode()"
+}
+}

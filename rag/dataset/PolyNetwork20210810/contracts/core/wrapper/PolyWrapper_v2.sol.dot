@@ -1,0 +1,114 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterPolyWrapperV2" {
+  graph [ label = "PolyWrapperV2", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "PolyWrapperV2.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "PolyWrapperV2.setFeeCollector" [ label = "setFeeCollector", color = "blue" ];
+  "PolyWrapperV2.setLockProxy" [ label = "setLockProxy", color = "blue" ];
+  "PolyWrapperV2.pause" [ label = "pause", color = "blue" ];
+  "PolyWrapperV2.unpause" [ label = "unpause", color = "blue" ];
+  "PolyWrapperV2.extractFee" [ label = "extractFee", color = "blue" ];
+  "PolyWrapperV2.lock" [ label = "lock", color = "green" ];
+  "PolyWrapperV2.speedUp" [ label = "speedUp", color = "green" ];
+  "PolyWrapperV2._pull" [ label = "_pull" ];
+  "PolyWrapperV2._checkoutFee" [ label = "_checkoutFee" ];
+  "PolyWrapperV2._push" [ label = "_push" ];
+  "PolyWrapperV2.transferOwnership" [ label = "transferOwnership" ];
+  "PolyWrapperV2.address" [ label = "address" ];
+  "PolyWrapperV2.ILockProxy" [ label = "ILockProxy" ];
+  "PolyWrapperV2._pause" [ label = "_pause" ];
+  "PolyWrapperV2._unpause" [ label = "_unpause" ];
+  "PolyWrapperV2.IERC20" [ label = "IERC20" ];
+}
+
+subgraph "clusterILockProxy" {
+  graph [ label = "ILockProxy", color = "lightgray" ];
+  "ILockProxy.managerProxyContract" [ label = "managerProxyContract" ];
+  "ILockProxy.lock" [ label = "lock" ];
+}
+
+subgraph "clusteramount" {
+  graph [ label = "amount", color = "lightgray" ];
+  "amount.sub" [ label = "sub" ];
+}
+
+  "PolyWrapperV2.<Constructor>";
+  "PolyWrapperV2.transferOwnership";
+  "PolyWrapperV2.setFeeCollector";
+  "PolyWrapperV2.address";
+  "PolyWrapperV2.setLockProxy";
+  "PolyWrapperV2.ILockProxy";
+  "ILockProxy.managerProxyContract";
+  "PolyWrapperV2.pause";
+  "PolyWrapperV2._pause";
+  "PolyWrapperV2.unpause";
+  "PolyWrapperV2._unpause";
+  "PolyWrapperV2.extractFee";
+  "PolyWrapperV2.IERC20";
+  "PolyWrapperV2.lock";
+  "PolyWrapperV2._pull";
+  "PolyWrapperV2._checkoutFee";
+  "PolyWrapperV2._push";
+  "PolyWrapperV2.speedUp";
+  "amount.sub";
+  "ILockProxy.lock";
+  "PolyWrapperV2.<Constructor>" -> "PolyWrapperV2.transferOwnership" [ color = "green" ];
+  "PolyWrapperV2.setFeeCollector" -> "PolyWrapperV2.address" [ color = "green" ];
+  "PolyWrapperV2.setLockProxy" -> "PolyWrapperV2.address" [ color = "green" ];
+  "PolyWrapperV2.setLockProxy" -> "PolyWrapperV2.ILockProxy" [ color = "green" ];
+  "PolyWrapperV2.setLockProxy" -> "ILockProxy.managerProxyContract" [ color = "orange" ];
+  "PolyWrapperV2.setLockProxy" -> "PolyWrapperV2.address" [ color = "green" ];
+  "PolyWrapperV2.pause" -> "PolyWrapperV2._pause" [ color = "green" ];
+  "PolyWrapperV2.unpause" -> "PolyWrapperV2._unpause" [ color = "green" ];
+  "PolyWrapperV2.extractFee" -> "PolyWrapperV2.address" [ color = "green" ];
+  "PolyWrapperV2.extractFee" -> "PolyWrapperV2.address" [ color = "green" ];
+  "PolyWrapperV2.extractFee" -> "PolyWrapperV2.IERC20" [ color = "green" ];
+  "PolyWrapperV2.extractFee" -> "PolyWrapperV2.IERC20" [ color = "green" ];
+  "PolyWrapperV2.extractFee" -> "PolyWrapperV2.address" [ color = "green" ];
+  "PolyWrapperV2.lock" -> "PolyWrapperV2.address" [ color = "green" ];
+  "PolyWrapperV2.lock" -> "PolyWrapperV2._pull" [ color = "green" ];
+  "PolyWrapperV2.lock" -> "PolyWrapperV2._checkoutFee" [ color = "green" ];
+  "PolyWrapperV2.lock" -> "PolyWrapperV2._push" [ color = "green" ];
+  "PolyWrapperV2.speedUp" -> "PolyWrapperV2._pull" [ color = "green" ];
+  "PolyWrapperV2._pull" -> "PolyWrapperV2.address" [ color = "green" ];
+  "PolyWrapperV2._pull" -> "PolyWrapperV2.IERC20" [ color = "green" ];
+  "PolyWrapperV2._pull" -> "PolyWrapperV2.address" [ color = "green" ];
+  "PolyWrapperV2._checkoutFee" -> "PolyWrapperV2.address" [ color = "green" ];
+  "PolyWrapperV2._checkoutFee" -> "amount.sub" [ color = "orange" ];
+  "PolyWrapperV2._push" -> "PolyWrapperV2.address" [ color = "green" ];
+  "PolyWrapperV2._push" -> "PolyWrapperV2.IERC20" [ color = "green" ];
+  "PolyWrapperV2._push" -> "PolyWrapperV2.address" [ color = "green" ];
+  "PolyWrapperV2._push" -> "PolyWrapperV2.IERC20" [ color = "green" ];
+  "PolyWrapperV2._push" -> "PolyWrapperV2.address" [ color = "green" ];
+  "PolyWrapperV2._push" -> "ILockProxy.lock" [ color = "orange" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

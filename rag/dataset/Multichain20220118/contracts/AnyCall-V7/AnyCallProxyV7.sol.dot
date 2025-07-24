@@ -1,0 +1,169 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterReentrantLock" {
+  graph [ label = "ReentrantLock", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ReentrantLock.lock" [ label = "lock", color = "yellow" ];
+}
+
+subgraph "clusterAdministrable" {
+  graph [ label = "Administrable", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Administrable.setAdmin" [ label = "setAdmin", color = "white" ];
+  "Administrable.transferAdmin" [ label = "transferAdmin", color = "blue" ];
+  "Administrable.acceptAdmin" [ label = "acceptAdmin", color = "blue" ];
+  "Administrable.onlyAdmin" [ label = "onlyAdmin", color = "yellow" ];
+  "Administrable.address" [ label = "address" ];
+}
+
+subgraph "clusterPausable" {
+  graph [ label = "Pausable", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Pausable.whenNotPaused" [ label = "whenNotPaused", color = "yellow" ];
+  "Pausable.setPaused" [ label = "setPaused", color = "blue" ];
+}
+
+subgraph "clusterMPCControllable" {
+  graph [ label = "MPCControllable", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "MPCControllable.onlyMPC" [ label = "onlyMPC", color = "yellow" ];
+  "MPCControllable.changeMPC" [ label = "changeMPC", color = "blue" ];
+  "MPCControllable.applyMPC" [ label = "applyMPC", color = "blue" ];
+  "MPCControllable.address" [ label = "address" ];
+}
+
+subgraph "clusterIAnyCallApp" {
+  graph [ label = "IAnyCallApp  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IAnyCallApp.anyExecute" [ label = "anyExecute", color = "blue" ];
+  "IAnyCallApp.anyFallback" [ label = "anyFallback", color = "blue" ];
+}
+
+subgraph "clusterAnyCallExecutor" {
+  graph [ label = "AnyCallExecutor", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "AnyCallExecutor.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "AnyCallExecutor.onlyAnyCallProxy" [ label = "onlyAnyCallProxy", color = "yellow" ];
+  "AnyCallExecutor.appExec" [ label = "appExec", color = "blue" ];
+  "AnyCallExecutor.appFallback" [ label = "appFallback", color = "blue" ];
+}
+
+subgraph "clusterIAnyCallProxyV7" {
+  graph [ label = "IAnyCallProxyV7  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IAnyCallProxyV7.executor" [ label = "executor", color = "blue" ];
+  "IAnyCallProxyV7.anyCall" [ label = "anyCall", color = "blue" ];
+  "IAnyCallProxyV7.retry" [ label = "retry", color = "blue" ];
+}
+
+subgraph "clusterIUniGas" {
+  graph [ label = "IUniGas  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IUniGas.ethToUniGas" [ label = "ethToUniGas", color = "blue" ];
+  "IUniGas.uniGasToEth" [ label = "uniGasToEth", color = "blue" ];
+}
+
+subgraph "clusterAnyCallProxyV7" {
+  graph [ label = "AnyCallProxyV7", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "AnyCallProxyV7.onlyInternal" [ label = "onlyInternal", color = "yellow" ];
+  "AnyCallProxyV7.initiate" [ label = "initiate", color = "green" ];
+  "AnyCallProxyV7.setConfig" [ label = "setConfig", color = "green" ];
+  "AnyCallProxyV7.setUniGasOracle" [ label = "setUniGasOracle", color = "green" ];
+  "AnyCallProxyV7.checkUniGas" [ label = "checkUniGas" ];
+  "AnyCallProxyV7.calcRequestID" [ label = "calcRequestID" ];
+  "AnyCallProxyV7.calcExecArgsHash" [ label = "calcExecArgsHash" ];
+  "AnyCallProxyV7.anyCall" [ label = "anyCall", color = "blue" ];
+  "AnyCallProxyV7.anyExec" [ label = "anyExec", color = "blue" ];
+  "AnyCallProxyV7._anyExec" [ label = "_anyExec" ];
+  "AnyCallProxyV7.autoFallback" [ label = "autoFallback", color = "blue" ];
+  "AnyCallProxyV7.anyFallback" [ label = "anyFallback", color = "blue" ];
+  "AnyCallProxyV7._fallback" [ label = "_fallback" ];
+  "AnyCallProxyV7.retry" [ label = "retry", color = "blue" ];
+  "AnyCallProxyV7.deposit" [ label = "deposit", color = "green" ];
+  "AnyCallProxyV7.withdraw" [ label = "withdraw", color = "green" ];
+  "AnyCallProxyV7.approve" [ label = "approve", color = "blue" ];
+  "AnyCallProxyV7.__Context_init_unchained" [ label = "__Context_init_unchained" ];
+  "AnyCallProxyV7.__Ownable_init_unchained" [ label = "__Ownable_init_unchained" ];
+  "AnyCallProxyV7.setAdmin" [ label = "setAdmin" ];
+}
+
+  "Administrable.acceptAdmin";
+  "Administrable.address";
+  "MPCControllable.applyMPC";
+  "MPCControllable.address";
+  "AnyCallProxyV7.onlyInternal";
+  "AnyCallProxyV7.initiate";
+  "AnyCallProxyV7.__Context_init_unchained";
+  "AnyCallProxyV7.__Ownable_init_unchained";
+  "AnyCallProxyV7.setAdmin";
+  "AnyCallProxyV7.anyCall";
+  "AnyCallProxyV7.calcRequestID";
+  "AnyCallProxyV7.calcExecArgsHash";
+  "AnyCallProxyV7.checkUniGas";
+  "AnyCallProxyV7.anyExec";
+  "AnyCallProxyV7._anyExec";
+  "AnyCallProxyV7.autoFallback";
+  "AnyCallProxyV7._fallback";
+  "AnyCallProxyV7.anyFallback";
+  "AnyCallProxyV7.retry";
+  "Administrable.acceptAdmin" -> "Administrable.address" [ color = "green" ];
+  "MPCControllable.applyMPC" -> "MPCControllable.address" [ color = "green" ];
+  "AnyCallProxyV7.onlyInternal" -> "MPCControllable.address" [ color = "green" ];
+  "AnyCallProxyV7.initiate" -> "AnyCallProxyV7.__Context_init_unchained" [ color = "green" ];
+  "AnyCallProxyV7.initiate" -> "AnyCallProxyV7.__Ownable_init_unchained" [ color = "green" ];
+  "AnyCallProxyV7.initiate" -> "AnyCallProxyV7.setAdmin" [ color = "green" ];
+  "AnyCallProxyV7.initiate" -> "MPCControllable.address" [ color = "green" ];
+  "AnyCallProxyV7.initiate" -> "MPCControllable.address" [ color = "green" ];
+  "AnyCallProxyV7.anyCall" -> "AnyCallProxyV7.calcRequestID" [ color = "green" ];
+  "AnyCallProxyV7.anyCall" -> "AnyCallProxyV7.calcExecArgsHash" [ color = "green" ];
+  "AnyCallProxyV7.anyCall" -> "AnyCallProxyV7.checkUniGas" [ color = "green" ];
+  "AnyCallProxyV7.anyExec" -> "AnyCallProxyV7.calcRequestID" [ color = "green" ];
+  "AnyCallProxyV7.anyExec" -> "MPCControllable.address" [ color = "green" ];
+  "AnyCallProxyV7.anyExec" -> "MPCControllable.address" [ color = "green" ];
+  "AnyCallProxyV7.anyExec" -> "AnyCallProxyV7._anyExec" [ color = "green" ];
+  "AnyCallProxyV7.anyExec" -> "AnyCallProxyV7.calcExecArgsHash" [ color = "green" ];
+  "AnyCallProxyV7.anyExec" -> "MPCControllable.address" [ color = "green" ];
+  "AnyCallProxyV7.anyExec" -> "MPCControllable.address" [ color = "green" ];
+  "AnyCallProxyV7.anyExec" -> "MPCControllable.address" [ color = "green" ];
+  "AnyCallProxyV7.anyExec" -> "MPCControllable.address" [ color = "green" ];
+  "AnyCallProxyV7.anyExec" -> "MPCControllable.address" [ color = "green" ];
+  "AnyCallProxyV7.anyExec" -> "MPCControllable.address" [ color = "green" ];
+  "AnyCallProxyV7.anyExec" -> "MPCControllable.address" [ color = "green" ];
+  "AnyCallProxyV7._anyExec" -> "MPCControllable.address" [ color = "green" ];
+  "AnyCallProxyV7._anyExec" -> "MPCControllable.address" [ color = "green" ];
+  "AnyCallProxyV7.autoFallback" -> "AnyCallProxyV7.calcRequestID" [ color = "green" ];
+  "AnyCallProxyV7.autoFallback" -> "MPCControllable.address" [ color = "green" ];
+  "AnyCallProxyV7.autoFallback" -> "AnyCallProxyV7._fallback" [ color = "green" ];
+  "AnyCallProxyV7.anyFallback" -> "AnyCallProxyV7.calcRequestID" [ color = "green" ];
+  "AnyCallProxyV7.anyFallback" -> "AnyCallProxyV7.calcExecArgsHash" [ color = "green" ];
+  "AnyCallProxyV7.anyFallback" -> "AnyCallProxyV7._fallback" [ color = "green" ];
+  "AnyCallProxyV7._fallback" -> "MPCControllable.address" [ color = "green" ];
+  "AnyCallProxyV7._fallback" -> "MPCControllable.address" [ color = "green" ];
+  "AnyCallProxyV7.retry" -> "AnyCallProxyV7.calcRequestID" [ color = "green" ];
+  "AnyCallProxyV7.retry" -> "AnyCallProxyV7.calcExecArgsHash" [ color = "green" ];
+  "AnyCallProxyV7.retry" -> "AnyCallProxyV7.checkUniGas" [ color = "green" ];
+  "AnyCallProxyV7.retry" -> "AnyCallProxyV7.calcRequestID" [ color = "green" ];
+  "AnyCallProxyV7.retry" -> "AnyCallProxyV7.calcExecArgsHash" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

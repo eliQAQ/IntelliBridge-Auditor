@@ -1,0 +1,18 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_28_L1StandardBridge {
+label = "L1StandardBridge"
+"28_depositETHTo" [label="depositETHTo"]
+"28_depositERC20To" [label="depositERC20To"]
+}subgraph cluster_61_IOptimismPortal {
+label = "IOptimismPortal"
+"61_depositTransaction" [label="depositTransaction"]
+}subgraph cluster_47_OldL1TokenGateway {
+label = "OldL1TokenGateway"
+"47_initiateSynthTransfer" [label="initiateSynthTransfer"]
+"47_depositTo" [label="depositTo"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+}
+}

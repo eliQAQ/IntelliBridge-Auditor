@@ -1,0 +1,63 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterLiFiDiamond" {
+  graph [ label = "LiFiDiamond", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "LiFiDiamond.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "LiFiDiamond.<Fallback>" [ label = "<Fallback>", color = "blue" ];
+  "LiFiDiamond.<Receive Ether>" [ label = "<Receive Ether>", color = "blue" ];
+  "LiFiDiamond.address" [ label = "address" ];
+}
+
+subgraph "clusterLibDiamond" {
+  graph [ label = "LibDiamond", color = "lightgray" ];
+  "LibDiamond.setContractOwner" [ label = "setContractOwner" ];
+  "LibDiamond.diamondCut" [ label = "diamondCut" ];
+}
+
+subgraph "clusterIDiamondCut" {
+  graph [ label = "IDiamondCut", color = "lightgray" ];
+  "IDiamondCut.FacetCut" [ label = "FacetCut" ];
+}
+
+  "LiFiDiamond.<Constructor>";
+  "LibDiamond.setContractOwner";
+  "IDiamondCut.FacetCut";
+  "LibDiamond.diamondCut";
+  "LiFiDiamond.address";
+  "LiFiDiamond.<Fallback>";
+  "LiFiDiamond.<Constructor>" -> "LibDiamond.setContractOwner" [ color = "orange" ];
+  "LiFiDiamond.<Constructor>" -> "IDiamondCut.FacetCut" [ color = "orange" ];
+  "LiFiDiamond.<Constructor>" -> "LibDiamond.diamondCut" [ color = "orange" ];
+  "LiFiDiamond.<Constructor>" -> "LiFiDiamond.address" [ color = "green" ];
+  "LiFiDiamond.<Fallback>" -> "LiFiDiamond.address" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

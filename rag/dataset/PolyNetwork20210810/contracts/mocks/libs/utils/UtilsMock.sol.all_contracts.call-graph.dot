@@ -1,0 +1,58 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_481_Utils {
+label = "Utils"
+"481_addressToBytes" [label="addressToBytes"]
+"481_bytesToUint256" [label="bytesToUint256"]
+"481_containMAddresses" [label="containMAddresses"]
+"481_uint256ToBytes" [label="uint256ToBytes"]
+"481_hashLeaf" [label="hashLeaf"]
+"481_bytesToAddress" [label="bytesToAddress"]
+"481_compressMCPubKey" [label="compressMCPubKey"]
+"481_isContract" [label="isContract"]
+"481_bytesToBytes32" [label="bytesToBytes32"]
+"481_slice" [label="slice"]
+"481_equalStorage" [label="equalStorage"]
+"481_hashChildren" [label="hashChildren"]
+"481_compressMCPubKey" -> "481_slice"
+}subgraph cluster_163_UtilsMock {
+label = "UtilsMock"
+"163_equalStorage" [label="equalStorage"]
+"163_uint256ToBytes" [label="uint256ToBytes"]
+"163_bytesToAddress" [label="bytesToAddress"]
+"163_constructor" [label="constructor"]
+"163_addressToBytes" [label="addressToBytes"]
+"163_slice" [label="slice"]
+"163_hashLeaf" [label="hashLeaf"]
+"163_containMAddresses" [label="containMAddresses"]
+"163_bytesToBytes32" [label="bytesToBytes32"]
+"163_hashChildren" [label="hashChildren"]
+"163_bytesToUint256" [label="bytesToUint256"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"sha256(bytes)" 
+"require(bool)" 
+"require(bool,string)" 
+"abi.encodePacked()" 
+"481_bytesToUint256" -> "require(bool,string)"
+"481_bytesToAddress" -> "require(bool,string)"
+"481_compressMCPubKey" -> "require(bool,string)"
+"481_hashLeaf" -> "abi.encodePacked()"
+"481_bytesToBytes32" -> "require(bool,string)"
+"481_hashLeaf" -> "sha256(bytes)"
+"481_hashChildren" -> "sha256(bytes)"
+"481_slice" -> "require(bool)"
+"481_uint256ToBytes" -> "require(bool,string)"
+"481_hashChildren" -> "abi.encodePacked()"
+}"163_containMAddresses" -> "481_containMAddresses"
+"163_bytesToAddress" -> "481_bytesToAddress"
+"163_addressToBytes" -> "481_addressToBytes"
+"163_hashChildren" -> "481_hashChildren"
+"163_hashLeaf" -> "481_hashLeaf"
+"163_equalStorage" -> "481_equalStorage"
+"163_slice" -> "481_slice"
+"163_bytesToBytes32" -> "481_bytesToBytes32"
+"163_uint256ToBytes" -> "481_uint256ToBytes"
+"163_bytesToUint256" -> "481_bytesToUint256"
+}

@@ -1,0 +1,104 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterLibAsset" {
+  graph [ label = "LibAsset  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "LibAsset.isNativeAsset" [ label = "isNativeAsset" ];
+  "LibAsset.getOwnBalance" [ label = "getOwnBalance", color = "white" ];
+  "LibAsset.transferNativeAsset" [ label = "transferNativeAsset" ];
+  "LibAsset.approveERC20" [ label = "approveERC20", color = "white" ];
+  "LibAsset.transferERC20" [ label = "transferERC20", color = "white" ];
+  "LibAsset.transferFromERC20" [ label = "transferFromERC20", color = "white" ];
+  "LibAsset.increaseERC20Allowance" [ label = "increaseERC20Allowance", color = "white" ];
+  "LibAsset.decreaseERC20Allowance" [ label = "decreaseERC20Allowance", color = "white" ];
+  "LibAsset.transferAsset" [ label = "transferAsset", color = "white" ];
+  "LibAsset.address" [ label = "address" ];
+  "LibAsset.IERC20" [ label = "IERC20" ];
+}
+
+subgraph "clusterIERC20" {
+  graph [ label = "IERC20", color = "lightgray" ];
+  "IERC20.allowance" [ label = "allowance" ];
+}
+
+subgraph "clusterSafeERC20" {
+  graph [ label = "SafeERC20", color = "lightgray" ];
+  "SafeERC20.safeApprove" [ label = "safeApprove" ];
+  "SafeERC20.safeTransfer" [ label = "safeTransfer" ];
+  "SafeERC20.safeTransferFrom" [ label = "safeTransferFrom" ];
+  "SafeERC20.safeIncreaseAllowance" [ label = "safeIncreaseAllowance" ];
+  "SafeERC20.safeDecreaseAllowance" [ label = "safeDecreaseAllowance" ];
+}
+
+  "LibAsset.getOwnBalance";
+  "LibAsset.isNativeAsset";
+  "LibAsset.address";
+  "LibAsset.IERC20";
+  "LibAsset.approveERC20";
+  "IERC20.allowance";
+  "SafeERC20.safeApprove";
+  "LibAsset.transferERC20";
+  "SafeERC20.safeTransfer";
+  "LibAsset.transferFromERC20";
+  "SafeERC20.safeTransferFrom";
+  "LibAsset.increaseERC20Allowance";
+  "SafeERC20.safeIncreaseAllowance";
+  "LibAsset.decreaseERC20Allowance";
+  "SafeERC20.safeDecreaseAllowance";
+  "LibAsset.transferAsset";
+  "LibAsset.transferNativeAsset";
+  "LibAsset.getOwnBalance" -> "LibAsset.isNativeAsset" [ color = "green" ];
+  "LibAsset.getOwnBalance" -> "LibAsset.address" [ color = "green" ];
+  "LibAsset.getOwnBalance" -> "LibAsset.IERC20" [ color = "green" ];
+  "LibAsset.getOwnBalance" -> "LibAsset.address" [ color = "green" ];
+  "LibAsset.approveERC20" -> "LibAsset.isNativeAsset" [ color = "green" ];
+  "LibAsset.approveERC20" -> "LibAsset.address" [ color = "green" ];
+  "LibAsset.approveERC20" -> "IERC20.allowance" [ color = "orange" ];
+  "LibAsset.approveERC20" -> "LibAsset.address" [ color = "green" ];
+  "LibAsset.approveERC20" -> "SafeERC20.safeApprove" [ color = "orange" ];
+  "LibAsset.approveERC20" -> "LibAsset.IERC20" [ color = "green" ];
+  "LibAsset.approveERC20" -> "SafeERC20.safeApprove" [ color = "orange" ];
+  "LibAsset.approveERC20" -> "LibAsset.IERC20" [ color = "green" ];
+  "LibAsset.transferERC20" -> "SafeERC20.safeTransfer" [ color = "orange" ];
+  "LibAsset.transferERC20" -> "LibAsset.IERC20" [ color = "green" ];
+  "LibAsset.transferFromERC20" -> "SafeERC20.safeTransferFrom" [ color = "orange" ];
+  "LibAsset.transferFromERC20" -> "LibAsset.IERC20" [ color = "green" ];
+  "LibAsset.increaseERC20Allowance" -> "LibAsset.isNativeAsset" [ color = "green" ];
+  "LibAsset.increaseERC20Allowance" -> "SafeERC20.safeIncreaseAllowance" [ color = "orange" ];
+  "LibAsset.increaseERC20Allowance" -> "LibAsset.IERC20" [ color = "green" ];
+  "LibAsset.decreaseERC20Allowance" -> "LibAsset.isNativeAsset" [ color = "green" ];
+  "LibAsset.decreaseERC20Allowance" -> "SafeERC20.safeDecreaseAllowance" [ color = "orange" ];
+  "LibAsset.decreaseERC20Allowance" -> "LibAsset.IERC20" [ color = "green" ];
+  "LibAsset.transferAsset" -> "LibAsset.isNativeAsset" [ color = "green" ];
+  "LibAsset.transferAsset" -> "LibAsset.transferNativeAsset" [ color = "green" ];
+  "LibAsset.transferAsset" -> "LibAsset.transferERC20" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

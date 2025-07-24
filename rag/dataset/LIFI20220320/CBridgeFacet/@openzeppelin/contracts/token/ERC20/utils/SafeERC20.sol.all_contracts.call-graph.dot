@@ -1,0 +1,76 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_301_IERC20 {
+label = "IERC20"
+"301_totalSupply" [label="totalSupply"]
+"301_transferFrom" [label="transferFrom"]
+"301_allowance" [label="allowance"]
+"301_balanceOf" [label="balanceOf"]
+"301_approve" [label="approve"]
+"301_transfer" [label="transfer"]
+}subgraph cluster_598_Address {
+label = "Address"
+"598_verifyCallResult" [label="verifyCallResult"]
+"598_functionStaticCall" [label="functionStaticCall"]
+"598_functionCall" [label="functionCall"]
+"598_functionCallWithValue" [label="functionCallWithValue"]
+"598_functionDelegateCall" [label="functionDelegateCall"]
+"598_isContract" [label="isContract"]
+"598_sendValue" [label="sendValue"]
+"598_functionDelegateCall" -> "598_isContract"
+"598_functionStaticCall" -> "598_verifyCallResult"
+"598_functionStaticCall" -> "598_functionStaticCall"
+"598_functionCall" -> "598_functionCall"
+"598_functionCallWithValue" -> "598_functionCallWithValue"
+"598_functionDelegateCall" -> "598_verifyCallResult"
+"598_functionCall" -> "598_functionCallWithValue"
+"598_functionDelegateCall" -> "598_functionDelegateCall"
+"598_functionCallWithValue" -> "598_verifyCallResult"
+"598_functionStaticCall" -> "598_isContract"
+"598_functionCallWithValue" -> "598_isContract"
+}subgraph cluster_223_SafeERC20 {
+label = "SafeERC20"
+"223_safeDecreaseAllowance" [label="safeDecreaseAllowance"]
+"223_safeTransfer" [label="safeTransfer"]
+"223_safeTransferFrom" [label="safeTransferFrom"]
+"223_safeIncreaseAllowance" [label="safeIncreaseAllowance"]
+"223_safeApprove" [label="safeApprove"]
+"223__callOptionalReturn" [label="_callOptionalReturn"]
+"223_safeTransferFrom" -> "223__callOptionalReturn"
+"223_safeDecreaseAllowance" -> "223__callOptionalReturn"
+"223_safeApprove" -> "223__callOptionalReturn"
+"223_safeTransfer" -> "223__callOptionalReturn"
+"223_safeIncreaseAllowance" -> "223__callOptionalReturn"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"balance(address)" 
+"mload(uint256)" 
+"abi.encodeWithSelector()" 
+"abi.decode()" 
+"require(bool,string)" 
+"revert(string)" 
+"revert(uint256,uint256)" 
+"598_functionDelegateCall" -> "require(bool,string)"
+"598_functionCallWithValue" -> "require(bool,string)"
+"223__callOptionalReturn" -> "require(bool,string)"
+"223_safeTransfer" -> "abi.encodeWithSelector()"
+"598_functionStaticCall" -> "require(bool,string)"
+"223_safeDecreaseAllowance" -> "require(bool,string)"
+"223_safeTransferFrom" -> "abi.encodeWithSelector()"
+"223_safeDecreaseAllowance" -> "abi.encodeWithSelector()"
+"598_verifyCallResult" -> "mload(uint256)"
+"598_sendValue" -> "require(bool,string)"
+"598_sendValue" -> "balance(address)"
+"598_verifyCallResult" -> "revert(string)"
+"223_safeIncreaseAllowance" -> "abi.encodeWithSelector()"
+"598_functionCallWithValue" -> "balance(address)"
+"223_safeApprove" -> "abi.encodeWithSelector()"
+"598_verifyCallResult" -> "revert(uint256,uint256)"
+"223_safeApprove" -> "require(bool,string)"
+"223__callOptionalReturn" -> "abi.decode()"
+}"223_safeIncreaseAllowance" -> "301_allowance"
+"223__callOptionalReturn" -> "598_functionCall"
+"223_safeDecreaseAllowance" -> "301_allowance"
+"223_safeApprove" -> "301_allowance"
+}

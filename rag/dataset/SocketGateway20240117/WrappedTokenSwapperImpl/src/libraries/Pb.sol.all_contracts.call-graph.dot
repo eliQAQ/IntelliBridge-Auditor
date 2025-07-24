@@ -1,0 +1,42 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_355_Pb {
+label = "Pb"
+"355_fromBytes" [label="fromBytes"]
+"355_hasMore" [label="hasMore"]
+"355__uint256" [label="_uint256"]
+"355_decKey" [label="decKey"]
+"355_decVarint" [label="decVarint"]
+"355_skipValue" [label="skipValue"]
+"355__address" [label="_address"]
+"355__bytes32" [label="_bytes32"]
+"355_decBytes" [label="decBytes"]
+"355__addressPayable" [label="_addressPayable"]
+"355_decBytes" -> "355_decVarint"
+"355__address" -> "355__addressPayable"
+"355_skipValue" -> "355_decVarint"
+"355_decKey" -> "355_decVarint"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool)" 
+"mload(uint256)" 
+"revert()" 
+"byte(uint256,uint256)" 
+"mstore(uint256,uint256)" 
+"355__uint256" -> "require(bool)"
+"355_decVarint" -> "revert()"
+"355_decBytes" -> "mload(uint256)"
+"355_skipValue" -> "revert()"
+"355_skipValue" -> "require(bool)"
+"355__bytes32" -> "mload(uint256)"
+"355__addressPayable" -> "mload(uint256)"
+"355_decBytes" -> "require(bool)"
+"355__uint256" -> "mload(uint256)"
+"355_decVarint" -> "mload(uint256)"
+"355__addressPayable" -> "require(bool)"
+"355_decBytes" -> "mstore(uint256,uint256)"
+"355__bytes32" -> "require(bool)"
+"355_decVarint" -> "byte(uint256,uint256)"
+}
+}

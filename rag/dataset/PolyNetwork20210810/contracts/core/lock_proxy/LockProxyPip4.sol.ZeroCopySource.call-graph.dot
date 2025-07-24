@@ -1,0 +1,39 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_2221_ZeroCopySource {
+label = "ZeroCopySource"
+"2221_NextBytes20" [label="NextBytes20"]
+"2221_NextBool" [label="NextBool"]
+"2221_NextByte" [label="NextByte"]
+"2221_NextVarUint" [label="NextVarUint"]
+"2221_NextUint64" [label="NextUint64"]
+"2221_NextVarBytes" [label="NextVarBytes"]
+"2221_NextUint32" [label="NextUint32"]
+"2221_NextHash" [label="NextHash"]
+"2221_NextUint16" [label="NextUint16"]
+"2221_NextUint8" [label="NextUint8"]
+"2221_NextUint255" [label="NextUint255"]
+"2221_NextVarUint" -> "2221_NextUint16"
+"2221_NextVarUint" -> "2221_NextByte"
+"2221_NextVarUint" -> "2221_NextUint64"
+"2221_NextVarBytes" -> "2221_NextVarUint"
+"2221_NextVarUint" -> "2221_NextUint32"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"revert(string)" 
+"2221_NextUint8" -> "require(bool,string)"
+"2221_NextUint64" -> "require(bool,string)"
+"2221_NextBool" -> "revert(string)"
+"2221_NextVarUint" -> "require(bool,string)"
+"2221_NextUint32" -> "require(bool,string)"
+"2221_NextHash" -> "require(bool,string)"
+"2221_NextBool" -> "require(bool,string)"
+"2221_NextUint16" -> "require(bool,string)"
+"2221_NextByte" -> "require(bool,string)"
+"2221_NextBytes20" -> "require(bool,string)"
+"2221_NextUint255" -> "require(bool,string)"
+"2221_NextVarBytes" -> "require(bool,string)"
+}
+}

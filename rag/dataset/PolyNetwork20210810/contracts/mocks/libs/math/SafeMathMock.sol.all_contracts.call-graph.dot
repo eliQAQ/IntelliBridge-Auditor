@@ -1,0 +1,34 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_83_SafeMathMock {
+label = "SafeMathMock"
+"83_sub" [label="sub"]
+"83_add" [label="add"]
+"83_mul" [label="mul"]
+"83_mod" [label="mod"]
+"83_div" [label="div"]
+}subgraph cluster_270_SafeMath {
+label = "SafeMath"
+"270_mod" [label="mod"]
+"270_add" [label="add"]
+"270_mul" [label="mul"]
+"270_sub" [label="sub"]
+"270_div" [label="div"]
+"270_mod" -> "270_mod"
+"270_sub" -> "270_sub"
+"270_div" -> "270_div"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"270_div" -> "require(bool,string)"
+"270_mod" -> "require(bool,string)"
+"270_mul" -> "require(bool,string)"
+"270_sub" -> "require(bool,string)"
+"270_add" -> "require(bool,string)"
+}"83_sub" -> "270_sub"
+"83_div" -> "270_div"
+"83_mod" -> "270_mod"
+"83_mul" -> "270_mul"
+"83_add" -> "270_add"
+}

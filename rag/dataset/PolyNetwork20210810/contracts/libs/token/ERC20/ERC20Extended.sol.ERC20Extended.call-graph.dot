@@ -1,0 +1,73 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_580_ERC20 {
+label = "ERC20"
+"580__transfer" [label="_transfer"]
+"580_totalSupply" [label="totalSupply"]
+"580_transfer" [label="transfer"]
+"580__mint" [label="_mint"]
+"580__burn" [label="_burn"]
+"580_balanceOf" [label="balanceOf"]
+"580_allowance" [label="allowance"]
+"580_approve" [label="approve"]
+"580_transferFrom" [label="transferFrom"]
+"580_decreaseAllowance" [label="decreaseAllowance"]
+"580__burnFrom" [label="_burnFrom"]
+"580__approve" [label="_approve"]
+"580_increaseAllowance" [label="increaseAllowance"]
+"580_approve" -> "580__msgSender"
+"580_transferFrom" -> "580__transfer"
+"580_transfer" -> "580__msgSender"
+"580_transferFrom" -> "580__approve"
+"580__burnFrom" -> "580__burn"
+"580_transfer" -> "580__transfer"
+"580_approve" -> "580__approve"
+"580_increaseAllowance" -> "580__approve"
+"580_decreaseAllowance" -> "580__msgSender"
+"580_decreaseAllowance" -> "580__approve"
+"580_transferFrom" -> "580__msgSender"
+"580_increaseAllowance" -> "580__msgSender"
+"580__burnFrom" -> "580__approve"
+"580__burnFrom" -> "580__msgSender"
+}subgraph cluster_638_ERC20Detailed {
+label = "ERC20Detailed"
+"638_decimals" [label="decimals"]
+"638_symbol" [label="symbol"]
+"638_constructor" [label="constructor"]
+"638_name" [label="name"]
+}subgraph cluster_140_ERC20Extended {
+label = "ERC20Extended"
+"140_burn" [label="burn"]
+"140_bindAssetHash" [label="bindAssetHash"]
+"140_mint" [label="mint"]
+"140_setManagerProxy" [label="setManagerProxy"]
+"140_bindAssetHash" -> "140_onlyOperator"
+"140_mint" -> "140__mint"
+"140_burn" -> "140__msgSender"
+"140_mint" -> "140_onlyManagerContract"
+"140_setManagerProxy" -> "140_onlyOperator"
+"140_burn" -> "140__burn"
+}subgraph cluster_175_Context {
+label = "Context"
+"175__msgData" [label="_msgData"]
+"175_constructor" [label="constructor"]
+"175__msgSender" [label="_msgSender"]
+}subgraph cluster_894_IERC20 {
+label = "IERC20"
+"894_allowance" [label="allowance"]
+"894_balanceOf" [label="balanceOf"]
+"894_transfer" [label="transfer"]
+"894_totalSupply" [label="totalSupply"]
+"894_approve" [label="approve"]
+"894_transferFrom" [label="transferFrom"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"580__burn" -> "require(bool,string)"
+"580__approve" -> "require(bool,string)"
+"580__transfer" -> "require(bool,string)"
+"140_bindAssetHash" -> "require(bool,string)"
+"580__mint" -> "require(bool,string)"
+}
+}

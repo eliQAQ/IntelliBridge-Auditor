@@ -1,0 +1,12 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_43_LibUtil {
+label = "LibUtil"
+"43_getRevertMsg" [label="getRevertMsg"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"abi.decode()" 
+"43_getRevertMsg" -> "abi.decode()"
+}
+}

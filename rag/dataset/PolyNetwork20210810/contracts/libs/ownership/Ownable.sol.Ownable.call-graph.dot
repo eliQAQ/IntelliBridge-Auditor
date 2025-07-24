@@ -1,0 +1,27 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_144_Context {
+label = "Context"
+"144__msgData" [label="_msgData"]
+"144_constructor" [label="constructor"]
+"144__msgSender" [label="_msgSender"]
+}subgraph cluster_117_Ownable {
+label = "Ownable"
+"117_isOwner" [label="isOwner"]
+"117_owner" [label="owner"]
+"117_renounceOwnership" [label="renounceOwnership"]
+"117__transferOwnership" [label="_transferOwnership"]
+"117_transferOwnership" [label="transferOwnership"]
+"117_constructor" [label="constructor"]
+"117_renounceOwnership" -> "117_onlyOwner"
+"117_constructor" -> "117__msgSender"
+"117_transferOwnership" -> "117__transferOwnership"
+"117_isOwner" -> "117__msgSender"
+"117_transferOwnership" -> "117_onlyOwner"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"117__transferOwnership" -> "require(bool,string)"
+}
+}

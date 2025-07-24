@@ -1,0 +1,96 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterBridgeToken" {
+  graph [ label = "BridgeToken", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "BridgeToken.initialize" [ label = "initialize", color = "green" ];
+  "BridgeToken.burn" [ label = "burn", color = "blue" ];
+  "BridgeToken.mint" [ label = "mint", color = "blue" ];
+  "BridgeToken.setDetailsHash" [ label = "setDetailsHash", color = "blue" ];
+  "BridgeToken.setDetails" [ label = "setDetails", color = "blue" ];
+  "BridgeToken.permit" [ label = "permit", color = "blue" ];
+  "BridgeToken.balanceOf" [ label = "balanceOf", color = "green" ];
+  "BridgeToken.name" [ label = "name", color = "green" ];
+  "BridgeToken.symbol" [ label = "symbol", color = "green" ];
+  "BridgeToken.decimals" [ label = "decimals", color = "green" ];
+  "BridgeToken.domainSeparator" [ label = "domainSeparator" ];
+  "BridgeToken.transferOwnership" [ label = "transferOwnership", color = "green" ];
+  "BridgeToken.renounceOwnership" [ label = "renounceOwnership", color = "green" ];
+  "BridgeToken.__Ownable_init" [ label = "__Ownable_init" ];
+  "BridgeToken._burn" [ label = "_burn" ];
+  "BridgeToken._mint" [ label = "_mint" ];
+  "BridgeToken.address" [ label = "address" ];
+  "BridgeToken._approve" [ label = "_approve" ];
+}
+
+subgraph "clusterBridgeMessage" {
+  graph [ label = "BridgeMessage", color = "lightgray" ];
+  "BridgeMessage.getDetailsHash" [ label = "getDetailsHash" ];
+}
+
+subgraph "clusterERC20" {
+  graph [ label = "ERC20", color = "lightgray" ];
+  "ERC20.balanceOf" [ label = "balanceOf" ];
+}
+
+subgraph "clusterOwnableUpgradeable" {
+  graph [ label = "OwnableUpgradeable", color = "lightgray" ];
+  "OwnableUpgradeable.transferOwnership" [ label = "transferOwnership" ];
+}
+
+  "BridgeToken.initialize";
+  "BridgeToken.__Ownable_init";
+  "BridgeToken.burn";
+  "BridgeToken._burn";
+  "BridgeToken.mint";
+  "BridgeToken._mint";
+  "BridgeToken.setDetails";
+  "BridgeMessage.getDetailsHash";
+  "BridgeToken.permit";
+  "BridgeToken.address";
+  "BridgeToken.domainSeparator";
+  "BridgeToken._approve";
+  "BridgeToken.balanceOf";
+  "ERC20.balanceOf";
+  "BridgeToken.transferOwnership";
+  "OwnableUpgradeable.transferOwnership";
+  "BridgeToken.initialize" -> "BridgeToken.__Ownable_init" [ color = "green" ];
+  "BridgeToken.burn" -> "BridgeToken._burn" [ color = "green" ];
+  "BridgeToken.mint" -> "BridgeToken._mint" [ color = "green" ];
+  "BridgeToken.setDetails" -> "BridgeMessage.getDetailsHash" [ color = "orange" ];
+  "BridgeToken.permit" -> "BridgeToken.address" [ color = "green" ];
+  "BridgeToken.permit" -> "BridgeToken.domainSeparator" [ color = "green" ];
+  "BridgeToken.permit" -> "BridgeToken._approve" [ color = "green" ];
+  "BridgeToken.balanceOf" -> "ERC20.balanceOf" [ color = "orange" ];
+  "BridgeToken.domainSeparator" -> "BridgeToken.address" [ color = "green" ];
+  "BridgeToken.transferOwnership" -> "OwnableUpgradeable.transferOwnership" [ color = "orange" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

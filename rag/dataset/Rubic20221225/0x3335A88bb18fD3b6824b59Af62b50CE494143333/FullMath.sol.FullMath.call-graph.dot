@@ -1,0 +1,14 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_132_FullMath {
+label = "FullMath"
+"132_mulDiv" [label="mulDiv"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool)" 
+"mulmod(uint256,uint256,uint256)" 
+"132_mulDiv" -> "require(bool)"
+"132_mulDiv" -> "mulmod(uint256,uint256,uint256)"
+}
+}

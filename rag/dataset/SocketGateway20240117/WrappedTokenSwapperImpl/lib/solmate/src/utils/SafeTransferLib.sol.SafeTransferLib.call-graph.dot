@@ -1,0 +1,40 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_84_SafeTransferLib {
+label = "SafeTransferLib"
+"84_safeTransferFrom" [label="safeTransferFrom"]
+"84_safeApprove" [label="safeApprove"]
+"84_safeTransferETH" [label="safeTransferETH"]
+"84_safeTransfer" [label="safeTransfer"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"mstore(uint256,uint256)" 
+"gas()" 
+"returndatasize()" 
+"mload(uint256)" 
+"call(uint256,uint256,uint256,uint256,uint256,uint256,uint256)" 
+"require(bool,string)" 
+"84_safeTransfer" -> "mstore(uint256,uint256)"
+"84_safeTransfer" -> "gas()"
+"84_safeTransfer" -> "require(bool,string)"
+"84_safeTransferFrom" -> "require(bool,string)"
+"84_safeTransfer" -> "mload(uint256)"
+"84_safeTransfer" -> "returndatasize()"
+"84_safeApprove" -> "require(bool,string)"
+"84_safeApprove" -> "call(uint256,uint256,uint256,uint256,uint256,uint256,uint256)"
+"84_safeTransferFrom" -> "mstore(uint256,uint256)"
+"84_safeTransferETH" -> "require(bool,string)"
+"84_safeTransferFrom" -> "call(uint256,uint256,uint256,uint256,uint256,uint256,uint256)"
+"84_safeTransferFrom" -> "returndatasize()"
+"84_safeTransferETH" -> "call(uint256,uint256,uint256,uint256,uint256,uint256,uint256)"
+"84_safeTransferFrom" -> "gas()"
+"84_safeTransferETH" -> "gas()"
+"84_safeTransfer" -> "call(uint256,uint256,uint256,uint256,uint256,uint256,uint256)"
+"84_safeApprove" -> "returndatasize()"
+"84_safeApprove" -> "mstore(uint256,uint256)"
+"84_safeApprove" -> "gas()"
+"84_safeApprove" -> "mload(uint256)"
+"84_safeTransferFrom" -> "mload(uint256)"
+}
+}

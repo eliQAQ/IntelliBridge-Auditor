@@ -1,0 +1,68 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_648_IERC20Metadata {
+label = "IERC20Metadata"
+"648_symbol" [label="symbol"]
+"648_decimals" [label="decimals"]
+"648_name" [label="name"]
+}subgraph cluster_545_ERC20 {
+label = "ERC20"
+"545__afterTokenTransfer" [label="_afterTokenTransfer"]
+"545_decimals" [label="decimals"]
+"545_totalSupply" [label="totalSupply"]
+"545_decreaseAllowance" [label="decreaseAllowance"]
+"545_approve" [label="approve"]
+"545_increaseAllowance" [label="increaseAllowance"]
+"545_balanceOf" [label="balanceOf"]
+"545_constructor" [label="constructor"]
+"545__mint" [label="_mint"]
+"545_name" [label="name"]
+"545__beforeTokenTransfer" [label="_beforeTokenTransfer"]
+"545__transfer" [label="_transfer"]
+"545__burn" [label="_burn"]
+"545_transfer" [label="transfer"]
+"545_allowance" [label="allowance"]
+"545_transferFrom" [label="transferFrom"]
+"545_symbol" [label="symbol"]
+"545__approve" [label="_approve"]
+"545_transferFrom" -> "545__msgSender"
+"545__burn" -> "545__afterTokenTransfer"
+"545_transfer" -> "545__transfer"
+"545_transfer" -> "545__msgSender"
+"545_decreaseAllowance" -> "545__msgSender"
+"545__transfer" -> "545__beforeTokenTransfer"
+"545__mint" -> "545__afterTokenTransfer"
+"545__mint" -> "545__beforeTokenTransfer"
+"545__transfer" -> "545__afterTokenTransfer"
+"545_decreaseAllowance" -> "545__approve"
+"545_approve" -> "545__msgSender"
+"545_transferFrom" -> "545__approve"
+"545_increaseAllowance" -> "545__approve"
+"545_transferFrom" -> "545__transfer"
+"545_increaseAllowance" -> "545__msgSender"
+"545__burn" -> "545__beforeTokenTransfer"
+"545_approve" -> "545__approve"
+}subgraph cluster_670_Context {
+label = "Context"
+"670__msgSender" [label="_msgSender"]
+"670__msgData" [label="_msgData"]
+}subgraph cluster_623_IERC20 {
+label = "IERC20"
+"623_totalSupply" [label="totalSupply"]
+"623_approve" [label="approve"]
+"623_transfer" [label="transfer"]
+"623_balanceOf" [label="balanceOf"]
+"623_allowance" [label="allowance"]
+"623_transferFrom" [label="transferFrom"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"545_decreaseAllowance" -> "require(bool,string)"
+"545_transferFrom" -> "require(bool,string)"
+"545__approve" -> "require(bool,string)"
+"545__transfer" -> "require(bool,string)"
+"545__mint" -> "require(bool,string)"
+"545__burn" -> "require(bool,string)"
+}
+}

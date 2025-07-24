@@ -1,0 +1,166 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterQBridge" {
+  graph [ label = "QBridge", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "QBridge.initialize" [ label = "initialize", color = "blue" ];
+  "QBridge.onlyRelayers" [ label = "onlyRelayers", color = "yellow" ];
+  "QBridge.onlyOwnerOrRelayers" [ label = "onlyOwnerOrRelayers", color = "yellow" ];
+  "QBridge.setRelayerThreshold" [ label = "setRelayerThreshold", color = "blue" ];
+  "QBridge.addRelayer" [ label = "addRelayer", color = "blue" ];
+  "QBridge.removeRelayer" [ label = "removeRelayer", color = "blue" ];
+  "QBridge.setResource" [ label = "setResource", color = "blue" ];
+  "QBridge.setBurnable" [ label = "setBurnable", color = "blue" ];
+  "QBridge.setDepositNonce" [ label = "setDepositNonce", color = "blue" ];
+  "QBridge.setFee" [ label = "setFee", color = "blue" ];
+  "QBridge.manualRelease" [ label = "manualRelease", color = "blue" ];
+  "QBridge.sweep" [ label = "sweep", color = "blue" ];
+  "QBridge.isRelayer" [ label = "isRelayer", color = "blue" ];
+  "QBridge.totalRelayers" [ label = "totalRelayers" ];
+  "QBridge.combinedProposalId" [ label = "combinedProposalId" ];
+  "QBridge.getProposal" [ label = "getProposal", color = "blue" ];
+  "QBridge.deposit" [ label = "deposit", color = "blue" ];
+  "QBridge.depositETH" [ label = "depositETH", color = "blue" ];
+  "QBridge.voteProposal" [ label = "voteProposal", color = "blue" ];
+  "QBridge.executeProposal" [ label = "executeProposal" ];
+  "QBridge.cancelProposal" [ label = "cancelProposal", color = "green" ];
+  "QBridge._relayerBit" [ label = "_relayerBit" ];
+  "QBridge._hasVoted" [ label = "_hasVoted" ];
+  "QBridge._bitmap" [ label = "_bitmap" ];
+  "QBridge.__PausableUpgradeable_init" [ label = "__PausableUpgradeable_init" ];
+  "QBridge.__AccessControl_init" [ label = "__AccessControl_init" ];
+  "QBridge._setupRole" [ label = "_setupRole" ];
+  "QBridge.hasRole" [ label = "hasRole" ];
+  "QBridge.owner" [ label = "owner" ];
+  "QBridge.grantRole" [ label = "grantRole" ];
+  "QBridge.revokeRole" [ label = "revokeRole" ];
+  "QBridge.IQBridgeHandler" [ label = "IQBridgeHandler" ];
+  "QBridge.address" [ label = "address" ];
+}
+
+subgraph "clusterSafeToken" {
+  graph [ label = "SafeToken", color = "lightgray" ];
+  "SafeToken.safeTransferETH" [ label = "safeTransferETH" ];
+}
+
+subgraph "clusterAccessControlIndexUpgradeable" {
+  graph [ label = "AccessControlIndexUpgradeable", color = "lightgray" ];
+  "AccessControlIndexUpgradeable.getRoleMemberCount" [ label = "getRoleMemberCount" ];
+  "AccessControlIndexUpgradeable.getRoleMemberIndex" [ label = "getRoleMemberIndex" ];
+}
+
+subgraph "clusteramount" {
+  graph [ label = "amount", color = "lightgray" ];
+  "amount.add" [ label = "add" ];
+}
+
+subgraph "clusterIQBridgeHandler" {
+  graph [ label = "IQBridgeHandler", color = "lightgray" ];
+  "IQBridgeHandler.executeProposal" [ label = "executeProposal" ];
+}
+
+  "QBridge.initialize";
+  "QBridge.__PausableUpgradeable_init";
+  "QBridge.__AccessControl_init";
+  "QBridge._setupRole";
+  "QBridge.onlyRelayers";
+  "QBridge.hasRole";
+  "QBridge.onlyOwnerOrRelayers";
+  "QBridge.owner";
+  "QBridge.addRelayer";
+  "QBridge.totalRelayers";
+  "QBridge.grantRole";
+  "QBridge.removeRelayer";
+  "QBridge.revokeRole";
+  "QBridge.setResource";
+  "QBridge.IQBridgeHandler";
+  "QBridge.setBurnable";
+  "QBridge.manualRelease";
+  "QBridge.sweep";
+  "SafeToken.safeTransferETH";
+  "QBridge.address";
+  "QBridge.isRelayer";
+  "AccessControlIndexUpgradeable.getRoleMemberCount";
+  "QBridge.getProposal";
+  "QBridge.combinedProposalId";
+  "QBridge._hasVoted";
+  "QBridge.deposit";
+  "QBridge.depositETH";
+  "amount.add";
+  "QBridge.voteProposal";
+  "QBridge.executeProposal";
+  "QBridge._bitmap";
+  "QBridge._relayerBit";
+  "IQBridgeHandler.executeProposal";
+  "QBridge.cancelProposal";
+  "AccessControlIndexUpgradeable.getRoleMemberIndex";
+  "QBridge.initialize" -> "QBridge.__PausableUpgradeable_init" [ color = "green" ];
+  "QBridge.initialize" -> "QBridge.__AccessControl_init" [ color = "green" ];
+  "QBridge.initialize" -> "QBridge._setupRole" [ color = "green" ];
+  "QBridge.onlyRelayers" -> "QBridge.hasRole" [ color = "green" ];
+  "QBridge.onlyOwnerOrRelayers" -> "QBridge.owner" [ color = "green" ];
+  "QBridge.onlyOwnerOrRelayers" -> "QBridge.hasRole" [ color = "green" ];
+  "QBridge.addRelayer" -> "QBridge.hasRole" [ color = "green" ];
+  "QBridge.addRelayer" -> "QBridge.totalRelayers" [ color = "green" ];
+  "QBridge.addRelayer" -> "QBridge.grantRole" [ color = "green" ];
+  "QBridge.removeRelayer" -> "QBridge.hasRole" [ color = "green" ];
+  "QBridge.removeRelayer" -> "QBridge.revokeRole" [ color = "green" ];
+  "QBridge.setResource" -> "QBridge.IQBridgeHandler" [ color = "green" ];
+  "QBridge.setBurnable" -> "QBridge.IQBridgeHandler" [ color = "green" ];
+  "QBridge.manualRelease" -> "QBridge.IQBridgeHandler" [ color = "green" ];
+  "QBridge.sweep" -> "SafeToken.safeTransferETH" [ color = "orange" ];
+  "QBridge.sweep" -> "QBridge.address" [ color = "green" ];
+  "QBridge.isRelayer" -> "QBridge.hasRole" [ color = "green" ];
+  "QBridge.totalRelayers" -> "AccessControlIndexUpgradeable.getRoleMemberCount" [ color = "orange" ];
+  "QBridge.getProposal" -> "QBridge.combinedProposalId" [ color = "green" ];
+  "QBridge.getProposal" -> "QBridge._hasVoted" [ color = "green" ];
+  "QBridge.deposit" -> "QBridge.address" [ color = "green" ];
+  "QBridge.deposit" -> "QBridge.IQBridgeHandler" [ color = "green" ];
+  "QBridge.depositETH" -> "amount.add" [ color = "orange" ];
+  "QBridge.depositETH" -> "QBridge.address" [ color = "green" ];
+  "QBridge.depositETH" -> "QBridge.IQBridgeHandler" [ color = "green" ];
+  "QBridge.voteProposal" -> "QBridge.address" [ color = "green" ];
+  "QBridge.voteProposal" -> "QBridge.combinedProposalId" [ color = "green" ];
+  "QBridge.voteProposal" -> "QBridge.executeProposal" [ color = "green" ];
+  "QBridge.voteProposal" -> "QBridge._hasVoted" [ color = "green" ];
+  "QBridge.voteProposal" -> "QBridge._bitmap" [ color = "green" ];
+  "QBridge.voteProposal" -> "QBridge._relayerBit" [ color = "green" ];
+  "QBridge.voteProposal" -> "QBridge.executeProposal" [ color = "green" ];
+  "QBridge.executeProposal" -> "QBridge.combinedProposalId" [ color = "green" ];
+  "QBridge.executeProposal" -> "QBridge.IQBridgeHandler" [ color = "green" ];
+  "QBridge.executeProposal" -> "IQBridgeHandler.executeProposal" [ color = "orange" ];
+  "QBridge.executeProposal" -> "IQBridgeHandler.executeProposal" [ color = "orange" ];
+  "QBridge.cancelProposal" -> "QBridge.combinedProposalId" [ color = "green" ];
+  "QBridge._relayerBit" -> "QBridge.address" [ color = "green" ];
+  "QBridge._relayerBit" -> "AccessControlIndexUpgradeable.getRoleMemberIndex" [ color = "orange" ];
+  "QBridge._hasVoted" -> "QBridge._relayerBit" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

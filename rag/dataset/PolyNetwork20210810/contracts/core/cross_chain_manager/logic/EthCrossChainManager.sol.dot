@@ -1,0 +1,178 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterEthCrossChainManager" {
+  graph [ label = "EthCrossChainManager", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "EthCrossChainManager.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "EthCrossChainManager.initGenesisBlock" [ label = "initGenesisBlock", color = "green" ];
+  "EthCrossChainManager.changeBookKeeper" [ label = "changeBookKeeper", color = "green" ];
+  "EthCrossChainManager.crossChain" [ label = "crossChain", color = "blue" ];
+  "EthCrossChainManager.verifyHeaderAndExecuteTx" [ label = "verifyHeaderAndExecuteTx", color = "green" ];
+  "EthCrossChainManager._executeCrossChainTx" [ label = "_executeCrossChainTx" ];
+  "EthCrossChainManager.IEthCrossChainData" [ label = "IEthCrossChainData" ];
+  "EthCrossChainManager.address" [ label = "address" ];
+}
+
+subgraph "clusterIEthCrossChainData" {
+  graph [ label = "IEthCrossChainData", color = "lightgray" ];
+  "IEthCrossChainData.getCurEpochConPubKeyBytes" [ label = "getCurEpochConPubKeyBytes" ];
+  "IEthCrossChainData.putCurEpochStartHeight" [ label = "putCurEpochStartHeight" ];
+  "IEthCrossChainData.putCurEpochConPubKeyBytes" [ label = "putCurEpochConPubKeyBytes" ];
+  "IEthCrossChainData.getCurEpochStartHeight" [ label = "getCurEpochStartHeight" ];
+  "IEthCrossChainData.getEthTxHashIndex" [ label = "getEthTxHashIndex" ];
+  "IEthCrossChainData.putEthTxHash" [ label = "putEthTxHash" ];
+  "IEthCrossChainData.checkIfFromChainTxExist" [ label = "checkIfFromChainTxExist" ];
+  "IEthCrossChainData.markFromChainTxExist" [ label = "markFromChainTxExist" ];
+}
+
+subgraph "clusterECCUtils" {
+  graph [ label = "ECCUtils", color = "lightgray" ];
+  "ECCUtils.deserializeHeader" [ label = "deserializeHeader" ];
+  "ECCUtils.verifyPubkey" [ label = "verifyPubkey" ];
+  "ECCUtils.serializeKeepers" [ label = "serializeKeepers" ];
+  "ECCUtils.deserializeKeepers" [ label = "deserializeKeepers" ];
+  "ECCUtils.verifySig" [ label = "verifySig" ];
+  "ECCUtils.merkleProve" [ label = "merkleProve" ];
+  "ECCUtils.getHeaderHash" [ label = "getHeaderHash" ];
+  "ECCUtils.deserializeMerkleValue" [ label = "deserializeMerkleValue" ];
+}
+
+subgraph "clusterUtils" {
+  graph [ label = "Utils", color = "lightgray" ];
+  "Utils.uint256ToBytes" [ label = "uint256ToBytes" ];
+  "Utils.addressToBytes" [ label = "addressToBytes" ];
+  "Utils.bytesToBytes32" [ label = "bytesToBytes32" ];
+  "Utils.bytesToAddress" [ label = "bytesToAddress" ];
+  "Utils.isContract" [ label = "isContract" ];
+}
+
+subgraph "clusterZeroCopySink" {
+  graph [ label = "ZeroCopySink", color = "lightgray" ];
+  "ZeroCopySink.WriteVarBytes" [ label = "WriteVarBytes" ];
+  "ZeroCopySink.WriteUint64" [ label = "WriteUint64" ];
+}
+
+subgraph "cluster_toContract" {
+  graph [ label = "_toContract", color = "lightgray" ];
+  "_toContract.call" [ label = "call" ];
+}
+
+subgraph "clusterZeroCopySource" {
+  graph [ label = "ZeroCopySource", color = "lightgray" ];
+  "ZeroCopySource.NextBool" [ label = "NextBool" ];
+}
+
+  "EthCrossChainManager.initGenesisBlock";
+  "EthCrossChainManager.IEthCrossChainData";
+  "IEthCrossChainData.getCurEpochConPubKeyBytes";
+  "ECCUtils.deserializeHeader";
+  "ECCUtils.verifyPubkey";
+  "IEthCrossChainData.putCurEpochStartHeight";
+  "IEthCrossChainData.putCurEpochConPubKeyBytes";
+  "ECCUtils.serializeKeepers";
+  "EthCrossChainManager.changeBookKeeper";
+  "IEthCrossChainData.getCurEpochStartHeight";
+  "ECCUtils.deserializeKeepers";
+  "ECCUtils.verifySig";
+  "EthCrossChainManager.crossChain";
+  "IEthCrossChainData.getEthTxHashIndex";
+  "Utils.uint256ToBytes";
+  "ZeroCopySink.WriteVarBytes";
+  "EthCrossChainManager.address";
+  "Utils.addressToBytes";
+  "ZeroCopySink.WriteUint64";
+  "IEthCrossChainData.putEthTxHash";
+  "EthCrossChainManager.verifyHeaderAndExecuteTx";
+  "ECCUtils.merkleProve";
+  "ECCUtils.getHeaderHash";
+  "Utils.bytesToBytes32";
+  "ECCUtils.deserializeMerkleValue";
+  "IEthCrossChainData.checkIfFromChainTxExist";
+  "IEthCrossChainData.markFromChainTxExist";
+  "Utils.bytesToAddress";
+  "EthCrossChainManager._executeCrossChainTx";
+  "Utils.isContract";
+  "_toContract.call";
+  "ZeroCopySource.NextBool";
+  "EthCrossChainManager.initGenesisBlock" -> "EthCrossChainManager.IEthCrossChainData" [ color = "green" ];
+  "EthCrossChainManager.initGenesisBlock" -> "IEthCrossChainData.getCurEpochConPubKeyBytes" [ color = "orange" ];
+  "EthCrossChainManager.initGenesisBlock" -> "ECCUtils.deserializeHeader" [ color = "orange" ];
+  "EthCrossChainManager.initGenesisBlock" -> "ECCUtils.verifyPubkey" [ color = "orange" ];
+  "EthCrossChainManager.initGenesisBlock" -> "IEthCrossChainData.putCurEpochStartHeight" [ color = "orange" ];
+  "EthCrossChainManager.initGenesisBlock" -> "IEthCrossChainData.putCurEpochConPubKeyBytes" [ color = "orange" ];
+  "EthCrossChainManager.initGenesisBlock" -> "ECCUtils.serializeKeepers" [ color = "orange" ];
+  "EthCrossChainManager.changeBookKeeper" -> "ECCUtils.deserializeHeader" [ color = "orange" ];
+  "EthCrossChainManager.changeBookKeeper" -> "EthCrossChainManager.IEthCrossChainData" [ color = "green" ];
+  "EthCrossChainManager.changeBookKeeper" -> "IEthCrossChainData.getCurEpochStartHeight" [ color = "orange" ];
+  "EthCrossChainManager.changeBookKeeper" -> "ECCUtils.deserializeKeepers" [ color = "orange" ];
+  "EthCrossChainManager.changeBookKeeper" -> "IEthCrossChainData.getCurEpochConPubKeyBytes" [ color = "orange" ];
+  "EthCrossChainManager.changeBookKeeper" -> "ECCUtils.verifySig" [ color = "orange" ];
+  "EthCrossChainManager.changeBookKeeper" -> "ECCUtils.verifyPubkey" [ color = "orange" ];
+  "EthCrossChainManager.changeBookKeeper" -> "IEthCrossChainData.putCurEpochStartHeight" [ color = "orange" ];
+  "EthCrossChainManager.changeBookKeeper" -> "IEthCrossChainData.putCurEpochConPubKeyBytes" [ color = "orange" ];
+  "EthCrossChainManager.changeBookKeeper" -> "ECCUtils.serializeKeepers" [ color = "orange" ];
+  "EthCrossChainManager.crossChain" -> "EthCrossChainManager.IEthCrossChainData" [ color = "green" ];
+  "EthCrossChainManager.crossChain" -> "IEthCrossChainData.getEthTxHashIndex" [ color = "orange" ];
+  "EthCrossChainManager.crossChain" -> "Utils.uint256ToBytes" [ color = "orange" ];
+  "EthCrossChainManager.crossChain" -> "ZeroCopySink.WriteVarBytes" [ color = "orange" ];
+  "EthCrossChainManager.crossChain" -> "ZeroCopySink.WriteVarBytes" [ color = "orange" ];
+  "EthCrossChainManager.crossChain" -> "EthCrossChainManager.address" [ color = "green" ];
+  "EthCrossChainManager.crossChain" -> "ZeroCopySink.WriteVarBytes" [ color = "orange" ];
+  "EthCrossChainManager.crossChain" -> "Utils.addressToBytes" [ color = "orange" ];
+  "EthCrossChainManager.crossChain" -> "ZeroCopySink.WriteUint64" [ color = "orange" ];
+  "EthCrossChainManager.crossChain" -> "ZeroCopySink.WriteVarBytes" [ color = "orange" ];
+  "EthCrossChainManager.crossChain" -> "ZeroCopySink.WriteVarBytes" [ color = "orange" ];
+  "EthCrossChainManager.crossChain" -> "ZeroCopySink.WriteVarBytes" [ color = "orange" ];
+  "EthCrossChainManager.crossChain" -> "IEthCrossChainData.putEthTxHash" [ color = "orange" ];
+  "EthCrossChainManager.verifyHeaderAndExecuteTx" -> "ECCUtils.deserializeHeader" [ color = "orange" ];
+  "EthCrossChainManager.verifyHeaderAndExecuteTx" -> "EthCrossChainManager.IEthCrossChainData" [ color = "green" ];
+  "EthCrossChainManager.verifyHeaderAndExecuteTx" -> "ECCUtils.deserializeKeepers" [ color = "orange" ];
+  "EthCrossChainManager.verifyHeaderAndExecuteTx" -> "IEthCrossChainData.getCurEpochConPubKeyBytes" [ color = "orange" ];
+  "EthCrossChainManager.verifyHeaderAndExecuteTx" -> "IEthCrossChainData.getCurEpochStartHeight" [ color = "orange" ];
+  "EthCrossChainManager.verifyHeaderAndExecuteTx" -> "ECCUtils.verifySig" [ color = "orange" ];
+  "EthCrossChainManager.verifyHeaderAndExecuteTx" -> "ECCUtils.verifySig" [ color = "orange" ];
+  "EthCrossChainManager.verifyHeaderAndExecuteTx" -> "ECCUtils.deserializeHeader" [ color = "orange" ];
+  "EthCrossChainManager.verifyHeaderAndExecuteTx" -> "ECCUtils.merkleProve" [ color = "orange" ];
+  "EthCrossChainManager.verifyHeaderAndExecuteTx" -> "ECCUtils.getHeaderHash" [ color = "orange" ];
+  "EthCrossChainManager.verifyHeaderAndExecuteTx" -> "Utils.bytesToBytes32" [ color = "orange" ];
+  "EthCrossChainManager.verifyHeaderAndExecuteTx" -> "ECCUtils.merkleProve" [ color = "orange" ];
+  "EthCrossChainManager.verifyHeaderAndExecuteTx" -> "ECCUtils.deserializeMerkleValue" [ color = "orange" ];
+  "EthCrossChainManager.verifyHeaderAndExecuteTx" -> "IEthCrossChainData.checkIfFromChainTxExist" [ color = "orange" ];
+  "EthCrossChainManager.verifyHeaderAndExecuteTx" -> "Utils.bytesToBytes32" [ color = "orange" ];
+  "EthCrossChainManager.verifyHeaderAndExecuteTx" -> "IEthCrossChainData.markFromChainTxExist" [ color = "orange" ];
+  "EthCrossChainManager.verifyHeaderAndExecuteTx" -> "Utils.bytesToBytes32" [ color = "orange" ];
+  "EthCrossChainManager.verifyHeaderAndExecuteTx" -> "Utils.bytesToAddress" [ color = "orange" ];
+  "EthCrossChainManager.verifyHeaderAndExecuteTx" -> "EthCrossChainManager._executeCrossChainTx" [ color = "green" ];
+  "EthCrossChainManager._executeCrossChainTx" -> "Utils.isContract" [ color = "orange" ];
+  "EthCrossChainManager._executeCrossChainTx" -> "_toContract.call" [ color = "orange" ];
+  "EthCrossChainManager._executeCrossChainTx" -> "ZeroCopySource.NextBool" [ color = "orange" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

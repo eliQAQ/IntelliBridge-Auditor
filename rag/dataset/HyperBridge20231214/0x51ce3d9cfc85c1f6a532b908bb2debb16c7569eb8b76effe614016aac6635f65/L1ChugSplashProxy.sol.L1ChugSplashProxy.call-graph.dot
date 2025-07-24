@@ -1,0 +1,71 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_300_L1ChugSplashProxy {
+label = "L1ChugSplashProxy"
+"300_getOwner" [label="getOwner"]
+"300_constructor" [label="constructor"]
+"300_getImplementation" [label="getImplementation"]
+"300_receive" [label="receive"]
+"300_setOwner" [label="setOwner"]
+"300_fallback" [label="fallback"]
+"300__getImplementation" [label="_getImplementation"]
+"300__setOwner" [label="_setOwner"]
+"300__getOwner" [label="_getOwner"]
+"300_setCode" [label="setCode"]
+"300__doProxyCall" [label="_doProxyCall"]
+"300__getAccountCodeHash" [label="_getAccountCodeHash"]
+"300_slitherConstructorConstantVariables" [label="slitherConstructorConstantVariables"]
+"300__setImplementation" [label="_setImplementation"]
+"300_setStorage" [label="setStorage"]
+"300_receive" -> "300__doProxyCall"
+"300__doProxyCall" -> "300_onlyWhenNotPaused"
+"300_setOwner" -> "300_proxyCallIfNotOwner"
+"300_setCode" -> "300__getImplementation"
+"300_setStorage" -> "300_proxyCallIfNotOwner"
+"300_getOwner" -> "300__getOwner"
+"300_setCode" -> "300__setImplementation"
+"300__doProxyCall" -> "300__getImplementation"
+"300_setOwner" -> "300__setOwner"
+"300_getImplementation" -> "300_proxyCallIfNotOwner"
+"300_getImplementation" -> "300__getImplementation"
+"300_setCode" -> "300__getAccountCodeHash"
+"300_constructor" -> "300__setOwner"
+"300_setCode" -> "300_proxyCallIfNotOwner"
+"300_fallback" -> "300__doProxyCall"
+"300_getOwner" -> "300_proxyCallIfNotOwner"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"returndatasize()" 
+"return(uint256,uint256)" 
+"require(bool,string)" 
+"gas()" 
+"delegatecall(uint256,uint256,uint256,uint256,uint256,uint256)" 
+"mload(uint256)" 
+"create(uint256,uint256,uint256)" 
+"sstore(uint256,uint256)" 
+"keccak256(bytes)" 
+"calldatacopy(uint256,uint256,uint256)" 
+"revert(uint256,uint256)" 
+"returndatacopy(uint256,uint256,uint256)" 
+"extcodehash(uint256)" 
+"calldatasize()" 
+"abi.encodePacked()" 
+"300_setCode" -> "mload(uint256)"
+"300_setCode" -> "keccak256(bytes)"
+"300__doProxyCall" -> "calldatacopy(uint256,uint256,uint256)"
+"300__doProxyCall" -> "gas()"
+"300__doProxyCall" -> "calldatasize()"
+"300__doProxyCall" -> "returndatacopy(uint256,uint256,uint256)"
+"300_setCode" -> "abi.encodePacked()"
+"300_setCode" -> "create(uint256,uint256,uint256)"
+"300_setCode" -> "require(bool,string)"
+"300__getAccountCodeHash" -> "extcodehash(uint256)"
+"300__doProxyCall" -> "require(bool,string)"
+"300__doProxyCall" -> "returndatasize()"
+"300_setStorage" -> "sstore(uint256,uint256)"
+"300__doProxyCall" -> "revert(uint256,uint256)"
+"300__doProxyCall" -> "delegatecall(uint256,uint256,uint256,uint256,uint256,uint256)"
+"300__doProxyCall" -> "return(uint256,uint256)"
+}
+}

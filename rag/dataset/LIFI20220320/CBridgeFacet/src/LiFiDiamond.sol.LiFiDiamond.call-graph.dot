@@ -1,0 +1,30 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_116_LiFiDiamond {
+label = "LiFiDiamond"
+"116_receive" [label="receive"]
+"116_fallback" [label="fallback"]
+"116_constructor" [label="constructor"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"delegatecall(uint256,uint256,uint256,uint256,uint256,uint256)" 
+"returndatasize()" 
+"calldatacopy(uint256,uint256,uint256)" 
+"calldatasize()" 
+"gas()" 
+"require(bool,string)" 
+"revert(uint256,uint256)" 
+"returndatacopy(uint256,uint256,uint256)" 
+"return(uint256,uint256)" 
+"116_fallback" -> "require(bool,string)"
+"116_fallback" -> "calldatasize()"
+"116_fallback" -> "gas()"
+"116_fallback" -> "returndatasize()"
+"116_fallback" -> "returndatacopy(uint256,uint256,uint256)"
+"116_fallback" -> "revert(uint256,uint256)"
+"116_fallback" -> "calldatacopy(uint256,uint256,uint256)"
+"116_fallback" -> "delegatecall(uint256,uint256,uint256,uint256,uint256,uint256)"
+"116_fallback" -> "return(uint256,uint256)"
+}
+}

@@ -1,0 +1,38 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_242_AddressUpgradeable {
+label = "AddressUpgradeable"
+"242_functionCallWithValue" [label="functionCallWithValue"]
+"242_functionCall" [label="functionCall"]
+"242_verifyCallResult" [label="verifyCallResult"]
+"242_isContract" [label="isContract"]
+"242_functionStaticCall" [label="functionStaticCall"]
+"242_sendValue" [label="sendValue"]
+"242_functionCall" -> "242_functionCallWithValue"
+"242_functionCallWithValue" -> "242_isContract"
+"242_functionCallWithValue" -> "242_functionCallWithValue"
+"242_functionStaticCall" -> "242_verifyCallResult"
+"242_functionCallWithValue" -> "242_verifyCallResult"
+"242_functionStaticCall" -> "242_isContract"
+"242_functionStaticCall" -> "242_functionStaticCall"
+"242_functionCall" -> "242_functionCall"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"balance(address)" 
+"code(address)" 
+"require(bool,string)" 
+"mload(uint256)" 
+"revert(uint256,uint256)" 
+"revert(string)" 
+"242_verifyCallResult" -> "revert(string)"
+"242_verifyCallResult" -> "revert(uint256,uint256)"
+"242_sendValue" -> "require(bool,string)"
+"242_functionStaticCall" -> "require(bool,string)"
+"242_isContract" -> "code(address)"
+"242_functionCallWithValue" -> "require(bool,string)"
+"242_sendValue" -> "balance(address)"
+"242_verifyCallResult" -> "mload(uint256)"
+"242_functionCallWithValue" -> "balance(address)"
+}
+}

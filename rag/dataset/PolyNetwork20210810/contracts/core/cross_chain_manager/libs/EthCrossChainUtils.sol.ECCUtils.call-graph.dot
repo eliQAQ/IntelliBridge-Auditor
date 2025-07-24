@@ -1,0 +1,41 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_912_ECCUtils {
+label = "ECCUtils"
+"912_deserializeHeader" [label="deserializeHeader"]
+"912_getHeaderHash" [label="getHeaderHash"]
+"912_deserializeKeepers" [label="deserializeKeepers"]
+"912_slitherConstructorConstantVariables" [label="slitherConstructorConstantVariables"]
+"912_merkleProve" [label="merkleProve"]
+"912_verifySig" [label="verifySig"]
+"912_deserializeMerkleValue" [label="deserializeMerkleValue"]
+"912_verifyPubkey" [label="verifyPubkey"]
+"912__getBookKeeper" [label="_getBookKeeper"]
+"912_serializeKeepers" [label="serializeKeepers"]
+"912_verifySig" -> "912_getHeaderHash"
+"912_verifyPubkey" -> "912__getBookKeeper"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"ripemd160(bytes)" 
+"revert(string)" 
+"sha256(bytes)" 
+"require(bool,string)" 
+"ecrecover(bytes32,uint8,bytes32,bytes32)" 
+"abi.encodePacked()" 
+"keccak256(bytes)" 
+"912_verifySig" -> "abi.encodePacked()"
+"912_merkleProve" -> "require(bool,string)"
+"912_merkleProve" -> "revert(string)"
+"912__getBookKeeper" -> "ripemd160(bytes)"
+"912__getBookKeeper" -> "keccak256(bytes)"
+"912__getBookKeeper" -> "abi.encodePacked()"
+"912_verifyPubkey" -> "require(bool,string)"
+"912_getHeaderHash" -> "sha256(bytes)"
+"912_serializeKeepers" -> "abi.encodePacked()"
+"912_verifySig" -> "ecrecover(bytes32,uint8,bytes32,bytes32)"
+"912_getHeaderHash" -> "abi.encodePacked()"
+"912_verifySig" -> "sha256(bytes)"
+"912__getBookKeeper" -> "sha256(bytes)"
+}
+}

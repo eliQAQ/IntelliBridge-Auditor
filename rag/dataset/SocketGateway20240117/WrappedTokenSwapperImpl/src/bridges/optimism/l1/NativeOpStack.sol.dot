@@ -1,0 +1,82 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterNativeOptimismStack" {
+  graph [ label = "NativeOptimismStack", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "NativeOptimismStack.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "NativeOptimismStack.bridgeAfterSwap" [ label = "bridgeAfterSwap", color = "blue" ];
+  "NativeOptimismStack.swapAndBridge" [ label = "swapAndBridge", color = "blue" ];
+  "NativeOptimismStack.bridgeERC20To" [ label = "bridgeERC20To", color = "blue" ];
+  "NativeOptimismStack.bridgeNativeTo" [ label = "bridgeNativeTo", color = "blue" ];
+  "NativeOptimismStack.IOptimismPortal" [ label = "IOptimismPortal" ];
+  "NativeOptimismStack.SocketBridge" [ label = "SocketBridge" ];
+  "NativeOptimismStack.ERC20" [ label = "ERC20" ];
+  "NativeOptimismStack.address" [ label = "address" ];
+  "NativeOptimismStack.L1StandardBridge" [ label = "L1StandardBridge" ];
+}
+
+subgraph "clustersocketRoute" {
+  graph [ label = "socketRoute", color = "lightgray" ];
+  "socketRoute.getRoute" [ label = "getRoute" ];
+}
+
+  "NativeOptimismStack.<Constructor>";
+  "NativeOptimismStack.IOptimismPortal";
+  "NativeOptimismStack.bridgeAfterSwap";
+  "NativeOptimismStack.SocketBridge";
+  "NativeOptimismStack.ERC20";
+  "NativeOptimismStack.address";
+  "NativeOptimismStack.L1StandardBridge";
+  "NativeOptimismStack.swapAndBridge";
+  "socketRoute.getRoute";
+  "NativeOptimismStack.bridgeERC20To";
+  "NativeOptimismStack.bridgeNativeTo";
+  "NativeOptimismStack.<Constructor>" -> "NativeOptimismStack.IOptimismPortal" [ color = "green" ];
+  "NativeOptimismStack.bridgeAfterSwap" -> "NativeOptimismStack.SocketBridge" [ color = "green" ];
+  "NativeOptimismStack.bridgeAfterSwap" -> "NativeOptimismStack.ERC20" [ color = "green" ];
+  "NativeOptimismStack.bridgeAfterSwap" -> "NativeOptimismStack.address" [ color = "green" ];
+  "NativeOptimismStack.bridgeAfterSwap" -> "NativeOptimismStack.ERC20" [ color = "green" ];
+  "NativeOptimismStack.bridgeAfterSwap" -> "NativeOptimismStack.L1StandardBridge" [ color = "green" ];
+  "NativeOptimismStack.swapAndBridge" -> "socketRoute.getRoute" [ color = "orange" ];
+  "NativeOptimismStack.swapAndBridge" -> "NativeOptimismStack.SocketBridge" [ color = "green" ];
+  "NativeOptimismStack.swapAndBridge" -> "NativeOptimismStack.ERC20" [ color = "green" ];
+  "NativeOptimismStack.swapAndBridge" -> "NativeOptimismStack.address" [ color = "green" ];
+  "NativeOptimismStack.swapAndBridge" -> "NativeOptimismStack.ERC20" [ color = "green" ];
+  "NativeOptimismStack.swapAndBridge" -> "NativeOptimismStack.L1StandardBridge" [ color = "green" ];
+  "NativeOptimismStack.bridgeERC20To" -> "NativeOptimismStack.ERC20" [ color = "green" ];
+  "NativeOptimismStack.bridgeERC20To" -> "NativeOptimismStack.ERC20" [ color = "green" ];
+  "NativeOptimismStack.bridgeERC20To" -> "NativeOptimismStack.address" [ color = "green" ];
+  "NativeOptimismStack.bridgeERC20To" -> "NativeOptimismStack.ERC20" [ color = "green" ];
+  "NativeOptimismStack.bridgeERC20To" -> "NativeOptimismStack.SocketBridge" [ color = "green" ];
+  "NativeOptimismStack.bridgeERC20To" -> "NativeOptimismStack.L1StandardBridge" [ color = "green" ];
+  "NativeOptimismStack.bridgeNativeTo" -> "NativeOptimismStack.SocketBridge" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

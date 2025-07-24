@@ -1,0 +1,30 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_217_Administrable {
+label = "Administrable"
+"217_acceptAdmin" [label="acceptAdmin"]
+"217_transferAdmin" [label="transferAdmin"]
+"217_setAdmin" [label="setAdmin"]
+"217_transferAdmin" -> "217_onlyAdmin"
+}subgraph cluster_291_IAnyCallSender {
+label = "IAnyCallSender"
+"291_anyFallback" [label="anyFallback"]
+}subgraph cluster_124_AnyCallSender {
+label = "AnyCallSender"
+"124_anyFallback" [label="anyFallback"]
+"124__anyFallback" [label="_anyFallback"]
+"124_setAnyCallProxy" [label="setAnyCallProxy"]
+"124_constructor" [label="constructor"]
+"124__anyCall" [label="_anyCall"]
+"124_setAnyCallProxy" -> "124_onlyAdmin"
+"124_anyFallback" -> "124_onlyExecutor"
+"124_anyFallback" -> "124__anyFallback"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool)" 
+"require(bool,string)" 
+"217_acceptAdmin" -> "require(bool)"
+"124_anyFallback" -> "require(bool,string)"
+}
+}

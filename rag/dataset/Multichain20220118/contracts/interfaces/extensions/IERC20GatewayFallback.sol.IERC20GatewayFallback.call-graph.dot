@@ -1,0 +1,14 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_16_IERC20GatewayFallback {
+label = "IERC20GatewayFallback"
+"16_Swapout" [label="Swapout"]
+}subgraph cluster_35_IERC20Gateway {
+label = "IERC20Gateway"
+"35_token" [label="token"]
+"35_Swapout_no_fallback" [label="Swapout_no_fallback"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+}
+}

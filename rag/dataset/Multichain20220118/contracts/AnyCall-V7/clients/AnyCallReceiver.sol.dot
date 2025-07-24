@@ -1,0 +1,64 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterAnyCallReceiver" {
+  graph [ label = "AnyCallReceiver", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "AnyCallReceiver.onlyExecutor" [ label = "onlyExecutor", color = "yellow" ];
+  "AnyCallReceiver.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "AnyCallReceiver.setSenders" [ label = "setSenders", color = "green" ];
+  "AnyCallReceiver.setAnyCallProxy" [ label = "setAnyCallProxy", color = "green" ];
+  "AnyCallReceiver._anyExecute" [ label = "_anyExecute" ];
+  "AnyCallReceiver.anyExecute" [ label = "anyExecute", color = "blue" ];
+  "AnyCallReceiver.depositAnyCallFee" [ label = "depositAnyCallFee", color = "green" ];
+  "AnyCallReceiver.withdrawAnyCallFee" [ label = "withdrawAnyCallFee", color = "green" ];
+  "AnyCallReceiver.approve" [ label = "approve", color = "green" ];
+  "AnyCallReceiver.IAnyCallProxyV7" [ label = "IAnyCallProxyV7" ];
+  "AnyCallReceiver.address" [ label = "address" ];
+}
+
+  "AnyCallReceiver.onlyExecutor";
+  "AnyCallReceiver.IAnyCallProxyV7";
+  "AnyCallReceiver.anyExecute";
+  "AnyCallReceiver._anyExecute";
+  "AnyCallReceiver.depositAnyCallFee";
+  "AnyCallReceiver.address";
+  "AnyCallReceiver.withdrawAnyCallFee";
+  "AnyCallReceiver.approve";
+  "AnyCallReceiver.onlyExecutor" -> "AnyCallReceiver.IAnyCallProxyV7" [ color = "green" ];
+  "AnyCallReceiver.anyExecute" -> "AnyCallReceiver._anyExecute" [ color = "green" ];
+  "AnyCallReceiver.depositAnyCallFee" -> "AnyCallReceiver.IAnyCallProxyV7" [ color = "green" ];
+  "AnyCallReceiver.depositAnyCallFee" -> "AnyCallReceiver.address" [ color = "green" ];
+  "AnyCallReceiver.withdrawAnyCallFee" -> "AnyCallReceiver.IAnyCallProxyV7" [ color = "green" ];
+  "AnyCallReceiver.withdrawAnyCallFee" -> "AnyCallReceiver.address" [ color = "green" ];
+  "AnyCallReceiver.approve" -> "AnyCallReceiver.IAnyCallProxyV7" [ color = "green" ];
+  "AnyCallReceiver.approve" -> "AnyCallReceiver.address" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

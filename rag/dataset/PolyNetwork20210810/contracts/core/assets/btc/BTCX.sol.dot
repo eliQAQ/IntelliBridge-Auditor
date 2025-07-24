@@ -1,0 +1,120 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterBTCX" {
+  graph [ label = "BTCX", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "BTCX.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "BTCX.setMinimumLimit" [ label = "setMinimumLimit", color = "green" ];
+  "BTCX.unlock" [ label = "unlock", color = "green" ];
+  "BTCX.lock" [ label = "lock", color = "green" ];
+  "BTCX._serializeToBtcTxArgs" [ label = "_serializeToBtcTxArgs" ];
+  "BTCX._serializeTxArgs" [ label = "_serializeTxArgs" ];
+  "BTCX._deserializeTxArgs" [ label = "_deserializeTxArgs" ];
+  "BTCX._msgSender" [ label = "_msgSender" ];
+  "BTCX.mint" [ label = "mint" ];
+  "BTCX.address" [ label = "address" ];
+  "BTCX.burn" [ label = "burn" ];
+  "BTCX.IEthCrossChainManagerProxy" [ label = "IEthCrossChainManagerProxy" ];
+  "BTCX.IEthCrossChainManager" [ label = "IEthCrossChainManager" ];
+}
+
+subgraph "clusterUtils" {
+  graph [ label = "Utils", color = "lightgray" ];
+  "Utils.equalStorage" [ label = "equalStorage" ];
+  "Utils.bytesToAddress" [ label = "bytesToAddress" ];
+}
+
+subgraph "clusterIEthCrossChainManagerProxy" {
+  graph [ label = "IEthCrossChainManagerProxy", color = "lightgray" ];
+  "IEthCrossChainManagerProxy.getEthCrossChainManager" [ label = "getEthCrossChainManager" ];
+}
+
+subgraph "clusterIEthCrossChainManager" {
+  graph [ label = "IEthCrossChainManager", color = "lightgray" ];
+  "IEthCrossChainManager.crossChain" [ label = "crossChain" ];
+}
+
+subgraph "clusterZeroCopySink" {
+  graph [ label = "ZeroCopySink", color = "lightgray" ];
+  "ZeroCopySink.WriteVarBytes" [ label = "WriteVarBytes" ];
+  "ZeroCopySink.WriteUint64" [ label = "WriteUint64" ];
+}
+
+subgraph "clusterZeroCopySource" {
+  graph [ label = "ZeroCopySource", color = "lightgray" ];
+  "ZeroCopySource.NextVarBytes" [ label = "NextVarBytes" ];
+  "ZeroCopySource.NextUint64" [ label = "NextUint64" ];
+}
+
+  "BTCX.<Constructor>";
+  "BTCX._msgSender";
+  "BTCX.unlock";
+  "BTCX._deserializeTxArgs";
+  "Utils.equalStorage";
+  "Utils.bytesToAddress";
+  "BTCX.mint";
+  "BTCX.address";
+  "BTCX.lock";
+  "BTCX._serializeToBtcTxArgs";
+  "BTCX._serializeTxArgs";
+  "BTCX.burn";
+  "BTCX.IEthCrossChainManagerProxy";
+  "IEthCrossChainManagerProxy.getEthCrossChainManager";
+  "BTCX.IEthCrossChainManager";
+  "IEthCrossChainManager.crossChain";
+  "ZeroCopySink.WriteVarBytes";
+  "ZeroCopySink.WriteUint64";
+  "ZeroCopySource.NextVarBytes";
+  "ZeroCopySource.NextUint64";
+  "BTCX.<Constructor>" -> "BTCX._msgSender" [ color = "green" ];
+  "BTCX.unlock" -> "BTCX._deserializeTxArgs" [ color = "green" ];
+  "BTCX.unlock" -> "Utils.equalStorage" [ color = "orange" ];
+  "BTCX.unlock" -> "Utils.bytesToAddress" [ color = "orange" ];
+  "BTCX.unlock" -> "BTCX.mint" [ color = "green" ];
+  "BTCX.unlock" -> "BTCX.address" [ color = "green" ];
+  "BTCX.lock" -> "BTCX._serializeToBtcTxArgs" [ color = "green" ];
+  "BTCX.lock" -> "BTCX._serializeTxArgs" [ color = "green" ];
+  "BTCX.lock" -> "BTCX.burn" [ color = "green" ];
+  "BTCX.lock" -> "BTCX.IEthCrossChainManagerProxy" [ color = "green" ];
+  "BTCX.lock" -> "IEthCrossChainManagerProxy.getEthCrossChainManager" [ color = "orange" ];
+  "BTCX.lock" -> "BTCX.IEthCrossChainManager" [ color = "green" ];
+  "BTCX.lock" -> "IEthCrossChainManager.crossChain" [ color = "orange" ];
+  "BTCX.lock" -> "BTCX.address" [ color = "green" ];
+  "BTCX.lock" -> "BTCX._msgSender" [ color = "green" ];
+  "BTCX._serializeToBtcTxArgs" -> "ZeroCopySink.WriteVarBytes" [ color = "orange" ];
+  "BTCX._serializeToBtcTxArgs" -> "ZeroCopySink.WriteUint64" [ color = "orange" ];
+  "BTCX._serializeToBtcTxArgs" -> "ZeroCopySink.WriteVarBytes" [ color = "orange" ];
+  "BTCX._serializeTxArgs" -> "ZeroCopySink.WriteVarBytes" [ color = "orange" ];
+  "BTCX._serializeTxArgs" -> "ZeroCopySink.WriteUint64" [ color = "orange" ];
+  "BTCX._deserializeTxArgs" -> "ZeroCopySource.NextVarBytes" [ color = "orange" ];
+  "BTCX._deserializeTxArgs" -> "ZeroCopySource.NextUint64" [ color = "orange" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

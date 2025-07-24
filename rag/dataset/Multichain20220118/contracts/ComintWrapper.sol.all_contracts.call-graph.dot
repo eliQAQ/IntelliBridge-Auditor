@@ -1,0 +1,58 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_16_IComintToken {
+label = "IComintToken"
+"16_burnFrom" [label="burnFrom"]
+"16_mint" [label="mint"]
+}subgraph cluster_549_ComintWrapper {
+label = "ComintWrapper"
+"549_setVaultOnly" [label="setVaultOnly"]
+"549_applyMinter" [label="applyMinter"]
+"549_constructor" [label="constructor"]
+"549__burn" [label="_burn"]
+"549_mpc" [label="mpc"]
+"549_Swapin" [label="Swapin"]
+"549_changeVault" [label="changeVault"]
+"549_revokeMinter" [label="revokeMinter"]
+"549_totalSupply" [label="totalSupply"]
+"549_owner" [label="owner"]
+"549_getAllMinters" [label="getAllMinters"]
+"549__mint" [label="_mint"]
+"549_setVault" [label="setVault"]
+"549_initVault" [label="initVault"]
+"549_burn" [label="burn"]
+"549_applyVault" [label="applyVault"]
+"549_mint" [label="mint"]
+"549_setMinter" [label="setMinter"]
+"549_Swapout" [label="Swapout"]
+"549_setMinter" -> "549_onlyVault"
+"549_setVaultOnly" -> "549_onlyVault"
+"549_mint" -> "549_onlyAuth"
+"549_Swapin" -> "549__mint"
+"549_setVault" -> "549_onlyVault"
+"549_initVault" -> "549_onlyVault"
+"549_applyVault" -> "549_onlyVault"
+"549_revokeMinter" -> "549_onlyVault"
+"549_burn" -> "549_onlyAuth"
+"549_changeVault" -> "549_onlyVault"
+"549_Swapout" -> "549__burn"
+"549_burn" -> "549__burn"
+"549_applyMinter" -> "549_onlyVault"
+"549_Swapin" -> "549_onlyAuth"
+"549_mint" -> "549__mint"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool)" 
+"require(bool,string)" 
+"549_initVault" -> "require(bool)"
+"549_applyMinter" -> "require(bool)"
+"549_setMinter" -> "require(bool,string)"
+"549_constructor" -> "require(bool)"
+"549_setVault" -> "require(bool,string)"
+"549_changeVault" -> "require(bool,string)"
+"549_Swapout" -> "require(bool,string)"
+"549_applyVault" -> "require(bool)"
+}"549__burn" -> "16_burnFrom"
+"549__mint" -> "16_mint"
+}

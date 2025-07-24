@@ -1,0 +1,101 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterStargateImplL1" {
+  graph [ label = "StargateImplL1", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "StargateImplL1.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "StargateImplL1.bridgeAfterSwap" [ label = "bridgeAfterSwap", color = "blue" ];
+  "StargateImplL1.swapAndBridge" [ label = "swapAndBridge", color = "blue" ];
+  "StargateImplL1.bridgeERC20To" [ label = "bridgeERC20To", color = "blue" ];
+  "StargateImplL1.bridgeNativeTo" [ label = "bridgeNativeTo", color = "blue" ];
+  "StargateImplL1.IBridgeStargate" [ label = "IBridgeStargate" ];
+  "StargateImplL1.payable" [ label = "payable" ];
+  "StargateImplL1.ERC20" [ label = "ERC20" ];
+  "StargateImplL1.address" [ label = "address" ];
+  "StargateImplL1.SocketBridge" [ label = "SocketBridge" ];
+}
+
+subgraph "clusterIBridgeStargate" {
+  graph [ label = "IBridgeStargate", color = "lightgray" ];
+  "IBridgeStargate.lzTxObj" [ label = "lzTxObj" ];
+}
+
+subgraph "clustersocketRoute" {
+  graph [ label = "socketRoute", color = "lightgray" ];
+  "socketRoute.getRoute" [ label = "getRoute" ];
+}
+
+subgraph "clusterERC20" {
+  graph [ label = "ERC20", color = "lightgray" ];
+  "ERC20.safeTransferFrom" [ label = "safeTransferFrom" ];
+  "ERC20.safeApprove" [ label = "safeApprove" ];
+}
+
+  "StargateImplL1.<Constructor>";
+  "StargateImplL1.IBridgeStargate";
+  "StargateImplL1.bridgeAfterSwap";
+  "StargateImplL1.payable";
+  "StargateImplL1.ERC20";
+  "StargateImplL1.address";
+  "IBridgeStargate.lzTxObj";
+  "StargateImplL1.SocketBridge";
+  "StargateImplL1.swapAndBridge";
+  "socketRoute.getRoute";
+  "StargateImplL1.bridgeERC20To";
+  "ERC20.safeTransferFrom";
+  "ERC20.safeApprove";
+  "StargateImplL1.bridgeNativeTo";
+  "StargateImplL1.<Constructor>" -> "StargateImplL1.IBridgeStargate" [ color = "green" ];
+  "StargateImplL1.<Constructor>" -> "StargateImplL1.IBridgeStargate" [ color = "green" ];
+  "StargateImplL1.bridgeAfterSwap" -> "StargateImplL1.payable" [ color = "green" ];
+  "StargateImplL1.bridgeAfterSwap" -> "StargateImplL1.ERC20" [ color = "green" ];
+  "StargateImplL1.bridgeAfterSwap" -> "StargateImplL1.address" [ color = "green" ];
+  "StargateImplL1.bridgeAfterSwap" -> "StargateImplL1.payable" [ color = "green" ];
+  "StargateImplL1.bridgeAfterSwap" -> "IBridgeStargate.lzTxObj" [ color = "orange" ];
+  "StargateImplL1.bridgeAfterSwap" -> "StargateImplL1.SocketBridge" [ color = "green" ];
+  "StargateImplL1.swapAndBridge" -> "socketRoute.getRoute" [ color = "orange" ];
+  "StargateImplL1.swapAndBridge" -> "StargateImplL1.payable" [ color = "green" ];
+  "StargateImplL1.swapAndBridge" -> "StargateImplL1.ERC20" [ color = "green" ];
+  "StargateImplL1.swapAndBridge" -> "StargateImplL1.address" [ color = "green" ];
+  "StargateImplL1.swapAndBridge" -> "StargateImplL1.payable" [ color = "green" ];
+  "StargateImplL1.swapAndBridge" -> "IBridgeStargate.lzTxObj" [ color = "orange" ];
+  "StargateImplL1.swapAndBridge" -> "StargateImplL1.SocketBridge" [ color = "green" ];
+  "StargateImplL1.bridgeERC20To" -> "StargateImplL1.ERC20" [ color = "green" ];
+  "StargateImplL1.bridgeERC20To" -> "ERC20.safeTransferFrom" [ color = "orange" ];
+  "StargateImplL1.bridgeERC20To" -> "ERC20.safeApprove" [ color = "orange" ];
+  "StargateImplL1.bridgeERC20To" -> "StargateImplL1.address" [ color = "green" ];
+  "StargateImplL1.bridgeERC20To" -> "StargateImplL1.payable" [ color = "green" ];
+  "StargateImplL1.bridgeERC20To" -> "IBridgeStargate.lzTxObj" [ color = "orange" ];
+  "StargateImplL1.bridgeERC20To" -> "StargateImplL1.SocketBridge" [ color = "green" ];
+  "StargateImplL1.bridgeNativeTo" -> "StargateImplL1.payable" [ color = "green" ];
+  "StargateImplL1.bridgeNativeTo" -> "StargateImplL1.SocketBridge" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

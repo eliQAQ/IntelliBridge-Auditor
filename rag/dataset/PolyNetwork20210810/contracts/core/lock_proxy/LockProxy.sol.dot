@@ -1,0 +1,162 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterLockProxy" {
+  graph [ label = "LockProxy", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "LockProxy.onlyManagerContract" [ label = "onlyManagerContract", color = "yellow" ];
+  "LockProxy.setManagerProxy" [ label = "setManagerProxy", color = "green" ];
+  "LockProxy.bindProxyHash" [ label = "bindProxyHash", color = "green" ];
+  "LockProxy.bindAssetHash" [ label = "bindAssetHash", color = "green" ];
+  "LockProxy.lock" [ label = "lock", color = "green" ];
+  "LockProxy.unlock" [ label = "unlock", color = "green" ];
+  "LockProxy.getBalanceFor" [ label = "getBalanceFor" ];
+  "LockProxy._transferToContract" [ label = "_transferToContract" ];
+  "LockProxy._transferFromContract" [ label = "_transferFromContract" ];
+  "LockProxy._transferERC20ToContract" [ label = "_transferERC20ToContract" ];
+  "LockProxy._transferERC20FromContract" [ label = "_transferERC20FromContract" ];
+  "LockProxy._serializeTxArgs" [ label = "_serializeTxArgs" ];
+  "LockProxy._deserializeTxArgs" [ label = "_deserializeTxArgs" ];
+  "LockProxy.IEthCrossChainManagerProxy" [ label = "IEthCrossChainManagerProxy" ];
+  "LockProxy._msgSender" [ label = "_msgSender" ];
+  "LockProxy.IEthCrossChainManager" [ label = "IEthCrossChainManager" ];
+  "LockProxy.address" [ label = "address" ];
+  "LockProxy.IERC20" [ label = "IERC20" ];
+}
+
+subgraph "clusterIEthCrossChainManagerProxy" {
+  graph [ label = "IEthCrossChainManagerProxy", color = "lightgray" ];
+  "IEthCrossChainManagerProxy.getEthCrossChainManager" [ label = "getEthCrossChainManager" ];
+}
+
+subgraph "clusterIEthCrossChainManager" {
+  graph [ label = "IEthCrossChainManager", color = "lightgray" ];
+  "IEthCrossChainManager.crossChain" [ label = "crossChain" ];
+}
+
+subgraph "clusterUtils" {
+  graph [ label = "Utils", color = "lightgray" ];
+  "Utils.equalStorage" [ label = "equalStorage" ];
+  "Utils.bytesToAddress" [ label = "bytesToAddress" ];
+}
+
+subgraph "clusterIERC20" {
+  graph [ label = "IERC20", color = "lightgray" ];
+  "IERC20.balanceOf" [ label = "balanceOf" ];
+  "IERC20.safeTransferFrom" [ label = "safeTransferFrom" ];
+  "IERC20.safeTransfer" [ label = "safeTransfer" ];
+}
+
+subgraph "clusteruint160(toAddress)" {
+  graph [ label = "uint160(toAddress)", color = "lightgray" ];
+  "uint160(toAddress).transfer" [ label = "transfer" ];
+}
+
+subgraph "clusterZeroCopySink" {
+  graph [ label = "ZeroCopySink", color = "lightgray" ];
+  "ZeroCopySink.WriteVarBytes" [ label = "WriteVarBytes" ];
+  "ZeroCopySink.WriteUint255" [ label = "WriteUint255" ];
+}
+
+subgraph "clusterZeroCopySource" {
+  graph [ label = "ZeroCopySource", color = "lightgray" ];
+  "ZeroCopySource.NextVarBytes" [ label = "NextVarBytes" ];
+  "ZeroCopySource.NextUint255" [ label = "NextUint255" ];
+}
+
+  "LockProxy.onlyManagerContract";
+  "LockProxy.IEthCrossChainManagerProxy";
+  "LockProxy._msgSender";
+  "IEthCrossChainManagerProxy.getEthCrossChainManager";
+  "LockProxy.bindAssetHash";
+  "LockProxy.getBalanceFor";
+  "LockProxy.lock";
+  "LockProxy._transferToContract";
+  "LockProxy._serializeTxArgs";
+  "LockProxy.IEthCrossChainManager";
+  "IEthCrossChainManager.crossChain";
+  "LockProxy.unlock";
+  "LockProxy._deserializeTxArgs";
+  "Utils.equalStorage";
+  "Utils.bytesToAddress";
+  "LockProxy._transferFromContract";
+  "LockProxy.address";
+  "LockProxy.IERC20";
+  "IERC20.balanceOf";
+  "LockProxy._transferERC20ToContract";
+  "uint160(toAddress).transfer";
+  "LockProxy._transferERC20FromContract";
+  "IERC20.safeTransferFrom";
+  "IERC20.safeTransfer";
+  "ZeroCopySink.WriteVarBytes";
+  "ZeroCopySink.WriteUint255";
+  "ZeroCopySource.NextVarBytes";
+  "ZeroCopySource.NextUint255";
+  "LockProxy.onlyManagerContract" -> "LockProxy.IEthCrossChainManagerProxy" [ color = "green" ];
+  "LockProxy.onlyManagerContract" -> "LockProxy._msgSender" [ color = "green" ];
+  "LockProxy.onlyManagerContract" -> "IEthCrossChainManagerProxy.getEthCrossChainManager" [ color = "orange" ];
+  "LockProxy.bindAssetHash" -> "LockProxy.getBalanceFor" [ color = "green" ];
+  "LockProxy.lock" -> "LockProxy._transferToContract" [ color = "green" ];
+  "LockProxy.lock" -> "LockProxy._serializeTxArgs" [ color = "green" ];
+  "LockProxy.lock" -> "LockProxy.IEthCrossChainManagerProxy" [ color = "green" ];
+  "LockProxy.lock" -> "IEthCrossChainManagerProxy.getEthCrossChainManager" [ color = "orange" ];
+  "LockProxy.lock" -> "LockProxy.IEthCrossChainManager" [ color = "green" ];
+  "LockProxy.lock" -> "IEthCrossChainManager.crossChain" [ color = "orange" ];
+  "LockProxy.lock" -> "LockProxy._msgSender" [ color = "green" ];
+  "LockProxy.unlock" -> "LockProxy._deserializeTxArgs" [ color = "green" ];
+  "LockProxy.unlock" -> "Utils.equalStorage" [ color = "orange" ];
+  "LockProxy.unlock" -> "Utils.bytesToAddress" [ color = "orange" ];
+  "LockProxy.unlock" -> "Utils.bytesToAddress" [ color = "orange" ];
+  "LockProxy.unlock" -> "LockProxy._transferFromContract" [ color = "green" ];
+  "LockProxy.getBalanceFor" -> "LockProxy.address" [ color = "green" ];
+  "LockProxy.getBalanceFor" -> "LockProxy.address" [ color = "green" ];
+  "LockProxy.getBalanceFor" -> "LockProxy.IERC20" [ color = "green" ];
+  "LockProxy.getBalanceFor" -> "IERC20.balanceOf" [ color = "orange" ];
+  "LockProxy.getBalanceFor" -> "LockProxy.address" [ color = "green" ];
+  "LockProxy._transferToContract" -> "LockProxy.address" [ color = "green" ];
+  "LockProxy._transferToContract" -> "LockProxy._transferERC20ToContract" [ color = "green" ];
+  "LockProxy._transferToContract" -> "LockProxy._msgSender" [ color = "green" ];
+  "LockProxy._transferToContract" -> "LockProxy.address" [ color = "green" ];
+  "LockProxy._transferFromContract" -> "LockProxy.address" [ color = "green" ];
+  "LockProxy._transferFromContract" -> "uint160(toAddress).transfer" [ color = "orange" ];
+  "LockProxy._transferFromContract" -> "LockProxy.address" [ color = "green" ];
+  "LockProxy._transferFromContract" -> "LockProxy._transferERC20FromContract" [ color = "green" ];
+  "LockProxy._transferERC20ToContract" -> "LockProxy.IERC20" [ color = "green" ];
+  "LockProxy._transferERC20ToContract" -> "IERC20.safeTransferFrom" [ color = "orange" ];
+  "LockProxy._transferERC20FromContract" -> "LockProxy.IERC20" [ color = "green" ];
+  "LockProxy._transferERC20FromContract" -> "IERC20.safeTransfer" [ color = "orange" ];
+  "LockProxy._serializeTxArgs" -> "ZeroCopySink.WriteVarBytes" [ color = "orange" ];
+  "LockProxy._serializeTxArgs" -> "ZeroCopySink.WriteVarBytes" [ color = "orange" ];
+  "LockProxy._serializeTxArgs" -> "ZeroCopySink.WriteUint255" [ color = "orange" ];
+  "LockProxy._deserializeTxArgs" -> "ZeroCopySource.NextVarBytes" [ color = "orange" ];
+  "LockProxy._deserializeTxArgs" -> "ZeroCopySource.NextVarBytes" [ color = "orange" ];
+  "LockProxy._deserializeTxArgs" -> "ZeroCopySource.NextUint255" [ color = "orange" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

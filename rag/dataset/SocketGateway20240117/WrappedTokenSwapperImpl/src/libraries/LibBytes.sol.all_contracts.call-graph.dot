@@ -1,0 +1,21 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_65_LibBytes {
+label = "LibBytes"
+"65_concat" [label="concat"]
+"65_slice" [label="slice"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"revert SliceOutOfBounds()" 
+"mload(uint256)" 
+"mstore(uint256,uint256)" 
+"revert SliceOverflow()" 
+"65_concat" -> "mload(uint256)"
+"65_slice" -> "mstore(uint256,uint256)"
+"65_slice" -> "revert SliceOverflow()"
+"65_slice" -> "mload(uint256)"
+"65_concat" -> "mstore(uint256,uint256)"
+"65_slice" -> "revert SliceOutOfBounds()"
+}
+}

@@ -1,0 +1,75 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterAnyswapV4Router" {
+  graph [ label = "AnyswapV4Router  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "AnyswapV4Router.anySwapOutUnderlying" [ label = "anySwapOutUnderlying" ];
+}
+
+subgraph "clusterAnyswapL2Impl" {
+  graph [ label = "AnyswapL2Impl", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "AnyswapL2Impl.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "AnyswapL2Impl.bridgeAfterSwap" [ label = "bridgeAfterSwap", color = "blue" ];
+  "AnyswapL2Impl.swapAndBridge" [ label = "swapAndBridge", color = "blue" ];
+  "AnyswapL2Impl.bridgeERC20To" [ label = "bridgeERC20To", color = "blue" ];
+  "AnyswapL2Impl.SocketBridge" [ label = "SocketBridge" ];
+  "AnyswapL2Impl.ERC20" [ label = "ERC20" ];
+}
+
+subgraph "clustersocketRoute" {
+  graph [ label = "socketRoute", color = "lightgray" ];
+  "socketRoute.getRoute" [ label = "getRoute" ];
+}
+
+subgraph "clusterERC20" {
+  graph [ label = "ERC20", color = "lightgray" ];
+  "ERC20.safeTransferFrom" [ label = "safeTransferFrom" ];
+}
+
+  "AnyswapL2Impl.bridgeAfterSwap";
+  "AnyswapV4Router.anySwapOutUnderlying";
+  "AnyswapL2Impl.SocketBridge";
+  "AnyswapL2Impl.swapAndBridge";
+  "socketRoute.getRoute";
+  "AnyswapL2Impl.bridgeERC20To";
+  "AnyswapL2Impl.ERC20";
+  "ERC20.safeTransferFrom";
+  "AnyswapL2Impl.bridgeAfterSwap" -> "AnyswapV4Router.anySwapOutUnderlying" [ color = "orange" ];
+  "AnyswapL2Impl.bridgeAfterSwap" -> "AnyswapL2Impl.SocketBridge" [ color = "green" ];
+  "AnyswapL2Impl.swapAndBridge" -> "socketRoute.getRoute" [ color = "orange" ];
+  "AnyswapL2Impl.swapAndBridge" -> "AnyswapV4Router.anySwapOutUnderlying" [ color = "orange" ];
+  "AnyswapL2Impl.swapAndBridge" -> "AnyswapL2Impl.SocketBridge" [ color = "green" ];
+  "AnyswapL2Impl.bridgeERC20To" -> "AnyswapL2Impl.ERC20" [ color = "green" ];
+  "AnyswapL2Impl.bridgeERC20To" -> "ERC20.safeTransferFrom" [ color = "orange" ];
+  "AnyswapL2Impl.bridgeERC20To" -> "AnyswapV4Router.anySwapOutUnderlying" [ color = "orange" ];
+  "AnyswapL2Impl.bridgeERC20To" -> "AnyswapL2Impl.SocketBridge" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

@@ -1,0 +1,36 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_1528_Utils {
+label = "Utils"
+"1528_bytesToUint256" [label="bytesToUint256"]
+"1528_hashChildren" [label="hashChildren"]
+"1528_containMAddresses" [label="containMAddresses"]
+"1528_addressToBytes" [label="addressToBytes"]
+"1528_compressMCPubKey" [label="compressMCPubKey"]
+"1528_slice" [label="slice"]
+"1528_bytesToBytes32" [label="bytesToBytes32"]
+"1528_equalStorage" [label="equalStorage"]
+"1528_uint256ToBytes" [label="uint256ToBytes"]
+"1528_isContract" [label="isContract"]
+"1528_bytesToAddress" [label="bytesToAddress"]
+"1528_hashLeaf" [label="hashLeaf"]
+"1528_compressMCPubKey" -> "1528_slice"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"require(bool)" 
+"sha256(bytes)" 
+"abi.encodePacked()" 
+"1528_compressMCPubKey" -> "require(bool,string)"
+"1528_hashLeaf" -> "sha256(bytes)"
+"1528_uint256ToBytes" -> "require(bool,string)"
+"1528_hashChildren" -> "sha256(bytes)"
+"1528_hashLeaf" -> "abi.encodePacked()"
+"1528_bytesToBytes32" -> "require(bool,string)"
+"1528_slice" -> "require(bool)"
+"1528_bytesToUint256" -> "require(bool,string)"
+"1528_hashChildren" -> "abi.encodePacked()"
+"1528_bytesToAddress" -> "require(bool,string)"
+}
+}

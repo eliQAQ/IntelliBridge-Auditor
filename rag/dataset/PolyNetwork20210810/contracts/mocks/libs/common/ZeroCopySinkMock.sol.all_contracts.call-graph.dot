@@ -1,0 +1,49 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_321_ZeroCopySinkMock {
+label = "ZeroCopySinkMock"
+"321_WriteUint16" [label="WriteUint16"]
+"321_WriteUint64" [label="WriteUint64"]
+"321_WriteUint255" [label="WriteUint255"]
+"321_WriteBool" [label="WriteBool"]
+"321_WriteUint8" [label="WriteUint8"]
+"321_WriteVarUint" [label="WriteVarUint"]
+"321_WriteByte" [label="WriteByte"]
+"321_WriteVarBytes" [label="WriteVarBytes"]
+"321_WriteUint32" [label="WriteUint32"]
+}subgraph cluster_518_ZeroCopySink {
+label = "ZeroCopySink"
+"518_WriteVarBytes" [label="WriteVarBytes"]
+"518_WriteByte" [label="WriteByte"]
+"518_WriteUint16" [label="WriteUint16"]
+"518_WriteBool" [label="WriteBool"]
+"518_WriteUint64" [label="WriteUint64"]
+"518_WriteVarUint" [label="WriteVarUint"]
+"518_WriteUint32" [label="WriteUint32"]
+"518_WriteUint8" [label="WriteUint8"]
+"518_WriteUint255" [label="WriteUint255"]
+"518_WriteVarUint" -> "518_WriteUint8"
+"518_WriteVarUint" -> "518_WriteUint16"
+"518_WriteVarUint" -> "518_WriteUint64"
+"518_WriteVarBytes" -> "518_WriteVarUint"
+"518_WriteVarUint" -> "518_WriteByte"
+"518_WriteByte" -> "518_WriteUint8"
+"518_WriteVarUint" -> "518_WriteUint32"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"abi.encodePacked()" 
+"518_WriteVarUint" -> "abi.encodePacked()"
+"518_WriteUint255" -> "require(bool,string)"
+"518_WriteVarBytes" -> "abi.encodePacked()"
+}"321_WriteVarUint" -> "518_WriteVarUint"
+"321_WriteBool" -> "518_WriteBool"
+"321_WriteVarBytes" -> "518_WriteVarBytes"
+"321_WriteUint8" -> "518_WriteUint8"
+"321_WriteUint64" -> "518_WriteUint64"
+"321_WriteUint32" -> "518_WriteUint32"
+"321_WriteUint255" -> "518_WriteUint255"
+"321_WriteUint16" -> "518_WriteUint16"
+"321_WriteByte" -> "518_WriteByte"
+}

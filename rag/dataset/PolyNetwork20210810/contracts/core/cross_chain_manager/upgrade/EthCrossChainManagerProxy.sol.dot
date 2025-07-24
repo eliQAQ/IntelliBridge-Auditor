@@ -1,0 +1,87 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterEthCrossChainManagerProxy" {
+  graph [ label = "EthCrossChainManagerProxy", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "EthCrossChainManagerProxy.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "EthCrossChainManagerProxy.pause" [ label = "pause", color = "green" ];
+  "EthCrossChainManagerProxy.unpause" [ label = "unpause", color = "green" ];
+  "EthCrossChainManagerProxy.pauseEthCrossChainManager" [ label = "pauseEthCrossChainManager", color = "green" ];
+  "EthCrossChainManagerProxy.upgradeEthCrossChainManager" [ label = "upgradeEthCrossChainManager", color = "green" ];
+  "EthCrossChainManagerProxy.unpauseEthCrossChainManager" [ label = "unpauseEthCrossChainManager", color = "green" ];
+  "EthCrossChainManagerProxy.getEthCrossChainManager" [ label = "getEthCrossChainManager", color = "green" ];
+  "EthCrossChainManagerProxy.paused" [ label = "paused" ];
+  "EthCrossChainManagerProxy._pause" [ label = "_pause" ];
+  "EthCrossChainManagerProxy._unpause" [ label = "_unpause" ];
+  "EthCrossChainManagerProxy.IUpgradableECCM" [ label = "IUpgradableECCM" ];
+}
+
+subgraph "clusterIUpgradableECCM" {
+  graph [ label = "IUpgradableECCM", color = "lightgray" ];
+  "IUpgradableECCM.pause" [ label = "pause" ];
+  "IUpgradableECCM.paused" [ label = "paused" ];
+  "IUpgradableECCM.upgradeToNew" [ label = "upgradeToNew" ];
+  "IUpgradableECCM.isOwner" [ label = "isOwner" ];
+  "IUpgradableECCM.unpause" [ label = "unpause" ];
+}
+
+  "EthCrossChainManagerProxy.pause";
+  "EthCrossChainManagerProxy.paused";
+  "EthCrossChainManagerProxy._pause";
+  "EthCrossChainManagerProxy.unpause";
+  "EthCrossChainManagerProxy._unpause";
+  "EthCrossChainManagerProxy.pauseEthCrossChainManager";
+  "EthCrossChainManagerProxy.IUpgradableECCM";
+  "IUpgradableECCM.pause";
+  "EthCrossChainManagerProxy.upgradeEthCrossChainManager";
+  "IUpgradableECCM.paused";
+  "IUpgradableECCM.upgradeToNew";
+  "IUpgradableECCM.isOwner";
+  "EthCrossChainManagerProxy.unpauseEthCrossChainManager";
+  "IUpgradableECCM.unpause";
+  "EthCrossChainManagerProxy.pause" -> "EthCrossChainManagerProxy.paused" [ color = "green" ];
+  "EthCrossChainManagerProxy.pause" -> "EthCrossChainManagerProxy._pause" [ color = "green" ];
+  "EthCrossChainManagerProxy.unpause" -> "EthCrossChainManagerProxy.paused" [ color = "green" ];
+  "EthCrossChainManagerProxy.unpause" -> "EthCrossChainManagerProxy._unpause" [ color = "green" ];
+  "EthCrossChainManagerProxy.pauseEthCrossChainManager" -> "EthCrossChainManagerProxy.IUpgradableECCM" [ color = "green" ];
+  "EthCrossChainManagerProxy.pauseEthCrossChainManager" -> "EthCrossChainManagerProxy.pause" [ color = "green" ];
+  "EthCrossChainManagerProxy.pauseEthCrossChainManager" -> "IUpgradableECCM.pause" [ color = "orange" ];
+  "EthCrossChainManagerProxy.upgradeEthCrossChainManager" -> "EthCrossChainManagerProxy.IUpgradableECCM" [ color = "green" ];
+  "EthCrossChainManagerProxy.upgradeEthCrossChainManager" -> "IUpgradableECCM.paused" [ color = "orange" ];
+  "EthCrossChainManagerProxy.upgradeEthCrossChainManager" -> "IUpgradableECCM.pause" [ color = "orange" ];
+  "EthCrossChainManagerProxy.upgradeEthCrossChainManager" -> "IUpgradableECCM.upgradeToNew" [ color = "orange" ];
+  "EthCrossChainManagerProxy.upgradeEthCrossChainManager" -> "EthCrossChainManagerProxy.IUpgradableECCM" [ color = "green" ];
+  "EthCrossChainManagerProxy.upgradeEthCrossChainManager" -> "IUpgradableECCM.isOwner" [ color = "orange" ];
+  "EthCrossChainManagerProxy.unpauseEthCrossChainManager" -> "EthCrossChainManagerProxy.IUpgradableECCM" [ color = "green" ];
+  "EthCrossChainManagerProxy.unpauseEthCrossChainManager" -> "IUpgradableECCM.unpause" [ color = "orange" ];
+  "EthCrossChainManagerProxy.unpauseEthCrossChainManager" -> "EthCrossChainManagerProxy.unpause" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

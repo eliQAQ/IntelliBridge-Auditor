@@ -1,0 +1,268 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_1251_ISushiswapV3Router01 {
+label = "ISushiswapV3Router01"
+"1251_swapExactTokensForTokens" [label="swapExactTokensForTokens"]
+"1251_WFTM" [label="WFTM"]
+"1251_swapExactFTMForTokens" [label="swapExactFTMForTokens"]
+"1251_getAmountIn" [label="getAmountIn"]
+"1251_swapTokensForExactTokens" [label="swapTokensForExactTokens"]
+"1251_getAmountsIn" [label="getAmountsIn"]
+"1251_removeLiquidityFTM" [label="removeLiquidityFTM"]
+"1251_getAmountsOut" [label="getAmountsOut"]
+"1251_addLiquidityFTM" [label="addLiquidityFTM"]
+"1251_addLiquidity" [label="addLiquidity"]
+"1251_getAmountOut" [label="getAmountOut"]
+"1251_factory" [label="factory"]
+"1251_quote" [label="quote"]
+"1251_removeLiquidityFTMWithPermit" [label="removeLiquidityFTMWithPermit"]
+"1251_swapTokensForExactFTM" [label="swapTokensForExactFTM"]
+"1251_removeLiquidityWithPermit" [label="removeLiquidityWithPermit"]
+"1251_swapFTMForExactTokens" [label="swapFTMForExactTokens"]
+"1251_removeLiquidity" [label="removeLiquidity"]
+"1251_swapExactTokensForFTM" [label="swapExactTokensForFTM"]
+}subgraph cluster_1508_IERC20 {
+label = "IERC20"
+"1508_balanceOf" [label="balanceOf"]
+"1508_symbol" [label="symbol"]
+"1508_transferFrom" [label="transferFrom"]
+"1508_totalSupply" [label="totalSupply"]
+"1508_decimals" [label="decimals"]
+"1508_approve" [label="approve"]
+"1508_allowance" [label="allowance"]
+"1508_name" [label="name"]
+"1508_transferWithPermit" [label="transferWithPermit"]
+"1508_transfer" [label="transfer"]
+}subgraph cluster_1407_ISushiswapV3Factory {
+label = "ISushiswapV3Factory"
+"1407_migrator" [label="migrator"]
+"1407_setFeeToSetter" [label="setFeeToSetter"]
+"1407_allPairsLength" [label="allPairsLength"]
+"1407_setFeeTo" [label="setFeeTo"]
+"1407_setMigrator" [label="setMigrator"]
+"1407_allPairs" [label="allPairs"]
+"1407_getPair" [label="getPair"]
+"1407_feeTo" [label="feeTo"]
+"1407_feeToSetter" [label="feeToSetter"]
+"1407_createPair" [label="createPair"]
+}subgraph cluster_944_TransferHelper {
+label = "TransferHelper"
+"944_safeTransfer" [label="safeTransfer"]
+"944_safeApprove" [label="safeApprove"]
+"944_safeTransferFrom" [label="safeTransferFrom"]
+"944_safeTransferFTM" [label="safeTransferFTM"]
+}subgraph cluster_242_ISushiswapV3Pair {
+label = "ISushiswapV3Pair"
+"242_decimals" [label="decimals"]
+"242_transfer" [label="transfer"]
+"242_getReserves" [label="getReserves"]
+"242_sync" [label="sync"]
+"242_initialize" [label="initialize"]
+"242_token1" [label="token1"]
+"242_price0CumulativeLast" [label="price0CumulativeLast"]
+"242_kLast" [label="kLast"]
+"242_price1CumulativeLast" [label="price1CumulativeLast"]
+"242_balanceOf" [label="balanceOf"]
+"242_permit" [label="permit"]
+"242_factory" [label="factory"]
+"242_MINIMUM_LIQUIDITY" [label="MINIMUM_LIQUIDITY"]
+"242_mint" [label="mint"]
+"242_nonces" [label="nonces"]
+"242_skim" [label="skim"]
+"242_DOMAIN_SEPARATOR" [label="DOMAIN_SEPARATOR"]
+"242_totalSupply" [label="totalSupply"]
+"242_burn" [label="burn"]
+"242_symbol" [label="symbol"]
+"242_token0" [label="token0"]
+"242_transferFrom" [label="transferFrom"]
+"242_swap" [label="swap"]
+"242_name" [label="name"]
+"242_PERMIT_TYPEHASH" [label="PERMIT_TYPEHASH"]
+"242_allowance" [label="allowance"]
+"242_approve" [label="approve"]
+}subgraph cluster_786_SushiswapV3Library {
+label = "SushiswapV3Library"
+"786_quote" [label="quote"]
+"786_getReserves" [label="getReserves"]
+"786_getAmountOut" [label="getAmountOut"]
+"786_pairFor" [label="pairFor"]
+"786_getAmountsIn" [label="getAmountsIn"]
+"786_getAmountsOut" [label="getAmountsOut"]
+"786_sortTokens" [label="sortTokens"]
+"786_getAmountIn" [label="getAmountIn"]
+"786_pairFor" -> "786_sortTokens"
+"786_getReserves" -> "786_sortTokens"
+"786_getAmountsIn" -> "786_getAmountIn"
+"786_getAmountsOut" -> "786_getReserves"
+"786_getReserves" -> "786_pairFor"
+"786_getAmountsOut" -> "786_getAmountOut"
+"786_getAmountsIn" -> "786_getReserves"
+}subgraph cluster_1526_IWFTM {
+label = "IWFTM"
+"1526_transfer" [label="transfer"]
+"1526_withdraw" [label="withdraw"]
+"1526_deposit" [label="deposit"]
+}subgraph cluster_1336_ISushiswapV3Router02 {
+label = "ISushiswapV3Router02"
+"1336_swapExactFTMForTokensSupportingFeeOnTransferTokens" [label="swapExactFTMForTokensSupportingFeeOnTransferTokens"]
+"1336_swapExactTokensForTokensSupportingFeeOnTransferTokens" [label="swapExactTokensForTokensSupportingFeeOnTransferTokens"]
+"1336_removeLiquidityFTMWithPermitSupportingFeeOnTransferTokens" [label="removeLiquidityFTMWithPermitSupportingFeeOnTransferTokens"]
+"1336_removeLiquidityFTMSupportingFeeOnTransferTokens" [label="removeLiquidityFTMSupportingFeeOnTransferTokens"]
+"1336_swapExactTokensForFTMSupportingFeeOnTransferTokens" [label="swapExactTokensForFTMSupportingFeeOnTransferTokens"]
+}subgraph cluster_315_SafeMathSushiswap {
+label = "SafeMathSushiswap"
+"315_add" [label="add"]
+"315_mul" [label="mul"]
+"315_sub" [label="sub"]
+}subgraph cluster_3071_SushiswapV3PermitRouter02 {
+label = "SushiswapV3PermitRouter02"
+"3071_constructor" [label="constructor"]
+"3071_receive" [label="receive"]
+"3071_quote" [label="quote"]
+"3071_swapExactFTMForTokens" [label="swapExactFTMForTokens"]
+"3071_removeLiquidityFTM" [label="removeLiquidityFTM"]
+"3071_removeLiquidityFTMWithPermit" [label="removeLiquidityFTMWithPermit"]
+"3071_getAmountIn" [label="getAmountIn"]
+"3071_addLiquidityFTMWithPermit" [label="addLiquidityFTMWithPermit"]
+"3071_getAmountOut" [label="getAmountOut"]
+"3071_swapTokensForExactFTMWithPermit" [label="swapTokensForExactFTMWithPermit"]
+"3071__swap" [label="_swap"]
+"3071_removeLiquidityWithPermit" [label="removeLiquidityWithPermit"]
+"3071_swapTokensForExactTokensWithPermit" [label="swapTokensForExactTokensWithPermit"]
+"3071_getAmountsOut" [label="getAmountsOut"]
+"3071_swapFTMForExactTokens" [label="swapFTMForExactTokens"]
+"3071_swapExactTokensForFTM" [label="swapExactTokensForFTM"]
+"3071_addLiquidityWithPermit" [label="addLiquidityWithPermit"]
+"3071_removeLiquidity" [label="removeLiquidity"]
+"3071__addLiquidity" [label="_addLiquidity"]
+"3071_getAmountsIn" [label="getAmountsIn"]
+"3071_swapExactTokensForTokensWithPermit" [label="swapExactTokensForTokensWithPermit"]
+"3071_removeLiquidityFTM" -> "3071_ensure"
+"3071_removeLiquidityFTMWithPermit" -> "3071_removeLiquidityFTM"
+"3071_addLiquidityFTMWithPermit" -> "3071__addLiquidity"
+"3071_addLiquidityWithPermit" -> "3071_ensure"
+"3071_swapFTMForExactTokens" -> "3071__swap"
+"3071_swapTokensForExactTokensWithPermit" -> "3071_ensure"
+"3071_swapFTMForExactTokens" -> "3071_ensure"
+"3071_addLiquidityWithPermit" -> "3071__addLiquidity"
+"3071_swapExactFTMForTokens" -> "3071_ensure"
+"3071_removeLiquidityWithPermit" -> "3071_removeLiquidity"
+"3071_swapTokensForExactFTMWithPermit" -> "3071_ensure"
+"3071_removeLiquidity" -> "3071_ensure"
+"3071_removeLiquidityFTM" -> "3071_removeLiquidity"
+"3071_swapExactTokensForFTM" -> "3071__swap"
+"3071_addLiquidityFTMWithPermit" -> "3071_ensure"
+"3071_swapExactTokensForTokensWithPermit" -> "3071__swap"
+"3071_swapExactTokensForTokensWithPermit" -> "3071_ensure"
+"3071_swapExactFTMForTokens" -> "3071__swap"
+"3071_swapTokensForExactTokensWithPermit" -> "3071__swap"
+"3071_swapTokensForExactFTMWithPermit" -> "3071__swap"
+"3071_swapExactTokensForFTM" -> "3071_ensure"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"abi.encodeWithSelector()" 
+"assert(bool)" 
+"abi.decode()" 
+"abi.encodePacked()" 
+"keccak256(bytes)" 
+"require(bool,string)" 
+"786_getAmountOut" -> "require(bool,string)"
+"3071_swapExactTokensForTokensWithPermit" -> "require(bool,string)"
+"944_safeApprove" -> "abi.encodeWithSelector()"
+"3071__addLiquidity" -> "assert(bool)"
+"3071_swapExactTokensForFTM" -> "require(bool,string)"
+"3071_swapTokensForExactFTMWithPermit" -> "require(bool,string)"
+"786_pairFor" -> "abi.encodePacked()"
+"315_add" -> "require(bool,string)"
+"786_getAmountsIn" -> "require(bool,string)"
+"944_safeTransferFrom" -> "require(bool,string)"
+"3071__addLiquidity" -> "require(bool,string)"
+"786_sortTokens" -> "require(bool,string)"
+"3071_receive" -> "assert(bool)"
+"944_safeTransferFrom" -> "abi.encodeWithSelector()"
+"315_mul" -> "require(bool,string)"
+"315_sub" -> "require(bool,string)"
+"786_quote" -> "require(bool,string)"
+"944_safeTransfer" -> "abi.encodeWithSelector()"
+"3071_swapFTMForExactTokens" -> "require(bool,string)"
+"944_safeApprove" -> "abi.decode()"
+"944_safeTransferFTM" -> "require(bool,string)"
+"944_safeApprove" -> "require(bool,string)"
+"786_getAmountIn" -> "require(bool,string)"
+"3071_addLiquidityFTMWithPermit" -> "assert(bool)"
+"3071_swapExactFTMForTokens" -> "assert(bool)"
+"786_pairFor" -> "keccak256(bytes)"
+"944_safeTransfer" -> "abi.decode()"
+"3071_swapFTMForExactTokens" -> "assert(bool)"
+"3071_removeLiquidity" -> "require(bool,string)"
+"3071_swapTokensForExactTokensWithPermit" -> "require(bool,string)"
+"786_getAmountsOut" -> "require(bool,string)"
+"944_safeTransfer" -> "require(bool,string)"
+"944_safeTransferFrom" -> "abi.decode()"
+"3071_swapExactFTMForTokens" -> "require(bool,string)"
+}"3071_swapFTMForExactTokens" -> "1526_deposit"
+"3071_swapTokensForExactFTMWithPermit" -> "786_pairFor"
+"3071_addLiquidityWithPermit" -> "786_pairFor"
+"3071_swapExactTokensForTokensWithPermit" -> "786_getAmountsOut"
+"3071_addLiquidityFTMWithPermit" -> "1526_transfer"
+"3071_removeLiquidityFTMWithPermit" -> "786_pairFor"
+"3071_addLiquidityWithPermit" -> "1508_transferWithPermit"
+"3071_removeLiquidity" -> "786_pairFor"
+"3071__swap" -> "242_swap"
+"3071_addLiquidityWithPermit" -> "242_mint"
+"3071_getAmountOut" -> "786_getAmountOut"
+"3071__addLiquidity" -> "1407_createPair"
+"3071_swapTokensForExactTokensWithPermit" -> "786_pairFor"
+"3071_getAmountsIn" -> "786_getAmountsIn"
+"3071_swapExactFTMForTokens" -> "1526_transfer"
+"3071__addLiquidity" -> "1407_getPair"
+"3071__addLiquidity" -> "786_quote"
+"3071_swapExactTokensForFTM" -> "1508_transferWithPermit"
+"3071_quote" -> "786_quote"
+"3071__swap" -> "786_pairFor"
+"3071_swapFTMForExactTokens" -> "944_safeTransferFTM"
+"3071_swapTokensForExactTokensWithPermit" -> "1508_transferWithPermit"
+"786_getAmountIn" -> "315_add"
+"3071_removeLiquidityFTMWithPermit" -> "242_permit"
+"3071_swapTokensForExactFTMWithPermit" -> "786_getAmountsIn"
+"3071_addLiquidityFTMWithPermit" -> "786_pairFor"
+"3071_swapExactTokensForFTM" -> "944_safeTransferFTM"
+"3071_getAmountIn" -> "786_getAmountIn"
+"3071__addLiquidity" -> "786_getReserves"
+"3071_swapExactTokensForFTM" -> "786_pairFor"
+"3071_swapTokensForExactFTMWithPermit" -> "944_safeTransferFTM"
+"3071_swapTokensForExactTokensWithPermit" -> "786_getAmountsIn"
+"786_getAmountIn" -> "315_sub"
+"3071_getAmountsOut" -> "786_getAmountsOut"
+"3071_addLiquidityFTMWithPermit" -> "944_safeTransferFTM"
+"3071_removeLiquidity" -> "786_sortTokens"
+"3071_swapExactFTMForTokens" -> "1526_deposit"
+"786_getAmountIn" -> "315_mul"
+"3071_addLiquidityFTMWithPermit" -> "1508_transferWithPermit"
+"3071_removeLiquidity" -> "242_burn"
+"3071_removeLiquidityWithPermit" -> "786_pairFor"
+"3071__swap" -> "786_sortTokens"
+"3071_removeLiquidityFTM" -> "944_safeTransferFTM"
+"3071_removeLiquidityFTM" -> "1526_withdraw"
+"3071_swapExactFTMForTokens" -> "786_pairFor"
+"3071_swapExactTokensForTokensWithPermit" -> "1508_transferWithPermit"
+"3071_removeLiquidityWithPermit" -> "242_permit"
+"3071_swapExactTokensForTokensWithPermit" -> "786_pairFor"
+"786_getAmountOut" -> "315_mul"
+"786_getAmountOut" -> "315_add"
+"786_getReserves" -> "242_getReserves"
+"3071_swapTokensForExactFTMWithPermit" -> "1508_transferWithPermit"
+"3071_swapExactTokensForFTM" -> "1526_withdraw"
+"3071_swapExactFTMForTokens" -> "786_getAmountsOut"
+"3071_removeLiquidity" -> "242_transferFrom"
+"3071_swapFTMForExactTokens" -> "786_getAmountsIn"
+"3071_addLiquidityFTMWithPermit" -> "1526_deposit"
+"786_quote" -> "315_mul"
+"3071_removeLiquidityFTM" -> "944_safeTransfer"
+"3071_swapFTMForExactTokens" -> "786_pairFor"
+"3071_addLiquidityFTMWithPermit" -> "242_mint"
+"3071_swapFTMForExactTokens" -> "1526_transfer"
+"3071_swapExactTokensForFTM" -> "786_getAmountsOut"
+"3071_swapTokensForExactFTMWithPermit" -> "1526_withdraw"
+}

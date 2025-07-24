@@ -1,0 +1,255 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterXBridge" {
+  graph [ label = "XBridge", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "XBridge.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "XBridge.initialize" [ label = "initialize", color = "blue" ];
+  "XBridge.<Receive Ether>" [ label = "<Receive Ether>", color = "blue" ];
+  "XBridge.<Fallback>" [ label = "<Fallback>", color = "blue" ];
+  "XBridge.lock" [ label = "lock", color = "blue" ];
+  "XBridge.unlock" [ label = "unlock", color = "blue" ];
+  "XBridge.swapTokensForETH" [ label = "swapTokensForETH" ];
+  "XBridge.safeApprove" [ label = "safeApprove" ];
+  "XBridge.mint" [ label = "mint" ];
+  "XBridge.burn" [ label = "burn" ];
+  "XBridge.transferAndCalcAmountAndFees" [ label = "transferAndCalcAmountAndFees" ];
+  "XBridge.verify" [ label = "verify" ];
+  "XBridge.prefixed" [ label = "prefixed" ];
+  "XBridge.returnHash" [ label = "returnHash" ];
+  "XBridge.call" [ label = "call" ];
+  "XBridge.listToken" [ label = "listToken", color = "blue" ];
+  "XBridge.delistTokenByOwner" [ label = "delistTokenByOwner", color = "blue" ];
+  "XBridge.delistTokenByUser" [ label = "delistTokenByUser", color = "blue" ];
+  "XBridge.transferListingFee" [ label = "transferListingFee" ];
+  "XBridge.setListingFee" [ label = "setListingFee", color = "blue" ];
+  "XBridge.setListingFeeCollector" [ label = "setListingFeeCollector", color = "blue" ];
+  "XBridge.setExcludeFeeFromListing" [ label = "setExcludeFeeFromListing", color = "blue" ];
+  "XBridge.changeAdmin" [ label = "changeAdmin", color = "blue" ];
+  "XBridge.setFeeForToken" [ label = "setFeeForToken", color = "blue" ];
+  "XBridge.setChainSupported" [ label = "setChainSupported", color = "blue" ];
+  "XBridge.setFeeCollector" [ label = "setFeeCollector", color = "blue" ];
+  "XBridge.getTotalSigners" [ label = "getTotalSigners", color = "blue" ];
+  "XBridge.depositTokens" [ label = "depositTokens", color = "blue" ];
+  "XBridge.withdrawTokens" [ label = "withdrawTokens", color = "blue" ];
+  "XBridge.claimTax" [ label = "claimTax", color = "blue" ];
+  "XBridge.viewTax" [ label = "viewTax", color = "blue" ];
+  "XBridge.changeTokenLister" [ label = "changeTokenLister", color = "blue" ];
+  "XBridge.getSigners" [ label = "getSigners", color = "blue" ];
+  "XBridge.setThresholdLimit" [ label = "setThresholdLimit", color = "blue" ];
+  "XBridge.setRouter" [ label = "setRouter", color = "blue" ];
+  "XBridge.setUsdt" [ label = "setUsdt", color = "blue" ];
+  "XBridge.setNative" [ label = "setNative", color = "blue" ];
+  "XBridge.migrateData" [ label = "migrateData", color = "blue" ];
+  "XBridge._disableInitializers" [ label = "_disableInitializers" ];
+  "XBridge.address" [ label = "address" ];
+  "XBridge.__Ownable_init" [ label = "__Ownable_init" ];
+  "XBridge.__ReentrancyGuard_init" [ label = "__ReentrancyGuard_init" ];
+  "XBridge.IUniswapV2Router02" [ label = "IUniswapV2Router02" ];
+  "XBridge.IERC20" [ label = "IERC20" ];
+  "XBridge.payable" [ label = "payable" ];
+  "XBridge.IUniswapV2Factory" [ label = "IUniswapV2Factory" ];
+}
+
+subgraph "clusterIUniswapV2Router02" {
+  graph [ label = "IUniswapV2Router02", color = "lightgray" ];
+  "IUniswapV2Router02.factory" [ label = "factory" ];
+  "IUniswapV2Router02.WETH" [ label = "WETH" ];
+  "IUniswapV2Router02.getAmountsOut" [ label = "getAmountsOut" ];
+  "IUniswapV2Router02.swapExactTokensForETHSupportingFeeOnTransferTokens" [ label = "swapExactTokensForETHSupportingFeeOnTransferTokens" ];
+}
+
+subgraph "clustertoken" {
+  graph [ label = "token", color = "lightgray" ];
+  "token.call" [ label = "call" ];
+}
+
+  "XBridge.<Constructor>";
+  "XBridge._disableInitializers";
+  "XBridge.initialize";
+  "XBridge.address";
+  "XBridge.__Ownable_init";
+  "XBridge.__ReentrancyGuard_init";
+  "XBridge.IUniswapV2Router02";
+  "XBridge.lock";
+  "XBridge.transferAndCalcAmountAndFees";
+  "XBridge.burn";
+  "XBridge.unlock";
+  "XBridge.verify";
+  "XBridge.IERC20";
+  "XBridge.mint";
+  "XBridge.payable";
+  "XBridge.IUniswapV2Factory";
+  "IUniswapV2Router02.factory";
+  "IUniswapV2Router02.WETH";
+  "IUniswapV2Router02.getAmountsOut";
+  "XBridge.swapTokensForETH";
+  "XBridge.safeApprove";
+  "IUniswapV2Router02.swapExactTokensForETHSupportingFeeOnTransferTokens";
+  "token.call";
+  "XBridge.returnHash";
+  "XBridge.call";
+  "XBridge.prefixed";
+  "XBridge.listToken";
+  "XBridge.transferListingFee";
+  "XBridge.delistTokenByOwner";
+  "XBridge.delistTokenByUser";
+  "XBridge.setListingFeeCollector";
+  "XBridge.setExcludeFeeFromListing";
+  "XBridge.setFeeForToken";
+  "XBridge.setFeeCollector";
+  "XBridge.depositTokens";
+  "XBridge.withdrawTokens";
+  "XBridge.claimTax";
+  "XBridge.viewTax";
+  "XBridge.changeTokenLister";
+  "XBridge.setRouter";
+  "XBridge.setUsdt";
+  "XBridge.setNative";
+  "XBridge.migrateData";
+  "XBridge.<Constructor>" -> "XBridge._disableInitializers" [ color = "green" ];
+  "XBridge.initialize" -> "XBridge.address" [ color = "green" ];
+  "XBridge.initialize" -> "XBridge.address" [ color = "green" ];
+  "XBridge.initialize" -> "XBridge.__Ownable_init" [ color = "green" ];
+  "XBridge.initialize" -> "XBridge.__ReentrancyGuard_init" [ color = "green" ];
+  "XBridge.initialize" -> "XBridge.IUniswapV2Router02" [ color = "green" ];
+  "XBridge.lock" -> "XBridge.address" [ color = "green" ];
+  "XBridge.lock" -> "XBridge.address" [ color = "green" ];
+  "XBridge.lock" -> "XBridge.transferAndCalcAmountAndFees" [ color = "green" ];
+  "XBridge.lock" -> "XBridge.transferAndCalcAmountAndFees" [ color = "green" ];
+  "XBridge.lock" -> "XBridge.burn" [ color = "green" ];
+  "XBridge.lock" -> "XBridge.transferAndCalcAmountAndFees" [ color = "green" ];
+  "XBridge.unlock" -> "XBridge.address" [ color = "green" ];
+  "XBridge.unlock" -> "XBridge.address" [ color = "green" ];
+  "XBridge.unlock" -> "XBridge.address" [ color = "green" ];
+  "XBridge.unlock" -> "XBridge.verify" [ color = "green" ];
+  "XBridge.unlock" -> "XBridge.address" [ color = "green" ];
+  "XBridge.unlock" -> "XBridge.IERC20" [ color = "green" ];
+  "XBridge.unlock" -> "XBridge.address" [ color = "green" ];
+  "XBridge.unlock" -> "XBridge.mint" [ color = "green" ];
+  "XBridge.unlock" -> "XBridge.mint" [ color = "green" ];
+  "XBridge.unlock" -> "XBridge.IERC20" [ color = "green" ];
+  "XBridge.unlock" -> "XBridge.address" [ color = "green" ];
+  "XBridge.unlock" -> "XBridge.payable" [ color = "green" ];
+  "XBridge.unlock" -> "XBridge.payable" [ color = "green" ];
+  "XBridge.unlock" -> "XBridge.IERC20" [ color = "green" ];
+  "XBridge.unlock" -> "XBridge.address" [ color = "green" ];
+  "XBridge.unlock" -> "XBridge.payable" [ color = "green" ];
+  "XBridge.unlock" -> "XBridge.payable" [ color = "green" ];
+  "XBridge.unlock" -> "XBridge.mint" [ color = "green" ];
+  "XBridge.unlock" -> "XBridge.mint" [ color = "green" ];
+  "XBridge.unlock" -> "XBridge.IERC20" [ color = "green" ];
+  "XBridge.unlock" -> "XBridge.IUniswapV2Factory" [ color = "green" ];
+  "XBridge.unlock" -> "IUniswapV2Router02.factory" [ color = "orange" ];
+  "XBridge.unlock" -> "IUniswapV2Router02.WETH" [ color = "orange" ];
+  "XBridge.unlock" -> "XBridge.address" [ color = "green" ];
+  "XBridge.unlock" -> "IUniswapV2Router02.WETH" [ color = "orange" ];
+  "XBridge.unlock" -> "IUniswapV2Router02.getAmountsOut" [ color = "orange" ];
+  "XBridge.unlock" -> "XBridge.swapTokensForETH" [ color = "green" ];
+  "XBridge.unlock" -> "IUniswapV2Router02.WETH" [ color = "orange" ];
+  "XBridge.unlock" -> "XBridge.IUniswapV2Factory" [ color = "green" ];
+  "XBridge.unlock" -> "IUniswapV2Router02.factory" [ color = "orange" ];
+  "XBridge.unlock" -> "XBridge.address" [ color = "green" ];
+  "XBridge.unlock" -> "IUniswapV2Router02.getAmountsOut" [ color = "orange" ];
+  "XBridge.unlock" -> "XBridge.swapTokensForETH" [ color = "green" ];
+  "XBridge.swapTokensForETH" -> "XBridge.safeApprove" [ color = "green" ];
+  "XBridge.swapTokensForETH" -> "XBridge.address" [ color = "green" ];
+  "XBridge.swapTokensForETH" -> "IUniswapV2Router02.WETH" [ color = "orange" ];
+  "XBridge.swapTokensForETH" -> "IUniswapV2Router02.swapExactTokensForETHSupportingFeeOnTransferTokens" [ color = "orange" ];
+  "XBridge.swapTokensForETH" -> "IUniswapV2Router02.WETH" [ color = "orange" ];
+  "XBridge.swapTokensForETH" -> "IUniswapV2Router02.swapExactTokensForETHSupportingFeeOnTransferTokens" [ color = "orange" ];
+  "XBridge.safeApprove" -> "token.call" [ color = "orange" ];
+  "XBridge.mint" -> "XBridge.returnHash" [ color = "green" ];
+  "XBridge.mint" -> "XBridge.call" [ color = "green" ];
+  "XBridge.burn" -> "XBridge.returnHash" [ color = "green" ];
+  "XBridge.burn" -> "XBridge.call" [ color = "green" ];
+  "XBridge.transferAndCalcAmountAndFees" -> "XBridge.IERC20" [ color = "green" ];
+  "XBridge.transferAndCalcAmountAndFees" -> "XBridge.address" [ color = "green" ];
+  "XBridge.transferAndCalcAmountAndFees" -> "XBridge.IERC20" [ color = "green" ];
+  "XBridge.transferAndCalcAmountAndFees" -> "XBridge.address" [ color = "green" ];
+  "XBridge.transferAndCalcAmountAndFees" -> "XBridge.IERC20" [ color = "green" ];
+  "XBridge.transferAndCalcAmountAndFees" -> "XBridge.address" [ color = "green" ];
+  "XBridge.verify" -> "XBridge.prefixed" [ color = "green" ];
+  "XBridge.verify" -> "XBridge.address" [ color = "green" ];
+  "XBridge.call" -> "XBridge.IERC20" [ color = "green" ];
+  "XBridge.call" -> "XBridge.payable" [ color = "green" ];
+  "XBridge.listToken" -> "XBridge.address" [ color = "green" ];
+  "XBridge.listToken" -> "XBridge.address" [ color = "green" ];
+  "XBridge.listToken" -> "XBridge.address" [ color = "green" ];
+  "XBridge.listToken" -> "XBridge.address" [ color = "green" ];
+  "XBridge.listToken" -> "XBridge.transferListingFee" [ color = "green" ];
+  "XBridge.delistTokenByOwner" -> "XBridge.address" [ color = "green" ];
+  "XBridge.delistTokenByOwner" -> "XBridge.address" [ color = "green" ];
+  "XBridge.delistTokenByOwner" -> "XBridge.address" [ color = "green" ];
+  "XBridge.delistTokenByOwner" -> "XBridge.address" [ color = "green" ];
+  "XBridge.delistTokenByUser" -> "XBridge.address" [ color = "green" ];
+  "XBridge.delistTokenByUser" -> "XBridge.address" [ color = "green" ];
+  "XBridge.delistTokenByUser" -> "XBridge.address" [ color = "green" ];
+  "XBridge.delistTokenByUser" -> "XBridge.address" [ color = "green" ];
+  "XBridge.transferListingFee" -> "XBridge.address" [ color = "green" ];
+  "XBridge.transferListingFee" -> "XBridge.payable" [ color = "green" ];
+  "XBridge.transferListingFee" -> "XBridge.payable" [ color = "green" ];
+  "XBridge.setListingFeeCollector" -> "XBridge.address" [ color = "green" ];
+  "XBridge.setExcludeFeeFromListing" -> "XBridge.address" [ color = "green" ];
+  "XBridge.setFeeForToken" -> "XBridge.address" [ color = "green" ];
+  "XBridge.setFeeCollector" -> "XBridge.address" [ color = "green" ];
+  "XBridge.depositTokens" -> "XBridge.IERC20" [ color = "green" ];
+  "XBridge.depositTokens" -> "XBridge.address" [ color = "green" ];
+  "XBridge.depositTokens" -> "XBridge.IERC20" [ color = "green" ];
+  "XBridge.depositTokens" -> "XBridge.address" [ color = "green" ];
+  "XBridge.depositTokens" -> "XBridge.IERC20" [ color = "green" ];
+  "XBridge.depositTokens" -> "XBridge.address" [ color = "green" ];
+  "XBridge.withdrawTokens" -> "XBridge.address" [ color = "green" ];
+  "XBridge.withdrawTokens" -> "XBridge.IERC20" [ color = "green" ];
+  "XBridge.withdrawTokens" -> "XBridge.address" [ color = "green" ];
+  "XBridge.withdrawTokens" -> "XBridge.IERC20" [ color = "green" ];
+  "XBridge.withdrawTokens" -> "XBridge.address" [ color = "green" ];
+  "XBridge.withdrawTokens" -> "XBridge.payable" [ color = "green" ];
+  "XBridge.claimTax" -> "IUniswapV2Router02.WETH" [ color = "orange" ];
+  "XBridge.claimTax" -> "IUniswapV2Router02.getAmountsOut" [ color = "orange" ];
+  "XBridge.claimTax" -> "XBridge.swapTokensForETH" [ color = "green" ];
+  "XBridge.claimTax" -> "IUniswapV2Router02.WETH" [ color = "orange" ];
+  "XBridge.claimTax" -> "IUniswapV2Router02.getAmountsOut" [ color = "orange" ];
+  "XBridge.claimTax" -> "XBridge.swapTokensForETH" [ color = "green" ];
+  "XBridge.viewTax" -> "IUniswapV2Router02.WETH" [ color = "orange" ];
+  "XBridge.viewTax" -> "IUniswapV2Router02.getAmountsOut" [ color = "orange" ];
+  "XBridge.viewTax" -> "IUniswapV2Router02.getAmountsOut" [ color = "orange" ];
+  "XBridge.changeTokenLister" -> "XBridge.address" [ color = "green" ];
+  "XBridge.changeTokenLister" -> "XBridge.address" [ color = "green" ];
+  "XBridge.setRouter" -> "XBridge.IUniswapV2Router02" [ color = "green" ];
+  "XBridge.setUsdt" -> "XBridge.address" [ color = "green" ];
+  "XBridge.setNative" -> "XBridge.address" [ color = "green" ];
+  "XBridge.migrateData" -> "XBridge.address" [ color = "green" ];
+  "XBridge.migrateData" -> "XBridge.address" [ color = "green" ];
+  "XBridge.migrateData" -> "XBridge.address" [ color = "green" ];
+  "XBridge.migrateData" -> "XBridge.address" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

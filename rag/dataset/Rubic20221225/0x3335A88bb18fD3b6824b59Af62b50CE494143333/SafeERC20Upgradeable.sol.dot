@@ -1,0 +1,85 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterSafeERC20Upgradeable" {
+  graph [ label = "SafeERC20Upgradeable  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "SafeERC20Upgradeable.safeTransfer" [ label = "safeTransfer", color = "white" ];
+  "SafeERC20Upgradeable.safeTransferFrom" [ label = "safeTransferFrom", color = "white" ];
+  "SafeERC20Upgradeable.safeApprove" [ label = "safeApprove", color = "white" ];
+  "SafeERC20Upgradeable.safeIncreaseAllowance" [ label = "safeIncreaseAllowance", color = "white" ];
+  "SafeERC20Upgradeable.safeDecreaseAllowance" [ label = "safeDecreaseAllowance", color = "white" ];
+  "SafeERC20Upgradeable.safePermit" [ label = "safePermit", color = "white" ];
+  "SafeERC20Upgradeable._callOptionalReturn" [ label = "_callOptionalReturn" ];
+  "SafeERC20Upgradeable.address" [ label = "address" ];
+}
+
+subgraph "clusterIERC20Upgradeable" {
+  graph [ label = "IERC20Upgradeable", color = "lightgray" ];
+  "IERC20Upgradeable.allowance" [ label = "allowance" ];
+  "IERC20Upgradeable.functionCall" [ label = "functionCall" ];
+}
+
+subgraph "clusterIERC20PermitUpgradeable" {
+  graph [ label = "IERC20PermitUpgradeable", color = "lightgray" ];
+  "IERC20PermitUpgradeable.nonces" [ label = "nonces" ];
+  "IERC20PermitUpgradeable.permit" [ label = "permit" ];
+}
+
+  "SafeERC20Upgradeable.safeTransfer";
+  "SafeERC20Upgradeable._callOptionalReturn";
+  "SafeERC20Upgradeable.safeTransferFrom";
+  "SafeERC20Upgradeable.safeApprove";
+  "IERC20Upgradeable.allowance";
+  "SafeERC20Upgradeable.address";
+  "SafeERC20Upgradeable.safeIncreaseAllowance";
+  "SafeERC20Upgradeable.safeDecreaseAllowance";
+  "SafeERC20Upgradeable.safePermit";
+  "IERC20PermitUpgradeable.nonces";
+  "IERC20PermitUpgradeable.permit";
+  "IERC20Upgradeable.functionCall";
+  "SafeERC20Upgradeable.safeTransfer" -> "SafeERC20Upgradeable._callOptionalReturn" [ color = "green" ];
+  "SafeERC20Upgradeable.safeTransferFrom" -> "SafeERC20Upgradeable._callOptionalReturn" [ color = "green" ];
+  "SafeERC20Upgradeable.safeApprove" -> "IERC20Upgradeable.allowance" [ color = "orange" ];
+  "SafeERC20Upgradeable.safeApprove" -> "SafeERC20Upgradeable.address" [ color = "green" ];
+  "SafeERC20Upgradeable.safeApprove" -> "SafeERC20Upgradeable._callOptionalReturn" [ color = "green" ];
+  "SafeERC20Upgradeable.safeIncreaseAllowance" -> "IERC20Upgradeable.allowance" [ color = "orange" ];
+  "SafeERC20Upgradeable.safeIncreaseAllowance" -> "SafeERC20Upgradeable.address" [ color = "green" ];
+  "SafeERC20Upgradeable.safeIncreaseAllowance" -> "SafeERC20Upgradeable._callOptionalReturn" [ color = "green" ];
+  "SafeERC20Upgradeable.safeDecreaseAllowance" -> "IERC20Upgradeable.allowance" [ color = "orange" ];
+  "SafeERC20Upgradeable.safeDecreaseAllowance" -> "SafeERC20Upgradeable.address" [ color = "green" ];
+  "SafeERC20Upgradeable.safeDecreaseAllowance" -> "SafeERC20Upgradeable._callOptionalReturn" [ color = "green" ];
+  "SafeERC20Upgradeable.safePermit" -> "IERC20PermitUpgradeable.nonces" [ color = "orange" ];
+  "SafeERC20Upgradeable.safePermit" -> "IERC20PermitUpgradeable.permit" [ color = "orange" ];
+  "SafeERC20Upgradeable.safePermit" -> "IERC20PermitUpgradeable.nonces" [ color = "orange" ];
+  "SafeERC20Upgradeable._callOptionalReturn" -> "IERC20Upgradeable.functionCall" [ color = "orange" ];
+  "SafeERC20Upgradeable._callOptionalReturn" -> "SafeERC20Upgradeable.address" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

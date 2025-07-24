@@ -1,0 +1,52 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_2464_Context {
+label = "Context"
+"2464__msgSender" [label="_msgSender"]
+"2464__msgData" [label="_msgData"]
+"2464_constructor" [label="constructor"]
+}subgraph cluster_544_RippleLockProxy {
+label = "RippleLockProxy"
+"544__deserializeTxArgs" [label="_deserializeTxArgs"]
+"544__serializeTxArgs" [label="_serializeTxArgs"]
+"544_unlock" [label="unlock"]
+"544_rippleSetup" [label="rippleSetup"]
+"544_constructor" [label="constructor"]
+"544_setManagerProxy" [label="setManagerProxy"]
+"544_bindProxyHash" [label="bindProxyHash"]
+"544_slitherConstructorVariables" [label="slitherConstructorVariables"]
+"544__rippleCheck" [label="_rippleCheck"]
+"544_lock" [label="lock"]
+"544_unlock" -> "544__deserializeTxArgs"
+"544_unlock" -> "544_onlyManagerContract"
+"544_setManagerProxy" -> "544_onlyOwner"
+"544_rippleSetup" -> "544_onlyOwner"
+"544_lock" -> "544__serializeTxArgs"
+"544_lock" -> "544__rippleCheck"
+"544_lock" -> "544__msgSender"
+"544_bindProxyHash" -> "544_onlyOwner"
+}subgraph cluster_1439_Ownable {
+label = "Ownable"
+"1439_isOwner" [label="isOwner"]
+"1439_owner" [label="owner"]
+"1439_renounceOwnership" [label="renounceOwnership"]
+"1439_transferOwnership" [label="transferOwnership"]
+"1439__transferOwnership" [label="_transferOwnership"]
+"1439_constructor" [label="constructor"]
+"1439_transferOwnership" -> "1439__transferOwnership"
+"1439_constructor" -> "1439__msgSender"
+"1439_transferOwnership" -> "1439_onlyOwner"
+"1439_renounceOwnership" -> "1439_onlyOwner"
+"1439_isOwner" -> "1439__msgSender"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"abi.encodePacked()" 
+"require(bool,string)" 
+"544_unlock" -> "require(bool,string)"
+"1439__transferOwnership" -> "require(bool,string)"
+"544__rippleCheck" -> "require(bool,string)"
+"544_lock" -> "require(bool,string)"
+"544__serializeTxArgs" -> "abi.encodePacked()"
+}
+}

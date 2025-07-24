@@ -1,0 +1,72 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterFeesTakerController" {
+  graph [ label = "FeesTakerController", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "FeesTakerController.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "FeesTakerController.takeFeesAndSwap" [ label = "takeFeesAndSwap", color = "blue" ];
+  "FeesTakerController.takeFeesAndBridge" [ label = "takeFeesAndBridge", color = "blue" ];
+  "FeesTakerController.takeFeesAndMultiBridge" [ label = "takeFeesAndMultiBridge", color = "blue" ];
+  "FeesTakerController.takeFeeAndSwapAndBridge" [ label = "takeFeeAndSwapAndBridge", color = "blue" ];
+  "FeesTakerController.takeFeeAndRefuelAndSwapAndBridge" [ label = "takeFeeAndRefuelAndSwapAndBridge", color = "blue" ];
+  "FeesTakerController.NativeTokenTransferFailed" [ color = "brown2", shape =box ];
+  "FeesTakerController.ERC20" [ label = "ERC20" ];
+  "FeesTakerController._executeRoute" [ label = "_executeRoute" ];
+}
+
+  "FeesTakerController.takeFeesAndSwap";
+  "FeesTakerController.NativeTokenTransferFailed";
+  "FeesTakerController.ERC20";
+  "FeesTakerController._executeRoute";
+  "FeesTakerController.takeFeesAndBridge";
+  "FeesTakerController.takeFeesAndMultiBridge";
+  "FeesTakerController.takeFeeAndSwapAndBridge";
+  "FeesTakerController.takeFeeAndRefuelAndSwapAndBridge";
+  "FeesTakerController.takeFeesAndSwap" -> "FeesTakerController.NativeTokenTransferFailed" [ color = "red" ];
+  "FeesTakerController.takeFeesAndSwap" -> "FeesTakerController.ERC20" [ color = "green" ];
+  "FeesTakerController.takeFeesAndSwap" -> "FeesTakerController._executeRoute" [ color = "green" ];
+  "FeesTakerController.takeFeesAndBridge" -> "FeesTakerController.NativeTokenTransferFailed" [ color = "red" ];
+  "FeesTakerController.takeFeesAndBridge" -> "FeesTakerController.ERC20" [ color = "green" ];
+  "FeesTakerController.takeFeesAndBridge" -> "FeesTakerController._executeRoute" [ color = "green" ];
+  "FeesTakerController.takeFeesAndMultiBridge" -> "FeesTakerController.NativeTokenTransferFailed" [ color = "red" ];
+  "FeesTakerController.takeFeesAndMultiBridge" -> "FeesTakerController.ERC20" [ color = "green" ];
+  "FeesTakerController.takeFeesAndMultiBridge" -> "FeesTakerController._executeRoute" [ color = "green" ];
+  "FeesTakerController.takeFeeAndSwapAndBridge" -> "FeesTakerController.NativeTokenTransferFailed" [ color = "red" ];
+  "FeesTakerController.takeFeeAndSwapAndBridge" -> "FeesTakerController.ERC20" [ color = "green" ];
+  "FeesTakerController.takeFeeAndSwapAndBridge" -> "FeesTakerController._executeRoute" [ color = "green" ];
+  "FeesTakerController.takeFeeAndSwapAndBridge" -> "FeesTakerController._executeRoute" [ color = "green" ];
+  "FeesTakerController.takeFeeAndRefuelAndSwapAndBridge" -> "FeesTakerController.NativeTokenTransferFailed" [ color = "red" ];
+  "FeesTakerController.takeFeeAndRefuelAndSwapAndBridge" -> "FeesTakerController.ERC20" [ color = "green" ];
+  "FeesTakerController.takeFeeAndRefuelAndSwapAndBridge" -> "FeesTakerController._executeRoute" [ color = "green" ];
+  "FeesTakerController.takeFeeAndRefuelAndSwapAndBridge" -> "FeesTakerController._executeRoute" [ color = "green" ];
+  "FeesTakerController.takeFeeAndRefuelAndSwapAndBridge" -> "FeesTakerController._executeRoute" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

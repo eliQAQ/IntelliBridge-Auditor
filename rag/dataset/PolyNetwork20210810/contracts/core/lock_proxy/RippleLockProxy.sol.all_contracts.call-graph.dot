@@ -1,0 +1,254 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_2720_IERC20 {
+label = "IERC20"
+"2720_approve" [label="approve"]
+"2720_transfer" [label="transfer"]
+"2720_totalSupply" [label="totalSupply"]
+"2720_allowance" [label="allowance"]
+"2720_transferFrom" [label="transferFrom"]
+"2720_balanceOf" [label="balanceOf"]
+}subgraph cluster_2464_Context {
+label = "Context"
+"2464__msgData" [label="_msgData"]
+"2464_constructor" [label="constructor"]
+"2464__msgSender" [label="_msgSender"]
+}subgraph cluster_544_RippleLockProxy {
+label = "RippleLockProxy"
+"544__deserializeTxArgs" [label="_deserializeTxArgs"]
+"544__serializeTxArgs" [label="_serializeTxArgs"]
+"544_unlock" [label="unlock"]
+"544_rippleSetup" [label="rippleSetup"]
+"544_constructor" [label="constructor"]
+"544_setManagerProxy" [label="setManagerProxy"]
+"544_bindProxyHash" [label="bindProxyHash"]
+"544__rippleCheck" [label="_rippleCheck"]
+"544_lock" [label="lock"]
+"544_unlock" -> "544__deserializeTxArgs"
+"544_unlock" -> "544_onlyManagerContract"
+"544_setManagerProxy" -> "544_onlyOwner"
+"544_rippleSetup" -> "544_onlyOwner"
+"544_lock" -> "544__serializeTxArgs"
+"544_lock" -> "544__rippleCheck"
+"544_lock" -> "544__msgSender"
+"544_bindProxyHash" -> "544_onlyOwner"
+}subgraph cluster_2437_Utils {
+label = "Utils"
+"2437_containMAddresses" [label="containMAddresses"]
+"2437_isContract" [label="isContract"]
+"2437_bytesToAddress" [label="bytesToAddress"]
+"2437_uint256ToBytes" [label="uint256ToBytes"]
+"2437_hashLeaf" [label="hashLeaf"]
+"2437_bytesToBytes32" [label="bytesToBytes32"]
+"2437_slice" [label="slice"]
+"2437_equalStorage" [label="equalStorage"]
+"2437_hashChildren" [label="hashChildren"]
+"2437_bytesToUint256" [label="bytesToUint256"]
+"2437_compressMCPubKey" [label="compressMCPubKey"]
+"2437_addressToBytes" [label="addressToBytes"]
+"2437_compressMCPubKey" -> "2437_slice"
+}subgraph cluster_2119_SafeERC20 {
+label = "SafeERC20"
+"2119_safeTransferFrom" [label="safeTransferFrom"]
+"2119_safeDecreaseAllowance" [label="safeDecreaseAllowance"]
+"2119_safeTransfer" [label="safeTransfer"]
+"2119_safeApprove" [label="safeApprove"]
+"2119_callOptionalReturn" [label="callOptionalReturn"]
+"2119_safeIncreaseAllowance" [label="safeIncreaseAllowance"]
+"2119_safeDecreaseAllowance" -> "2119_callOptionalReturn"
+"2119_safeTransfer" -> "2119_callOptionalReturn"
+"2119_safeApprove" -> "2119_callOptionalReturn"
+"2119_safeTransferFrom" -> "2119_callOptionalReturn"
+"2119_safeIncreaseAllowance" -> "2119_callOptionalReturn"
+}subgraph cluster_1321_ZeroCopySource {
+label = "ZeroCopySource"
+"1321_NextUint64" [label="NextUint64"]
+"1321_NextUint8" [label="NextUint8"]
+"1321_NextVarBytes" [label="NextVarBytes"]
+"1321_NextVarUint" [label="NextVarUint"]
+"1321_NextUint32" [label="NextUint32"]
+"1321_NextBytes20" [label="NextBytes20"]
+"1321_NextByte" [label="NextByte"]
+"1321_NextUint16" [label="NextUint16"]
+"1321_NextHash" [label="NextHash"]
+"1321_NextBool" [label="NextBool"]
+"1321_NextUint255" [label="NextUint255"]
+"1321_NextVarUint" -> "1321_NextUint64"
+"1321_NextVarUint" -> "1321_NextUint16"
+"1321_NextVarUint" -> "1321_NextUint32"
+"1321_NextVarUint" -> "1321_NextByte"
+"1321_NextVarBytes" -> "1321_NextVarUint"
+}subgraph cluster_1902_ERC20Detailed {
+label = "ERC20Detailed"
+"1902_name" [label="name"]
+"1902_symbol" [label="symbol"]
+"1902_constructor" [label="constructor"]
+"1902_decimals" [label="decimals"]
+}subgraph cluster_560_IEthCrossChainManager {
+label = "IEthCrossChainManager"
+"560_crossChain" [label="crossChain"]
+}subgraph cluster_82_bridgeAsset {
+label = "bridgeAsset"
+"82_burnFrom" [label="burnFrom"]
+"82_mint" [label="mint"]
+"82_constructor" [label="constructor"]
+"82_burnFrom" -> "82__burnFrom"
+"82_mint" -> "82_onlyBridge"
+"82_burnFrom" -> "82_onlyBridge"
+"82_mint" -> "82__mint"
+"82_constructor" -> "82_constructor"
+}subgraph cluster_1844_ERC20 {
+label = "ERC20"
+"1844_transferFrom" [label="transferFrom"]
+"1844_approve" [label="approve"]
+"1844_increaseAllowance" [label="increaseAllowance"]
+"1844_allowance" [label="allowance"]
+"1844_totalSupply" [label="totalSupply"]
+"1844__burn" [label="_burn"]
+"1844_decreaseAllowance" [label="decreaseAllowance"]
+"1844__mint" [label="_mint"]
+"1844_transfer" [label="transfer"]
+"1844__burnFrom" [label="_burnFrom"]
+"1844__transfer" [label="_transfer"]
+"1844__approve" [label="_approve"]
+"1844_balanceOf" [label="balanceOf"]
+"1844_approve" -> "1844__msgSender"
+"1844_increaseAllowance" -> "1844__approve"
+"1844_transferFrom" -> "1844__approve"
+"1844_decreaseAllowance" -> "1844__approve"
+"1844_increaseAllowance" -> "1844__msgSender"
+"1844_transferFrom" -> "1844__transfer"
+"1844_transfer" -> "1844__msgSender"
+"1844_decreaseAllowance" -> "1844__msgSender"
+"1844__burnFrom" -> "1844__msgSender"
+"1844_transferFrom" -> "1844__msgSender"
+"1844__burnFrom" -> "1844__approve"
+"1844_transfer" -> "1844__transfer"
+"1844__burnFrom" -> "1844__burn"
+"1844_approve" -> "1844__approve"
+}subgraph cluster_568_IEthCrossChainManagerProxy {
+label = "IEthCrossChainManagerProxy"
+"568_getEthCrossChainManager" [label="getEthCrossChainManager"]
+}subgraph cluster_2651_SafeMath {
+label = "SafeMath"
+"2651_mod" [label="mod"]
+"2651_add" [label="add"]
+"2651_sub" [label="sub"]
+"2651_div" [label="div"]
+"2651_mul" [label="mul"]
+"2651_mod" -> "2651_mod"
+"2651_sub" -> "2651_sub"
+"2651_div" -> "2651_div"
+}subgraph cluster_765_ZeroCopySink {
+label = "ZeroCopySink"
+"765_WriteUint8" [label="WriteUint8"]
+"765_WriteByte" [label="WriteByte"]
+"765_WriteVarBytes" [label="WriteVarBytes"]
+"765_WriteUint32" [label="WriteUint32"]
+"765_WriteBool" [label="WriteBool"]
+"765_WriteUint255" [label="WriteUint255"]
+"765_WriteUint16" [label="WriteUint16"]
+"765_WriteUint64" [label="WriteUint64"]
+"765_WriteVarUint" [label="WriteVarUint"]
+"765_WriteByte" -> "765_WriteUint8"
+"765_WriteVarBytes" -> "765_WriteVarUint"
+"765_WriteVarUint" -> "765_WriteByte"
+"765_WriteVarUint" -> "765_WriteUint32"
+"765_WriteVarUint" -> "765_WriteUint16"
+"765_WriteVarUint" -> "765_WriteUint64"
+"765_WriteVarUint" -> "765_WriteUint8"
+}subgraph cluster_1439_Ownable {
+label = "Ownable"
+"1439_isOwner" [label="isOwner"]
+"1439_owner" [label="owner"]
+"1439_renounceOwnership" [label="renounceOwnership"]
+"1439__transferOwnership" [label="_transferOwnership"]
+"1439_transferOwnership" [label="transferOwnership"]
+"1439_constructor" [label="constructor"]
+"1439_transferOwnership" -> "1439__transferOwnership"
+"1439_constructor" -> "1439__msgSender"
+"1439_transferOwnership" -> "1439_onlyOwner"
+"1439_renounceOwnership" -> "1439_onlyOwner"
+"1439_isOwner" -> "1439__msgSender"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"abi.encodePacked()" 
+"require(bool,string)" 
+"abi.decode()" 
+"require(bool)" 
+"sha256(bytes)" 
+"revert(string)" 
+"abi.encodeWithSelector()" 
+"2437_bytesToAddress" -> "require(bool,string)"
+"2119_safeApprove" -> "abi.encodeWithSelector()"
+"2437_uint256ToBytes" -> "require(bool,string)"
+"2437_bytesToUint256" -> "require(bool,string)"
+"2437_hashLeaf" -> "sha256(bytes)"
+"1321_NextUint8" -> "require(bool,string)"
+"2651_add" -> "require(bool,string)"
+"544__rippleCheck" -> "require(bool,string)"
+"544_lock" -> "require(bool,string)"
+"1321_NextUint32" -> "require(bool,string)"
+"544__serializeTxArgs" -> "abi.encodePacked()"
+"765_WriteUint255" -> "require(bool,string)"
+"1321_NextHash" -> "require(bool,string)"
+"2119_safeDecreaseAllowance" -> "abi.encodeWithSelector()"
+"2437_slice" -> "require(bool)"
+"2119_callOptionalReturn" -> "abi.decode()"
+"1439__transferOwnership" -> "require(bool,string)"
+"1321_NextUint255" -> "require(bool,string)"
+"1844__transfer" -> "require(bool,string)"
+"2651_mul" -> "require(bool,string)"
+"2119_safeTransfer" -> "abi.encodeWithSelector()"
+"1321_NextBool" -> "revert(string)"
+"1321_NextBytes20" -> "require(bool,string)"
+"2651_mod" -> "require(bool,string)"
+"2119_callOptionalReturn" -> "require(bool,string)"
+"1321_NextByte" -> "require(bool,string)"
+"2119_safeApprove" -> "require(bool,string)"
+"1321_NextUint64" -> "require(bool,string)"
+"1321_NextBool" -> "require(bool,string)"
+"2437_hashLeaf" -> "abi.encodePacked()"
+"765_WriteVarUint" -> "abi.encodePacked()"
+"2119_safeTransferFrom" -> "abi.encodeWithSelector()"
+"765_WriteVarBytes" -> "abi.encodePacked()"
+"2437_hashChildren" -> "sha256(bytes)"
+"2437_compressMCPubKey" -> "require(bool,string)"
+"1844__burn" -> "require(bool,string)"
+"544_unlock" -> "require(bool,string)"
+"1321_NextVarUint" -> "require(bool,string)"
+"2119_safeIncreaseAllowance" -> "abi.encodeWithSelector()"
+"2437_bytesToBytes32" -> "require(bool,string)"
+"1844__mint" -> "require(bool,string)"
+"1321_NextVarBytes" -> "require(bool,string)"
+"1844__approve" -> "require(bool,string)"
+"2651_sub" -> "require(bool,string)"
+"1321_NextUint16" -> "require(bool,string)"
+"2651_div" -> "require(bool,string)"
+"2437_hashChildren" -> "abi.encodePacked()"
+}"1844__mint" -> "2651_add"
+"1844__burn" -> "2651_sub"
+"544__deserializeTxArgs" -> "1321_NextVarBytes"
+"2119_safeApprove" -> "2720_allowance"
+"544__serializeTxArgs" -> "765_WriteVarBytes"
+"1844_transferFrom" -> "2651_sub"
+"1844__burnFrom" -> "2651_sub"
+"2119_safeDecreaseAllowance" -> "2651_sub"
+"2119_safeDecreaseAllowance" -> "2720_allowance"
+"1844_decreaseAllowance" -> "2651_sub"
+"1844_increaseAllowance" -> "2651_add"
+"544_lock" -> "82_burnFrom"
+"544__serializeTxArgs" -> "765_WriteUint255"
+"1844__transfer" -> "2651_add"
+"544_unlock" -> "82_mint"
+"2119_safeIncreaseAllowance" -> "2720_allowance"
+"544__deserializeTxArgs" -> "1321_NextUint255"
+"544_lock" -> "560_crossChain"
+"544_unlock" -> "2437_bytesToAddress"
+"2119_safeIncreaseAllowance" -> "2651_add"
+"1844__transfer" -> "2651_sub"
+"544_lock" -> "568_getEthCrossChainManager"
+"2119_callOptionalReturn" -> "2437_isContract"
+"544_unlock" -> "2437_equalStorage"
+}

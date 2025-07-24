@@ -1,0 +1,82 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterNativeArbitrumImpl" {
+  graph [ label = "NativeArbitrumImpl", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "NativeArbitrumImpl.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "NativeArbitrumImpl.bridgeAfterSwap" [ label = "bridgeAfterSwap", color = "blue" ];
+  "NativeArbitrumImpl.swapAndBridge" [ label = "swapAndBridge", color = "blue" ];
+  "NativeArbitrumImpl.bridgeERC20To" [ label = "bridgeERC20To", color = "blue" ];
+  "NativeArbitrumImpl.ERC20" [ label = "ERC20" ];
+  "NativeArbitrumImpl.address" [ label = "address" ];
+  "NativeArbitrumImpl.L1GatewayRouter" [ label = "L1GatewayRouter" ];
+  "NativeArbitrumImpl.SocketBridge" [ label = "SocketBridge" ];
+}
+
+subgraph "clustersocketRoute" {
+  graph [ label = "socketRoute", color = "lightgray" ];
+  "socketRoute.getRoute" [ label = "getRoute" ];
+}
+
+subgraph "clusterERC20" {
+  graph [ label = "ERC20", color = "lightgray" ];
+  "ERC20.safeTransferFrom" [ label = "safeTransferFrom" ];
+}
+
+  "NativeArbitrumImpl.bridgeAfterSwap";
+  "NativeArbitrumImpl.ERC20";
+  "NativeArbitrumImpl.address";
+  "NativeArbitrumImpl.L1GatewayRouter";
+  "NativeArbitrumImpl.SocketBridge";
+  "NativeArbitrumImpl.swapAndBridge";
+  "socketRoute.getRoute";
+  "NativeArbitrumImpl.bridgeERC20To";
+  "ERC20.safeTransferFrom";
+  "NativeArbitrumImpl.bridgeAfterSwap" -> "NativeArbitrumImpl.ERC20" [ color = "green" ];
+  "NativeArbitrumImpl.bridgeAfterSwap" -> "NativeArbitrumImpl.address" [ color = "green" ];
+  "NativeArbitrumImpl.bridgeAfterSwap" -> "NativeArbitrumImpl.ERC20" [ color = "green" ];
+  "NativeArbitrumImpl.bridgeAfterSwap" -> "NativeArbitrumImpl.L1GatewayRouter" [ color = "green" ];
+  "NativeArbitrumImpl.bridgeAfterSwap" -> "NativeArbitrumImpl.SocketBridge" [ color = "green" ];
+  "NativeArbitrumImpl.swapAndBridge" -> "socketRoute.getRoute" [ color = "orange" ];
+  "NativeArbitrumImpl.swapAndBridge" -> "NativeArbitrumImpl.ERC20" [ color = "green" ];
+  "NativeArbitrumImpl.swapAndBridge" -> "NativeArbitrumImpl.address" [ color = "green" ];
+  "NativeArbitrumImpl.swapAndBridge" -> "NativeArbitrumImpl.ERC20" [ color = "green" ];
+  "NativeArbitrumImpl.swapAndBridge" -> "NativeArbitrumImpl.L1GatewayRouter" [ color = "green" ];
+  "NativeArbitrumImpl.swapAndBridge" -> "NativeArbitrumImpl.SocketBridge" [ color = "green" ];
+  "NativeArbitrumImpl.bridgeERC20To" -> "NativeArbitrumImpl.ERC20" [ color = "green" ];
+  "NativeArbitrumImpl.bridgeERC20To" -> "ERC20.safeTransferFrom" [ color = "orange" ];
+  "NativeArbitrumImpl.bridgeERC20To" -> "NativeArbitrumImpl.ERC20" [ color = "green" ];
+  "NativeArbitrumImpl.bridgeERC20To" -> "NativeArbitrumImpl.address" [ color = "green" ];
+  "NativeArbitrumImpl.bridgeERC20To" -> "NativeArbitrumImpl.ERC20" [ color = "green" ];
+  "NativeArbitrumImpl.bridgeERC20To" -> "NativeArbitrumImpl.L1GatewayRouter" [ color = "green" ];
+  "NativeArbitrumImpl.bridgeERC20To" -> "NativeArbitrumImpl.SocketBridge" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

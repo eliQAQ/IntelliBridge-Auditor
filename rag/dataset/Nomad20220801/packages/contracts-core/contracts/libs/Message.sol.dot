@@ -1,0 +1,99 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterMessage" {
+  graph [ label = "Message  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Message.formatMessage" [ label = "formatMessage" ];
+  "Message.messageHash" [ label = "messageHash", color = "white" ];
+  "Message.origin" [ label = "origin", color = "white" ];
+  "Message.sender" [ label = "sender", color = "white" ];
+  "Message.nonce" [ label = "nonce", color = "white" ];
+  "Message.destination" [ label = "destination", color = "white" ];
+  "Message.recipient" [ label = "recipient", color = "white" ];
+  "Message.recipientAddress" [ label = "recipientAddress", color = "white" ];
+  "Message.body" [ label = "body", color = "white" ];
+  "Message.leaf" [ label = "leaf", color = "white" ];
+}
+
+subgraph "cluster_message" {
+  graph [ label = "_message", color = "lightgray" ];
+  "_message.indexUint" [ label = "indexUint" ];
+  "_message.index" [ label = "index" ];
+  "_message.slice" [ label = "slice" ];
+  "_message.len" [ label = "len" ];
+}
+
+subgraph "clusterTypeCasts" {
+  graph [ label = "TypeCasts", color = "lightgray" ];
+  "TypeCasts.bytes32ToAddress" [ label = "bytes32ToAddress" ];
+}
+
+subgraph "clusterTypedMemView" {
+  graph [ label = "TypedMemView", color = "lightgray" ];
+  "TypedMemView.clone" [ label = "clone" ];
+}
+
+  "Message.messageHash";
+  "Message.formatMessage";
+  "Message.origin";
+  "_message.indexUint";
+  "Message.sender";
+  "_message.index";
+  "Message.nonce";
+  "Message.destination";
+  "Message.recipient";
+  "Message.recipientAddress";
+  "TypeCasts.bytes32ToAddress";
+  "Message.body";
+  "_message.slice";
+  "_message.len";
+  "Message.leaf";
+  "TypedMemView.clone";
+  "Message.messageHash" -> "Message.formatMessage" [ color = "green" ];
+  "Message.origin" -> "_message.indexUint" [ color = "orange" ];
+  "Message.sender" -> "_message.index" [ color = "orange" ];
+  "Message.nonce" -> "_message.indexUint" [ color = "orange" ];
+  "Message.destination" -> "_message.indexUint" [ color = "orange" ];
+  "Message.recipient" -> "_message.index" [ color = "orange" ];
+  "Message.recipientAddress" -> "TypeCasts.bytes32ToAddress" [ color = "orange" ];
+  "Message.recipientAddress" -> "Message.recipient" [ color = "green" ];
+  "Message.body" -> "_message.slice" [ color = "orange" ];
+  "Message.body" -> "_message.len" [ color = "orange" ];
+  "Message.leaf" -> "Message.messageHash" [ color = "green" ];
+  "Message.leaf" -> "Message.origin" [ color = "green" ];
+  "Message.leaf" -> "Message.sender" [ color = "green" ];
+  "Message.leaf" -> "Message.nonce" [ color = "green" ];
+  "Message.leaf" -> "Message.destination" [ color = "green" ];
+  "Message.leaf" -> "Message.recipient" [ color = "green" ];
+  "Message.leaf" -> "TypedMemView.clone" [ color = "orange" ];
+  "Message.leaf" -> "Message.body" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

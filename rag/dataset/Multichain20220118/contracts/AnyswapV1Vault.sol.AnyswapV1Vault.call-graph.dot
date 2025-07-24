@@ -1,0 +1,89 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_3077_AnyswapV1Vault {
+label = "AnyswapV1Vault"
+"3077_anySwapOutExactTokensForTokens" [label="anySwapOutExactTokensForTokens"]
+"3077__anySwapOut" [label="_anySwapOut"]
+"3077_mpc" [label="mpc"]
+"3077_getAmountsIn" [label="getAmountsIn"]
+"3077_anySwapOutExactTokensForTokensUnderlying" [label="anySwapOutExactTokensForTokensUnderlying"]
+"3077_anySwapOutExactTokensForNativeUnderlyingWithPermit" [label="anySwapOutExactTokensForNativeUnderlyingWithPermit"]
+"3077_anySwapFeeTo" [label="anySwapFeeTo"]
+"3077_cID" [label="cID"]
+"3077_anySwapOutExactTokensForNativeUnderlying" [label="anySwapOutExactTokensForNativeUnderlying"]
+"3077_anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" [label="anySwapOutExactTokensForTokensUnderlyingWithTransferPermit"]
+"3077_anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" [label="anySwapOutExactTokensForNativeUnderlyingWithTransferPermit"]
+"3077_anySwapOutUnderlyingWithTransferPermit" [label="anySwapOutUnderlyingWithTransferPermit"]
+"3077__anySwapIn" [label="_anySwapIn"]
+"3077_anySwapOut" [label="anySwapOut"]
+"3077_anySwapInExactTokensForTokens" [label="anySwapInExactTokensForTokens"]
+"3077_getAmountIn" [label="getAmountIn"]
+"3077_anySwapIn" [label="anySwapIn"]
+"3077_getAmountsOut" [label="getAmountsOut"]
+"3077_anySwapOutUnderlying" [label="anySwapOutUnderlying"]
+"3077__swap" [label="_swap"]
+"3077_quote" [label="quote"]
+"3077_getAmountOut" [label="getAmountOut"]
+"3077_anySwapOutUnderlyingWithPermit" [label="anySwapOutUnderlyingWithPermit"]
+"3077_anySwapInUnderlying" [label="anySwapInUnderlying"]
+"3077_changeMPC" [label="changeMPC"]
+"3077_receive" [label="receive"]
+"3077_constructor" [label="constructor"]
+"3077_changeVault" [label="changeVault"]
+"3077_anySwapOutExactTokensForTokensUnderlyingWithPermit" [label="anySwapOutExactTokensForTokensUnderlyingWithPermit"]
+"3077_anySwapInExactTokensForNative" [label="anySwapInExactTokensForNative"]
+"3077_anySwapOutExactTokensForNative" [label="anySwapOutExactTokensForNative"]
+"3077_anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" -> "3077_cID"
+"3077_anySwapFeeTo" -> "3077_mpc"
+"3077_anySwapOutExactTokensForTokensUnderlyingWithPermit" -> "3077_ensure"
+"3077_anySwapInExactTokensForNative" -> "3077_onlyMPC"
+"3077_anySwapOutExactTokensForTokens" -> "3077_cID"
+"3077_anySwapOutExactTokensForTokensUnderlying" -> "3077_ensure"
+"3077_changeMPC" -> "3077_mpc"
+"3077_anySwapOutUnderlyingWithPermit" -> "3077__anySwapOut"
+"3077_anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" -> "3077_ensure"
+"3077_anySwapOutUnderlyingWithTransferPermit" -> "3077__anySwapOut"
+"3077_anySwapInExactTokensForTokens" -> "3077_ensure"
+"3077_anySwapIn" -> "3077_onlyMPC"
+"3077_anySwapOutUnderlying" -> "3077__anySwapOut"
+"3077_anySwapFeeTo" -> "3077_onlyMPC"
+"3077_anySwapOutExactTokensForNative" -> "3077_cID"
+"3077__anySwapOut" -> "3077_cID"
+"3077_anySwapOutExactTokensForNativeUnderlyingWithPermit" -> "3077_ensure"
+"3077_anySwapOutExactTokensForTokensUnderlyingWithPermit" -> "3077_cID"
+"3077_anySwapInUnderlying" -> "3077__anySwapIn"
+"3077_anySwapInExactTokensForNative" -> "3077__swap"
+"3077_anySwapInExactTokensForTokens" -> "3077__swap"
+"3077_anySwapInUnderlying" -> "3077_onlyMPC"
+"3077_changeMPC" -> "3077_onlyMPC"
+"3077_anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" -> "3077_ensure"
+"3077_anySwapInExactTokensForNative" -> "3077__anySwapIn"
+"3077_anySwapOutExactTokensForNativeUnderlying" -> "3077_cID"
+"3077_anySwapOutExactTokensForTokensUnderlying" -> "3077_cID"
+"3077_changeVault" -> "3077_onlyMPC"
+"3077_anySwapInExactTokensForTokens" -> "3077__anySwapIn"
+"3077_anySwapOut" -> "3077__anySwapOut"
+"3077_anySwapOutExactTokensForNativeUnderlying" -> "3077_ensure"
+"3077_anySwapOutExactTokensForNativeUnderlyingWithPermit" -> "3077_cID"
+"3077_anySwapInExactTokensForNative" -> "3077_ensure"
+"3077_anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" -> "3077_cID"
+"3077_anySwapInExactTokensForTokens" -> "3077_onlyMPC"
+"3077_anySwapIn" -> "3077__anySwapIn"
+"3077_anySwapOutExactTokensForNative" -> "3077_ensure"
+"3077_anySwapOutExactTokensForTokens" -> "3077_ensure"
+"3077_changeMPC" -> "3077_cID"
+"3077__anySwapIn" -> "3077_cID"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"assert(bool)" 
+"chainid()" 
+"3077_anySwapInExactTokensForTokens" -> "require(bool,string)"
+"3077_cID" -> "chainid()"
+"3077_changeVault" -> "require(bool,string)"
+"3077_receive" -> "assert(bool)"
+"3077_anySwapInExactTokensForNative" -> "require(bool,string)"
+"3077_changeMPC" -> "require(bool,string)"
+}
+}

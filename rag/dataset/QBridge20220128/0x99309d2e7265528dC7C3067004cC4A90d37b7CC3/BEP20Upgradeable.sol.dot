@@ -1,0 +1,125 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterBEP20Upgradeable" {
+  graph [ label = "BEP20Upgradeable", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "BEP20Upgradeable.__BEP20__init" [ label = "__BEP20__init", color = "white" ];
+  "BEP20Upgradeable.getOwner" [ label = "getOwner", color = "blue" ];
+  "BEP20Upgradeable.decimals" [ label = "decimals", color = "blue" ];
+  "BEP20Upgradeable.symbol" [ label = "symbol", color = "blue" ];
+  "BEP20Upgradeable.name" [ label = "name", color = "blue" ];
+  "BEP20Upgradeable.totalSupply" [ label = "totalSupply", color = "green" ];
+  "BEP20Upgradeable.balanceOf" [ label = "balanceOf", color = "green" ];
+  "BEP20Upgradeable.transfer" [ label = "transfer", color = "blue" ];
+  "BEP20Upgradeable.allowance" [ label = "allowance", color = "green" ];
+  "BEP20Upgradeable.approve" [ label = "approve", color = "green" ];
+  "BEP20Upgradeable.transferFrom" [ label = "transferFrom", color = "blue" ];
+  "BEP20Upgradeable.increaseAllowance" [ label = "increaseAllowance", color = "green" ];
+  "BEP20Upgradeable.decreaseAllowance" [ label = "decreaseAllowance", color = "green" ];
+  "BEP20Upgradeable.burn" [ label = "burn", color = "green" ];
+  "BEP20Upgradeable._transfer" [ label = "_transfer" ];
+  "BEP20Upgradeable._mint" [ label = "_mint", color = "white" ];
+  "BEP20Upgradeable._burn" [ label = "_burn" ];
+  "BEP20Upgradeable._approve" [ label = "_approve" ];
+  "BEP20Upgradeable._burnFrom" [ label = "_burnFrom", color = "white" ];
+  "BEP20Upgradeable.__Ownable_init" [ label = "__Ownable_init" ];
+  "BEP20Upgradeable.owner" [ label = "owner" ];
+  "BEP20Upgradeable._msgSender" [ label = "_msgSender" ];
+  "BEP20Upgradeable.address" [ label = "address" ];
+  "BEP20Upgradeable.Transfer" [ label = "Transfer" ];
+  "BEP20Upgradeable.Approval" [ label = "Approval" ];
+}
+
+subgraph "cluster_totalSupply" {
+  graph [ label = "_totalSupply", color = "lightgray" ];
+  "_totalSupply.add" [ label = "add" ];
+  "_totalSupply.sub" [ label = "sub" ];
+}
+
+  "BEP20Upgradeable.__BEP20__init";
+  "BEP20Upgradeable.__Ownable_init";
+  "BEP20Upgradeable.getOwner";
+  "BEP20Upgradeable.owner";
+  "BEP20Upgradeable.transfer";
+  "BEP20Upgradeable._transfer";
+  "BEP20Upgradeable._msgSender";
+  "BEP20Upgradeable.approve";
+  "BEP20Upgradeable._approve";
+  "BEP20Upgradeable.transferFrom";
+  "BEP20Upgradeable.increaseAllowance";
+  "BEP20Upgradeable.decreaseAllowance";
+  "BEP20Upgradeable.burn";
+  "BEP20Upgradeable._burn";
+  "BEP20Upgradeable.address";
+  "BEP20Upgradeable.Transfer";
+  "BEP20Upgradeable._mint";
+  "_totalSupply.add";
+  "_totalSupply.sub";
+  "BEP20Upgradeable.Approval";
+  "BEP20Upgradeable._burnFrom";
+  "BEP20Upgradeable.__BEP20__init" -> "BEP20Upgradeable.__Ownable_init" [ color = "green" ];
+  "BEP20Upgradeable.getOwner" -> "BEP20Upgradeable.owner" [ color = "green" ];
+  "BEP20Upgradeable.transfer" -> "BEP20Upgradeable._transfer" [ color = "green" ];
+  "BEP20Upgradeable.transfer" -> "BEP20Upgradeable._msgSender" [ color = "green" ];
+  "BEP20Upgradeable.approve" -> "BEP20Upgradeable._approve" [ color = "green" ];
+  "BEP20Upgradeable.approve" -> "BEP20Upgradeable._msgSender" [ color = "green" ];
+  "BEP20Upgradeable.transferFrom" -> "BEP20Upgradeable._transfer" [ color = "green" ];
+  "BEP20Upgradeable.transferFrom" -> "BEP20Upgradeable._approve" [ color = "green" ];
+  "BEP20Upgradeable.transferFrom" -> "BEP20Upgradeable._msgSender" [ color = "green" ];
+  "BEP20Upgradeable.transferFrom" -> "BEP20Upgradeable._msgSender" [ color = "green" ];
+  "BEP20Upgradeable.increaseAllowance" -> "BEP20Upgradeable._approve" [ color = "green" ];
+  "BEP20Upgradeable.increaseAllowance" -> "BEP20Upgradeable._msgSender" [ color = "green" ];
+  "BEP20Upgradeable.increaseAllowance" -> "BEP20Upgradeable._msgSender" [ color = "green" ];
+  "BEP20Upgradeable.decreaseAllowance" -> "BEP20Upgradeable._approve" [ color = "green" ];
+  "BEP20Upgradeable.decreaseAllowance" -> "BEP20Upgradeable._msgSender" [ color = "green" ];
+  "BEP20Upgradeable.decreaseAllowance" -> "BEP20Upgradeable._msgSender" [ color = "green" ];
+  "BEP20Upgradeable.burn" -> "BEP20Upgradeable._burn" [ color = "green" ];
+  "BEP20Upgradeable.burn" -> "BEP20Upgradeable._msgSender" [ color = "green" ];
+  "BEP20Upgradeable._transfer" -> "BEP20Upgradeable.address" [ color = "green" ];
+  "BEP20Upgradeable._transfer" -> "BEP20Upgradeable.address" [ color = "green" ];
+  "BEP20Upgradeable._transfer" -> "BEP20Upgradeable.Transfer" [ color = "green" ];
+  "BEP20Upgradeable._mint" -> "BEP20Upgradeable.address" [ color = "green" ];
+  "BEP20Upgradeable._mint" -> "_totalSupply.add" [ color = "orange" ];
+  "BEP20Upgradeable._mint" -> "BEP20Upgradeable.Transfer" [ color = "green" ];
+  "BEP20Upgradeable._mint" -> "BEP20Upgradeable.address" [ color = "green" ];
+  "BEP20Upgradeable._burn" -> "BEP20Upgradeable.address" [ color = "green" ];
+  "BEP20Upgradeable._burn" -> "_totalSupply.sub" [ color = "orange" ];
+  "BEP20Upgradeable._burn" -> "BEP20Upgradeable.Transfer" [ color = "green" ];
+  "BEP20Upgradeable._burn" -> "BEP20Upgradeable.address" [ color = "green" ];
+  "BEP20Upgradeable._approve" -> "BEP20Upgradeable.address" [ color = "green" ];
+  "BEP20Upgradeable._approve" -> "BEP20Upgradeable.address" [ color = "green" ];
+  "BEP20Upgradeable._approve" -> "BEP20Upgradeable.Approval" [ color = "green" ];
+  "BEP20Upgradeable._burnFrom" -> "BEP20Upgradeable._burn" [ color = "green" ];
+  "BEP20Upgradeable._burnFrom" -> "BEP20Upgradeable._approve" [ color = "green" ];
+  "BEP20Upgradeable._burnFrom" -> "BEP20Upgradeable._msgSender" [ color = "green" ];
+  "BEP20Upgradeable._burnFrom" -> "BEP20Upgradeable._msgSender" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

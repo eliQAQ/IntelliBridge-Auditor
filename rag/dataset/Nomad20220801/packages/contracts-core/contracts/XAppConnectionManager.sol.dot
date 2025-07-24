@@ -1,0 +1,104 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterXAppConnectionManager" {
+  graph [ label = "XAppConnectionManager", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "XAppConnectionManager.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "XAppConnectionManager.unenrollReplica" [ label = "unenrollReplica", color = "blue" ];
+  "XAppConnectionManager.setHome" [ label = "setHome", color = "blue" ];
+  "XAppConnectionManager.ownerEnrollReplica" [ label = "ownerEnrollReplica", color = "blue" ];
+  "XAppConnectionManager.ownerUnenrollReplica" [ label = "ownerUnenrollReplica", color = "blue" ];
+  "XAppConnectionManager.setWatcherPermission" [ label = "setWatcherPermission", color = "blue" ];
+  "XAppConnectionManager.localDomain" [ label = "localDomain", color = "blue" ];
+  "XAppConnectionManager.watcherPermission" [ label = "watcherPermission", color = "blue" ];
+  "XAppConnectionManager.isReplica" [ label = "isReplica", color = "green" ];
+  "XAppConnectionManager._clearReplica" [ label = "_clearReplica" ];
+  "XAppConnectionManager._clearDomain" [ label = "_clearDomain" ];
+  "XAppConnectionManager._recoverWatcherFromSig" [ label = "_recoverWatcherFromSig" ];
+  "XAppConnectionManager.renounceOwnership" [ label = "renounceOwnership", color = "green" ];
+  "XAppConnectionManager.address" [ label = "address" ];
+  "XAppConnectionManager.Replica" [ label = "Replica" ];
+  "XAppConnectionManager.Home" [ label = "Home" ];
+}
+
+subgraph "clusterTypeCasts" {
+  graph [ label = "TypeCasts", color = "lightgray" ];
+  "TypeCasts.bytes32ToAddress" [ label = "bytes32ToAddress" ];
+  "TypeCasts.addressToBytes32" [ label = "addressToBytes32" ];
+}
+
+subgraph "clusterHome" {
+  graph [ label = "Home", color = "lightgray" ];
+  "Home.localDomain" [ label = "localDomain" ];
+}
+
+subgraph "clusterECDSA" {
+  graph [ label = "ECDSA", color = "lightgray" ];
+  "ECDSA.toEthSignedMessageHash" [ label = "toEthSignedMessageHash" ];
+  "ECDSA.recover" [ label = "recover" ];
+}
+
+  "XAppConnectionManager.unenrollReplica";
+  "XAppConnectionManager.address";
+  "XAppConnectionManager.Replica";
+  "TypeCasts.bytes32ToAddress";
+  "XAppConnectionManager._recoverWatcherFromSig";
+  "TypeCasts.addressToBytes32";
+  "XAppConnectionManager._clearReplica";
+  "XAppConnectionManager.setHome";
+  "XAppConnectionManager.Home";
+  "XAppConnectionManager.ownerEnrollReplica";
+  "XAppConnectionManager._clearDomain";
+  "XAppConnectionManager.ownerUnenrollReplica";
+  "XAppConnectionManager.localDomain";
+  "Home.localDomain";
+  "ECDSA.toEthSignedMessageHash";
+  "ECDSA.recover";
+  "XAppConnectionManager.unenrollReplica" -> "XAppConnectionManager.address" [ color = "green" ];
+  "XAppConnectionManager.unenrollReplica" -> "XAppConnectionManager.Replica" [ color = "green" ];
+  "XAppConnectionManager.unenrollReplica" -> "TypeCasts.bytes32ToAddress" [ color = "orange" ];
+  "XAppConnectionManager.unenrollReplica" -> "XAppConnectionManager._recoverWatcherFromSig" [ color = "green" ];
+  "XAppConnectionManager.unenrollReplica" -> "TypeCasts.addressToBytes32" [ color = "orange" ];
+  "XAppConnectionManager.unenrollReplica" -> "XAppConnectionManager._clearReplica" [ color = "green" ];
+  "XAppConnectionManager.setHome" -> "XAppConnectionManager.Home" [ color = "green" ];
+  "XAppConnectionManager.ownerEnrollReplica" -> "XAppConnectionManager._clearReplica" [ color = "green" ];
+  "XAppConnectionManager.ownerEnrollReplica" -> "XAppConnectionManager._clearDomain" [ color = "green" ];
+  "XAppConnectionManager.ownerUnenrollReplica" -> "XAppConnectionManager._clearReplica" [ color = "green" ];
+  "XAppConnectionManager.localDomain" -> "Home.localDomain" [ color = "orange" ];
+  "XAppConnectionManager._clearReplica" -> "XAppConnectionManager.address" [ color = "green" ];
+  "XAppConnectionManager._clearDomain" -> "XAppConnectionManager.address" [ color = "green" ];
+  "XAppConnectionManager._clearDomain" -> "XAppConnectionManager.address" [ color = "green" ];
+  "XAppConnectionManager._recoverWatcherFromSig" -> "XAppConnectionManager.Replica" [ color = "green" ];
+  "XAppConnectionManager._recoverWatcherFromSig" -> "TypeCasts.bytes32ToAddress" [ color = "orange" ];
+  "XAppConnectionManager._recoverWatcherFromSig" -> "ECDSA.toEthSignedMessageHash" [ color = "orange" ];
+  "XAppConnectionManager._recoverWatcherFromSig" -> "ECDSA.recover" [ color = "orange" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

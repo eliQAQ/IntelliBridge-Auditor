@@ -1,0 +1,511 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterStructs" {
+  graph [ label = "Structs  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+}
+
+subgraph "clusterIWormhole" {
+  graph [ label = "IWormhole  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IWormhole.publishMessage" [ label = "publishMessage", color = "blue" ];
+  "IWormhole.parseAndVerifyVM" [ label = "parseAndVerifyVM", color = "blue" ];
+  "IWormhole.verifyVM" [ label = "verifyVM", color = "blue" ];
+  "IWormhole.verifySignatures" [ label = "verifySignatures", color = "blue" ];
+  "IWormhole.parseVM" [ label = "parseVM", color = "blue" ];
+  "IWormhole.getGuardianSet" [ label = "getGuardianSet", color = "blue" ];
+  "IWormhole.getCurrentGuardianSetIndex" [ label = "getCurrentGuardianSetIndex", color = "blue" ];
+  "IWormhole.getGuardianSetExpiry" [ label = "getGuardianSetExpiry", color = "blue" ];
+  "IWormhole.governanceActionIsConsumed" [ label = "governanceActionIsConsumed", color = "blue" ];
+  "IWormhole.isInitialized" [ label = "isInitialized", color = "blue" ];
+  "IWormhole.chainId" [ label = "chainId", color = "blue" ];
+  "IWormhole.governanceChainId" [ label = "governanceChainId", color = "blue" ];
+  "IWormhole.governanceContract" [ label = "governanceContract", color = "blue" ];
+  "IWormhole.messageFee" [ label = "messageFee", color = "blue" ];
+}
+
+subgraph "clusterBridgeStorage" {
+  graph [ label = "BridgeStorage", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+}
+
+subgraph "clusterBridgeState" {
+  graph [ label = "BridgeState", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+}
+
+subgraph "clusterBridgeToken" {
+  graph [ label = "BridgeToken", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "BridgeToken.<Constructor>" [ label = "<Constructor>", color = "green" ];
+}
+
+subgraph "clusterTokenStorage" {
+  graph [ label = "TokenStorage", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+}
+
+subgraph "clusterTokenState" {
+  graph [ label = "TokenState", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+}
+
+subgraph "clusterTokenImplementation" {
+  graph [ label = "TokenImplementation", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "TokenImplementation.initialize" [ label = "initialize", color = "green" ];
+  "TokenImplementation.name" [ label = "name", color = "green" ];
+  "TokenImplementation.symbol" [ label = "symbol", color = "green" ];
+  "TokenImplementation.owner" [ label = "owner" ];
+  "TokenImplementation.decimals" [ label = "decimals", color = "green" ];
+  "TokenImplementation.totalSupply" [ label = "totalSupply", color = "green" ];
+  "TokenImplementation.chainId" [ label = "chainId", color = "green" ];
+  "TokenImplementation.nativeContract" [ label = "nativeContract", color = "green" ];
+  "TokenImplementation.balanceOf" [ label = "balanceOf", color = "green" ];
+  "TokenImplementation.transfer" [ label = "transfer", color = "green" ];
+  "TokenImplementation.allowance" [ label = "allowance", color = "green" ];
+  "TokenImplementation.approve" [ label = "approve", color = "green" ];
+  "TokenImplementation.transferFrom" [ label = "transferFrom", color = "green" ];
+  "TokenImplementation.increaseAllowance" [ label = "increaseAllowance", color = "green" ];
+  "TokenImplementation.decreaseAllowance" [ label = "decreaseAllowance", color = "green" ];
+  "TokenImplementation._transfer" [ label = "_transfer" ];
+  "TokenImplementation.mint" [ label = "mint", color = "green" ];
+  "TokenImplementation._mint" [ label = "_mint" ];
+  "TokenImplementation.burn" [ label = "burn", color = "green" ];
+  "TokenImplementation._burn" [ label = "_burn" ];
+  "TokenImplementation._approve" [ label = "_approve" ];
+  "TokenImplementation.updateDetails" [ label = "updateDetails", color = "green" ];
+  "TokenImplementation.onlyOwner" [ label = "onlyOwner", color = "yellow" ];
+  "TokenImplementation.initializer" [ label = "initializer", color = "yellow" ];
+  "TokenImplementation._msgSender" [ label = "_msgSender" ];
+  "TokenImplementation.address" [ label = "address" ];
+}
+
+subgraph "clusterBytesLib" {
+  graph [ label = "BytesLib  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "BytesLib.concat" [ label = "concat", color = "white" ];
+  "BytesLib.concatStorage" [ label = "concatStorage", color = "white" ];
+  "BytesLib.slice" [ label = "slice", color = "white" ];
+  "BytesLib.toAddress" [ label = "toAddress", color = "white" ];
+  "BytesLib.toUint8" [ label = "toUint8", color = "white" ];
+  "BytesLib.toUint16" [ label = "toUint16", color = "white" ];
+  "BytesLib.toUint32" [ label = "toUint32", color = "white" ];
+  "BytesLib.toUint64" [ label = "toUint64", color = "white" ];
+  "BytesLib.toUint96" [ label = "toUint96", color = "white" ];
+  "BytesLib.toUint128" [ label = "toUint128", color = "white" ];
+  "BytesLib.toUint256" [ label = "toUint256", color = "white" ];
+  "BytesLib.toBytes32" [ label = "toBytes32", color = "white" ];
+  "BytesLib.equal" [ label = "equal", color = "white" ];
+  "BytesLib.equalStorage" [ label = "equalStorage", color = "white" ];
+}
+
+subgraph "clusterBridgeGetters" {
+  graph [ label = "BridgeGetters", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "BridgeGetters.governanceActionIsConsumed" [ label = "governanceActionIsConsumed", color = "green" ];
+  "BridgeGetters.isInitialized" [ label = "isInitialized", color = "green" ];
+  "BridgeGetters.isTransferCompleted" [ label = "isTransferCompleted", color = "green" ];
+  "BridgeGetters.wormhole" [ label = "wormhole", color = "green" ];
+  "BridgeGetters.chainId" [ label = "chainId", color = "green" ];
+  "BridgeGetters.governanceChainId" [ label = "governanceChainId", color = "green" ];
+  "BridgeGetters.governanceContract" [ label = "governanceContract", color = "green" ];
+  "BridgeGetters.wrappedAsset" [ label = "wrappedAsset", color = "green" ];
+  "BridgeGetters.bridgeContracts" [ label = "bridgeContracts", color = "green" ];
+  "BridgeGetters.tokenImplementation" [ label = "tokenImplementation", color = "green" ];
+  "BridgeGetters.WETH" [ label = "WETH", color = "green" ];
+  "BridgeGetters.outstandingBridged" [ label = "outstandingBridged", color = "green" ];
+  "BridgeGetters.isWrappedAsset" [ label = "isWrappedAsset", color = "green" ];
+}
+
+subgraph "clusterIWETH" {
+  graph [ label = "IWETH  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IWETH.deposit" [ label = "deposit", color = "blue" ];
+  "IWETH.withdraw" [ label = "withdraw", color = "blue" ];
+}
+
+subgraph "clusterBridgeSetters" {
+  graph [ label = "BridgeSetters", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "BridgeSetters.setInitialized" [ label = "setInitialized", color = "white" ];
+  "BridgeSetters.setGovernanceActionConsumed" [ label = "setGovernanceActionConsumed", color = "white" ];
+  "BridgeSetters.setTransferCompleted" [ label = "setTransferCompleted", color = "white" ];
+  "BridgeSetters.setChainId" [ label = "setChainId", color = "white" ];
+  "BridgeSetters.setGovernanceChainId" [ label = "setGovernanceChainId", color = "white" ];
+  "BridgeSetters.setGovernanceContract" [ label = "setGovernanceContract", color = "white" ];
+  "BridgeSetters.setBridgeImplementation" [ label = "setBridgeImplementation", color = "white" ];
+  "BridgeSetters.setTokenImplementation" [ label = "setTokenImplementation", color = "white" ];
+  "BridgeSetters.setWETH" [ label = "setWETH", color = "white" ];
+  "BridgeSetters.setWormhole" [ label = "setWormhole", color = "white" ];
+  "BridgeSetters.setWrappedAsset" [ label = "setWrappedAsset", color = "white" ];
+  "BridgeSetters.setOutstandingBridged" [ label = "setOutstandingBridged", color = "white" ];
+  "BridgeSetters.payable" [ label = "payable" ];
+}
+
+subgraph "clusterBridgeStructs" {
+  graph [ label = "BridgeStructs", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "BridgeStructs.AssetMeta" [ label = "AssetMeta" ];
+  "BridgeStructs.Transfer" [ style = "dotted" ];
+}
+
+subgraph "clusterBridgeGovernance" {
+  graph [ label = "BridgeGovernance", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "BridgeGovernance.registerChain" [ label = "registerChain", color = "green" ];
+  "BridgeGovernance.upgrade" [ label = "upgrade", color = "green" ];
+  "BridgeGovernance.verifyGovernanceVM" [ label = "verifyGovernanceVM" ];
+  "BridgeGovernance.upgradeImplementation" [ label = "upgradeImplementation" ];
+  "BridgeGovernance.parseRegisterChain" [ label = "parseRegisterChain" ];
+  "BridgeGovernance.parseUpgrade" [ label = "parseUpgrade" ];
+  "BridgeGovernance.setGovernanceActionConsumed" [ label = "setGovernanceActionConsumed" ];
+  "BridgeGovernance.chainId" [ label = "chainId" ];
+  "BridgeGovernance.bridgeContracts" [ label = "bridgeContracts" ];
+  "BridgeGovernance.setBridgeImplementation" [ label = "setBridgeImplementation" ];
+  "BridgeGovernance.address" [ label = "address" ];
+  "BridgeGovernance.wormhole" [ label = "wormhole" ];
+  "BridgeGovernance.governanceChainId" [ label = "governanceChainId" ];
+  "BridgeGovernance.governanceContract" [ label = "governanceContract" ];
+  "BridgeGovernance.governanceActionIsConsumed" [ label = "governanceActionIsConsumed" ];
+  "BridgeGovernance._getImplementation" [ label = "_getImplementation" ];
+  "BridgeGovernance._upgradeTo" [ label = "_upgradeTo" ];
+}
+
+subgraph "clusterBridge" {
+  graph [ label = "Bridge", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Bridge.attestToken" [ label = "attestToken", color = "green" ];
+  "Bridge.wrapAndTransferETH" [ label = "wrapAndTransferETH", color = "green" ];
+  "Bridge.transferTokens" [ label = "transferTokens", color = "green" ];
+  "Bridge.normalizeAmount" [ label = "normalizeAmount" ];
+  "Bridge.deNormalizeAmount" [ label = "deNormalizeAmount" ];
+  "Bridge.logTransfer" [ label = "logTransfer" ];
+  "Bridge.updateWrapped" [ label = "updateWrapped", color = "blue" ];
+  "Bridge._updateWrapped" [ label = "_updateWrapped" ];
+  "Bridge.createWrapped" [ label = "createWrapped", color = "blue" ];
+  "Bridge._createWrapped" [ label = "_createWrapped" ];
+  "Bridge.completeTransfer" [ label = "completeTransfer", color = "green" ];
+  "Bridge.completeTransferAndUnwrapETH" [ label = "completeTransferAndUnwrapETH", color = "green" ];
+  "Bridge._completeTransfer" [ label = "_completeTransfer" ];
+  "Bridge.bridgeOut" [ label = "bridgeOut" ];
+  "Bridge.bridgedIn" [ label = "bridgedIn" ];
+  "Bridge.verifyBridgeVM" [ label = "verifyBridgeVM" ];
+  "Bridge.encodeAssetMeta" [ label = "encodeAssetMeta" ];
+  "Bridge.encodeTransfer" [ label = "encodeTransfer" ];
+  "Bridge.parseAssetMeta" [ label = "parseAssetMeta" ];
+  "Bridge.parseTransfer" [ label = "parseTransfer" ];
+  "Bridge.bytes32ToString" [ label = "bytes32ToString" ];
+  "Bridge.<Receive Ether>" [ label = "<Receive Ether>", color = "blue" ];
+  "Bridge.WETH" [ label = "WETH" ];
+  "Bridge.isWrappedAsset" [ label = "isWrappedAsset" ];
+  "Bridge.IERC20" [ label = "IERC20" ];
+  "Bridge.wrappedAsset" [ label = "wrappedAsset" ];
+  "Bridge.type" [ label = "type" ];
+  "Bridge.setWrappedAsset" [ label = "setWrappedAsset" ];
+  "Bridge.isTransferCompleted" [ label = "isTransferCompleted" ];
+  "Bridge.setTransferCompleted" [ label = "setTransferCompleted" ];
+  "Bridge.outstandingBridged" [ label = "outstandingBridged" ];
+  "Bridge.setOutstandingBridged" [ label = "setOutstandingBridged" ];
+}
+
+subgraph "clusternewImplementation" {
+  graph [ label = "newImplementation", color = "lightgray" ];
+  "newImplementation.delegatecall" [ label = "delegatecall" ];
+}
+
+subgraph "clusterencoded" {
+  graph [ label = "encoded", color = "lightgray" ];
+  "encoded.toBytes32" [ label = "toBytes32" ];
+  "encoded.toUint8" [ label = "toUint8" ];
+  "encoded.toUint16" [ label = "toUint16" ];
+  "encoded.toUint256" [ label = "toUint256" ];
+}
+
+subgraph "clustertokenAddress" {
+  graph [ label = "tokenAddress", color = "lightgray" ];
+  "tokenAddress.staticcall" [ label = "staticcall" ];
+}
+
+subgraph "clustertoken" {
+  graph [ label = "token", color = "lightgray" ];
+  "token.staticcall" [ label = "staticcall" ];
+}
+
+subgraph "clusterSafeERC20" {
+  graph [ label = "SafeERC20", color = "lightgray" ];
+  "SafeERC20.safeTransferFrom" [ label = "safeTransferFrom" ];
+  "SafeERC20.safeTransfer" [ label = "safeTransfer" ];
+}
+
+subgraph "clusterIERC20" {
+  graph [ label = "IERC20", color = "lightgray" ];
+  "IERC20.staticcall" [ label = "staticcall" ];
+}
+
+  "TokenImplementation.transfer";
+  "TokenImplementation._transfer";
+  "TokenImplementation._msgSender";
+  "TokenImplementation.approve";
+  "TokenImplementation._approve";
+  "TokenImplementation.transferFrom";
+  "TokenImplementation.increaseAllowance";
+  "TokenImplementation.decreaseAllowance";
+  "TokenImplementation.address";
+  "TokenImplementation.mint";
+  "TokenImplementation._mint";
+  "TokenImplementation.burn";
+  "TokenImplementation._burn";
+  "TokenImplementation.onlyOwner";
+  "TokenImplementation.owner";
+  "BridgeSetters.setWormhole";
+  "BridgeSetters.payable";
+  "BridgeGovernance.registerChain";
+  "BridgeGovernance.verifyGovernanceVM";
+  "BridgeGovernance.setGovernanceActionConsumed";
+  "BridgeGovernance.parseRegisterChain";
+  "BridgeGovernance.chainId";
+  "BridgeGovernance.bridgeContracts";
+  "BridgeGovernance.setBridgeImplementation";
+  "BridgeGovernance.upgrade";
+  "BridgeGovernance.parseUpgrade";
+  "BridgeGovernance.upgradeImplementation";
+  "BridgeGovernance.address";
+  "BridgeGovernance.wormhole";
+  "BridgeGovernance.governanceChainId";
+  "BridgeGovernance.governanceContract";
+  "BridgeGovernance.governanceActionIsConsumed";
+  "BridgeGovernance._getImplementation";
+  "BridgeGovernance._upgradeTo";
+  "newImplementation.delegatecall";
+  "encoded.toBytes32";
+  "encoded.toUint8";
+  "encoded.toUint16";
+  "Bridge.attestToken";
+  "tokenAddress.staticcall";
+  "BridgeStructs.AssetMeta";
+  "Bridge.encodeAssetMeta";
+  "Bridge.wrapAndTransferETH";
+  "Bridge.normalizeAmount";
+  "Bridge.deNormalizeAmount";
+  "Bridge.WETH";
+  "Bridge.bridgeOut";
+  "Bridge.logTransfer";
+  "Bridge.transferTokens";
+  "Bridge.isWrappedAsset";
+  "token.staticcall";
+  "SafeERC20.safeTransferFrom";
+  "Bridge.IERC20";
+  "BridgeStructs.Transfer";
+  "Bridge.encodeTransfer";
+  "Bridge.updateWrapped";
+  "Bridge.verifyBridgeVM";
+  "Bridge.parseAssetMeta";
+  "Bridge._updateWrapped";
+  "Bridge.wrappedAsset";
+  "Bridge.bytes32ToString";
+  "Bridge.createWrapped";
+  "Bridge._createWrapped";
+  "Bridge.type";
+  "Bridge.setWrappedAsset";
+  "Bridge.completeTransfer";
+  "Bridge._completeTransfer";
+  "Bridge.completeTransferAndUnwrapETH";
+  "Bridge.parseTransfer";
+  "Bridge.isTransferCompleted";
+  "Bridge.setTransferCompleted";
+  "Bridge.bridgedIn";
+  "IERC20.staticcall";
+  "SafeERC20.safeTransfer";
+  "Bridge.outstandingBridged";
+  "Bridge.setOutstandingBridged";
+  "encoded.toUint256";
+  "TokenImplementation.transfer" -> "TokenImplementation._transfer" [ color = "green" ];
+  "TokenImplementation.transfer" -> "TokenImplementation._msgSender" [ color = "green" ];
+  "TokenImplementation.approve" -> "TokenImplementation._approve" [ color = "green" ];
+  "TokenImplementation.approve" -> "TokenImplementation._msgSender" [ color = "green" ];
+  "TokenImplementation.transferFrom" -> "TokenImplementation._transfer" [ color = "green" ];
+  "TokenImplementation.transferFrom" -> "TokenImplementation._msgSender" [ color = "green" ];
+  "TokenImplementation.transferFrom" -> "TokenImplementation._approve" [ color = "green" ];
+  "TokenImplementation.transferFrom" -> "TokenImplementation._msgSender" [ color = "green" ];
+  "TokenImplementation.increaseAllowance" -> "TokenImplementation._approve" [ color = "green" ];
+  "TokenImplementation.increaseAllowance" -> "TokenImplementation._msgSender" [ color = "green" ];
+  "TokenImplementation.increaseAllowance" -> "TokenImplementation._msgSender" [ color = "green" ];
+  "TokenImplementation.decreaseAllowance" -> "TokenImplementation._msgSender" [ color = "green" ];
+  "TokenImplementation.decreaseAllowance" -> "TokenImplementation._approve" [ color = "green" ];
+  "TokenImplementation.decreaseAllowance" -> "TokenImplementation._msgSender" [ color = "green" ];
+  "TokenImplementation._transfer" -> "TokenImplementation.address" [ color = "green" ];
+  "TokenImplementation._transfer" -> "TokenImplementation.address" [ color = "green" ];
+  "TokenImplementation.mint" -> "TokenImplementation._mint" [ color = "green" ];
+  "TokenImplementation._mint" -> "TokenImplementation.address" [ color = "green" ];
+  "TokenImplementation._mint" -> "TokenImplementation.address" [ color = "green" ];
+  "TokenImplementation.burn" -> "TokenImplementation._burn" [ color = "green" ];
+  "TokenImplementation._burn" -> "TokenImplementation.address" [ color = "green" ];
+  "TokenImplementation._burn" -> "TokenImplementation.address" [ color = "green" ];
+  "TokenImplementation._approve" -> "TokenImplementation.address" [ color = "green" ];
+  "TokenImplementation._approve" -> "TokenImplementation.address" [ color = "green" ];
+  "TokenImplementation.onlyOwner" -> "TokenImplementation.owner" [ color = "green" ];
+  "TokenImplementation.onlyOwner" -> "TokenImplementation._msgSender" [ color = "green" ];
+  "BridgeSetters.setWormhole" -> "BridgeSetters.payable" [ color = "green" ];
+  "BridgeGovernance.registerChain" -> "BridgeGovernance.verifyGovernanceVM" [ color = "green" ];
+  "BridgeGovernance.registerChain" -> "BridgeGovernance.setGovernanceActionConsumed" [ color = "green" ];
+  "BridgeGovernance.registerChain" -> "BridgeGovernance.parseRegisterChain" [ color = "green" ];
+  "BridgeGovernance.registerChain" -> "BridgeGovernance.chainId" [ color = "green" ];
+  "BridgeGovernance.registerChain" -> "BridgeGovernance.bridgeContracts" [ color = "green" ];
+  "BridgeGovernance.registerChain" -> "BridgeGovernance.setBridgeImplementation" [ color = "green" ];
+  "BridgeGovernance.upgrade" -> "BridgeGovernance.verifyGovernanceVM" [ color = "green" ];
+  "BridgeGovernance.upgrade" -> "BridgeGovernance.setGovernanceActionConsumed" [ color = "green" ];
+  "BridgeGovernance.upgrade" -> "BridgeGovernance.parseUpgrade" [ color = "green" ];
+  "BridgeGovernance.upgrade" -> "BridgeGovernance.chainId" [ color = "green" ];
+  "BridgeGovernance.upgrade" -> "BridgeGovernance.upgradeImplementation" [ color = "green" ];
+  "BridgeGovernance.upgrade" -> "BridgeGovernance.address" [ color = "green" ];
+  "BridgeGovernance.verifyGovernanceVM" -> "BridgeGovernance.wormhole" [ color = "green" ];
+  "BridgeGovernance.verifyGovernanceVM" -> "BridgeGovernance.governanceChainId" [ color = "green" ];
+  "BridgeGovernance.verifyGovernanceVM" -> "BridgeGovernance.governanceContract" [ color = "green" ];
+  "BridgeGovernance.verifyGovernanceVM" -> "BridgeGovernance.governanceActionIsConsumed" [ color = "green" ];
+  "BridgeGovernance.upgradeImplementation" -> "BridgeGovernance._getImplementation" [ color = "green" ];
+  "BridgeGovernance.upgradeImplementation" -> "BridgeGovernance._upgradeTo" [ color = "green" ];
+  "BridgeGovernance.upgradeImplementation" -> "newImplementation.delegatecall" [ color = "orange" ];
+  "BridgeGovernance.parseRegisterChain" -> "encoded.toBytes32" [ color = "orange" ];
+  "BridgeGovernance.parseRegisterChain" -> "encoded.toUint8" [ color = "orange" ];
+  "BridgeGovernance.parseRegisterChain" -> "encoded.toUint16" [ color = "orange" ];
+  "BridgeGovernance.parseRegisterChain" -> "encoded.toUint16" [ color = "orange" ];
+  "BridgeGovernance.parseRegisterChain" -> "encoded.toBytes32" [ color = "orange" ];
+  "BridgeGovernance.parseUpgrade" -> "encoded.toBytes32" [ color = "orange" ];
+  "BridgeGovernance.parseUpgrade" -> "encoded.toUint8" [ color = "orange" ];
+  "BridgeGovernance.parseUpgrade" -> "encoded.toUint16" [ color = "orange" ];
+  "BridgeGovernance.parseUpgrade" -> "encoded.toBytes32" [ color = "orange" ];
+  "Bridge.attestToken" -> "tokenAddress.staticcall" [ color = "orange" ];
+  "Bridge.attestToken" -> "tokenAddress.staticcall" [ color = "orange" ];
+  "Bridge.attestToken" -> "tokenAddress.staticcall" [ color = "orange" ];
+  "Bridge.attestToken" -> "BridgeStructs.AssetMeta" [ color = "orange" ];
+  "Bridge.attestToken" -> "BridgeGovernance.chainId" [ color = "green" ];
+  "Bridge.attestToken" -> "Bridge.encodeAssetMeta" [ color = "green" ];
+  "Bridge.attestToken" -> "BridgeGovernance.wormhole" [ color = "green" ];
+  "Bridge.wrapAndTransferETH" -> "BridgeGovernance.wormhole" [ color = "green" ];
+  "Bridge.wrapAndTransferETH" -> "Bridge.normalizeAmount" [ color = "green" ];
+  "Bridge.wrapAndTransferETH" -> "Bridge.normalizeAmount" [ color = "green" ];
+  "Bridge.wrapAndTransferETH" -> "Bridge.deNormalizeAmount" [ color = "green" ];
+  "Bridge.wrapAndTransferETH" -> "BridgeSetters.payable" [ color = "green" ];
+  "Bridge.wrapAndTransferETH" -> "Bridge.WETH" [ color = "green" ];
+  "Bridge.wrapAndTransferETH" -> "Bridge.bridgeOut" [ color = "green" ];
+  "Bridge.wrapAndTransferETH" -> "BridgeGovernance.address" [ color = "green" ];
+  "Bridge.wrapAndTransferETH" -> "Bridge.WETH" [ color = "green" ];
+  "Bridge.wrapAndTransferETH" -> "Bridge.logTransfer" [ color = "green" ];
+  "Bridge.wrapAndTransferETH" -> "BridgeGovernance.chainId" [ color = "green" ];
+  "Bridge.wrapAndTransferETH" -> "BridgeGovernance.address" [ color = "green" ];
+  "Bridge.wrapAndTransferETH" -> "Bridge.WETH" [ color = "green" ];
+  "Bridge.transferTokens" -> "Bridge.isWrappedAsset" [ color = "green" ];
+  "Bridge.transferTokens" -> "BridgeGovernance.chainId" [ color = "green" ];
+  "Bridge.transferTokens" -> "token.staticcall" [ color = "orange" ];
+  "Bridge.transferTokens" -> "Bridge.deNormalizeAmount" [ color = "green" ];
+  "Bridge.transferTokens" -> "Bridge.normalizeAmount" [ color = "green" ];
+  "Bridge.transferTokens" -> "BridgeGovernance.chainId" [ color = "green" ];
+  "Bridge.transferTokens" -> "token.staticcall" [ color = "orange" ];
+  "Bridge.transferTokens" -> "BridgeGovernance.address" [ color = "green" ];
+  "Bridge.transferTokens" -> "SafeERC20.safeTransferFrom" [ color = "orange" ];
+  "Bridge.transferTokens" -> "Bridge.IERC20" [ color = "green" ];
+  "Bridge.transferTokens" -> "BridgeGovernance.address" [ color = "green" ];
+  "Bridge.transferTokens" -> "token.staticcall" [ color = "orange" ];
+  "Bridge.transferTokens" -> "BridgeGovernance.address" [ color = "green" ];
+  "Bridge.transferTokens" -> "SafeERC20.safeTransferFrom" [ color = "orange" ];
+  "Bridge.transferTokens" -> "Bridge.IERC20" [ color = "green" ];
+  "Bridge.transferTokens" -> "BridgeGovernance.address" [ color = "green" ];
+  "Bridge.transferTokens" -> "BridgeGovernance.address" [ color = "green" ];
+  "Bridge.transferTokens" -> "Bridge.normalizeAmount" [ color = "green" ];
+  "Bridge.transferTokens" -> "Bridge.normalizeAmount" [ color = "green" ];
+  "Bridge.transferTokens" -> "BridgeGovernance.chainId" [ color = "green" ];
+  "Bridge.transferTokens" -> "Bridge.bridgeOut" [ color = "green" ];
+  "Bridge.transferTokens" -> "Bridge.logTransfer" [ color = "green" ];
+  "Bridge.logTransfer" -> "BridgeStructs.Transfer" [ color = "orange" ];
+  "Bridge.logTransfer" -> "Bridge.encodeTransfer" [ color = "green" ];
+  "Bridge.updateWrapped" -> "BridgeGovernance.wormhole" [ color = "green" ];
+  "Bridge.updateWrapped" -> "Bridge.verifyBridgeVM" [ color = "green" ];
+  "Bridge.updateWrapped" -> "Bridge.parseAssetMeta" [ color = "green" ];
+  "Bridge.updateWrapped" -> "Bridge._updateWrapped" [ color = "green" ];
+  "Bridge._updateWrapped" -> "Bridge.wrappedAsset" [ color = "green" ];
+  "Bridge._updateWrapped" -> "BridgeGovernance.address" [ color = "green" ];
+  "Bridge._updateWrapped" -> "Bridge.bytes32ToString" [ color = "green" ];
+  "Bridge._updateWrapped" -> "Bridge.bytes32ToString" [ color = "green" ];
+  "Bridge.createWrapped" -> "BridgeGovernance.wormhole" [ color = "green" ];
+  "Bridge.createWrapped" -> "Bridge.verifyBridgeVM" [ color = "green" ];
+  "Bridge.createWrapped" -> "Bridge.parseAssetMeta" [ color = "green" ];
+  "Bridge.createWrapped" -> "Bridge._createWrapped" [ color = "green" ];
+  "Bridge._createWrapped" -> "BridgeGovernance.chainId" [ color = "green" ];
+  "Bridge._createWrapped" -> "Bridge.wrappedAsset" [ color = "green" ];
+  "Bridge._createWrapped" -> "BridgeGovernance.address" [ color = "green" ];
+  "Bridge._createWrapped" -> "Bridge.bytes32ToString" [ color = "green" ];
+  "Bridge._createWrapped" -> "Bridge.bytes32ToString" [ color = "green" ];
+  "Bridge._createWrapped" -> "BridgeGovernance.address" [ color = "green" ];
+  "Bridge._createWrapped" -> "BridgeGovernance.address" [ color = "green" ];
+  "Bridge._createWrapped" -> "Bridge.type" [ color = "green" ];
+  "Bridge._createWrapped" -> "Bridge.setWrappedAsset" [ color = "green" ];
+  "Bridge.completeTransfer" -> "Bridge._completeTransfer" [ color = "green" ];
+  "Bridge.completeTransferAndUnwrapETH" -> "Bridge._completeTransfer" [ color = "green" ];
+  "Bridge._completeTransfer" -> "BridgeGovernance.wormhole" [ color = "green" ];
+  "Bridge._completeTransfer" -> "Bridge.verifyBridgeVM" [ color = "green" ];
+  "Bridge._completeTransfer" -> "Bridge.parseTransfer" [ color = "green" ];
+  "Bridge._completeTransfer" -> "Bridge.isTransferCompleted" [ color = "green" ];
+  "Bridge._completeTransfer" -> "Bridge.setTransferCompleted" [ color = "green" ];
+  "Bridge._completeTransfer" -> "BridgeGovernance.chainId" [ color = "green" ];
+  "Bridge._completeTransfer" -> "BridgeGovernance.chainId" [ color = "green" ];
+  "Bridge._completeTransfer" -> "Bridge.IERC20" [ color = "green" ];
+  "Bridge._completeTransfer" -> "BridgeGovernance.address" [ color = "green" ];
+  "Bridge._completeTransfer" -> "Bridge.bridgedIn" [ color = "green" ];
+  "Bridge._completeTransfer" -> "BridgeGovernance.address" [ color = "green" ];
+  "Bridge._completeTransfer" -> "Bridge.wrappedAsset" [ color = "green" ];
+  "Bridge._completeTransfer" -> "BridgeGovernance.address" [ color = "green" ];
+  "Bridge._completeTransfer" -> "Bridge.IERC20" [ color = "green" ];
+  "Bridge._completeTransfer" -> "BridgeGovernance.address" [ color = "green" ];
+  "Bridge._completeTransfer" -> "BridgeGovernance.address" [ color = "green" ];
+  "Bridge._completeTransfer" -> "Bridge.WETH" [ color = "green" ];
+  "Bridge._completeTransfer" -> "IERC20.staticcall" [ color = "orange" ];
+  "Bridge._completeTransfer" -> "BridgeGovernance.address" [ color = "green" ];
+  "Bridge._completeTransfer" -> "Bridge.deNormalizeAmount" [ color = "green" ];
+  "Bridge._completeTransfer" -> "Bridge.deNormalizeAmount" [ color = "green" ];
+  "Bridge._completeTransfer" -> "Bridge.WETH" [ color = "green" ];
+  "Bridge._completeTransfer" -> "BridgeSetters.payable" [ color = "green" ];
+  "Bridge._completeTransfer" -> "BridgeGovernance.chainId" [ color = "green" ];
+  "Bridge._completeTransfer" -> "BridgeGovernance.address" [ color = "green" ];
+  "Bridge._completeTransfer" -> "SafeERC20.safeTransfer" [ color = "orange" ];
+  "Bridge._completeTransfer" -> "BridgeGovernance.address" [ color = "green" ];
+  "Bridge._completeTransfer" -> "Bridge.WETH" [ color = "green" ];
+  "Bridge._completeTransfer" -> "BridgeSetters.payable" [ color = "green" ];
+  "Bridge._completeTransfer" -> "BridgeGovernance.chainId" [ color = "green" ];
+  "Bridge._completeTransfer" -> "BridgeGovernance.address" [ color = "green" ];
+  "Bridge._completeTransfer" -> "SafeERC20.safeTransfer" [ color = "orange" ];
+  "Bridge.bridgeOut" -> "Bridge.outstandingBridged" [ color = "green" ];
+  "Bridge.bridgeOut" -> "Bridge.type" [ color = "green" ];
+  "Bridge.bridgeOut" -> "Bridge.setOutstandingBridged" [ color = "green" ];
+  "Bridge.bridgedIn" -> "Bridge.setOutstandingBridged" [ color = "green" ];
+  "Bridge.bridgedIn" -> "Bridge.outstandingBridged" [ color = "green" ];
+  "Bridge.verifyBridgeVM" -> "BridgeGovernance.bridgeContracts" [ color = "green" ];
+  "Bridge.parseAssetMeta" -> "encoded.toUint8" [ color = "orange" ];
+  "Bridge.parseAssetMeta" -> "encoded.toBytes32" [ color = "orange" ];
+  "Bridge.parseAssetMeta" -> "encoded.toUint16" [ color = "orange" ];
+  "Bridge.parseAssetMeta" -> "encoded.toUint8" [ color = "orange" ];
+  "Bridge.parseAssetMeta" -> "encoded.toBytes32" [ color = "orange" ];
+  "Bridge.parseAssetMeta" -> "encoded.toBytes32" [ color = "orange" ];
+  "Bridge.parseTransfer" -> "encoded.toUint8" [ color = "orange" ];
+  "Bridge.parseTransfer" -> "encoded.toUint256" [ color = "orange" ];
+  "Bridge.parseTransfer" -> "encoded.toBytes32" [ color = "orange" ];
+  "Bridge.parseTransfer" -> "encoded.toUint16" [ color = "orange" ];
+  "Bridge.parseTransfer" -> "encoded.toBytes32" [ color = "orange" ];
+  "Bridge.parseTransfer" -> "encoded.toUint16" [ color = "orange" ];
+  "Bridge.parseTransfer" -> "encoded.toUint256" [ color = "orange" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

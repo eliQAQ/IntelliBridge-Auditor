@@ -1,0 +1,83 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterGenericBridgeFacet" {
+  graph [ label = "GenericBridgeFacet", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "GenericBridgeFacet.startBridgeTokensGeneric" [ label = "startBridgeTokensGeneric", color = "green" ];
+  "GenericBridgeFacet.swapAndStartBridgeTokensGeneric" [ label = "swapAndStartBridgeTokensGeneric", color = "green" ];
+  "GenericBridgeFacet._startBridge" [ label = "_startBridge" ];
+  "GenericBridgeFacet.address" [ label = "address" ];
+  "GenericBridgeFacet.LiFiTransferStarted" [ label = "LiFiTransferStarted" ];
+  "GenericBridgeFacet.IERC20" [ label = "IERC20" ];
+}
+
+subgraph "clusterLibAsset" {
+  graph [ label = "LibAsset", color = "lightgray" ];
+  "LibAsset.transferFromERC20" [ label = "transferFromERC20" ];
+  "LibAsset.getOwnBalance" [ label = "getOwnBalance" ];
+  "LibAsset.approveERC20" [ label = "approveERC20" ];
+}
+
+subgraph "clusterLibSwap" {
+  graph [ label = "LibSwap", color = "lightgray" ];
+  "LibSwap.swap" [ label = "swap" ];
+}
+
+subgraph "clusterLibUtil" {
+  graph [ label = "LibUtil", color = "lightgray" ];
+  "LibUtil.getRevertMsg" [ label = "getRevertMsg" ];
+}
+
+  "GenericBridgeFacet.startBridgeTokensGeneric";
+  "LibAsset.transferFromERC20";
+  "GenericBridgeFacet.address";
+  "GenericBridgeFacet._startBridge";
+  "GenericBridgeFacet.LiFiTransferStarted";
+  "GenericBridgeFacet.swapAndStartBridgeTokensGeneric";
+  "LibAsset.getOwnBalance";
+  "LibSwap.swap";
+  "LibAsset.approveERC20";
+  "GenericBridgeFacet.IERC20";
+  "LibUtil.getRevertMsg";
+  "GenericBridgeFacet.startBridgeTokensGeneric" -> "LibAsset.transferFromERC20" [ color = "orange" ];
+  "GenericBridgeFacet.startBridgeTokensGeneric" -> "GenericBridgeFacet.address" [ color = "green" ];
+  "GenericBridgeFacet.startBridgeTokensGeneric" -> "GenericBridgeFacet._startBridge" [ color = "green" ];
+  "GenericBridgeFacet.startBridgeTokensGeneric" -> "GenericBridgeFacet.LiFiTransferStarted" [ color = "green" ];
+  "GenericBridgeFacet.swapAndStartBridgeTokensGeneric" -> "LibAsset.getOwnBalance" [ color = "orange" ];
+  "GenericBridgeFacet.swapAndStartBridgeTokensGeneric" -> "LibSwap.swap" [ color = "orange" ];
+  "GenericBridgeFacet.swapAndStartBridgeTokensGeneric" -> "LibAsset.getOwnBalance" [ color = "orange" ];
+  "GenericBridgeFacet.swapAndStartBridgeTokensGeneric" -> "GenericBridgeFacet._startBridge" [ color = "green" ];
+  "GenericBridgeFacet.swapAndStartBridgeTokensGeneric" -> "GenericBridgeFacet.LiFiTransferStarted" [ color = "green" ];
+  "GenericBridgeFacet._startBridge" -> "LibAsset.approveERC20" [ color = "orange" ];
+  "GenericBridgeFacet._startBridge" -> "GenericBridgeFacet.IERC20" [ color = "green" ];
+  "GenericBridgeFacet._startBridge" -> "LibUtil.getRevertMsg" [ color = "orange" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

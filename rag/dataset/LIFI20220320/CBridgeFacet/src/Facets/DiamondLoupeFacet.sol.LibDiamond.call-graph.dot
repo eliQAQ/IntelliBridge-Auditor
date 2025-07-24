@@ -1,0 +1,54 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_1069_LibDiamond {
+label = "LibDiamond"
+"1069_enforceIsContractOwner" [label="enforceIsContractOwner"]
+"1069_diamondStorage" [label="diamondStorage"]
+"1069_initializeDiamondCut" [label="initializeDiamondCut"]
+"1069_enforceHasContractCode" [label="enforceHasContractCode"]
+"1069_diamondCut" [label="diamondCut"]
+"1069_slitherConstructorConstantVariables" [label="slitherConstructorConstantVariables"]
+"1069_removeFunctions" [label="removeFunctions"]
+"1069_addFunction" [label="addFunction"]
+"1069_setContractOwner" [label="setContractOwner"]
+"1069_addFunctions" [label="addFunctions"]
+"1069_replaceFunctions" [label="replaceFunctions"]
+"1069_addFacet" [label="addFacet"]
+"1069_removeFunction" [label="removeFunction"]
+"1069_contractOwner" [label="contractOwner"]
+"1069_replaceFunctions" -> "1069_addFacet"
+"1069_addFunctions" -> "1069_addFacet"
+"1069_addFunctions" -> "1069_diamondStorage"
+"1069_addFacet" -> "1069_enforceHasContractCode"
+"1069_addFunctions" -> "1069_addFunction"
+"1069_setContractOwner" -> "1069_diamondStorage"
+"1069_diamondCut" -> "1069_replaceFunctions"
+"1069_contractOwner" -> "1069_diamondStorage"
+"1069_replaceFunctions" -> "1069_removeFunction"
+"1069_initializeDiamondCut" -> "1069_enforceHasContractCode"
+"1069_replaceFunctions" -> "1069_addFunction"
+"1069_removeFunctions" -> "1069_diamondStorage"
+"1069_removeFunctions" -> "1069_removeFunction"
+"1069_enforceIsContractOwner" -> "1069_diamondStorage"
+"1069_diamondCut" -> "1069_initializeDiamondCut"
+"1069_diamondCut" -> "1069_addFunctions"
+"1069_diamondCut" -> "1069_removeFunctions"
+"1069_replaceFunctions" -> "1069_diamondStorage"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"revert(string)" 
+"keccak256(bytes)" 
+"1069_enforceIsContractOwner" -> "require(bool,string)"
+"1069_slitherConstructorConstantVariables" -> "keccak256(bytes)"
+"1069_initializeDiamondCut" -> "require(bool,string)"
+"1069_enforceHasContractCode" -> "require(bool,string)"
+"1069_removeFunctions" -> "require(bool,string)"
+"1069_addFunctions" -> "require(bool,string)"
+"1069_replaceFunctions" -> "require(bool,string)"
+"1069_initializeDiamondCut" -> "revert(string)"
+"1069_diamondCut" -> "revert(string)"
+"1069_removeFunction" -> "require(bool,string)"
+}
+}

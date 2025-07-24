@@ -1,0 +1,32 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_223_SafeERC20 {
+label = "SafeERC20"
+"223__callOptionalReturn" [label="_callOptionalReturn"]
+"223_safeDecreaseAllowance" [label="safeDecreaseAllowance"]
+"223_safeTransfer" [label="safeTransfer"]
+"223_safeIncreaseAllowance" [label="safeIncreaseAllowance"]
+"223_safeApprove" [label="safeApprove"]
+"223_safeTransferFrom" [label="safeTransferFrom"]
+"223_safeTransferFrom" -> "223__callOptionalReturn"
+"223_safeDecreaseAllowance" -> "223__callOptionalReturn"
+"223_safeApprove" -> "223__callOptionalReturn"
+"223_safeTransfer" -> "223__callOptionalReturn"
+"223_safeIncreaseAllowance" -> "223__callOptionalReturn"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"abi.decode()" 
+"abi.encodeWithSelector()" 
+"require(bool,string)" 
+"223__callOptionalReturn" -> "require(bool,string)"
+"223_safeTransfer" -> "abi.encodeWithSelector()"
+"223_safeTransferFrom" -> "abi.encodeWithSelector()"
+"223_safeDecreaseAllowance" -> "require(bool,string)"
+"223_safeDecreaseAllowance" -> "abi.encodeWithSelector()"
+"223_safeIncreaseAllowance" -> "abi.encodeWithSelector()"
+"223_safeApprove" -> "abi.encodeWithSelector()"
+"223_safeApprove" -> "require(bool,string)"
+"223__callOptionalReturn" -> "abi.decode()"
+}
+}

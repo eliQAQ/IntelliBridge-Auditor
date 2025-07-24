@@ -1,0 +1,162 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterHome" {
+  graph [ label = "Home", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "Home.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "Home.initialize" [ label = "initialize", color = "green" ];
+  "Home.onlyUpdaterManager" [ label = "onlyUpdaterManager", color = "yellow" ];
+  "Home.notFailed" [ label = "notFailed", color = "yellow" ];
+  "Home.setUpdater" [ label = "setUpdater", color = "blue" ];
+  "Home.setUpdaterManager" [ label = "setUpdaterManager", color = "blue" ];
+  "Home.dispatch" [ label = "dispatch", color = "blue" ];
+  "Home.update" [ label = "update", color = "blue" ];
+  "Home.suggestUpdate" [ label = "suggestUpdate", color = "blue" ];
+  "Home.doubleUpdate" [ label = "doubleUpdate", color = "blue" ];
+  "Home.homeDomainHash" [ label = "homeDomainHash", color = "green" ];
+  "Home.improperUpdate" [ label = "improperUpdate" ];
+  "Home._setUpdaterManager" [ label = "_setUpdaterManager" ];
+  "Home._fail" [ label = "_fail" ];
+  "Home._destinationAndNonce" [ label = "_destinationAndNonce" ];
+  "Home.__QueueManager_initialize" [ label = "__QueueManager_initialize" ];
+  "Home.__NomadBase_initialize" [ label = "__NomadBase_initialize" ];
+  "Home.address" [ label = "address" ];
+  "Home._setUpdater" [ label = "_setUpdater" ];
+  "Home.IUpdaterManager" [ label = "IUpdaterManager" ];
+  "Home.root" [ label = "root" ];
+  "Home.count" [ label = "count" ];
+  "Home.Update" [ label = "Update" ];
+  "Home._homeDomainHash" [ label = "_homeDomainHash" ];
+}
+
+subgraph "clusterIUpdaterManager" {
+  graph [ label = "IUpdaterManager", color = "lightgray" ];
+  "IUpdaterManager.updater" [ label = "updater" ];
+  "IUpdaterManager.slashUpdater" [ label = "slashUpdater" ];
+}
+
+subgraph "clusterMessage" {
+  graph [ label = "Message", color = "lightgray" ];
+  "Message.formatMessage" [ label = "formatMessage" ];
+}
+
+subgraph "clustertree" {
+  graph [ label = "tree", color = "lightgray" ];
+  "tree.insert" [ label = "insert" ];
+}
+
+subgraph "clusterqueue" {
+  graph [ label = "queue", color = "lightgray" ];
+  "queue.enqueue" [ label = "enqueue" ];
+  "queue.dequeue" [ label = "dequeue" ];
+  "queue.length" [ label = "length" ];
+  "queue.lastItem" [ label = "lastItem" ];
+  "queue.contains" [ label = "contains" ];
+}
+
+subgraph "clusterNomadBase" {
+  graph [ label = "NomadBase", color = "lightgray" ];
+  "NomadBase._isUpdaterSignature" [ label = "_isUpdaterSignature" ];
+}
+
+subgraph "clusterAddress" {
+  graph [ label = "Address", color = "lightgray" ];
+  "Address.isContract" [ label = "isContract" ];
+}
+
+  "Home.initialize";
+  "Home.__QueueManager_initialize";
+  "Home._setUpdaterManager";
+  "Home.__NomadBase_initialize";
+  "IUpdaterManager.updater";
+  "Home.onlyUpdaterManager";
+  "Home.address";
+  "Home.setUpdater";
+  "Home._setUpdater";
+  "Home.setUpdaterManager";
+  "Home.IUpdaterManager";
+  "Home.dispatch";
+  "Message.formatMessage";
+  "tree.insert";
+  "queue.enqueue";
+  "Home.root";
+  "Home.count";
+  "Home._destinationAndNonce";
+  "Home.update";
+  "Home.improperUpdate";
+  "queue.dequeue";
+  "Home.Update";
+  "Home.suggestUpdate";
+  "queue.length";
+  "queue.lastItem";
+  "Home.doubleUpdate";
+  "NomadBase._isUpdaterSignature";
+  "Home._fail";
+  "Home.homeDomainHash";
+  "Home._homeDomainHash";
+  "queue.contains";
+  "Address.isContract";
+  "IUpdaterManager.slashUpdater";
+  "Home.initialize" -> "Home.__QueueManager_initialize" [ color = "green" ];
+  "Home.initialize" -> "Home._setUpdaterManager" [ color = "green" ];
+  "Home.initialize" -> "Home.__NomadBase_initialize" [ color = "green" ];
+  "Home.initialize" -> "IUpdaterManager.updater" [ color = "orange" ];
+  "Home.onlyUpdaterManager" -> "Home.address" [ color = "green" ];
+  "Home.setUpdater" -> "Home._setUpdater" [ color = "green" ];
+  "Home.setUpdaterManager" -> "Home._setUpdaterManager" [ color = "green" ];
+  "Home.setUpdaterManager" -> "Home.IUpdaterManager" [ color = "green" ];
+  "Home.setUpdaterManager" -> "Home._setUpdater" [ color = "green" ];
+  "Home.setUpdaterManager" -> "Home.IUpdaterManager" [ color = "green" ];
+  "Home.dispatch" -> "Message.formatMessage" [ color = "orange" ];
+  "Home.dispatch" -> "tree.insert" [ color = "orange" ];
+  "Home.dispatch" -> "queue.enqueue" [ color = "orange" ];
+  "Home.dispatch" -> "Home.root" [ color = "green" ];
+  "Home.dispatch" -> "Home.count" [ color = "green" ];
+  "Home.dispatch" -> "Home._destinationAndNonce" [ color = "green" ];
+  "Home.update" -> "Home.improperUpdate" [ color = "green" ];
+  "Home.update" -> "queue.dequeue" [ color = "orange" ];
+  "Home.update" -> "Home.Update" [ color = "green" ];
+  "Home.suggestUpdate" -> "queue.length" [ color = "orange" ];
+  "Home.suggestUpdate" -> "queue.lastItem" [ color = "orange" ];
+  "Home.doubleUpdate" -> "NomadBase._isUpdaterSignature" [ color = "orange" ];
+  "Home.doubleUpdate" -> "NomadBase._isUpdaterSignature" [ color = "orange" ];
+  "Home.doubleUpdate" -> "Home._fail" [ color = "green" ];
+  "Home.homeDomainHash" -> "Home._homeDomainHash" [ color = "green" ];
+  "Home.improperUpdate" -> "NomadBase._isUpdaterSignature" [ color = "green" ];
+  "Home.improperUpdate" -> "queue.contains" [ color = "orange" ];
+  "Home.improperUpdate" -> "Home._fail" [ color = "green" ];
+  "Home._setUpdaterManager" -> "Address.isContract" [ color = "orange" ];
+  "Home._setUpdaterManager" -> "Home.address" [ color = "green" ];
+  "Home._setUpdaterManager" -> "Home.IUpdaterManager" [ color = "green" ];
+  "Home._setUpdaterManager" -> "Home.address" [ color = "green" ];
+  "Home._fail" -> "IUpdaterManager.slashUpdater" [ color = "orange" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

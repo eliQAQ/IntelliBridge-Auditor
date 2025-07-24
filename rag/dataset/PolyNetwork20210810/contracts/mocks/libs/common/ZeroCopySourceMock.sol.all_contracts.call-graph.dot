@@ -1,0 +1,62 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_233_ZeroCopySourceMock {
+label = "ZeroCopySourceMock"
+"233_NextUint16" [label="NextUint16"]
+"233_NextBool" [label="NextBool"]
+"233_NextVarUint" [label="NextVarUint"]
+"233_NextUint64" [label="NextUint64"]
+"233_NextUint8" [label="NextUint8"]
+"233_NextByte" [label="NextByte"]
+"233_NextUint32" [label="NextUint32"]
+"233_NextVarBytes" [label="NextVarBytes"]
+"233_NextUint255" [label="NextUint255"]
+"233_NextBytes20" [label="NextBytes20"]
+"233_NextHash" [label="NextHash"]
+}subgraph cluster_789_ZeroCopySource {
+label = "ZeroCopySource"
+"789_NextUint64" [label="NextUint64"]
+"789_NextByte" [label="NextByte"]
+"789_NextUint255" [label="NextUint255"]
+"789_NextVarUint" [label="NextVarUint"]
+"789_NextVarBytes" [label="NextVarBytes"]
+"789_NextUint8" [label="NextUint8"]
+"789_NextUint32" [label="NextUint32"]
+"789_NextUint16" [label="NextUint16"]
+"789_NextHash" [label="NextHash"]
+"789_NextBytes20" [label="NextBytes20"]
+"789_NextBool" [label="NextBool"]
+"789_NextVarUint" -> "789_NextUint16"
+"789_NextVarBytes" -> "789_NextVarUint"
+"789_NextVarUint" -> "789_NextUint32"
+"789_NextVarUint" -> "789_NextUint64"
+"789_NextVarUint" -> "789_NextByte"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"revert(string)" 
+"require(bool,string)" 
+"789_NextBytes20" -> "require(bool,string)"
+"789_NextByte" -> "require(bool,string)"
+"789_NextUint16" -> "require(bool,string)"
+"789_NextBool" -> "revert(string)"
+"789_NextVarBytes" -> "require(bool,string)"
+"789_NextHash" -> "require(bool,string)"
+"789_NextBool" -> "require(bool,string)"
+"789_NextUint8" -> "require(bool,string)"
+"789_NextUint255" -> "require(bool,string)"
+"789_NextVarUint" -> "require(bool,string)"
+"789_NextUint64" -> "require(bool,string)"
+"789_NextUint32" -> "require(bool,string)"
+}"233_NextVarBytes" -> "789_NextVarBytes"
+"233_NextUint16" -> "789_NextUint16"
+"233_NextHash" -> "789_NextHash"
+"233_NextUint8" -> "789_NextUint8"
+"233_NextBool" -> "789_NextBool"
+"233_NextBytes20" -> "789_NextBytes20"
+"233_NextByte" -> "789_NextByte"
+"233_NextUint64" -> "789_NextUint64"
+"233_NextUint32" -> "789_NextUint32"
+"233_NextVarUint" -> "789_NextVarUint"
+"233_NextUint255" -> "789_NextUint255"
+}

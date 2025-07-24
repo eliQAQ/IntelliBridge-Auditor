@@ -1,0 +1,99 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterIConnextHandler" {
+  graph [ label = "IConnextHandler  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "IConnextHandler.xcall" [ label = "xcall" ];
+}
+
+subgraph "clusterWETH" {
+  graph [ label = "WETH  (iface)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "WETH.deposit" [ label = "deposit", color = "blue" ];
+}
+
+subgraph "clusterConnextImpl" {
+  graph [ label = "ConnextImpl", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ConnextImpl.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "ConnextImpl.bridgeAfterSwap" [ label = "bridgeAfterSwap", color = "blue" ];
+  "ConnextImpl.swapAndBridge" [ label = "swapAndBridge", color = "blue" ];
+  "ConnextImpl.bridgeERC20To" [ label = "bridgeERC20To", color = "blue" ];
+  "ConnextImpl.bridgeNativeTo" [ label = "bridgeNativeTo", color = "blue" ];
+  "ConnextImpl.ERC20" [ label = "ERC20" ];
+  "ConnextImpl.address" [ label = "address" ];
+  "ConnextImpl.SocketBridge" [ label = "SocketBridge" ];
+}
+
+subgraph "clustersocketRoute" {
+  graph [ label = "socketRoute", color = "lightgray" ];
+  "socketRoute.getRoute" [ label = "getRoute" ];
+}
+
+  "ConnextImpl.bridgeAfterSwap";
+  "ConnextImpl.ERC20";
+  "ConnextImpl.address";
+  "IConnextHandler.xcall";
+  "ConnextImpl.SocketBridge";
+  "ConnextImpl.swapAndBridge";
+  "socketRoute.getRoute";
+  "ConnextImpl.bridgeERC20To";
+  "ConnextImpl.bridgeNativeTo";
+  "ConnextImpl.bridgeAfterSwap" -> "ConnextImpl.ERC20" [ color = "green" ];
+  "ConnextImpl.bridgeAfterSwap" -> "ConnextImpl.address" [ color = "green" ];
+  "ConnextImpl.bridgeAfterSwap" -> "ConnextImpl.address" [ color = "green" ];
+  "ConnextImpl.bridgeAfterSwap" -> "ConnextImpl.ERC20" [ color = "green" ];
+  "ConnextImpl.bridgeAfterSwap" -> "ConnextImpl.address" [ color = "green" ];
+  "ConnextImpl.bridgeAfterSwap" -> "IConnextHandler.xcall" [ color = "orange" ];
+  "ConnextImpl.bridgeAfterSwap" -> "ConnextImpl.SocketBridge" [ color = "green" ];
+  "ConnextImpl.swapAndBridge" -> "socketRoute.getRoute" [ color = "orange" ];
+  "ConnextImpl.swapAndBridge" -> "ConnextImpl.ERC20" [ color = "green" ];
+  "ConnextImpl.swapAndBridge" -> "ConnextImpl.address" [ color = "green" ];
+  "ConnextImpl.swapAndBridge" -> "ConnextImpl.address" [ color = "green" ];
+  "ConnextImpl.swapAndBridge" -> "ConnextImpl.ERC20" [ color = "green" ];
+  "ConnextImpl.swapAndBridge" -> "ConnextImpl.address" [ color = "green" ];
+  "ConnextImpl.swapAndBridge" -> "IConnextHandler.xcall" [ color = "orange" ];
+  "ConnextImpl.swapAndBridge" -> "ConnextImpl.SocketBridge" [ color = "green" ];
+  "ConnextImpl.bridgeERC20To" -> "ConnextImpl.ERC20" [ color = "green" ];
+  "ConnextImpl.bridgeERC20To" -> "ConnextImpl.ERC20" [ color = "green" ];
+  "ConnextImpl.bridgeERC20To" -> "ConnextImpl.address" [ color = "green" ];
+  "ConnextImpl.bridgeERC20To" -> "ConnextImpl.address" [ color = "green" ];
+  "ConnextImpl.bridgeERC20To" -> "ConnextImpl.ERC20" [ color = "green" ];
+  "ConnextImpl.bridgeERC20To" -> "ConnextImpl.address" [ color = "green" ];
+  "ConnextImpl.bridgeERC20To" -> "IConnextHandler.xcall" [ color = "orange" ];
+  "ConnextImpl.bridgeERC20To" -> "ConnextImpl.SocketBridge" [ color = "green" ];
+  "ConnextImpl.bridgeNativeTo" -> "ConnextImpl.ERC20" [ color = "green" ];
+  "ConnextImpl.bridgeNativeTo" -> "ConnextImpl.address" [ color = "green" ];
+  "ConnextImpl.bridgeNativeTo" -> "ConnextImpl.address" [ color = "green" ];
+  "ConnextImpl.bridgeNativeTo" -> "ConnextImpl.ERC20" [ color = "green" ];
+  "ConnextImpl.bridgeNativeTo" -> "ConnextImpl.address" [ color = "green" ];
+  "ConnextImpl.bridgeNativeTo" -> "IConnextHandler.xcall" [ color = "orange" ];
+  "ConnextImpl.bridgeNativeTo" -> "ConnextImpl.SocketBridge" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

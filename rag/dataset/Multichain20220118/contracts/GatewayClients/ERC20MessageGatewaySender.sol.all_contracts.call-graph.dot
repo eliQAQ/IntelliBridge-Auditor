@@ -1,0 +1,14 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_41_ERC20_Message_Gateway_Sender {
+label = "ERC20_Message_Gateway_Sender"
+"41_send" [label="send"]
+}subgraph cluster_62_IERC20MessageGateway {
+label = "IERC20MessageGateway"
+"62_SwapOut_and_call" [label="SwapOut_and_call"]
+"62_token" [label="token"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+}"41_send" -> "62_SwapOut_and_call"
+}

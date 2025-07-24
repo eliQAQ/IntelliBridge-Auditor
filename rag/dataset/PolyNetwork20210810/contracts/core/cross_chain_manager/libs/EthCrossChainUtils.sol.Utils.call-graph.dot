@@ -1,0 +1,36 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_1983_Utils {
+label = "Utils"
+"1983_compressMCPubKey" [label="compressMCPubKey"]
+"1983_slice" [label="slice"]
+"1983_hashLeaf" [label="hashLeaf"]
+"1983_isContract" [label="isContract"]
+"1983_uint256ToBytes" [label="uint256ToBytes"]
+"1983_hashChildren" [label="hashChildren"]
+"1983_containMAddresses" [label="containMAddresses"]
+"1983_bytesToUint256" [label="bytesToUint256"]
+"1983_bytesToBytes32" [label="bytesToBytes32"]
+"1983_equalStorage" [label="equalStorage"]
+"1983_bytesToAddress" [label="bytesToAddress"]
+"1983_addressToBytes" [label="addressToBytes"]
+"1983_compressMCPubKey" -> "1983_slice"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"sha256(bytes)" 
+"abi.encodePacked()" 
+"require(bool)" 
+"1983_bytesToUint256" -> "require(bool,string)"
+"1983_slice" -> "require(bool)"
+"1983_hashLeaf" -> "abi.encodePacked()"
+"1983_bytesToBytes32" -> "require(bool,string)"
+"1983_hashChildren" -> "abi.encodePacked()"
+"1983_bytesToAddress" -> "require(bool,string)"
+"1983_hashLeaf" -> "sha256(bytes)"
+"1983_uint256ToBytes" -> "require(bool,string)"
+"1983_hashChildren" -> "sha256(bytes)"
+"1983_compressMCPubKey" -> "require(bool,string)"
+}
+}

@@ -1,0 +1,36 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_790_Utils {
+label = "Utils"
+"790_bytesToAddress" [label="bytesToAddress"]
+"790_uint256ToBytes" [label="uint256ToBytes"]
+"790_compressMCPubKey" [label="compressMCPubKey"]
+"790_equalStorage" [label="equalStorage"]
+"790_isContract" [label="isContract"]
+"790_bytesToBytes32" [label="bytesToBytes32"]
+"790_containMAddresses" [label="containMAddresses"]
+"790_bytesToUint256" [label="bytesToUint256"]
+"790_hashLeaf" [label="hashLeaf"]
+"790_hashChildren" [label="hashChildren"]
+"790_slice" [label="slice"]
+"790_addressToBytes" [label="addressToBytes"]
+"790_compressMCPubKey" -> "790_slice"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool)" 
+"sha256(bytes)" 
+"abi.encodePacked()" 
+"require(bool,string)" 
+"790_bytesToAddress" -> "require(bool,string)"
+"790_slice" -> "require(bool)"
+"790_compressMCPubKey" -> "require(bool,string)"
+"790_hashChildren" -> "abi.encodePacked()"
+"790_hashChildren" -> "sha256(bytes)"
+"790_hashLeaf" -> "abi.encodePacked()"
+"790_bytesToUint256" -> "require(bool,string)"
+"790_hashLeaf" -> "sha256(bytes)"
+"790_bytesToBytes32" -> "require(bool,string)"
+"790_uint256ToBytes" -> "require(bool,string)"
+}
+}

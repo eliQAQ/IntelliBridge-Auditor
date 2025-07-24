@@ -1,0 +1,92 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_2723_AnyswapV4Router {
+label = "AnyswapV4Router"
+"2723_anySwapOutUnderlying" [label="anySwapOutUnderlying"]
+"2723_anySwapIn" [label="anySwapIn"]
+"2723_getAmountIn" [label="getAmountIn"]
+"2723_anySwapOutExactTokensForNativeUnderlying" [label="anySwapOutExactTokensForNativeUnderlying"]
+"2723_receive" [label="receive"]
+"2723_getAmountOut" [label="getAmountOut"]
+"2723_anySwapInExactTokensForTokens" [label="anySwapInExactTokensForTokens"]
+"2723_anySwapInAuto" [label="anySwapInAuto"]
+"2723_anySwapInUnderlying" [label="anySwapInUnderlying"]
+"2723_cID" [label="cID"]
+"2723_anySwapOutExactTokensForTokens" [label="anySwapOutExactTokensForTokens"]
+"2723__anySwapIn" [label="_anySwapIn"]
+"2723_mpc" [label="mpc"]
+"2723_anySwapOutExactTokensForTokensUnderlying" [label="anySwapOutExactTokensForTokensUnderlying"]
+"2723_anySwapOutExactTokensForNative" [label="anySwapOutExactTokensForNative"]
+"2723_anySwapOutUnderlyingWithPermit" [label="anySwapOutUnderlyingWithPermit"]
+"2723_anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" [label="anySwapOutExactTokensForTokensUnderlyingWithTransferPermit"]
+"2723_anySwapInExactTokensForNative" [label="anySwapInExactTokensForNative"]
+"2723_getAmountsIn" [label="getAmountsIn"]
+"2723_anySwapOutExactTokensForNativeUnderlyingWithPermit" [label="anySwapOutExactTokensForNativeUnderlyingWithPermit"]
+"2723_anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" [label="anySwapOutExactTokensForNativeUnderlyingWithTransferPermit"]
+"2723_changeMPC" [label="changeMPC"]
+"2723_anySwapOutExactTokensForTokensUnderlyingWithPermit" [label="anySwapOutExactTokensForTokensUnderlyingWithPermit"]
+"2723_anySwapFeeTo" [label="anySwapFeeTo"]
+"2723_constructor" [label="constructor"]
+"2723_getAmountsOut" [label="getAmountsOut"]
+"2723__anySwapOut" [label="_anySwapOut"]
+"2723__swap" [label="_swap"]
+"2723_anySwapOutUnderlyingWithTransferPermit" [label="anySwapOutUnderlyingWithTransferPermit"]
+"2723_anySwapOut" [label="anySwapOut"]
+"2723_quote" [label="quote"]
+"2723_changeVault" [label="changeVault"]
+"2723_anySwapFeeTo" -> "2723_onlyMPC"
+"2723_anySwapOutExactTokensForTokensUnderlyingWithPermit" -> "2723_cID"
+"2723_anySwapInExactTokensForNative" -> "2723__anySwapIn"
+"2723_anySwapOutUnderlyingWithPermit" -> "2723__anySwapOut"
+"2723_anySwapOutExactTokensForNativeUnderlying" -> "2723_cID"
+"2723_anySwapInAuto" -> "2723__anySwapIn"
+"2723_anySwapInAuto" -> "2723_onlyMPC"
+"2723_anySwapInExactTokensForTokens" -> "2723_onlyMPC"
+"2723_anySwapInExactTokensForNative" -> "2723_onlyMPC"
+"2723_anySwapOutExactTokensForNativeUnderlyingWithPermit" -> "2723_ensure"
+"2723_anySwapInExactTokensForNative" -> "2723__swap"
+"2723_changeVault" -> "2723_onlyMPC"
+"2723_anySwapInUnderlying" -> "2723_onlyMPC"
+"2723_anySwapFeeTo" -> "2723_mpc"
+"2723_anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" -> "2723_ensure"
+"2723_changeMPC" -> "2723_onlyMPC"
+"2723_changeMPC" -> "2723_cID"
+"2723_anySwapInExactTokensForTokens" -> "2723_ensure"
+"2723_anySwapOut" -> "2723__anySwapOut"
+"2723_anySwapOutExactTokensForTokensUnderlyingWithTransferPermit" -> "2723_cID"
+"2723_anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" -> "2723_ensure"
+"2723_anySwapOutUnderlyingWithTransferPermit" -> "2723__anySwapOut"
+"2723_anySwapOutExactTokensForNativeUnderlyingWithTransferPermit" -> "2723_cID"
+"2723_anySwapOutExactTokensForTokensUnderlying" -> "2723_ensure"
+"2723_anySwapOutExactTokensForTokensUnderlyingWithPermit" -> "2723_ensure"
+"2723_changeMPC" -> "2723_mpc"
+"2723__anySwapIn" -> "2723_cID"
+"2723_anySwapOutUnderlying" -> "2723__anySwapOut"
+"2723_anySwapInUnderlying" -> "2723__anySwapIn"
+"2723_anySwapInExactTokensForTokens" -> "2723__anySwapIn"
+"2723_anySwapOutExactTokensForNativeUnderlyingWithPermit" -> "2723_cID"
+"2723_anySwapOutExactTokensForNative" -> "2723_cID"
+"2723__anySwapOut" -> "2723_cID"
+"2723_anySwapOutExactTokensForTokens" -> "2723_ensure"
+"2723_anySwapOutExactTokensForNative" -> "2723_ensure"
+"2723_anySwapOutExactTokensForTokensUnderlying" -> "2723_cID"
+"2723_anySwapOutExactTokensForTokens" -> "2723_cID"
+"2723_anySwapInExactTokensForNative" -> "2723_ensure"
+"2723_anySwapOutExactTokensForNativeUnderlying" -> "2723_ensure"
+"2723_anySwapIn" -> "2723__anySwapIn"
+"2723_anySwapIn" -> "2723_onlyMPC"
+"2723_anySwapInExactTokensForTokens" -> "2723__swap"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"assert(bool)" 
+"chainid()" 
+"require(bool,string)" 
+"2723_anySwapInExactTokensForNative" -> "require(bool,string)"
+"2723_changeVault" -> "require(bool,string)"
+"2723_receive" -> "assert(bool)"
+"2723_cID" -> "chainid()"
+"2723_anySwapInExactTokensForTokens" -> "require(bool,string)"
+"2723_changeMPC" -> "require(bool,string)"
+}
+}

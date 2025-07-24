@@ -1,0 +1,28 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_556_MerkleLib {
+label = "MerkleLib"
+"556_rootWithCtx" [label="rootWithCtx"]
+"556_root" [label="root"]
+"556_zeroHashes" [label="zeroHashes"]
+"556_branchRoot" [label="branchRoot"]
+"556_insert" [label="insert"]
+"556_root" -> "556_rootWithCtx"
+"556_root" -> "556_zeroHashes"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"keccak256(bytes)" 
+"assert(bool)" 
+"abi.encodePacked()" 
+"556_insert" -> "require(bool,string)"
+"556_branchRoot" -> "abi.encodePacked()"
+"556_rootWithCtx" -> "keccak256(bytes)"
+"556_rootWithCtx" -> "abi.encodePacked()"
+"556_insert" -> "abi.encodePacked()"
+"556_branchRoot" -> "keccak256(bytes)"
+"556_insert" -> "assert(bool)"
+"556_insert" -> "keccak256(bytes)"
+}
+}

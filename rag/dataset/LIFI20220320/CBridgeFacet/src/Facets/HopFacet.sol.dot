@@ -1,0 +1,109 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterHopFacet" {
+  graph [ label = "HopFacet", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "HopFacet.initHop" [ label = "initHop", color = "blue" ];
+  "HopFacet.startBridgeTokensViaHop" [ label = "startBridgeTokensViaHop", color = "green" ];
+  "HopFacet.swapAndStartBridgeTokensViaHop" [ label = "swapAndStartBridgeTokensViaHop", color = "green" ];
+  "HopFacet._startBridge" [ label = "_startBridge" ];
+  "HopFacet._bridge" [ label = "_bridge" ];
+  "HopFacet.getStorage" [ label = "getStorage" ];
+  "HopFacet.address" [ label = "address" ];
+  "HopFacet.LiFiTransferStarted" [ label = "LiFiTransferStarted" ];
+  "HopFacet.IERC20" [ label = "IERC20" ];
+  "HopFacet.IHopBridge" [ label = "IHopBridge" ];
+}
+
+subgraph "clusterLibDiamond" {
+  graph [ label = "LibDiamond", color = "lightgray" ];
+  "LibDiamond.enforceIsContractOwner" [ label = "enforceIsContractOwner" ];
+}
+
+subgraph "clusterLibAsset" {
+  graph [ label = "LibAsset", color = "lightgray" ];
+  "LibAsset.getOwnBalance" [ label = "getOwnBalance" ];
+  "LibAsset.transferFromERC20" [ label = "transferFromERC20" ];
+  "LibAsset.approveERC20" [ label = "approveERC20" ];
+  "LibAsset.isNativeAsset" [ label = "isNativeAsset" ];
+}
+
+subgraph "clusterLibSwap" {
+  graph [ label = "LibSwap", color = "lightgray" ];
+  "LibSwap.swap" [ label = "swap" ];
+}
+
+  "HopFacet.initHop";
+  "HopFacet.getStorage";
+  "LibDiamond.enforceIsContractOwner";
+  "HopFacet.startBridgeTokensViaHop";
+  "HopFacet._bridge";
+  "HopFacet.address";
+  "LibAsset.getOwnBalance";
+  "LibAsset.transferFromERC20";
+  "HopFacet._startBridge";
+  "HopFacet.LiFiTransferStarted";
+  "HopFacet.swapAndStartBridgeTokensViaHop";
+  "LibSwap.swap";
+  "LibAsset.approveERC20";
+  "HopFacet.IERC20";
+  "LibAsset.isNativeAsset";
+  "HopFacet.IHopBridge";
+  "HopFacet.initHop" -> "HopFacet.getStorage" [ color = "green" ];
+  "HopFacet.initHop" -> "LibDiamond.enforceIsContractOwner" [ color = "orange" ];
+  "HopFacet.startBridgeTokensViaHop" -> "HopFacet._bridge" [ color = "green" ];
+  "HopFacet.startBridgeTokensViaHop" -> "HopFacet.address" [ color = "green" ];
+  "HopFacet.startBridgeTokensViaHop" -> "LibAsset.getOwnBalance" [ color = "orange" ];
+  "HopFacet.startBridgeTokensViaHop" -> "LibAsset.transferFromERC20" [ color = "orange" ];
+  "HopFacet.startBridgeTokensViaHop" -> "HopFacet.address" [ color = "green" ];
+  "HopFacet.startBridgeTokensViaHop" -> "LibAsset.getOwnBalance" [ color = "orange" ];
+  "HopFacet.startBridgeTokensViaHop" -> "HopFacet._startBridge" [ color = "green" ];
+  "HopFacet.startBridgeTokensViaHop" -> "HopFacet.LiFiTransferStarted" [ color = "green" ];
+  "HopFacet.swapAndStartBridgeTokensViaHop" -> "HopFacet._bridge" [ color = "green" ];
+  "HopFacet.swapAndStartBridgeTokensViaHop" -> "LibAsset.getOwnBalance" [ color = "orange" ];
+  "HopFacet.swapAndStartBridgeTokensViaHop" -> "LibSwap.swap" [ color = "orange" ];
+  "HopFacet.swapAndStartBridgeTokensViaHop" -> "LibAsset.getOwnBalance" [ color = "orange" ];
+  "HopFacet.swapAndStartBridgeTokensViaHop" -> "HopFacet._startBridge" [ color = "green" ];
+  "HopFacet.swapAndStartBridgeTokensViaHop" -> "HopFacet.LiFiTransferStarted" [ color = "green" ];
+  "HopFacet._startBridge" -> "HopFacet.getStorage" [ color = "green" ];
+  "HopFacet._startBridge" -> "HopFacet._bridge" [ color = "green" ];
+  "HopFacet._startBridge" -> "HopFacet._bridge" [ color = "green" ];
+  "HopFacet._startBridge" -> "HopFacet._bridge" [ color = "green" ];
+  "HopFacet._startBridge" -> "LibAsset.approveERC20" [ color = "orange" ];
+  "HopFacet._startBridge" -> "HopFacet.IERC20" [ color = "green" ];
+  "HopFacet._startBridge" -> "LibAsset.isNativeAsset" [ color = "orange" ];
+  "HopFacet._startBridge" -> "HopFacet.address" [ color = "green" ];
+  "HopFacet._startBridge" -> "HopFacet.IHopBridge" [ color = "green" ];
+  "HopFacet._startBridge" -> "HopFacet.address" [ color = "green" ];
+  "HopFacet._startBridge" -> "HopFacet.IHopBridge" [ color = "green" ];
+  "HopFacet._bridge" -> "HopFacet.getStorage" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

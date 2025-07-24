@@ -1,0 +1,87 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_35_LPToken {
+label = "LPToken"
+"35_constructor" [label="constructor"]
+"35_constructor" -> "35_constructor"
+"35_constructor" -> "35__mint"
+}subgraph cluster_712_SafeMath {
+label = "SafeMath"
+"712_mul" [label="mul"]
+"712_add" [label="add"]
+"712_mod" [label="mod"]
+"712_div" [label="div"]
+"712_sub" [label="sub"]
+"712_mod" -> "712_mod"
+"712_div" -> "712_div"
+"712_sub" -> "712_sub"
+}subgraph cluster_525_ERC20Detailed {
+label = "ERC20Detailed"
+"525_decimals" [label="decimals"]
+"525_symbol" [label="symbol"]
+"525_name" [label="name"]
+"525_constructor" [label="constructor"]
+}subgraph cluster_781_IERC20 {
+label = "IERC20"
+"781_allowance" [label="allowance"]
+"781_totalSupply" [label="totalSupply"]
+"781_balanceOf" [label="balanceOf"]
+"781_transfer" [label="transfer"]
+"781_approve" [label="approve"]
+"781_transferFrom" [label="transferFrom"]
+}subgraph cluster_467_ERC20 {
+label = "ERC20"
+"467__approve" [label="_approve"]
+"467_allowance" [label="allowance"]
+"467_increaseAllowance" [label="increaseAllowance"]
+"467__transfer" [label="_transfer"]
+"467__burn" [label="_burn"]
+"467_totalSupply" [label="totalSupply"]
+"467__mint" [label="_mint"]
+"467_transfer" [label="transfer"]
+"467__burnFrom" [label="_burnFrom"]
+"467_transferFrom" [label="transferFrom"]
+"467_balanceOf" [label="balanceOf"]
+"467_decreaseAllowance" [label="decreaseAllowance"]
+"467_approve" [label="approve"]
+"467_decreaseAllowance" -> "467__msgSender"
+"467_transfer" -> "467__msgSender"
+"467_transferFrom" -> "467__approve"
+"467_approve" -> "467__approve"
+"467__burnFrom" -> "467__msgSender"
+"467_transferFrom" -> "467__transfer"
+"467_transfer" -> "467__transfer"
+"467_approve" -> "467__msgSender"
+"467_transferFrom" -> "467__msgSender"
+"467__burnFrom" -> "467__approve"
+"467_increaseAllowance" -> "467__msgSender"
+"467__burnFrom" -> "467__burn"
+"467_increaseAllowance" -> "467__approve"
+"467_decreaseAllowance" -> "467__approve"
+}subgraph cluster_62_Context {
+label = "Context"
+"62__msgData" [label="_msgData"]
+"62__msgSender" [label="_msgSender"]
+"62_constructor" [label="constructor"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"467__burn" -> "require(bool,string)"
+"467__transfer" -> "require(bool,string)"
+"467__approve" -> "require(bool,string)"
+"467__mint" -> "require(bool,string)"
+"712_add" -> "require(bool,string)"
+"712_mul" -> "require(bool,string)"
+"712_sub" -> "require(bool,string)"
+"712_mod" -> "require(bool,string)"
+"712_div" -> "require(bool,string)"
+}"467_transferFrom" -> "712_sub"
+"467__transfer" -> "712_sub"
+"467__mint" -> "712_add"
+"467__transfer" -> "712_add"
+"467__burnFrom" -> "712_sub"
+"467_decreaseAllowance" -> "712_sub"
+"467__burn" -> "712_sub"
+"467_increaseAllowance" -> "712_add"
+}

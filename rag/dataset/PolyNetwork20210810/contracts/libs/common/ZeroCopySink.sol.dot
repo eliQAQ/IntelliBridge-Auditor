@@ -1,0 +1,62 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterZeroCopySink" {
+  graph [ label = "ZeroCopySink  (lib)", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ZeroCopySink.WriteBool" [ label = "WriteBool", color = "white" ];
+  "ZeroCopySink.WriteByte" [ label = "WriteByte", color = "white" ];
+  "ZeroCopySink.WriteUint8" [ label = "WriteUint8" ];
+  "ZeroCopySink.WriteUint16" [ label = "WriteUint16" ];
+  "ZeroCopySink.WriteUint32" [ label = "WriteUint32" ];
+  "ZeroCopySink.WriteUint64" [ label = "WriteUint64" ];
+  "ZeroCopySink.WriteUint255" [ label = "WriteUint255", color = "white" ];
+  "ZeroCopySink.WriteVarBytes" [ label = "WriteVarBytes", color = "white" ];
+  "ZeroCopySink.WriteVarUint" [ label = "WriteVarUint" ];
+}
+
+  "ZeroCopySink.WriteByte";
+  "ZeroCopySink.WriteUint8";
+  "ZeroCopySink.WriteVarBytes";
+  "ZeroCopySink.WriteVarUint";
+  "ZeroCopySink.WriteUint16";
+  "ZeroCopySink.WriteUint32";
+  "ZeroCopySink.WriteUint64";
+  "ZeroCopySink.WriteByte" -> "ZeroCopySink.WriteUint8" [ color = "green" ];
+  "ZeroCopySink.WriteVarBytes" -> "ZeroCopySink.WriteVarUint" [ color = "green" ];
+  "ZeroCopySink.WriteVarUint" -> "ZeroCopySink.WriteUint8" [ color = "green" ];
+  "ZeroCopySink.WriteVarUint" -> "ZeroCopySink.WriteByte" [ color = "green" ];
+  "ZeroCopySink.WriteVarUint" -> "ZeroCopySink.WriteUint16" [ color = "green" ];
+  "ZeroCopySink.WriteVarUint" -> "ZeroCopySink.WriteByte" [ color = "green" ];
+  "ZeroCopySink.WriteVarUint" -> "ZeroCopySink.WriteUint32" [ color = "green" ];
+  "ZeroCopySink.WriteVarUint" -> "ZeroCopySink.WriteByte" [ color = "green" ];
+  "ZeroCopySink.WriteVarUint" -> "ZeroCopySink.WriteUint64" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

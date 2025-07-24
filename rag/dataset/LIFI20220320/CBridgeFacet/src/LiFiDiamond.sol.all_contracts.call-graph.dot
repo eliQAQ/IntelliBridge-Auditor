@@ -1,0 +1,77 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_154_IDiamondCut {
+label = "IDiamondCut"
+"154_diamondCut" [label="diamondCut"]
+}subgraph cluster_988_LibDiamond {
+label = "LibDiamond"
+"988_removeFunctions" [label="removeFunctions"]
+"988_addFacet" [label="addFacet"]
+"988_diamondStorage" [label="diamondStorage"]
+"988_enforceIsContractOwner" [label="enforceIsContractOwner"]
+"988_initializeDiamondCut" [label="initializeDiamondCut"]
+"988_removeFunction" [label="removeFunction"]
+"988_contractOwner" [label="contractOwner"]
+"988_replaceFunctions" [label="replaceFunctions"]
+"988_addFunction" [label="addFunction"]
+"988_addFunctions" [label="addFunctions"]
+"988_setContractOwner" [label="setContractOwner"]
+"988_diamondCut" [label="diamondCut"]
+"988_enforceHasContractCode" [label="enforceHasContractCode"]
+"988_replaceFunctions" -> "988_diamondStorage"
+"988_addFunctions" -> "988_addFacet"
+"988_setContractOwner" -> "988_diamondStorage"
+"988_addFunctions" -> "988_addFunction"
+"988_removeFunctions" -> "988_removeFunction"
+"988_replaceFunctions" -> "988_addFunction"
+"988_removeFunctions" -> "988_diamondStorage"
+"988_addFunctions" -> "988_diamondStorage"
+"988_initializeDiamondCut" -> "988_enforceHasContractCode"
+"988_contractOwner" -> "988_diamondStorage"
+"988_addFacet" -> "988_enforceHasContractCode"
+"988_diamondCut" -> "988_initializeDiamondCut"
+"988_diamondCut" -> "988_addFunctions"
+"988_diamondCut" -> "988_replaceFunctions"
+"988_replaceFunctions" -> "988_removeFunction"
+"988_enforceIsContractOwner" -> "988_diamondStorage"
+"988_replaceFunctions" -> "988_addFacet"
+"988_diamondCut" -> "988_removeFunctions"
+}subgraph cluster_116_LiFiDiamond {
+label = "LiFiDiamond"
+"116_receive" [label="receive"]
+"116_fallback" [label="fallback"]
+"116_constructor" [label="constructor"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"delegatecall(uint256,uint256,uint256,uint256,uint256,uint256)" 
+"returndatasize()" 
+"calldatacopy(uint256,uint256,uint256)" 
+"calldatasize()" 
+"gas()" 
+"revert(string)" 
+"require(bool,string)" 
+"revert(uint256,uint256)" 
+"returndatacopy(uint256,uint256,uint256)" 
+"return(uint256,uint256)" 
+"988_initializeDiamondCut" -> "require(bool,string)"
+"116_fallback" -> "require(bool,string)"
+"116_fallback" -> "calldatasize()"
+"988_replaceFunctions" -> "require(bool,string)"
+"116_fallback" -> "gas()"
+"116_fallback" -> "returndatasize()"
+"988_removeFunctions" -> "require(bool,string)"
+"116_fallback" -> "returndatacopy(uint256,uint256,uint256)"
+"988_enforceIsContractOwner" -> "require(bool,string)"
+"988_enforceHasContractCode" -> "require(bool,string)"
+"988_diamondCut" -> "revert(string)"
+"988_removeFunction" -> "require(bool,string)"
+"116_fallback" -> "revert(uint256,uint256)"
+"988_addFunctions" -> "require(bool,string)"
+"988_initializeDiamondCut" -> "revert(string)"
+"116_fallback" -> "calldatacopy(uint256,uint256,uint256)"
+"116_fallback" -> "delegatecall(uint256,uint256,uint256,uint256,uint256,uint256)"
+"116_fallback" -> "return(uint256,uint256)"
+}"116_constructor" -> "988_diamondCut"
+"116_constructor" -> "988_setContractOwner"
+}

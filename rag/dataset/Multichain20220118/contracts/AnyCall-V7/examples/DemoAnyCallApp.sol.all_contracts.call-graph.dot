@@ -1,0 +1,80 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_740_IAnyCallReceiver {
+label = "IAnyCallReceiver"
+"740_anyExecute" [label="anyExecute"]
+}subgraph cluster_239_DemoAnyCallApp {
+label = "DemoAnyCallApp"
+"239__anyFallback" [label="_anyFallback"]
+"239_setPeer" [label="setPeer"]
+"239__beforeSend" [label="_beforeSend"]
+"239_receiveBlockInfo" [label="receiveBlockInfo"]
+"239__anyExecute" [label="_anyExecute"]
+"239_setFee" [label="setFee"]
+"239_sendBlockInfo" [label="sendBlockInfo"]
+"239_constructor" [label="constructor"]
+"239__anyExecute" -> "239_receiveBlockInfo"
+"239__anyExecute" -> "239_sendBlockInfo"
+"239_constructor" -> "239_constructor"
+"239_setPeer" -> "239_onlyAdmin"
+"239_setFee" -> "239_onlyAdmin"
+"239_sendBlockInfo" -> "239__beforeSend"
+"239_sendBlockInfo" -> "239__anyCall"
+}subgraph cluster_722_IAnyCallProxyV7 {
+label = "IAnyCallProxyV7"
+"722_approve" [label="approve"]
+"722_executor" [label="executor"]
+"722_withdraw" [label="withdraw"]
+"722_deposit" [label="deposit"]
+"722_retry" [label="retry"]
+"722_anyCall" [label="anyCall"]
+}subgraph cluster_659_Administrable {
+label = "Administrable"
+"659_transferAdmin" [label="transferAdmin"]
+"659_setAdmin" [label="setAdmin"]
+"659_acceptAdmin" [label="acceptAdmin"]
+"659_transferAdmin" -> "659_onlyAdmin"
+}subgraph cluster_532_AnyCallApp {
+label = "AnyCallApp"
+"532_setAnyCallProxy" [label="setAnyCallProxy"]
+"532__anyFallback" [label="_anyFallback"]
+"532_approve" [label="approve"]
+"532_anyExecute" [label="anyExecute"]
+"532_depositAnyCallFee" [label="depositAnyCallFee"]
+"532_constructor" [label="constructor"]
+"532__anyExecute" [label="_anyExecute"]
+"532_setSenders" [label="setSenders"]
+"532_anyFallback" [label="anyFallback"]
+"532__anyCall" [label="_anyCall"]
+"532_withdrawAnyCallFee" [label="withdrawAnyCallFee"]
+"532_anyExecute" -> "532__anyExecute"
+"532_anyExecute" -> "532_onlyExecutor"
+"532_setAnyCallProxy" -> "532_onlyAdmin"
+"532_anyFallback" -> "532__anyFallback"
+"532_withdrawAnyCallFee" -> "532_onlyAdmin"
+"532_anyFallback" -> "532_onlyExecutor"
+"532_setSenders" -> "532_onlyAdmin"
+"532_approve" -> "532_onlyAdmin"
+}subgraph cluster_760_IAnyCallSender {
+label = "IAnyCallSender"
+"760_anyFallback" [label="anyFallback"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"abi.encodePacked()" 
+"require(bool,string)" 
+"abi.decode()" 
+"require(bool)" 
+"659_acceptAdmin" -> "require(bool)"
+"239_sendBlockInfo" -> "abi.encodePacked()"
+"532_anyExecute" -> "require(bool,string)"
+"532_anyFallback" -> "require(bool,string)"
+"239__anyExecute" -> "abi.decode()"
+"239__anyFallback" -> "abi.decode()"
+"532_withdrawAnyCallFee" -> "require(bool)"
+}"532__anyCall" -> "722_anyCall"
+"532_withdrawAnyCallFee" -> "722_withdraw"
+"532_approve" -> "722_approve"
+"532_depositAnyCallFee" -> "722_deposit"
+"532_anyFallback" -> "722_executor"
+}

@@ -1,0 +1,62 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_332_LibBytes {
+label = "LibBytes"
+"332_toUint128" [label="toUint128"]
+"332_toAddress" [label="toAddress"]
+"332_toBytes32" [label="toBytes32"]
+"332_toUint256" [label="toUint256"]
+"332_toUint32" [label="toUint32"]
+"332_concat" [label="concat"]
+"332_equal" [label="equal"]
+"332_toUint16" [label="toUint16"]
+"332_toUint64" [label="toUint64"]
+"332_concatStorage" [label="concatStorage"]
+"332_toUint96" [label="toUint96"]
+"332_equalStorage" [label="equalStorage"]
+"332_slice" [label="slice"]
+"332_toUint8" [label="toUint8"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"keccak256(uint256,uint256)" 
+"require(bool,string)" 
+"mload(uint256)" 
+"mstore(uint256,uint256)" 
+"sstore(uint256,uint256)" 
+"sload(uint256)" 
+"332_toAddress" -> "mload(uint256)"
+"332_equalStorage" -> "mload(uint256)"
+"332_toUint128" -> "require(bool,string)"
+"332_concat" -> "mstore(uint256,uint256)"
+"332_concat" -> "mload(uint256)"
+"332_toUint96" -> "mload(uint256)"
+"332_toUint16" -> "mload(uint256)"
+"332_equalStorage" -> "sload(uint256)"
+"332_concatStorage" -> "keccak256(uint256,uint256)"
+"332_equalStorage" -> "keccak256(uint256,uint256)"
+"332_slice" -> "mload(uint256)"
+"332_toUint64" -> "require(bool,string)"
+"332_toUint128" -> "mload(uint256)"
+"332_slice" -> "require(bool,string)"
+"332_equal" -> "mload(uint256)"
+"332_toUint8" -> "mload(uint256)"
+"332_toUint256" -> "mload(uint256)"
+"332_toUint16" -> "require(bool,string)"
+"332_concatStorage" -> "sstore(uint256,uint256)"
+"332_toUint96" -> "require(bool,string)"
+"332_concatStorage" -> "mload(uint256)"
+"332_slice" -> "mstore(uint256,uint256)"
+"332_toBytes32" -> "require(bool,string)"
+"332_toUint64" -> "mload(uint256)"
+"332_concatStorage" -> "sload(uint256)"
+"332_toUint256" -> "require(bool,string)"
+"332_toAddress" -> "require(bool,string)"
+"332_concatStorage" -> "mstore(uint256,uint256)"
+"332_toUint32" -> "mload(uint256)"
+"332_toUint32" -> "require(bool,string)"
+"332_toUint8" -> "require(bool,string)"
+"332_equalStorage" -> "mstore(uint256,uint256)"
+"332_toBytes32" -> "mload(uint256)"
+}
+}

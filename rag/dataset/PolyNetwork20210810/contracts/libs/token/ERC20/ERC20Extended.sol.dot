@@ -1,0 +1,68 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterERC20Extended" {
+  graph [ label = "ERC20Extended", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "ERC20Extended.onlyManagerContract" [ label = "onlyManagerContract", color = "yellow" ];
+  "ERC20Extended.onlyOperator" [ label = "onlyOperator", color = "yellow" ];
+  "ERC20Extended.mint" [ label = "mint", color = "green" ];
+  "ERC20Extended.burn" [ label = "burn", color = "green" ];
+  "ERC20Extended.setManagerProxy" [ label = "setManagerProxy", color = "green" ];
+  "ERC20Extended.bindAssetHash" [ label = "bindAssetHash", color = "green" ];
+  "ERC20Extended.IEthCrossChainManagerProxy" [ label = "IEthCrossChainManagerProxy" ];
+  "ERC20Extended._msgSender" [ label = "_msgSender" ];
+  "ERC20Extended._mint" [ label = "_mint" ];
+  "ERC20Extended._burn" [ label = "_burn" ];
+}
+
+subgraph "clusterIEthCrossChainManagerProxy" {
+  graph [ label = "IEthCrossChainManagerProxy", color = "lightgray" ];
+  "IEthCrossChainManagerProxy.getEthCrossChainManager" [ label = "getEthCrossChainManager" ];
+}
+
+  "ERC20Extended.onlyManagerContract";
+  "ERC20Extended.IEthCrossChainManagerProxy";
+  "ERC20Extended._msgSender";
+  "IEthCrossChainManagerProxy.getEthCrossChainManager";
+  "ERC20Extended.onlyOperator";
+  "ERC20Extended.mint";
+  "ERC20Extended._mint";
+  "ERC20Extended.burn";
+  "ERC20Extended._burn";
+  "ERC20Extended.onlyManagerContract" -> "ERC20Extended.IEthCrossChainManagerProxy" [ color = "green" ];
+  "ERC20Extended.onlyManagerContract" -> "ERC20Extended._msgSender" [ color = "green" ];
+  "ERC20Extended.onlyManagerContract" -> "IEthCrossChainManagerProxy.getEthCrossChainManager" [ color = "orange" ];
+  "ERC20Extended.onlyOperator" -> "ERC20Extended._msgSender" [ color = "green" ];
+  "ERC20Extended.mint" -> "ERC20Extended._mint" [ color = "green" ];
+  "ERC20Extended.burn" -> "ERC20Extended._burn" [ color = "green" ];
+  "ERC20Extended.burn" -> "ERC20Extended._msgSender" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

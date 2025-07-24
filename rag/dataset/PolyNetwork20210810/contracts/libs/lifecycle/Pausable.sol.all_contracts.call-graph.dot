@@ -1,0 +1,22 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_80_Pausable {
+label = "Pausable"
+"80_constructor" [label="constructor"]
+"80__unpause" [label="_unpause"]
+"80_paused" [label="paused"]
+"80__pause" [label="_pause"]
+"80__unpause" -> "80_whenPaused"
+"80__pause" -> "80__msgSender"
+"80__unpause" -> "80__msgSender"
+"80__pause" -> "80_whenNotPaused"
+}subgraph cluster_107_Context {
+label = "Context"
+"107__msgData" [label="_msgData"]
+"107_constructor" [label="constructor"]
+"107__msgSender" [label="_msgSender"]
+}subgraph cluster_solidity {
+label = "[Solidity]"
+}
+}

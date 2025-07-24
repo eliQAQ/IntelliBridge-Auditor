@@ -1,0 +1,90 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_715_StorageSlot {
+label = "StorageSlot"
+"715_getBytes32Slot" [label="getBytes32Slot"]
+"715_getAddressSlot" [label="getAddressSlot"]
+"715_getUint256Slot" [label="getUint256Slot"]
+"715_getBooleanSlot" [label="getBooleanSlot"]
+}subgraph cluster_348_ERC1967Upgrade {
+label = "ERC1967Upgrade"
+"348__changeAdmin" [label="_changeAdmin"]
+"348__getImplementation" [label="_getImplementation"]
+"348__upgradeToAndCall" [label="_upgradeToAndCall"]
+"348__setImplementation" [label="_setImplementation"]
+"348__setAdmin" [label="_setAdmin"]
+"348__upgradeTo" [label="_upgradeTo"]
+"348__getAdmin" [label="_getAdmin"]
+"348__upgradeToAndCallSecure" [label="_upgradeToAndCallSecure"]
+"348__getBeacon" [label="_getBeacon"]
+"348__setBeacon" [label="_setBeacon"]
+"348__upgradeBeaconToAndCall" [label="_upgradeBeaconToAndCall"]
+"348__changeAdmin" -> "348__getAdmin"
+"348__upgradeToAndCall" -> "348__upgradeTo"
+"348__upgradeToAndCallSecure" -> "348__getImplementation"
+"348__upgradeToAndCallSecure" -> "348__upgradeTo"
+"348__upgradeBeaconToAndCall" -> "348__setBeacon"
+"348__upgradeToAndCallSecure" -> "348__setImplementation"
+"348__changeAdmin" -> "348__setAdmin"
+"348__upgradeTo" -> "348__setImplementation"
+}subgraph cluster_358_IBeacon {
+label = "IBeacon"
+"358_implementation" [label="implementation"]
+}subgraph cluster_655_Address {
+label = "Address"
+"655_functionCallWithValue" [label="functionCallWithValue"]
+"655_verifyCallResult" [label="verifyCallResult"]
+"655_sendValue" [label="sendValue"]
+"655_functionStaticCall" [label="functionStaticCall"]
+"655_functionCall" [label="functionCall"]
+"655_functionDelegateCall" [label="functionDelegateCall"]
+"655_isContract" [label="isContract"]
+"655_functionCallWithValue" -> "655_functionCallWithValue"
+"655_functionCallWithValue" -> "655_isContract"
+"655_functionDelegateCall" -> "655_isContract"
+"655_functionCall" -> "655_functionCallWithValue"
+"655_functionStaticCall" -> "655_verifyCallResult"
+"655_functionStaticCall" -> "655_isContract"
+"655_functionCall" -> "655_functionCall"
+"655_functionDelegateCall" -> "655_functionDelegateCall"
+"655_functionStaticCall" -> "655_functionStaticCall"
+"655_functionDelegateCall" -> "655_verifyCallResult"
+"655_functionCallWithValue" -> "655_verifyCallResult"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"mload(uint256)" 
+"revert(string)" 
+"revert(uint256,uint256)" 
+"balance(address)" 
+"require(bool,string)" 
+"abi.encodeWithSignature()" 
+"655_functionCallWithValue" -> "require(bool,string)"
+"655_functionStaticCall" -> "require(bool,string)"
+"348__setImplementation" -> "require(bool,string)"
+"348__upgradeToAndCallSecure" -> "require(bool,string)"
+"655_functionCallWithValue" -> "balance(address)"
+"348__setAdmin" -> "require(bool,string)"
+"655_sendValue" -> "balance(address)"
+"655_sendValue" -> "require(bool,string)"
+"655_verifyCallResult" -> "revert(string)"
+"348__setBeacon" -> "require(bool,string)"
+"655_verifyCallResult" -> "mload(uint256)"
+"655_functionDelegateCall" -> "require(bool,string)"
+"348__upgradeToAndCallSecure" -> "abi.encodeWithSignature()"
+"655_verifyCallResult" -> "revert(uint256,uint256)"
+}"348__setBeacon" -> "715_getAddressSlot"
+"348__getImplementation" -> "715_getAddressSlot"
+"348__upgradeBeaconToAndCall" -> "358_implementation"
+"348__setBeacon" -> "358_implementation"
+"348__getBeacon" -> "715_getAddressSlot"
+"348__upgradeToAndCall" -> "655_functionDelegateCall"
+"348__upgradeToAndCallSecure" -> "715_getBooleanSlot"
+"348__upgradeBeaconToAndCall" -> "655_functionDelegateCall"
+"348__upgradeToAndCallSecure" -> "655_functionDelegateCall"
+"348__setImplementation" -> "655_isContract"
+"348__getAdmin" -> "715_getAddressSlot"
+"348__setAdmin" -> "715_getAddressSlot"
+"348__setBeacon" -> "655_isContract"
+"348__setImplementation" -> "715_getAddressSlot"
+}

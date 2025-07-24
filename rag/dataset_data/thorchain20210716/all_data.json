@@ -1,0 +1,752 @@
+{
+    "solidity_file": {
+        "C:\\Users\\wy\\Desktop\\rag\\dataset\\thorchain20210716\\0x4A33862042D004D3fc45E284E1aaFa05B48e3c9C\\THORChain_Router.sol": {
+            "filepath": "C:\\Users\\wy\\Desktop\\rag\\dataset\\thorchain20210716\\0x4A33862042D004D3fc45E284E1aaFa05B48e3c9C\\THORChain_Router.sol",
+            "filename": "THORChain_Router.sol",
+            "imported_contracts": {},
+            "contracts": {
+                "iERC20": {
+                    "type": {
+                        "__CT__": true,
+                        "value": 3
+                    },
+                    "is_abstract": false,
+                    "inherits": [],
+                    "state_variables": {},
+                    "functions": {
+                        "balanceOf": [
+                            {
+                                "visibility": "external",
+                                "content": "function balanceOf(address) external view returns (uint256);",
+                                "modifiers": [
+                                    "view"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": null
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "uint256",
+                                        "name": null
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "6c216aaf8fbc7fe0b0d71e90c12664c2"
+                            }
+                        ],
+                        "burn": [
+                            {
+                                "visibility": "external",
+                                "content": "function burn(uint) external;",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "uint",
+                                        "name": null
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "3f95dcddaef548b13d618b240ab30876"
+                            }
+                        ]
+                    },
+                    "modifiers": {},
+                    "structs": {},
+                    "events": {},
+                    "enums": {},
+                    "errors": {},
+                    "custom_types": {},
+                    "using_directives": {},
+                    "implement": []
+                },
+                "iRUNE": {
+                    "type": {
+                        "__CT__": true,
+                        "value": 3
+                    },
+                    "is_abstract": false,
+                    "inherits": [],
+                    "state_variables": {},
+                    "functions": {
+                        "transferTo": [
+                            {
+                                "visibility": "external",
+                                "content": "function transferTo(address, uint) external returns (bool);",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": null
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": null
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "bool",
+                                        "name": null
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "4d19caa0ab703674345a8f0a3bacfa76"
+                            }
+                        ]
+                    },
+                    "modifiers": {},
+                    "structs": {},
+                    "events": {},
+                    "enums": {},
+                    "errors": {},
+                    "custom_types": {},
+                    "using_directives": {},
+                    "implement": []
+                },
+                "iROUTER": {
+                    "type": {
+                        "__CT__": true,
+                        "value": 3
+                    },
+                    "is_abstract": false,
+                    "inherits": [],
+                    "state_variables": {},
+                    "functions": {
+                        "depositWithExpiry": [
+                            {
+                                "visibility": "external",
+                                "content": "function depositWithExpiry(address, address, uint, string calldata, uint) external;",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": null
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": null
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": null
+                                    },
+                                    {
+                                        "type": "string calldata",
+                                        "name": null
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": null
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "b8fcc6a4d4235bffcf344d38c5a2ae31"
+                            }
+                        ]
+                    },
+                    "modifiers": {},
+                    "structs": {},
+                    "events": {},
+                    "enums": {},
+                    "errors": {},
+                    "custom_types": {},
+                    "using_directives": {},
+                    "implement": []
+                },
+                "THORChain_Router": {
+                    "type": {
+                        "__CT__": true,
+                        "value": 1
+                    },
+                    "is_abstract": false,
+                    "inherits": [],
+                    "state_variables": {
+                        "RUNE": {
+                            "type": "address",
+                            "visibility": "public",
+                            "is_constant": false,
+                            "is_immutable": false,
+                            "is_override": false,
+                            "initial_value": null,
+                            "content": "address public RUNE;"
+                        },
+                        "vaultAllowance": {
+                            "type": "mapping(address => mapping(address => uint))",
+                            "visibility": "public",
+                            "is_constant": false,
+                            "is_immutable": false,
+                            "is_override": false,
+                            "initial_value": null,
+                            "content": "mapping(address => mapping(address => uint)) public vaultAllowance;"
+                        },
+                        "_NOT_ENTERED": {
+                            "type": "uint256",
+                            "visibility": "private",
+                            "is_constant": true,
+                            "is_immutable": false,
+                            "is_override": false,
+                            "initial_value": "1",
+                            "content": "uint256 private constant _NOT_ENTERED = 1;"
+                        },
+                        "_ENTERED": {
+                            "type": "uint256",
+                            "visibility": "private",
+                            "is_constant": true,
+                            "is_immutable": false,
+                            "is_override": false,
+                            "initial_value": "2",
+                            "content": "uint256 private constant _ENTERED = 2;"
+                        },
+                        "_status": {
+                            "type": "uint256",
+                            "visibility": "private",
+                            "is_constant": false,
+                            "is_immutable": false,
+                            "is_override": false,
+                            "initial_value": null,
+                            "content": "uint256 private _status;"
+                        }
+                    },
+                    "functions": {
+                        "constructor": [
+                            {
+                                "visibility": "public",
+                                "content": "constructor (address rune){ RUNE = rune; _status = _NOT_ENTERED;}",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "rune"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [
+                                    [
+                                        "RUNE",
+                                        "",
+                                        "THORChain_Router"
+                                    ],
+                                    [
+                                        "_NOT_ENTERED",
+                                        "",
+                                        "THORChain_Router"
+                                    ],
+                                    [
+                                        "_status",
+                                        "",
+                                        "THORChain_Router"
+                                    ]
+                                ],
+                                "writes": [
+                                    [
+                                        "RUNE",
+                                        "",
+                                        "THORChain_Router"
+                                    ],
+                                    [
+                                        "_status",
+                                        "",
+                                        "THORChain_Router"
+                                    ]
+                                ],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "1e6994c006078804c2e3e56ba7b7594a"
+                            }
+                        ],
+                        "depositWithExpiry": [
+                            {
+                                "visibility": "external",
+                                "content": "function depositWithExpiry(address payable vault, address asset, uint amount, string memory memo, uint expiration) external payable{ require(block.timestamp < expiration, \"THORChain_Router: expired\"); deposit(vault, asset, amount, memo);}",
+                                "modifiers": [
+                                    "payable"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "address payable",
+                                        "name": "vault"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "asset"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amount"
+                                    },
+                                    {
+                                        "type": "string memory",
+                                        "name": "memo"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "expiration"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "THORChain_Router.deposit"
+                                    ]
+                                },
+                                "is_payable": true,
+                                "md5": "5ff6be2d28701d049bde0c8ca8b4e763"
+                            }
+                        ],
+                        "deposit": [
+                            {
+                                "visibility": "public",
+                                "content": "function deposit(address payable vault, address asset, uint amount, string memory memo) public payable nonReentrant{ uint safeAmount; if(asset == address(0)){ safeAmount = msg.value; (bool success, ) = vault.call{ value:safeAmount} (\"\"); require(success);} else if(asset == RUNE){ safeAmount = amount; iRUNE(RUNE).transferTo(address(this), amount); iERC20(RUNE).burn(amount);} else{ safeAmount = safeTransferFrom(asset, amount); vaultAllowance[vault][asset] += safeAmount;} emit Deposit(vault, asset, safeAmount, memo);}",
+                                "modifiers": [
+                                    "payable",
+                                    "nonReentrant"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "address payable",
+                                        "name": "vault"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "asset"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amount"
+                                    },
+                                    {
+                                        "type": "string memory",
+                                        "name": "memo"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [
+                                    [
+                                        "RUNE",
+                                        "",
+                                        "THORChain_Router"
+                                    ],
+                                    [
+                                        "vaultAllowance",
+                                        "",
+                                        "THORChain_Router"
+                                    ]
+                                ],
+                                "writes": [
+                                    [
+                                        "vaultAllowance",
+                                        "",
+                                        "THORChain_Router"
+                                    ]
+                                ],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "THORChain_Router.nonReentrant",
+                                        "THORChain_Router.safeTransferFrom"
+                                    ]
+                                },
+                                "is_payable": true,
+                                "md5": "ec1034f77adf2b42b0da658b2e89fc5d"
+                            }
+                        ],
+                        "transferAllowance": [
+                            {
+                                "visibility": "external",
+                                "content": "function transferAllowance(address router, address newVault, address asset, uint amount, string memory memo) external{ if (router == address(this)){ _adjustAllowances(newVault, asset, amount); emit TransferAllowance(msg.sender, newVault, asset, amount, memo);} else{ _routerDeposit(router, newVault, asset, amount, memo);}}",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "router"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "newVault"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "asset"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amount"
+                                    },
+                                    {
+                                        "type": "string memory",
+                                        "name": "memo"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "THORChain_Router._adjustAllowances",
+                                        "THORChain_Router._routerDeposit"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "2452d760f1e759846f8152a764c104bd"
+                            }
+                        ],
+                        "transferOut": [
+                            {
+                                "visibility": "public",
+                                "content": "function transferOut(address payable to, address asset, uint amount, string memory memo) public payable nonReentrant{ uint safeAmount; bool success; if(asset == address(0)){ safeAmount = msg.value; (success, ) = to.call{ value:msg.value} (\"\");} else{ vaultAllowance[msg.sender][asset] -= amount; (success, ) = asset.call(abi.encodeWithSignature(\"transfer(address, uint256)\", to, amount)); safeAmount = amount;} require(success); emit TransferOut(msg.sender, to, asset, safeAmount, memo);}",
+                                "modifiers": [
+                                    "payable",
+                                    "nonReentrant"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "address payable",
+                                        "name": "to"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "asset"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "amount"
+                                    },
+                                    {
+                                        "type": "string memory",
+                                        "name": "memo"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [
+                                    [
+                                        "vaultAllowance",
+                                        "",
+                                        "THORChain_Router"
+                                    ]
+                                ],
+                                "writes": [
+                                    [
+                                        "vaultAllowance",
+                                        "",
+                                        "THORChain_Router"
+                                    ]
+                                ],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "THORChain_Router.nonReentrant",
+                                        "asset.call"
+                                    ]
+                                },
+                                "is_payable": true,
+                                "md5": "e65e550d9b6b976c0b02a40ed73955bb"
+                            }
+                        ],
+                        "batchTransferOut": [
+                            {
+                                "visibility": "external",
+                                "content": "function batchTransferOut(address[] memory recipients, Coin[] memory coins, string[] memory memos) external payable{ require((recipients.length == coins.length) && (coins.length == memos.length)); for(uint i = 0; i < coins.length; i++){ transferOut(payable(recipients[i]), coins[i].asset, coins[i].amount, memos[i]);}}",
+                                "modifiers": [
+                                    "payable"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "address[] memory",
+                                        "name": "recipients"
+                                    },
+                                    {
+                                        "type": "Coin[] memory",
+                                        "name": "coins"
+                                    },
+                                    {
+                                        "type": "string[] memory",
+                                        "name": "memos"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "THORChain_Router.transferOut"
+                                    ]
+                                },
+                                "is_payable": true,
+                                "md5": "fe84b682cb4872dbb4b21ed3ae51787b"
+                            }
+                        ],
+                        "returnVaultAssets": [
+                            {
+                                "visibility": "external",
+                                "content": "function returnVaultAssets(address router, address payable asgard, Coin[] memory coins, string memory memo) external payable{ if (router == address(this)){ for(uint i = 0; i < coins.length; i++){ _adjustAllowances(asgard, coins[i].asset, coins[i].amount);} emit VaultTransfer(msg.sender, asgard, coins, memo);} else{ for(uint i = 0; i < coins.length; i++){ _routerDeposit(router, asgard, coins[i].asset, coins[i].amount, memo);}} (bool success, ) = asgard.call{ value:msg.value} (\"\"); require(success);}",
+                                "modifiers": [
+                                    "payable"
+                                ],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "router"
+                                    },
+                                    {
+                                        "type": "address payable",
+                                        "name": "asgard"
+                                    },
+                                    {
+                                        "type": "Coin[] memory",
+                                        "name": "coins"
+                                    },
+                                    {
+                                        "type": "string memory",
+                                        "name": "memo"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "THORChain_Router._adjustAllowances",
+                                        "THORChain_Router._routerDeposit"
+                                    ]
+                                },
+                                "is_payable": true,
+                                "md5": "2acae2e055c4c244b7b7aadab3461d55"
+                            }
+                        ],
+                        "safeTransferFrom": [
+                            {
+                                "visibility": "internal",
+                                "content": "function safeTransferFrom(address _asset, uint _amount) internal returns(uint amount){ uint _startBal = iERC20(_asset).balanceOf(address(this)); (bool success, ) = _asset.call(abi.encodeWithSignature(\"transferFrom(address, address, uint256)\", msg.sender, address(this), _amount)); require(success); return (iERC20(_asset).balanceOf(address(this)) - _startBal);}",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "_asset"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "_amount"
+                                    }
+                                ],
+                                "returns": [
+                                    {
+                                        "type": "uint",
+                                        "name": "amount"
+                                    }
+                                ],
+                                "reads": [],
+                                "writes": [],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "_asset.call"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "25dde29dea1e70272d67742c9e40d214"
+                            }
+                        ],
+                        "_adjustAllowances": [
+                            {
+                                "visibility": "internal",
+                                "content": "function _adjustAllowances(address _newVault, address _asset, uint _amount) internal{ vaultAllowance[msg.sender][_asset] -= _amount; vaultAllowance[_newVault][_asset] += _amount;}",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "_newVault"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "_asset"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "_amount"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [
+                                    [
+                                        "vaultAllowance",
+                                        "",
+                                        "THORChain_Router"
+                                    ]
+                                ],
+                                "writes": [
+                                    [
+                                        "vaultAllowance",
+                                        "",
+                                        "THORChain_Router"
+                                    ]
+                                ],
+                                "external_calls": [],
+                                "is_payable": false,
+                                "md5": "37a961a1422e5eb66b5641cea4d87186"
+                            }
+                        ],
+                        "_routerDeposit": [
+                            {
+                                "visibility": "internal",
+                                "content": "function _routerDeposit(address _router, address _vault, address _asset, uint _amount, string memory _memo) internal{ vaultAllowance[msg.sender][_asset] -= _amount; (bool success, ) = _asset.call(abi.encodeWithSignature(\"approve(address, uint256)\", _router, _amount)); require(success); iROUTER(_router).depositWithExpiry(_vault, _asset, _amount, _memo, type (uint).max);}",
+                                "modifiers": [],
+                                "parameters": [
+                                    {
+                                        "type": "address",
+                                        "name": "_router"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "_vault"
+                                    },
+                                    {
+                                        "type": "address",
+                                        "name": "_asset"
+                                    },
+                                    {
+                                        "type": "uint",
+                                        "name": "_amount"
+                                    },
+                                    {
+                                        "type": "string memory",
+                                        "name": "_memo"
+                                    }
+                                ],
+                                "returns": [],
+                                "reads": [
+                                    [
+                                        "vaultAllowance",
+                                        "",
+                                        "THORChain_Router"
+                                    ]
+                                ],
+                                "writes": [
+                                    [
+                                        "vaultAllowance",
+                                        "",
+                                        "THORChain_Router"
+                                    ]
+                                ],
+                                "external_calls": {
+                                    "__set__": true,
+                                    "values": [
+                                        "_asset.call",
+                                        "THORChain_Router.type"
+                                    ]
+                                },
+                                "is_payable": false,
+                                "md5": "ac38ea662f9f2a9b590419b9fea7aefd"
+                            }
+                        ]
+                    },
+                    "modifiers": {
+                        "nonReentrant": {
+                            "parameters": [],
+                            "content": "modifier nonReentrant(){ require(_status != _ENTERED, \"ReentrancyGuard: reentrant call\"); _status = _ENTERED; _; _status = _NOT_ENTERED;}",
+                            "reads": [
+                                [
+                                    "_NOT_ENTERED",
+                                    "",
+                                    "THORChain_Router"
+                                ],
+                                [
+                                    "_ENTERED",
+                                    "",
+                                    "THORChain_Router"
+                                ],
+                                [
+                                    "_status",
+                                    "",
+                                    "THORChain_Router"
+                                ]
+                            ],
+                            "writes": [
+                                [
+                                    "_status",
+                                    "",
+                                    "THORChain_Router"
+                                ]
+                            ],
+                            "external_calls": [],
+                            "md5": "bfd26885a528af04ff7161b74f7a2107"
+                        }
+                    },
+                    "structs": {
+                        "Coin": {
+                            "content": "Coin{ address asset; uint amount;}"
+                        }
+                    },
+                    "events": {
+                        "Deposit": {
+                            "event": "Deposit",
+                            "content": "Deposit(address indexed to, address indexed asset, uint amount, string memo)"
+                        },
+                        "TransferOut": {
+                            "event": "TransferOut",
+                            "content": "TransferOut(address indexed vault, address indexed to, address asset, uint amount, string memo)"
+                        },
+                        "TransferAllowance": {
+                            "event": "TransferAllowance",
+                            "content": "TransferAllowance(address indexed oldVault, address indexed newVault, address asset, uint amount, string memo)"
+                        },
+                        "VaultTransfer": {
+                            "event": "VaultTransfer",
+                            "content": "VaultTransfer(address indexed oldVault, address indexed newVault, Coin[] coins, string memo)"
+                        }
+                    },
+                    "enums": {},
+                    "errors": {},
+                    "custom_types": {},
+                    "using_directives": {}
+                }
+            },
+            "state_variables": {},
+            "functions": {},
+            "modifiers": {},
+            "structs": {},
+            "events": {},
+            "enums": {},
+            "errors": {},
+            "custom_types": {},
+            "using_directives": {},
+            "external_functions": {
+                "THORChain_Router.deposit": "ec1034f77adf2b42b0da658b2e89fc5d",
+                "THORChain_Router.safeTransferFrom": "25dde29dea1e70272d67742c9e40d214",
+                "THORChain_Router.nonReentrant": "bfd26885a528af04ff7161b74f7a2107",
+                "THORChain_Router._adjustAllowances": "37a961a1422e5eb66b5641cea4d87186",
+                "THORChain_Router._routerDeposit": "ac38ea662f9f2a9b590419b9fea7aefd",
+                "THORChain_Router.transferOut": "e65e550d9b6b976c0b02a40ed73955bb"
+            },
+            "md5": "001df7c5a6b0af3a518f497cb6a99d46"
+        }
+    },
+    "handled_md5": {
+        "__set__": true,
+        "values": [
+            "001df7c5a6b0af3a518f497cb6a99d46"
+        ]
+    }
+}

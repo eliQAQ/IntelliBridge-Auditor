@@ -1,0 +1,105 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterNativeOptimismImpl" {
+  graph [ label = "NativeOptimismImpl", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "NativeOptimismImpl.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "NativeOptimismImpl.bridgeAfterSwap" [ label = "bridgeAfterSwap", color = "blue" ];
+  "NativeOptimismImpl.swapAndBridge" [ label = "swapAndBridge", color = "blue" ];
+  "NativeOptimismImpl.bridgeERC20To" [ label = "bridgeERC20To", color = "blue" ];
+  "NativeOptimismImpl.bridgeNativeTo" [ label = "bridgeNativeTo", color = "blue" ];
+  "NativeOptimismImpl.SocketBridge" [ label = "SocketBridge" ];
+  "NativeOptimismImpl.L1StandardBridge" [ label = "L1StandardBridge" ];
+  "NativeOptimismImpl.UnsupportedInterfaceId" [ label = "UnsupportedInterfaceId" ];
+  "NativeOptimismImpl.ERC20" [ label = "ERC20" ];
+  "NativeOptimismImpl.address" [ label = "address" ];
+  "NativeOptimismImpl.OldL1TokenGateway" [ label = "OldL1TokenGateway" ];
+}
+
+subgraph "clustersocketRoute" {
+  graph [ label = "socketRoute", color = "lightgray" ];
+  "socketRoute.getRoute" [ label = "getRoute" ];
+}
+
+subgraph "clusterERC20" {
+  graph [ label = "ERC20", color = "lightgray" ];
+  "ERC20.safeTransferFrom" [ label = "safeTransferFrom" ];
+  "ERC20.allowance" [ label = "allowance" ];
+  "ERC20.safeApprove" [ label = "safeApprove" ];
+}
+
+  "NativeOptimismImpl.bridgeAfterSwap";
+  "NativeOptimismImpl.SocketBridge";
+  "NativeOptimismImpl.L1StandardBridge";
+  "NativeOptimismImpl.UnsupportedInterfaceId";
+  "NativeOptimismImpl.ERC20";
+  "NativeOptimismImpl.address";
+  "NativeOptimismImpl.OldL1TokenGateway";
+  "NativeOptimismImpl.swapAndBridge";
+  "socketRoute.getRoute";
+  "NativeOptimismImpl.bridgeERC20To";
+  "ERC20.safeTransferFrom";
+  "ERC20.allowance";
+  "ERC20.safeApprove";
+  "NativeOptimismImpl.bridgeNativeTo";
+  "NativeOptimismImpl.bridgeAfterSwap" -> "NativeOptimismImpl.SocketBridge" [ color = "green" ];
+  "NativeOptimismImpl.bridgeAfterSwap" -> "NativeOptimismImpl.L1StandardBridge" [ color = "green" ];
+  "NativeOptimismImpl.bridgeAfterSwap" -> "NativeOptimismImpl.UnsupportedInterfaceId" [ color = "green" ];
+  "NativeOptimismImpl.bridgeAfterSwap" -> "NativeOptimismImpl.ERC20" [ color = "green" ];
+  "NativeOptimismImpl.bridgeAfterSwap" -> "NativeOptimismImpl.address" [ color = "green" ];
+  "NativeOptimismImpl.bridgeAfterSwap" -> "NativeOptimismImpl.ERC20" [ color = "green" ];
+  "NativeOptimismImpl.bridgeAfterSwap" -> "NativeOptimismImpl.L1StandardBridge" [ color = "green" ];
+  "NativeOptimismImpl.bridgeAfterSwap" -> "NativeOptimismImpl.OldL1TokenGateway" [ color = "green" ];
+  "NativeOptimismImpl.bridgeAfterSwap" -> "NativeOptimismImpl.OldL1TokenGateway" [ color = "green" ];
+  "NativeOptimismImpl.swapAndBridge" -> "socketRoute.getRoute" [ color = "orange" ];
+  "NativeOptimismImpl.swapAndBridge" -> "NativeOptimismImpl.SocketBridge" [ color = "green" ];
+  "NativeOptimismImpl.swapAndBridge" -> "NativeOptimismImpl.L1StandardBridge" [ color = "green" ];
+  "NativeOptimismImpl.swapAndBridge" -> "NativeOptimismImpl.UnsupportedInterfaceId" [ color = "green" ];
+  "NativeOptimismImpl.swapAndBridge" -> "NativeOptimismImpl.ERC20" [ color = "green" ];
+  "NativeOptimismImpl.swapAndBridge" -> "NativeOptimismImpl.address" [ color = "green" ];
+  "NativeOptimismImpl.swapAndBridge" -> "NativeOptimismImpl.ERC20" [ color = "green" ];
+  "NativeOptimismImpl.swapAndBridge" -> "NativeOptimismImpl.L1StandardBridge" [ color = "green" ];
+  "NativeOptimismImpl.swapAndBridge" -> "NativeOptimismImpl.OldL1TokenGateway" [ color = "green" ];
+  "NativeOptimismImpl.swapAndBridge" -> "NativeOptimismImpl.OldL1TokenGateway" [ color = "green" ];
+  "NativeOptimismImpl.bridgeERC20To" -> "NativeOptimismImpl.UnsupportedInterfaceId" [ color = "green" ];
+  "NativeOptimismImpl.bridgeERC20To" -> "NativeOptimismImpl.ERC20" [ color = "green" ];
+  "NativeOptimismImpl.bridgeERC20To" -> "ERC20.safeTransferFrom" [ color = "orange" ];
+  "NativeOptimismImpl.bridgeERC20To" -> "ERC20.allowance" [ color = "orange" ];
+  "NativeOptimismImpl.bridgeERC20To" -> "NativeOptimismImpl.address" [ color = "green" ];
+  "NativeOptimismImpl.bridgeERC20To" -> "ERC20.safeApprove" [ color = "orange" ];
+  "NativeOptimismImpl.bridgeERC20To" -> "NativeOptimismImpl.SocketBridge" [ color = "green" ];
+  "NativeOptimismImpl.bridgeERC20To" -> "NativeOptimismImpl.L1StandardBridge" [ color = "green" ];
+  "NativeOptimismImpl.bridgeERC20To" -> "NativeOptimismImpl.OldL1TokenGateway" [ color = "green" ];
+  "NativeOptimismImpl.bridgeERC20To" -> "NativeOptimismImpl.OldL1TokenGateway" [ color = "green" ];
+  "NativeOptimismImpl.bridgeNativeTo" -> "NativeOptimismImpl.L1StandardBridge" [ color = "green" ];
+  "NativeOptimismImpl.bridgeNativeTo" -> "NativeOptimismImpl.SocketBridge" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

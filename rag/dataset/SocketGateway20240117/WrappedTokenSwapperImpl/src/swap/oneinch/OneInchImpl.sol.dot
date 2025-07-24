@@ -1,0 +1,78 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterOneInchImpl" {
+  graph [ label = "OneInchImpl", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "OneInchImpl.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "OneInchImpl.performAction" [ label = "performAction", color = "blue" ];
+  "OneInchImpl.performActionWithIn" [ label = "performActionWithIn", color = "blue" ];
+  "OneInchImpl.ERC20" [ label = "ERC20" ];
+  "OneInchImpl.SwapFailed" [ label = "SwapFailed" ];
+  "OneInchImpl.SocketSwapTokens" [ label = "SocketSwapTokens" ];
+}
+
+subgraph "clusterERC20" {
+  graph [ label = "ERC20", color = "lightgray" ];
+  "ERC20.safeTransferFrom" [ label = "safeTransferFrom" ];
+  "ERC20.safeApprove" [ label = "safeApprove" ];
+}
+
+subgraph "clusterONEINCH_AGGREGATOR" {
+  graph [ label = "ONEINCH_AGGREGATOR", color = "lightgray" ];
+  "ONEINCH_AGGREGATOR.call" [ label = "call" ];
+}
+
+  "OneInchImpl.performAction";
+  "OneInchImpl.ERC20";
+  "ERC20.safeTransferFrom";
+  "ERC20.safeApprove";
+  "ONEINCH_AGGREGATOR.call";
+  "OneInchImpl.SwapFailed";
+  "OneInchImpl.SocketSwapTokens";
+  "OneInchImpl.performActionWithIn";
+  "OneInchImpl.performAction" -> "OneInchImpl.ERC20" [ color = "green" ];
+  "OneInchImpl.performAction" -> "ERC20.safeTransferFrom" [ color = "orange" ];
+  "OneInchImpl.performAction" -> "ERC20.safeApprove" [ color = "orange" ];
+  "OneInchImpl.performAction" -> "ONEINCH_AGGREGATOR.call" [ color = "orange" ];
+  "OneInchImpl.performAction" -> "ERC20.safeApprove" [ color = "orange" ];
+  "OneInchImpl.performAction" -> "OneInchImpl.SwapFailed" [ color = "green" ];
+  "OneInchImpl.performAction" -> "OneInchImpl.SwapFailed" [ color = "green" ];
+  "OneInchImpl.performAction" -> "OneInchImpl.SocketSwapTokens" [ color = "green" ];
+  "OneInchImpl.performActionWithIn" -> "OneInchImpl.ERC20" [ color = "green" ];
+  "OneInchImpl.performActionWithIn" -> "ERC20.safeTransferFrom" [ color = "orange" ];
+  "OneInchImpl.performActionWithIn" -> "ERC20.safeApprove" [ color = "orange" ];
+  "OneInchImpl.performActionWithIn" -> "ONEINCH_AGGREGATOR.call" [ color = "orange" ];
+  "OneInchImpl.performActionWithIn" -> "ERC20.safeApprove" [ color = "orange" ];
+  "OneInchImpl.performActionWithIn" -> "OneInchImpl.SwapFailed" [ color = "green" ];
+  "OneInchImpl.performActionWithIn" -> "OneInchImpl.SwapFailed" [ color = "green" ];
+  "OneInchImpl.performActionWithIn" -> "OneInchImpl.SocketSwapTokens" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

@@ -1,0 +1,92 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterSynapseBridgeImpl" {
+  graph [ label = "SynapseBridgeImpl", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "SynapseBridgeImpl.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "SynapseBridgeImpl.bridgeAfterSwap" [ label = "bridgeAfterSwap", color = "blue" ];
+  "SynapseBridgeImpl.swapAndBridge" [ label = "swapAndBridge", color = "blue" ];
+  "SynapseBridgeImpl.bridgeERC20To" [ label = "bridgeERC20To", color = "blue" ];
+  "SynapseBridgeImpl.bridgeNativeTo" [ label = "bridgeNativeTo", color = "blue" ];
+  "SynapseBridgeImpl.ISynapseRouter" [ label = "ISynapseRouter" ];
+  "SynapseBridgeImpl.ERC20" [ label = "ERC20" ];
+  "SynapseBridgeImpl.address" [ label = "address" ];
+  "SynapseBridgeImpl.SocketBridge" [ label = "SocketBridge" ];
+}
+
+subgraph "clusterISynapseRouter" {
+  graph [ label = "ISynapseRouter", color = "lightgray" ];
+  "ISynapseRouter.bridge" [ label = "bridge" ];
+}
+
+subgraph "clustersocketRoute" {
+  graph [ label = "socketRoute", color = "lightgray" ];
+  "socketRoute.getRoute" [ label = "getRoute" ];
+}
+
+  "SynapseBridgeImpl.<Constructor>";
+  "SynapseBridgeImpl.ISynapseRouter";
+  "SynapseBridgeImpl.bridgeAfterSwap";
+  "SynapseBridgeImpl.ERC20";
+  "SynapseBridgeImpl.address";
+  "ISynapseRouter.bridge";
+  "SynapseBridgeImpl.SocketBridge";
+  "SynapseBridgeImpl.swapAndBridge";
+  "socketRoute.getRoute";
+  "SynapseBridgeImpl.bridgeERC20To";
+  "SynapseBridgeImpl.bridgeNativeTo";
+  "SynapseBridgeImpl.<Constructor>" -> "SynapseBridgeImpl.ISynapseRouter" [ color = "green" ];
+  "SynapseBridgeImpl.bridgeAfterSwap" -> "SynapseBridgeImpl.ERC20" [ color = "green" ];
+  "SynapseBridgeImpl.bridgeAfterSwap" -> "SynapseBridgeImpl.address" [ color = "green" ];
+  "SynapseBridgeImpl.bridgeAfterSwap" -> "SynapseBridgeImpl.address" [ color = "green" ];
+  "SynapseBridgeImpl.bridgeAfterSwap" -> "SynapseBridgeImpl.ERC20" [ color = "green" ];
+  "SynapseBridgeImpl.bridgeAfterSwap" -> "SynapseBridgeImpl.address" [ color = "green" ];
+  "SynapseBridgeImpl.bridgeAfterSwap" -> "ISynapseRouter.bridge" [ color = "orange" ];
+  "SynapseBridgeImpl.bridgeAfterSwap" -> "SynapseBridgeImpl.SocketBridge" [ color = "green" ];
+  "SynapseBridgeImpl.swapAndBridge" -> "socketRoute.getRoute" [ color = "orange" ];
+  "SynapseBridgeImpl.swapAndBridge" -> "SynapseBridgeImpl.ERC20" [ color = "green" ];
+  "SynapseBridgeImpl.swapAndBridge" -> "SynapseBridgeImpl.address" [ color = "green" ];
+  "SynapseBridgeImpl.swapAndBridge" -> "SynapseBridgeImpl.address" [ color = "green" ];
+  "SynapseBridgeImpl.swapAndBridge" -> "SynapseBridgeImpl.ERC20" [ color = "green" ];
+  "SynapseBridgeImpl.swapAndBridge" -> "SynapseBridgeImpl.address" [ color = "green" ];
+  "SynapseBridgeImpl.swapAndBridge" -> "ISynapseRouter.bridge" [ color = "orange" ];
+  "SynapseBridgeImpl.swapAndBridge" -> "SynapseBridgeImpl.SocketBridge" [ color = "green" ];
+  "SynapseBridgeImpl.bridgeERC20To" -> "SynapseBridgeImpl.ERC20" [ color = "green" ];
+  "SynapseBridgeImpl.bridgeERC20To" -> "SynapseBridgeImpl.ERC20" [ color = "green" ];
+  "SynapseBridgeImpl.bridgeERC20To" -> "SynapseBridgeImpl.address" [ color = "green" ];
+  "SynapseBridgeImpl.bridgeERC20To" -> "SynapseBridgeImpl.address" [ color = "green" ];
+  "SynapseBridgeImpl.bridgeERC20To" -> "SynapseBridgeImpl.ERC20" [ color = "green" ];
+  "SynapseBridgeImpl.bridgeERC20To" -> "SynapseBridgeImpl.address" [ color = "green" ];
+  "SynapseBridgeImpl.bridgeERC20To" -> "ISynapseRouter.bridge" [ color = "orange" ];
+  "SynapseBridgeImpl.bridgeERC20To" -> "SynapseBridgeImpl.SocketBridge" [ color = "green" ];
+  "SynapseBridgeImpl.bridgeNativeTo" -> "SynapseBridgeImpl.SocketBridge" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

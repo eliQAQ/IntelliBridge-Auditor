@@ -1,0 +1,185 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterCelerImpl" {
+  graph [ label = "CelerImpl", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "CelerImpl.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "CelerImpl.<Receive Ether>" [ label = "<Receive Ether>", color = "blue" ];
+  "CelerImpl.bridgeAfterSwap" [ label = "bridgeAfterSwap", color = "blue" ];
+  "CelerImpl.swapAndBridge" [ label = "swapAndBridge", color = "blue" ];
+  "CelerImpl.bridgeERC20To" [ label = "bridgeERC20To", color = "blue" ];
+  "CelerImpl.bridgeNativeTo" [ label = "bridgeNativeTo", color = "blue" ];
+  "CelerImpl.refundCelerUser" [ label = "refundCelerUser", color = "blue" ];
+  "CelerImpl.decWithdrawMsg" [ label = "decWithdrawMsg" ];
+  "CelerImpl.ICBridge" [ label = "ICBridge" ];
+  "CelerImpl.ICelerStorageWrapper" [ label = "ICelerStorageWrapper" ];
+  "CelerImpl.address" [ label = "address" ];
+  "CelerImpl.SocketBridge" [ label = "SocketBridge" ];
+  "CelerImpl.ERC20" [ label = "ERC20" ];
+  "CelerImpl.InvalidCelerRefund" [ label = "InvalidCelerRefund" ];
+  "CelerImpl.CelerAlreadyRefunded" [ label = "CelerAlreadyRefunded" ];
+  "CelerImpl.CelerRefundNotReady" [ label = "CelerRefundNotReady" ];
+  "CelerImpl.payable" [ label = "payable" ];
+}
+
+subgraph "clusterICelerStorageWrapper" {
+  graph [ label = "ICelerStorageWrapper", color = "lightgray" ];
+  "ICelerStorageWrapper.setAddressForTransferId" [ label = "setAddressForTransferId" ];
+  "ICelerStorageWrapper.getAddressFromTransferId" [ label = "getAddressFromTransferId" ];
+  "ICelerStorageWrapper.deleteTransferId" [ label = "deleteTransferId" ];
+}
+
+subgraph "clusterICBridge" {
+  graph [ label = "ICBridge", color = "lightgray" ];
+  "ICBridge.send" [ label = "send" ];
+  "ICBridge.withdraws" [ label = "withdraws" ];
+  "ICBridge.withdraw" [ label = "withdraw" ];
+}
+
+subgraph "clustersocketRoute" {
+  graph [ label = "socketRoute", color = "lightgray" ];
+  "socketRoute.getRoute" [ label = "getRoute" ];
+}
+
+subgraph "clusterERC20" {
+  graph [ label = "ERC20", color = "lightgray" ];
+  "ERC20.safeTransferFrom" [ label = "safeTransferFrom" ];
+}
+
+subgraph "clusterPb" {
+  graph [ label = "Pb", color = "lightgray" ];
+  "Pb.fromBytes" [ label = "fromBytes" ];
+  "Pb._address" [ label = "_address" ];
+  "Pb._uint256" [ label = "_uint256" ];
+  "Pb._bytes32" [ label = "_bytes32" ];
+}
+
+subgraph "clusterPb.Buffer" {
+  graph [ label = "Pb.Buffer", color = "lightgray" ];
+  "Pb.Buffer.hasMore" [ label = "hasMore" ];
+  "Pb.Buffer.decKey" [ label = "decKey" ];
+  "Pb.Buffer.decVarint" [ label = "decVarint" ];
+  "Pb.Buffer.decBytes" [ label = "decBytes" ];
+  "Pb.Buffer.skipValue" [ label = "skipValue" ];
+}
+
+  "CelerImpl.<Constructor>";
+  "CelerImpl.ICBridge";
+  "CelerImpl.ICelerStorageWrapper";
+  "CelerImpl.bridgeAfterSwap";
+  "CelerImpl.address";
+  "ICelerStorageWrapper.setAddressForTransferId";
+  "ICBridge.send";
+  "CelerImpl.SocketBridge";
+  "CelerImpl.swapAndBridge";
+  "socketRoute.getRoute";
+  "CelerImpl.bridgeERC20To";
+  "CelerImpl.ERC20";
+  "ERC20.safeTransferFrom";
+  "CelerImpl.bridgeNativeTo";
+  "CelerImpl.refundCelerUser";
+  "CelerImpl.decWithdrawMsg";
+  "ICBridge.withdraws";
+  "ICBridge.withdraw";
+  "CelerImpl.InvalidCelerRefund";
+  "ICelerStorageWrapper.getAddressFromTransferId";
+  "ICelerStorageWrapper.deleteTransferId";
+  "CelerImpl.CelerAlreadyRefunded";
+  "CelerImpl.CelerRefundNotReady";
+  "CelerImpl.payable";
+  "Pb.fromBytes";
+  "Pb.Buffer.hasMore";
+  "Pb.Buffer.decKey";
+  "Pb.Buffer.decVarint";
+  "Pb._address";
+  "Pb.Buffer.decBytes";
+  "Pb._uint256";
+  "Pb._bytes32";
+  "Pb.Buffer.skipValue";
+  "CelerImpl.<Constructor>" -> "CelerImpl.ICBridge" [ color = "green" ];
+  "CelerImpl.<Constructor>" -> "CelerImpl.ICelerStorageWrapper" [ color = "green" ];
+  "CelerImpl.bridgeAfterSwap" -> "CelerImpl.address" [ color = "green" ];
+  "CelerImpl.bridgeAfterSwap" -> "ICelerStorageWrapper.setAddressForTransferId" [ color = "orange" ];
+  "CelerImpl.bridgeAfterSwap" -> "CelerImpl.address" [ color = "green" ];
+  "CelerImpl.bridgeAfterSwap" -> "ICelerStorageWrapper.setAddressForTransferId" [ color = "orange" ];
+  "CelerImpl.bridgeAfterSwap" -> "ICBridge.send" [ color = "orange" ];
+  "CelerImpl.bridgeAfterSwap" -> "CelerImpl.SocketBridge" [ color = "green" ];
+  "CelerImpl.swapAndBridge" -> "socketRoute.getRoute" [ color = "orange" ];
+  "CelerImpl.swapAndBridge" -> "CelerImpl.address" [ color = "green" ];
+  "CelerImpl.swapAndBridge" -> "ICelerStorageWrapper.setAddressForTransferId" [ color = "orange" ];
+  "CelerImpl.swapAndBridge" -> "CelerImpl.address" [ color = "green" ];
+  "CelerImpl.swapAndBridge" -> "ICelerStorageWrapper.setAddressForTransferId" [ color = "orange" ];
+  "CelerImpl.swapAndBridge" -> "ICBridge.send" [ color = "orange" ];
+  "CelerImpl.swapAndBridge" -> "CelerImpl.SocketBridge" [ color = "green" ];
+  "CelerImpl.bridgeERC20To" -> "CelerImpl.address" [ color = "green" ];
+  "CelerImpl.bridgeERC20To" -> "ICelerStorageWrapper.setAddressForTransferId" [ color = "orange" ];
+  "CelerImpl.bridgeERC20To" -> "CelerImpl.ERC20" [ color = "green" ];
+  "CelerImpl.bridgeERC20To" -> "ERC20.safeTransferFrom" [ color = "orange" ];
+  "CelerImpl.bridgeERC20To" -> "ICBridge.send" [ color = "orange" ];
+  "CelerImpl.bridgeERC20To" -> "CelerImpl.SocketBridge" [ color = "green" ];
+  "CelerImpl.bridgeNativeTo" -> "CelerImpl.address" [ color = "green" ];
+  "CelerImpl.bridgeNativeTo" -> "ICelerStorageWrapper.setAddressForTransferId" [ color = "orange" ];
+  "CelerImpl.bridgeNativeTo" -> "CelerImpl.SocketBridge" [ color = "green" ];
+  "CelerImpl.refundCelerUser" -> "CelerImpl.decWithdrawMsg" [ color = "green" ];
+  "CelerImpl.refundCelerUser" -> "CelerImpl.address" [ color = "green" ];
+  "CelerImpl.refundCelerUser" -> "CelerImpl.ERC20" [ color = "green" ];
+  "CelerImpl.refundCelerUser" -> "CelerImpl.address" [ color = "green" ];
+  "CelerImpl.refundCelerUser" -> "ICBridge.withdraws" [ color = "orange" ];
+  "CelerImpl.refundCelerUser" -> "ICBridge.withdraw" [ color = "orange" ];
+  "CelerImpl.refundCelerUser" -> "CelerImpl.InvalidCelerRefund" [ color = "green" ];
+  "CelerImpl.refundCelerUser" -> "ICelerStorageWrapper.getAddressFromTransferId" [ color = "orange" ];
+  "CelerImpl.refundCelerUser" -> "ICelerStorageWrapper.deleteTransferId" [ color = "orange" ];
+  "CelerImpl.refundCelerUser" -> "CelerImpl.address" [ color = "green" ];
+  "CelerImpl.refundCelerUser" -> "CelerImpl.CelerAlreadyRefunded" [ color = "green" ];
+  "CelerImpl.refundCelerUser" -> "CelerImpl.address" [ color = "green" ];
+  "CelerImpl.refundCelerUser" -> "CelerImpl.ERC20" [ color = "green" ];
+  "CelerImpl.refundCelerUser" -> "CelerImpl.address" [ color = "green" ];
+  "CelerImpl.refundCelerUser" -> "CelerImpl.CelerRefundNotReady" [ color = "green" ];
+  "CelerImpl.refundCelerUser" -> "CelerImpl.payable" [ color = "green" ];
+  "CelerImpl.refundCelerUser" -> "CelerImpl.CelerRefundNotReady" [ color = "green" ];
+  "CelerImpl.refundCelerUser" -> "CelerImpl.ERC20" [ color = "green" ];
+  "CelerImpl.refundCelerUser" -> "CelerImpl.CelerRefundNotReady" [ color = "green" ];
+  "CelerImpl.decWithdrawMsg" -> "Pb.fromBytes" [ color = "orange" ];
+  "CelerImpl.decWithdrawMsg" -> "Pb.Buffer.hasMore" [ color = "orange" ];
+  "CelerImpl.decWithdrawMsg" -> "Pb.Buffer.decKey" [ color = "orange" ];
+  "CelerImpl.decWithdrawMsg" -> "Pb.Buffer.decVarint" [ color = "orange" ];
+  "CelerImpl.decWithdrawMsg" -> "Pb.Buffer.decVarint" [ color = "orange" ];
+  "CelerImpl.decWithdrawMsg" -> "Pb._address" [ color = "orange" ];
+  "CelerImpl.decWithdrawMsg" -> "Pb.Buffer.decBytes" [ color = "orange" ];
+  "CelerImpl.decWithdrawMsg" -> "Pb._address" [ color = "orange" ];
+  "CelerImpl.decWithdrawMsg" -> "Pb.Buffer.decBytes" [ color = "orange" ];
+  "CelerImpl.decWithdrawMsg" -> "Pb._uint256" [ color = "orange" ];
+  "CelerImpl.decWithdrawMsg" -> "Pb.Buffer.decBytes" [ color = "orange" ];
+  "CelerImpl.decWithdrawMsg" -> "Pb._bytes32" [ color = "orange" ];
+  "CelerImpl.decWithdrawMsg" -> "Pb.Buffer.decBytes" [ color = "orange" ];
+  "CelerImpl.decWithdrawMsg" -> "Pb.Buffer.skipValue" [ color = "orange" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

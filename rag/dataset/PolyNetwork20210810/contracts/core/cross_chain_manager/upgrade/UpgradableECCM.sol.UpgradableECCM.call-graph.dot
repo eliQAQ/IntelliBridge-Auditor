@@ -1,0 +1,61 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_260_IUpgradableECCM {
+label = "IUpgradableECCM"
+"260_paused" [label="paused"]
+"260_upgradeToNew" [label="upgradeToNew"]
+"260_pause" [label="pause"]
+"260_unpause" [label="unpause"]
+"260_isOwner" [label="isOwner"]
+}subgraph cluster_486_Context {
+label = "Context"
+"486__msgSender" [label="_msgSender"]
+"486__msgData" [label="_msgData"]
+"486_constructor" [label="constructor"]
+}subgraph cluster_459_Ownable {
+label = "Ownable"
+"459_owner" [label="owner"]
+"459_isOwner" [label="isOwner"]
+"459_transferOwnership" [label="transferOwnership"]
+"459__transferOwnership" [label="_transferOwnership"]
+"459_renounceOwnership" [label="renounceOwnership"]
+"459_constructor" [label="constructor"]
+"459_transferOwnership" -> "459_onlyOwner"
+"459_transferOwnership" -> "459__transferOwnership"
+"459_renounceOwnership" -> "459_onlyOwner"
+"459_isOwner" -> "459__msgSender"
+"459_constructor" -> "459__msgSender"
+}subgraph cluster_341_Pausable {
+label = "Pausable"
+"341__unpause" [label="_unpause"]
+"341_paused" [label="paused"]
+"341__pause" [label="_pause"]
+"341_constructor" [label="constructor"]
+"341__pause" -> "341__msgSender"
+"341__pause" -> "341_whenNotPaused"
+"341__unpause" -> "341_whenPaused"
+"341__unpause" -> "341__msgSender"
+}subgraph cluster_126_UpgradableECCM {
+label = "UpgradableECCM"
+"126_constructor" [label="constructor"]
+"126_unpause" [label="unpause"]
+"126_pause" [label="pause"]
+"126_upgradeToNew" [label="upgradeToNew"]
+"126_upgradeToNew" -> "126_whenPaused"
+"126_pause" -> "126_paused"
+"126_constructor" -> "126_constructor"
+"126_pause" -> "126_onlyOwner"
+"126_unpause" -> "126_onlyOwner"
+"126_pause" -> "126__pause"
+"126_unpause" -> "126_paused"
+"126_unpause" -> "126__unpause"
+"126_upgradeToNew" -> "126_onlyOwner"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"126_unpause" -> "require(bool,string)"
+"459__transferOwnership" -> "require(bool,string)"
+"126_pause" -> "require(bool,string)"
+}
+}

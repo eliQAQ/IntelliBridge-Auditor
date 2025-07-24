@@ -1,0 +1,77 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterAccessControlIndexUpgradeable" {
+  graph [ label = "AccessControlIndexUpgradeable", color = "lightgray", style = "filled", bgcolor = "lightgray" ];
+  "AccessControlIndexUpgradeable.__AccessControl_init" [ label = "__AccessControl_init", color = "white" ];
+  "AccessControlIndexUpgradeable.__AccessControl_init_unchained" [ label = "__AccessControl_init_unchained" ];
+  "AccessControlIndexUpgradeable.hasRole" [ label = "hasRole" ];
+  "AccessControlIndexUpgradeable.getRoleMemberCount" [ label = "getRoleMemberCount", color = "green" ];
+  "AccessControlIndexUpgradeable.getRoleMember" [ label = "getRoleMember", color = "green" ];
+  "AccessControlIndexUpgradeable.getRoleMemberIndex" [ label = "getRoleMemberIndex", color = "green" ];
+  "AccessControlIndexUpgradeable.getRoleAdmin" [ label = "getRoleAdmin", color = "green" ];
+  "AccessControlIndexUpgradeable.grantRole" [ label = "grantRole", color = "green" ];
+  "AccessControlIndexUpgradeable.revokeRole" [ label = "revokeRole", color = "green" ];
+  "AccessControlIndexUpgradeable.renounceRole" [ label = "renounceRole", color = "green" ];
+  "AccessControlIndexUpgradeable._setupRole" [ label = "_setupRole", color = "white" ];
+  "AccessControlIndexUpgradeable._setRoleAdmin" [ label = "_setRoleAdmin", color = "white" ];
+  "AccessControlIndexUpgradeable._grantRole" [ label = "_grantRole" ];
+  "AccessControlIndexUpgradeable._revokeRole" [ label = "_revokeRole" ];
+  "AccessControlIndexUpgradeable.__Context_init_unchained" [ label = "__Context_init_unchained" ];
+  "AccessControlIndexUpgradeable._msgSender" [ label = "_msgSender" ];
+}
+
+  "AccessControlIndexUpgradeable.__AccessControl_init";
+  "AccessControlIndexUpgradeable.__Context_init_unchained";
+  "AccessControlIndexUpgradeable.__AccessControl_init_unchained";
+  "AccessControlIndexUpgradeable.grantRole";
+  "AccessControlIndexUpgradeable.hasRole";
+  "AccessControlIndexUpgradeable._msgSender";
+  "AccessControlIndexUpgradeable._grantRole";
+  "AccessControlIndexUpgradeable.revokeRole";
+  "AccessControlIndexUpgradeable._revokeRole";
+  "AccessControlIndexUpgradeable.renounceRole";
+  "AccessControlIndexUpgradeable._setupRole";
+  "AccessControlIndexUpgradeable.__AccessControl_init" -> "AccessControlIndexUpgradeable.__Context_init_unchained" [ color = "green" ];
+  "AccessControlIndexUpgradeable.__AccessControl_init" -> "AccessControlIndexUpgradeable.__AccessControl_init_unchained" [ color = "green" ];
+  "AccessControlIndexUpgradeable.grantRole" -> "AccessControlIndexUpgradeable.hasRole" [ color = "green" ];
+  "AccessControlIndexUpgradeable.grantRole" -> "AccessControlIndexUpgradeable._msgSender" [ color = "green" ];
+  "AccessControlIndexUpgradeable.grantRole" -> "AccessControlIndexUpgradeable._grantRole" [ color = "green" ];
+  "AccessControlIndexUpgradeable.revokeRole" -> "AccessControlIndexUpgradeable.hasRole" [ color = "green" ];
+  "AccessControlIndexUpgradeable.revokeRole" -> "AccessControlIndexUpgradeable._msgSender" [ color = "green" ];
+  "AccessControlIndexUpgradeable.revokeRole" -> "AccessControlIndexUpgradeable._revokeRole" [ color = "green" ];
+  "AccessControlIndexUpgradeable.renounceRole" -> "AccessControlIndexUpgradeable._msgSender" [ color = "green" ];
+  "AccessControlIndexUpgradeable.renounceRole" -> "AccessControlIndexUpgradeable._revokeRole" [ color = "green" ];
+  "AccessControlIndexUpgradeable._setupRole" -> "AccessControlIndexUpgradeable._grantRole" [ color = "green" ];
+  "AccessControlIndexUpgradeable._grantRole" -> "AccessControlIndexUpgradeable._msgSender" [ color = "green" ];
+  "AccessControlIndexUpgradeable._revokeRole" -> "AccessControlIndexUpgradeable._msgSender" [ color = "green" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i2">Custom Error Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="green"]
+key:i2:e -> key2:i2:w [color="orange"]
+key:i2:e -> key2:i2:w [color="red"]
+}
+}
+

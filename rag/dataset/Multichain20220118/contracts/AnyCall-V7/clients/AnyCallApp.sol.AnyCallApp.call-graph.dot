@@ -1,0 +1,46 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_520_IAnyCallSender {
+label = "IAnyCallSender"
+"520_anyFallback" [label="anyFallback"]
+}subgraph cluster_385_Administrable {
+label = "Administrable"
+"385_setAdmin" [label="setAdmin"]
+"385_transferAdmin" [label="transferAdmin"]
+"385_acceptAdmin" [label="acceptAdmin"]
+"385_transferAdmin" -> "385_onlyAdmin"
+}subgraph cluster_500_IAnyCallReceiver {
+label = "IAnyCallReceiver"
+"500_anyExecute" [label="anyExecute"]
+}subgraph cluster_292_AnyCallApp {
+label = "AnyCallApp"
+"292__anyFallback" [label="_anyFallback"]
+"292_approve" [label="approve"]
+"292__anyExecute" [label="_anyExecute"]
+"292_depositAnyCallFee" [label="depositAnyCallFee"]
+"292__anyCall" [label="_anyCall"]
+"292_anyFallback" [label="anyFallback"]
+"292_setAnyCallProxy" [label="setAnyCallProxy"]
+"292_setSenders" [label="setSenders"]
+"292_constructor" [label="constructor"]
+"292_anyExecute" [label="anyExecute"]
+"292_withdrawAnyCallFee" [label="withdrawAnyCallFee"]
+"292_anyFallback" -> "292__anyFallback"
+"292_setAnyCallProxy" -> "292_onlyAdmin"
+"292_withdrawAnyCallFee" -> "292_onlyAdmin"
+"292_anyExecute" -> "292__anyExecute"
+"292_setSenders" -> "292_onlyAdmin"
+"292_anyFallback" -> "292_onlyExecutor"
+"292_anyExecute" -> "292_onlyExecutor"
+"292_approve" -> "292_onlyAdmin"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"require(bool)" 
+"292_anyFallback" -> "require(bool,string)"
+"292_withdrawAnyCallFee" -> "require(bool)"
+"292_anyExecute" -> "require(bool,string)"
+"385_acceptAdmin" -> "require(bool)"
+}
+}

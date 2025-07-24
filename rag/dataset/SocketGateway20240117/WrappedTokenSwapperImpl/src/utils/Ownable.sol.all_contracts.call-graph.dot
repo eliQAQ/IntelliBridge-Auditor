@@ -1,0 +1,21 @@
+strict digraph {
+rankdir="LR"
+node [shape=box]
+subgraph cluster_118_Ownable {
+label = "Ownable"
+"118_claimOwner" [label="claimOwner"]
+"118_nominateOwner" [label="nominateOwner"]
+"118__claimOwner" [label="_claimOwner"]
+"118_owner" [label="owner"]
+"118_constructor" [label="constructor"]
+"118_nominee" [label="nominee"]
+"118_constructor" -> "118__claimOwner"
+"118_claimOwner" -> "118__claimOwner"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"revert OnlyNominee()" 
+"revert OnlyOwner()" 
+"118_claimOwner" -> "revert OnlyNominee()"
+"118_nominateOwner" -> "revert OnlyOwner()"
+}
+}
