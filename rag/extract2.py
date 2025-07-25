@@ -2121,7 +2121,7 @@ if __name__ == "__main__":
                 result = {}
                 all_output = {}
                 # model = "deepseek/deepseek-chat-v3-0324"
-                model = "deepseek-ai/DeepSeek-V3"
+                model = "Pro/deepseek-ai/DeepSeek-V3"
                 # platform = "openai"
                 platform = "gjld"
                 # 遍历目录里面的json文件
@@ -2244,7 +2244,7 @@ if __name__ == "__main__":
                             for attr in attribute_to_parameter:
                                 # 去除没有score的项
                                 attribute_to_parameter[attr] = dict(filter(lambda x: "score" in x[1] and ((x[1]["score"][0] >= "5" or x[1]["score"].startswith("100")) if isinstance(x[1]["score"],str) else x[1]["score"] >= 50), attribute_to_parameter[attr].items()))
-                                attribute_to_parameter[attr] = dict(sorted(attribute_to_parameter[attr].items(), key=lambda x:int(re.findall(r'\d+', x[1]["score"])[0]), reverse=True)[:1])
+                                attribute_to_parameter[attr] = dict(sorted(attribute_to_parameter[attr].items(), key=lambda x:int(re.findall(r'\d+', x[1]["score"])[0]) if isinstance(x[1]["score"],str) else x[1]["score"], reverse=True)[:1])
                             all_output[relation_ship]["step1"]["formatted_outputs1"] = parameter_to_attribute
                             all_output[relation_ship]["step1-time"] = time.time() - s1_start_time
 
@@ -2294,7 +2294,7 @@ if __name__ == "__main__":
 
                                         # 取得分前三的dataflow
                                         all_output[relation_ship]["step2"][attr][parameter]["dataflows"] = sorted(
-                                            all_output[relation_ship]["step2"][attr][parameter]["dataflows"], key=lambda x: int(re.findall(r'\d+', x["score"])[0]), reverse=True)[:2]
+                                            all_output[relation_ship]["step2"][attr][parameter]["dataflows"], key=lambda x: int(re.findall(r'\d+', x["score"])[0]) if isinstance(x["score"],str) else x["score"], reverse=True)[:2]
 
 
                                         merged_dataflows = []
@@ -2368,7 +2368,7 @@ if __name__ == "__main__":
                                             if isinstance(v_outputs3[0], dict):
                                                 v_outputs3[0] = v_outputs3[0][list(v_outputs3[0].keys())[0]]
                                             # 取得分第一的results
-                                            all_output[relation_ship]["step3"][attr][parameter][constraint]["verify_filtered"] = sorted(list(filter(lambda x: x and "score" in x,v_outputs3[0])), key=lambda x: int(re.findall(r'\d+', x["score"])[0]), reverse=True)[:1]
+                                            all_output[relation_ship]["step3"][attr][parameter][constraint]["verify_filtered"] = sorted(list(filter(lambda x: x and "score" in x,v_outputs3[0])), key=lambda x: int(re.findall(r'\d+', x["score"])[0]) if isinstance(x["score"],str) else x["score"], reverse=True)[:1]
                             all_output[relation_ship]["step3-time"] = time.time() - s3_start_time
                             all_output[relation_ship]["step3-call_api_times"] = s3_call_api_times
 
