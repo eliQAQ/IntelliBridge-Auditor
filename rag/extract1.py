@@ -10,7 +10,8 @@ import time
 from model import gpt, gpt_with_message, clean_this_cost, get_this_cost
 from read_function_call import handle
 from enum import Enum
-from prompt import *
+from prompt_E import *
+from  prompt_compare import *
 import chardet
 
 keywords = {
@@ -515,8 +516,6 @@ class SolidityContextExtractor:
                         # 遍历import进来的合约进行查找
                         flag = False
                         for imported_path in self.imported_contracts:
-                            if imported_path == "C:\\Users\\wy\\Desktop\\rag\\dataset\\Synapse20211106\\0x88E7af57270F70BCF32CD61fff0Ff635775C8f7c\\SwapUtils.sol":
-                                pass
                             if self.imported_contracts[imported_path]["in_database"]:
                                 if self.imported_contracts[imported_path]["import_all"]:
                                     for cont_name in self.all_data["solidity_file"][imported_path]["contracts"]:
@@ -2072,6 +2071,27 @@ constraints_t = {
     "externalCallFunction": ["Validate that externalCallFunction is in the allowed function signature list"]
   }
 if __name__ == "__main__":
+
+    com = [
+        ["ChainSwap20210711", "DecreaseAuthQuota", "t"],
+        ["HyperBridge20231214", "Initialized", "s"],
+        ["LIFI20220320", "AssetSwapped", "s"],
+        ["LIFI20240716", "AssetSwapped", "s"],
+        ["MeterPassport20220206", "Deposit", "s"],
+        ["Multichain20220118", "LogAnySwapOut", "s"],
+        ["Multichain20230215", "LogAnySwapOut", "s"],
+        ["Nomad20220801", "Process", "t"],
+        ["PolyNetwork20210810", "VerifyHeaderAndExecuteTxEvent", "t"],
+        ["QBridge20220128", "Deposit", "s"],
+        ["Qubit20220101", "Deposit", "s"],
+        ["Ronin20240806", "Withdrew", "s"],
+        ["Rubic20221225", "RequestSent", "s"],
+        ["SocketGateway20240117", "SocketSwapTokens", "s"],
+        ["thorchain20210716", "Deposit", "s"],
+        ["thorchain20210723", "VaultTransfer", "s"],
+        ["XBridge20240424", "TokenListed", "s"],
+        ["XBridge20240424", "TokenWithdrawn", "s"]
+    ]
     # 计时
     start = time.time()
     clean_this_cost()
@@ -2096,10 +2116,10 @@ if __name__ == "__main__":
     extractor.parse_dataset(file_directory)
     result = {}
     all_output = {}
-    model = "openai/gpt-4o"
-    # model = "moonshotai/Kimi-K2-Instruct"
-    platform = "openai"
-    # platform = "gjld"
+    # model = "deepseek/deepseek-chat-v3-0324"
+    model = "deepseek-ai/DeepSeek-V3"
+    # platform = "openai"
+    platform = "gjld"
     # 遍历目录里面的json文件
     for file_name in os.listdir(directory_name):
         if file_name.endswith(".json") and not file_name.startswith("all_output"):
@@ -2172,8 +2192,10 @@ if __name__ == "__main__":
                         outputs1[i] = outputs1[i][list(outputs1[i].keys())[0]]
 
                 for output in outputs1:
+                    if not output:
+                        raise Exception("step1 is empty")
                     for item in output:
-                        if not item:
+                        if not item or "attribute" not in item or "parameter" not in item:
                             continue
                         if item["attribute"] not in attribute_to_parameter:
                             attribute_to_parameter[item["attribute"]] = {}
@@ -2201,7 +2223,7 @@ if __name__ == "__main__":
 
                 for v_output in v_outputs1:
                     for item in v_output:
-                        if not item or not item["attribute"]:
+                        if not item or "attribute" not in item or not item["attribute"]:
                             continue
                         if item["attribute"] not in attribute_to_parameter:
                             attribute_to_parameter[item["attribute"]] = {}
@@ -2217,8 +2239,8 @@ if __name__ == "__main__":
                 # 每个attribute取score第一的parameter
                 for attr in attribute_to_parameter:
                     # 去除没有score的项
-                    attribute_to_parameter[attr] = dict(filter(lambda x: "score" in x[1], attribute_to_parameter[attr].items()))
-                    attribute_to_parameter[attr] = dict(sorted(attribute_to_parameter[attr].items(), key=lambda x:x[1]["score"], reverse=True)[:1])
+                    attribute_to_parameter[attr] = dict(filter(lambda x: "score" in x[1] and ((x[1]["score"][0] >= "5" or x[1]["score"].startswith("100")) if isinstance(x[1]["score"],str) else x[1]["score"] >= 50), attribute_to_parameter[attr].items()))
+                    attribute_to_parameter[attr] = dict(sorted(attribute_to_parameter[attr].items(), key=lambda x:int(re.findall(r'\d+', x[1]["score"])[0]), reverse=True)[:1])
                 all_output[relation_ship]["step1"]["formatted_outputs1"] = parameter_to_attribute
                 all_output[relation_ship]["step1-time"] = time.time() - s1_start_time
 
@@ -2268,12 +2290,15 @@ if __name__ == "__main__":
 
                             # 取得分前三的dataflow
                             all_output[relation_ship]["step2"][attr][parameter]["dataflows"] = sorted(
-                                all_output[relation_ship]["step2"][attr][parameter]["dataflows"], key=lambda x: str(x["score"]), reverse=True)[:2]
+                                all_output[relation_ship]["step2"][attr][parameter]["dataflows"], key=lambda x: int(re.findall(r'\d+', x["score"])[0]), reverse=True)[:2]
 
+
+                            merged_dataflows = []
+                            for dataflow in all_output[relation_ship]["step2"][attr][parameter]["dataflows"]:
+                                if (dataflow["score"] >= "5" or dataflow["score"].startswith("100")) if isinstance(dataflow["score"], str) else dataflow["score"] >= 50:
+                                    merged_dataflows.append(dataflow["dataflow"])
                             # step2-merge
-                            merge_prompt = get_merge_dataflow_prompt(parameter, [
-                                dataflow["dataflow"] for dataflow in all_output[relation_ship]["step2"][attr][parameter]["dataflows"]
-                            ])
+                            merge_prompt = get_merge_dataflow_prompt(parameter, merged_dataflows)
                             merge_outputs, native_completion_tokens, native_prompt_tokens, messages = gpt(merge_prompt, model=model, platform=platform)
                             s2_call_api_times += 1
 
@@ -2339,7 +2364,7 @@ if __name__ == "__main__":
                                 if isinstance(v_outputs3[0], dict):
                                     v_outputs3[0] = v_outputs3[0][list(v_outputs3[0].keys())[0]]
                                 # 取得分第一的results
-                                all_output[relation_ship]["step3"][attr][parameter][constraint]["verify_filtered"] = sorted(list(filter(lambda x: x and "score" in x,v_outputs3[0])), key=lambda x: str(x["score"]), reverse=True)[:1]
+                                all_output[relation_ship]["step3"][attr][parameter][constraint]["verify_filtered"] = sorted(list(filter(lambda x: x and "score" in x,v_outputs3[0])), key=lambda x: int(re.findall(r'\d+', x["score"])[0]), reverse=True)[:1]
                 all_output[relation_ship]["step3-time"] = time.time() - s3_start_time
                 all_output[relation_ship]["step3-call_api_times"] = s3_call_api_times
 
@@ -2358,6 +2383,8 @@ if __name__ == "__main__":
                             all_output[relation_ship]["step4"][attr][parameter] = {}
                         for constraint in all_output[relation_ship]["step3"][attr][parameter]:
                             for r in all_output[relation_ship]["step3"][attr][parameter][constraint]["verify_filtered"]:
+                                if not ((r["score"][0] >= "5" or r["score"].startswith("100")) if isinstance(r["score"], str) else r["score"] >= 50):
+                                    continue
                                 prompt4 = get_prompt4(parameter, r["validation"], codes, code_prompt)
                                 print(f"step4-{attr}-{parameter}-{constraint}")
                                 outputs4, native_completion_tokens, native_prompt_tokens, messages = gpt(prompt4, model=model, platform=platform)
@@ -2392,6 +2419,24 @@ if __name__ == "__main__":
                 all_output[relation_ship]["step4-time"] = time.time() - s4_start_time
                 all_output[relation_ship]["step4-call_api_times"] = s4_call_api_times
 
+                # compare
+                prompt_a = get_audit_prompt(codes)
+                print(f"compare_audit")
+                outputs_a, native_completion_tokens, native_prompt_tokens, messages = gpt(prompt_a, model=model, platform=platform)
+                outputs_a = [json.loads(o) if isinstance(o, str) else o for o in outputs_a]
+                outputs_a = outputs_a[0]
+                all_output[relation_ship]["compare_audit"] = outputs_a
+
+                if position == "s":
+                    prompt_a_v = get_attribute_verification_prompt(attributes_s, constraints, codes)
+                else:
+                    prompt_a_v = get_attribute_verification_prompt(attributes_t, constraints, codes)
+                print(f"compare_attribute_verification")
+                outputs_a_v, native_completion_tokens, native_prompt_tokens, messages = gpt(prompt_a_v, model=model, platform=platform)
+                outputs_a_v = [json.loads(o) if isinstance(o, str) else o for o in outputs_a_v]
+                outputs_a_v = outputs_a_v[0]
+                all_output[relation_ship]["compare_attribute_verification"] = outputs_a_v
+
                 with open(f"{directory_name}/all_output.json", 'w', encoding='utf-8') as file:
                     json.dump(all_output, file, indent=4, cls=SetEncoder, ensure_ascii=False)
 
@@ -2403,8 +2448,8 @@ if __name__ == "__main__":
     all_output["this_completion_tokens"] = this_completion_tokens
 
 
-    with open("result.json", 'w') as file:
-        json.dump(result, file, indent=4, cls=SetEncoder, ensure_ascii=False)
+    # with open("result.json", 'w') as file:
+    #     json.dump(result, file, indent=4, cls=SetEncoder, ensure_ascii=False)
     with open(f"{directory_name}/all_output.json", 'w', encoding='utf-8') as file:
         json.dump(all_output, file, indent=4, cls=SetEncoder, ensure_ascii=False)
     # 解析代码
