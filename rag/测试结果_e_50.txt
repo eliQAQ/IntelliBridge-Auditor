@@ -1,0 +1,120 @@
+--file-directory ChainSwap20210711 --event-name DecreaseAuthQuota --position t
+TP:0
+FN:1
+TN:1
+FP:0
+
+--file-directory HyperBridge20231214 --event-name ERC20BridgeFinalized --position s
+这个漏洞还是太偏了，根本没有注意到_emitERC20BridgeFinalized这个函数
+TP:0
+FN:1
+TN:1
+FP:0
+
+--file-directory LIFI20220320 --event-name AssetSwapped --position s
+TP:1
+FN:0
+TN:0
+FP:1
+提出来的绕过方式我觉得不太合理
+
+--file-directory LIFI20240716 --event-name AssetSwapped --position s
+TP:1
+FN:0
+TN:1
+FP:0
+
+
+--file-directory MeterPassport20220206 --event-name Deposit --position s
+完美指出了问题所在，不过提出的抢先交易绕过不是很清楚，算对吧
+TP:1
+FN:0
+TN:1
+FP:0
+
+--file-directory Multichain20220118 --event-name LogAnySwapOut --position s
+TP:1
+FN:0
+TN:1
+FP:0
+
+--file-directory Multichain20230215 --event-name LogAnySwapOut --position s
+TP:1
+FN:0
+TN:1
+FP:0
+
+
+--file-directory Nomad20220801 --event-name Process --position t
+TP:1
+FN:0
+TN:1
+FP:0
+
+
+--file-directory pNetwork20210920 --event-name Redeem --position s
+TP:1
+FN:0
+TN:1
+FP:0
+
+--file-directory PolyNetwork20210810 --event-name VerifyHeaderAndExecuteTxEvent --position t
+TP:1
+FN:0
+TN:1
+FP:0
+
+--file-directory QBridge20220128 --event-name Deposit --position s
+TP:1
+FN:0
+TN:1
+FP:0
+
+--file-directory Qubit20220101 --event-name Deposit --position s
+tokenAddress一直认为是data，第一步被过滤
+TP:0
+FN:1
+TN:1
+FP:0
+
+--file-directory Ronin20240806 --event-name Withdrew --position s
+TP:0
+FN:1
+TN:1
+FP:0
+
+--file-directory Rubic20221225 --event-name RequestSent --position s #事件在修饰器里,无法找到调用链,手动放在了函数内
+TP:1
+FN:0
+TN:1
+FP:0
+
+--file-directory SocketGateway20240117 --event-name SocketSwapTokens --position s
+TP:1
+FN:0
+TN:1
+FP:0
+提出的绕过是ERC20(toToken).balanceOf(socketGateway);中重写balanceOf函数，不知道行不行，理论上来说有点道理，不过这totoken应该不能随便改吧。
+
+
+--file-directory thorchain20210723 --event-name VaultTransfer --position s
+_vault就是asgard作为参数对应的变量名。漏洞发生的原因是asgard.call{value:msg.value}("");中asgard可被攻击者操控，通过自己的fallback函数伪造了跨链事件激活退款服务，也有链下的问题，根本是asgard没有检测
+TP:1
+FN:0
+TN:1
+FP:0
+
+
+--file-directory XBridge20240424 --event-name TokenListed --position s #TokenWithdrawn 两步漏洞,不过主要是listToken谁都能调用且只要提交满足_baseToken==_correspondingToken条件的参数，就能将自己设为该 token 的所有者
+TP:0
+FN:1
+TN:1
+FP:0
+
+
+总：
+TP:12
+FN:5
+TN:16
+FP:1
+
